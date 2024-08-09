@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sentry_protos.demo.app.v1;
+
+message GetResponse {
+  int64 a = 1;
+  double b = 2;
+  string c = 3;
+  repeated string d = 4;
+}
+
+message GetRequest {
+  int64 a = 1;
+  double b = 2;
+  repeated string c = 3;
+  map<string, int64> d = 4;
+}
+
+service MyService {
+  rpc Get(GetRequest) returns (GetResponse);
+}
