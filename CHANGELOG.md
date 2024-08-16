@@ -1,3 +1,11 @@
+## 0.1.8
+
+### Various fixes & improvements
+
+- craft wants no modified files (3e3c2d7d) by @markstory
+- Take a different approach with generating rust code (5b9c41dc) by @markstory
+- Expand pre-release script to generate code for rust (bbb642d5) by @markstory
+
 ## 0.1.7
 
 ### Various fixes & improvements
