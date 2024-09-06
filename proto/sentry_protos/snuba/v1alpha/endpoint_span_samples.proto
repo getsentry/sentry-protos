@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.snuba.v1alpha;
 
+import "sentry_protos/snuba/v1alpha/endpoint_hacks.proto";
 import "sentry_protos/snuba/v1alpha/request_common.proto";
 import "sentry_protos/snuba/v1alpha/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1alpha/trace_item_filter.proto";
@@ -18,7 +19,7 @@ message SpanSamplesRequest {
   repeated AttributeKey keys = 4;
   uint32 limit = 5;
   //contains context for special columns like project_name, only needs to be included if you are requesting one of those
-  optional AttributeKeyTransformContext attribute_key_transform_context = 6;
+  optional EndpointHacks hacks = 6;
 }
 
 message SpanSample {

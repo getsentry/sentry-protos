@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1alpha;
+
+// Things we need to support for legacy reasons, that should be avoided if possible
+// If you use this, expect bugs and/or performance issues.
+// Use it as a scratchpad for features that are product requirements, but not thought through enough
+// to be fully fledged members of a platform
+message EndpointHacks {
+  //Map a source column (like project id) to a discrete set of values (like project names)
+  message UIntToStringColumnMapping {
+    string source_column = 1;
+    string dest_column = 2;
+    map<uint64, string> mapping = 3;
+  }
+
+  // Map a source column (like 'release') to discrete values (like 'latest' -> '1.1.1')
+  message StringToStringColumnMapping {
+    string source_column = 1;
+    string dest_column = 2;
+    map<string, string> mapping = 3;
+  }
+
+  repeated UIntToStringColumnMapping uint_to_string_column_mappings = 1;
+  repeated StringToStringColumnMapping string_to_string_column_mappings = 2;
+}
