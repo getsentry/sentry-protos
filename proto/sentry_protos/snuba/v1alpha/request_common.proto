@@ -11,5 +11,5 @@ message RequestMeta {
   // can be empty
   repeated uint64 project_ids = 4;
   google.protobuf.Timestamp start_timestamp = 5;
-  google.protobuf.Timestamp end_timestamp = 6;
+  
 }
