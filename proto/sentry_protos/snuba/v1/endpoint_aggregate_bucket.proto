@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package sentry_protos.snuba.v1alpha;
+package sentry_protos.snuba.v1;
 
-import "sentry_protos/snuba/v1alpha/request_common.proto";
-import "sentry_protos/snuba/v1alpha/trace_item_attribute.proto";
-import "sentry_protos/snuba/v1alpha/trace_item_filter.proto";
+import "sentry_protos/snuba/v1/request_common.proto";
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 message AggregateBucketRequest {
   RequestMeta meta = 1;

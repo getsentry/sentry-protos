@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package sentry_protos.snuba.v1alpha;
+package sentry_protos.snuba.v1;
 
-import "sentry_protos/snuba/v1alpha/trace_item_attribute.proto";
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 
 message AndFilter {
   repeated TraceItemFilter filters = 1;

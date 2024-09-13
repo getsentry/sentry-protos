@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sentry_protos.snuba.v1alpha;
+package sentry_protos.snuba.v1;
 
 message AttributeKey {
   enum Type { //this mostly reflects what types are able to be ingested, see eap_spans consumer for ingest details
