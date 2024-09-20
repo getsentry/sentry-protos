@@ -9,29 +9,60 @@ message RetryPolicy {
   optional int64 deadletter_after_attempt = 4;
 }
 
-message PendingTask {
+enum Status {
+  PENDING = 0;
+  PROCESSING = 1;
+  COMPLETE = 2;
+  FAILURE = 3;
+  RETRY = 4;
+}
+
+message Work {
   string task_id = 1;
   string taskname = 2;
   string parameters = 3;
   string task_namespace = 4;
   optional string processing_deadline = 5;
-  string deadletter_at = 6;
   RetryPolicy retry_state = 7;
 }
 
-message GetTaskRequest {}
+message Task {
+  Work work = 1;
+  Status status = 2;
+  string topic = 3;
+  int64 partition = 4;
+  int64 offset = 5;
+  int64 received_at = 6;
+  string deadletter_at = 7;
+  optional int64 store_id = 8;
+}
+
+message GetTaskRequest {
+  optional int64 parition = 1;
+  optional string topic = 2;
+}
+
+message GetTaskResponse {
+  Task task = 1;
+}
 
 message SetTaskResultRequest {
-  string task_id = 1;
-  string taskname = 2;
-  string task_namespace = 3;
-  RetryPolicy retry_state = 4;
+  string store_id = 1;
+  Status status = 2;
 }
 
 message SetTaskResultResponse {}
 
+message CompleteTaskRequest {
+  string store_id = 1;
+}
+
+message CompleteTaskResponse {}
+
 service Consumer {
-  rpc GetTask(GetTaskRequest) returns (PendingTask) {}
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
 
   rpc SetTaskResult(SetTaskResultRequest) returns (SetTaskResultResponse) {}
+
+  rpc CompleteTask(CompleteTaskRequest) returns (CompleteTaskResponse) {}
 }
