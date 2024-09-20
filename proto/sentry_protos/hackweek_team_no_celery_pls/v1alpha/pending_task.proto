@@ -38,7 +38,7 @@ message Task {
 }
 
 message GetTaskRequest {
-  optional int64 parition = 1;
+  optional int64 partition = 1;
   optional string topic = 2;
 }
 
