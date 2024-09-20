@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.snuba.v1alpha;
 
-import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1alpha/request_common.proto";
+import "sentry_protos/snuba/v1alpha/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1alpha/trace_item_filter.proto";
 
 message AggregateBucketRequest {
@@ -19,12 +19,11 @@ message AggregateBucketRequest {
     FUNCTION_AVG = 7;
   }
 
-  google.protobuf.Timestamp start_timestamp = 2;
-  google.protobuf.Timestamp end_timestamp = 3;
   Function aggregate = 4;
   TraceItemFilter filter = 5;
   uint64 granularity_secs = 6;
-  string metric_name = 7;
+  AttributeKey key = 7;
+  repeated VirtualColumnContext virtual_column_context = 8;
 
   //TODO: group by, topn, etc, not necessary for MVP
 }

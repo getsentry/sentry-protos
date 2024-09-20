@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1alpha;
+
+import "sentry_protos/snuba/v1alpha/request_common.proto";
+import "sentry_protos/snuba/v1alpha/trace_item_attribute.proto";
+
+//A request for "which tags are available for these projects between these dates" - used for things like autocompletion
+message TraceItemAttributesRequest {
+  RequestMeta meta = 1;
+  uint32 limit = 2;
+  uint32 offset = 3;
+  AttributeKey.Type type = 5;
+}
+
+message TraceItemAttributesResponse {
+  message Tag {
+    string name = 1;
+    AttributeKey.Type type = 2;
+  }
+  repeated Tag tags = 1;
+}
+
+message AttributeValuesRequest {
+  RequestMeta meta = 1;
+  string name = 3;
+  // a substring of the value being searched,
+  // only strict substring supported, no regex
+  string value_substring_match = 4;
+  uint32 limit = 5;
+  uint32 offset = 6;
+}
+
+message AttributeValuesResponse {
+  repeated string values = 1;
+}

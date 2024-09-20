@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.snuba.v1alpha;
 
+import "sentry_protos/snuba/v1alpha/trace_item_attribute.proto";
+
 message AndFilter {
   repeated TraceItemFilter filters = 1;
 }
@@ -10,7 +12,7 @@ message OrFilter {
   repeated TraceItemFilter filters = 1;
 }
 
-message NumericalFilter {
+message ComparisonFilter {
   enum Op {
     OP_UNSPECIFIED = 0;
     OP_LESS_THAN = 1;
@@ -19,27 +21,16 @@ message NumericalFilter {
     OP_GREATER_THAN_OR_EQUALS = 4;
     OP_EQUALS = 5;
     OP_NOT_EQUALS = 6;
+    OP_LIKE = 7; //string only
+    OP_NOT_LIKE = 8; //string only
   }
-  string key = 1;
+  AttributeKey key = 1;
   Op op = 2;
-  float value = 3;
-}
-
-message StringFilter {
-  enum Op {
-    OP_UNSPECIFIED = 0;
-    OP_EQUALS = 1;
-    OP_NOT_EQUALS = 2;
-    OP_LIKE = 3;
-    OP_NOT_LIKE = 4;
-  }
-  string key = 1;
-  Op op = 2;
-  string value = 3;
+  AttributeValue value = 3;
 }
 
 message ExistsFilter {
-  string key = 1;
+  AttributeKey key = 1;
 }
 
 // Represents a condition on searching for a particular "trace item"
@@ -48,8 +39,7 @@ message TraceItemFilter {
   oneof value {
     AndFilter and_filter = 1;
     OrFilter or_filter = 2;
-    NumericalFilter number_filter = 3;
-    StringFilter string_filter = 4;
-    ExistsFilter exists_filter = 5;
+    ComparisonFilter comparison_filter = 3;
+    ExistsFilter exists_filter = 4;
   }
 }

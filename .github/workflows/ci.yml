@@ -4,13 +4,43 @@ on:
   pull_request:
 
 jobs:
-  check:
+  buf-checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
         with:
           ref: ${{ github.ref }}
       - uses: bufbuild/buf-setup-action@v1.34.0
-      - uses: bufbuild/buf-breaking-action@v1
+
+      - name: buf lint
+        run: |
+          buf lint
+
+      - name: buf breaking
+        uses: bufbuild/buf-breaking-action@v1
         with:
           against: 'https://github.com/getsentry/sentry-protos.git#branch=main'
+
+  codegen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_RELEASE_PAT }}
+          fetch-depth: 0
+
+      - name: Install protoc
+        uses: arduino/setup-protoc@v3
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: build python bindings
+        run: |
+          pip install -r requirements.txt
+          make build-py
+
+      - name: build rust bindings
+        run: |
+          make build-rust

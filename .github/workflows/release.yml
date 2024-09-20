@@ -20,20 +20,6 @@ jobs:
           token: ${{ secrets.GH_RELEASE_PAT }}
           fetch-depth: 0
 
-      - name: Install protoc
-        uses: arduino/setup-protoc@v3
-
-      - name: Generate rust code
-        run: |
-          make build-rust
-
-      - name: Commit generated rust code
-        run: |
-          git config user.email bot@getsentry.com
-          git config user.name getsentry-bot
-          git add rust/src
-          git commit -m 'regenerate rust bindings'
-
       - name: Prepare release
         uses: getsentry/action-prepare-release@v1
         env:

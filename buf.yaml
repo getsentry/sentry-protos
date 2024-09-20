@@ -1,11 +1,11 @@
 version: v2
 modules:
   - path: proto
+    excludes:
+      - proto/google/protobuf
 breaking:
   use:
     - FILE
   ignore_unstable_packages: true
-lint:
   ignore:
-    - "kafka/events.v1.proto"
-    - "relay/event.proto"
+    - google/proto

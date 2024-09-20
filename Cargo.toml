@@ -1,6 +1,6 @@
+# craft publishing requires a top-level Cargo.toml
 [workspace]
 resolver = "2"
 members = [
     "rust",
-    "rustgenerator"
 ]

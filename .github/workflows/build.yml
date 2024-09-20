@@ -21,6 +21,7 @@ jobs:
       - run: |
           pip install -r requirements.txt
           make package-py
+
       - uses: actions/upload-artifact@v3.1.1
         with:
           name: ${{ github.sha }}

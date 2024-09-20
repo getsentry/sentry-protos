@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sentry_protos.seer.v1;
+
+import "sentry_protos/seer/v1/common.proto";
+
+message SummarizeRequest {
+  uint64 group_id = 1;
+  uint64 organization_id = 2;
+  string organization_slug = 3;
+  uint64 project_id = 4;
+  repeated IssueDetails connected_issues = 5;
+}
+
+message SummarizeResponse {
+  uint64 group_id = 1;
+  string headline = 2;
+  string summary = 3;
+  string impact = 4;
+}
+
+service IssueSummaryService {
+  rpc Summarize(SummarizeRequest) returns (SummarizeResponse);
+}

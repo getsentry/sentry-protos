@@ -1,0 +1,18 @@
+// Common models used by multiple services
+
+syntax = "proto3";
+package sentry_protos.seer.v1;
+
+import "google/protobuf/struct.proto";
+
+message SentryEventData {
+  string title = 1;
+  repeated google.protobuf.Value entries = 2;
+}
+
+message IssueDetails {
+  uint64 id = 1;
+  string title = 2;
+  string short_id = 3; // optional
+  repeated SentryEventData events = 4;
+}
