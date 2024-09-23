@@ -110,7 +110,7 @@ service TaskConsumerService {
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
 
   // Update the state of a task with execution results. (also used in push models)
-  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
+  rpc SetTaskState(SetTaskStateRequest) returns (SetTaskStateResponse);
 }
 
 message AddTaskRequest {
@@ -126,15 +126,16 @@ message GetTaskResponse {
   optional WorkerTask task = 1;
 }
 
-message UpdateTaskRequest {
+message SetTaskStateRequest {
   string id = 1;
   TaskState state = 2;
 
   // Whether or not the worker wants another task in the response.
-  bool get_next = 3;
+  bool fetch_next = 3;
 }
-message UpdateTaskResponse {
+message SetTaskStateResponse {
   bool ok = 1;
+  // The next task that a worker should execute. Requires `fetch_next` to be set in SetTaskStateRequest
   optional WorkerTask task = 2;
 }
 
