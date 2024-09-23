@@ -103,10 +103,22 @@ enum TaskState {
 // RPC interface for TaskConsumers.
 // These methods would be used in pull based models.
 service TaskConsumerService {
+  // Could be used by systems without access to kafka to create tasks
+  rpc AddTask(AddTaskRequest) returns (AddTaskResponse);
+
   // Get a task to process
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
+
   // Update the state of a task with execution results. (also used in push models)
   rpc CompleteTask(CompleteTaskRequest) returns (CompleteTaskResponse);
+}
+
+message AddTaskRequest {
+  WorkerTask task = 1;
+}
+message AddTaskResponse {
+  bool ok = 1;
+  optional string error = 2;
 }
 
 message GetTaskRequest {}
