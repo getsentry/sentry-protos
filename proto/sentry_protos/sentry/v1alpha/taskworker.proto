@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package sentry_protos.sentry.v1alpha;
+
+import "google/protobuf/timestamp.proto";
+
+message RetryState {
+  // Current attempt number
+  int32 attempts = 1001;
+
+  // The classname or adapter type for the retry policy
+  string kind = 1002;
+
+  // After this attempt the task should be discarded
+  optional int32 discard_after_attempt = 1003;
+
+  // After this attempt the task should be put in the dead-letter-queue.
+  optional int32 deadletter_after_attempt = 1004;
+}
+
+// Task message that is stored in Kafka.
+// Once a task becomes a Pending task additional state is tracked.
+message WorkerTask {
+  // A GUID for the task. Used to update tasks
+  string task_id = 1;
+
+  // The name of the task. This name is resolved within the worker
+  string taskname = 2;
+
+  // An opaque parameter collection. Could be JSON or protobuf encoded
+  string parameters = 3;
+
+  // A map of headers for the task.
+  map<string, string> headers = 4;
+
+  // The timestamp a task was stored in Kafka
+  google.protobuf.Timestamp received_at = 5;
+
+  // The task deadline. After this time the task is expired and should not be executed.
+  optional google.protobuf.Timestamp deadline = 6;
+
+  // Retry state
+  RetryState retry_state = 7;
+}
+
+// Once a WorkerTask has been received by the task consumer it is 'upgraded'
+// into a PendingTask so that processing state can be tracked.
+// This proto might not be used as Pending tasks don't need to cross process boundaries.
+message PendingTask {
+  // A GUID for the task. Used to update task state
+  string task_id = 1;
+
+  // The name of the task. This name is resolved within the worker
+  string taskname = 2;
+
+  // An opaque parameter collection. Could be JSON or protobuf encoded
+  string parameters = 3;
+
+  // A map of headers for the task.
+  map<string, string> headers = 4;
+
+  // The timestamp a task was stored in Kafka
+  google.protobuf.Timestamp received_at = 5;
+
+  // The task deadline. After this time the task is expired and should not be executed.
+  optional google.protobuf.Timestamp deadline = 6;
+
+  // Retry state
+  RetryState retry_state = 7;
+
+  // The original offset that the WorkerTask message had
+  // Used to find contiguous blocks of completed tasks so that offsets
+  // can be commit to Kafka
+  int64 offset = 8;
+
+  // The timestamp this task was added to PendingTask storage
+  google.protobuf.Timestamp added_at = 9;
+
+  // The timestamp that this task expires and should be deadlettered.
+  google.protobuf.Timestamp deadletter_at = 10;
+
+  // The timestamp that processing is expected to be complete by.
+  // If processing is not complete by this time, a retry will be attempted.
+  google.protobuf.Timestamp processing_deadline = 11;
+
+  // The current task state
+  TaskState state = 12;
+}
+
+enum TaskState {
+  TASK_STATE_UNSPECIFIED = 0;
+  TASK_STATE_PENDING = 1;
+  TASK_STATE_PROCESSING = 2;
+  TASK_STATE_FAILURE = 3;
+  TASK_STATE_RETRY = 4;
+  TASK_STATE_COMPLETE = 5;
+}
+
+////////////////////////////
+// RPC messages and services
+////////////////////////////
+
+// RPC interface for TaskConsumers.
+// These methods would be used in pull based models.
+service TaskConsumerService {
+  // Get a task to process
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
+  // Update the state of a task with execution results. (also used in push models)
+  rpc CompleteTask(CompleteTaskRequest) returns (CompleteTaskResponse);
+}
+
+message GetTaskRequest {}
+message GetTaskResponse {
+  WorkerTask task = 1;
+}
+
+message CompleteTaskRequest {
+  string task_id = 1;
+  TaskState state = 2;
+
+  // Whether or not the worker wants another task in the response.
+  bool get_next = 3;
+}
+message CompleteTaskResponse {
+  bool ok = 1;
+  optional WorkerTask task = 2;
+}
+
+// RPC interface for TaskWorkers
+// These methods would be used in push based models
+service TaskWorkerService {
+  rpc SubmitTask(SubmitTaskRequest) returns (SubmitTaskResponse);
+}
+
+message SubmitTaskRequest {
+  WorkerTask task = 1;
+}
+message SubmitTaskResponse {
+  bool ok = 1;
+  optional string error = 2;
+}
