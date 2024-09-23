@@ -110,7 +110,7 @@ service TaskConsumerService {
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
 
   // Update the state of a task with execution results. (also used in push models)
-  rpc CompleteTask(CompleteTaskRequest) returns (CompleteTaskResponse);
+  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
 }
 
 message AddTaskRequest {
@@ -123,17 +123,17 @@ message AddTaskResponse {
 
 message GetTaskRequest {}
 message GetTaskResponse {
-  WorkerTask task = 1;
+  optional WorkerTask task = 1;
 }
 
-message CompleteTaskRequest {
+message UpdateTaskRequest {
   string id = 1;
   TaskState state = 2;
 
   // Whether or not the worker wants another task in the response.
   bool get_next = 3;
 }
-message CompleteTaskResponse {
+message UpdateTaskResponse {
   bool ok = 1;
   optional WorkerTask task = 2;
 }
