@@ -22,7 +22,7 @@ message RetryState {
 // Once a task becomes a Pending task additional state is tracked.
 message WorkerTask {
   // A GUID for the task. Used to update tasks
-  string task_id = 1;
+  string id = 1;
 
   // The name of the task. This name is resolved within the worker
   string taskname = 2;
@@ -48,7 +48,7 @@ message WorkerTask {
 // This proto might not be used as Pending tasks don't need to cross process boundaries.
 message PendingTask {
   // A GUID for the task. Used to update task state
-  string task_id = 1;
+  string id = 1;
 
   // The name of the task. This name is resolved within the worker
   string taskname = 2;
@@ -115,7 +115,7 @@ message GetTaskResponse {
 }
 
 message CompleteTaskRequest {
-  string task_id = 1;
+  string id = 1;
   TaskState state = 2;
 
   // Whether or not the worker wants another task in the response.
