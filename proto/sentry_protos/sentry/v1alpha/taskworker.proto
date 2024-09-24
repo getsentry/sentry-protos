@@ -92,7 +92,7 @@ service ConsumerService {
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
 
   // Update the state of a task with execution results. (also used in push models)
-  rpc SetTaskState(SetTaskStateRequest) returns (SetTaskStateResponse) {}
+  rpc SetTaskStatus(SetTaskStatusRequest) returns (SetTaskStatusResponse) {}
 }
 
 message GetTaskRequest {}
@@ -100,14 +100,14 @@ message GetTaskResponse {
   optional TaskActivation task = 1;
 }
 
-message SetTaskStateRequest {
+message SetTaskStatusRequest {
   string id = 1;
   TaskActivationStatus status = 2;
 
   // Set to true to have receive a new task in the response
   optional bool fetch_next = 3;
 }
-message SetTaskStateResponse {
+message SetTaskStatusResponse {
   optional TaskActivation task = 1;
 }
 
