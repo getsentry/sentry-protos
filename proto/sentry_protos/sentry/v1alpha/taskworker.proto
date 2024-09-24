@@ -33,23 +33,26 @@ message TaskActivation {
   // A GUID for the task. Used to update tasks
   string id = 1;
 
+  // The task namespace
+  string namespace = 2;
+
   // The name of the task. This name is resolved within the worker
-  string taskname = 2;
+  string taskname = 3;
 
   // An opaque parameter collection. Could be JSON or protobuf encoded
-  string parameters = 3;
+  string parameters = 4;
 
   // A map of headers for the task.
-  map<string, string> headers = 4;
+  map<string, string> headers = 5;
 
   // The timestamp a task was stored in Kafka
-  google.protobuf.Timestamp received_at = 5;
+  google.protobuf.Timestamp received_at = 6;
 
   // The task deadline. After this time the task is expired and should not be executed.
-  optional google.protobuf.Timestamp deadline = 6;
+  optional google.protobuf.Timestamp deadline = 7;
 
   // Retry state
-  RetryState retry_state = 7;
+  RetryState retry_state = 8;
 }
 
 // Once a TaskActivation has been received by the task consumer it is wrapped
