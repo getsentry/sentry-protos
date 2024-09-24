@@ -76,8 +76,6 @@ message InflightActivation {
   // The timestamp that processing is expected to be complete by.
   // If processing is not complete by this time, a retry will be attempted.
   google.protobuf.Timestamp processing_deadline = 6;
-
-  TaskActivationStatus state = 12;
 }
 
 ////////////////////////////
