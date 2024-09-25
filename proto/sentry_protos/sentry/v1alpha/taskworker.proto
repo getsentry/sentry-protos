@@ -28,7 +28,8 @@ enum TaskActivationStatus {
 }
 
 // Task message that is stored in Kafka.
-// Once consumed, TaskActivations are wrapped with InflightActivation to track additional state
+// Once consumed, TaskActivations are wrapped with InflightActivation to track
+// additional state
 message TaskActivation {
   // A GUID for the task. Used to update tasks
   string id = 1;
@@ -48,7 +49,8 @@ message TaskActivation {
   // The timestamp a task was stored in Kafka
   google.protobuf.Timestamp received_at = 6;
 
-  // The task deadline. After this time the task is expired and should not be executed.
+  // The task deadline. After this time the task is expired and should not be
+  // executed.
   optional google.protobuf.Timestamp deadline = 7;
 
   // Retry state
@@ -57,7 +59,8 @@ message TaskActivation {
 
 // Once a TaskActivation has been received by the task consumer it is wrapped
 // with InflightActivation so that processing state can be tracked.
-// This proto might not be used as InflightActivations don't need to cross process boundaries.
+// This proto might not be used as InflightActivations don't need to cross
+// process boundaries.
 message InflightActivation {
   // The TaskActivation being tracked.
   TaskActivation activation = 1;
@@ -88,10 +91,11 @@ service ConsumerService {
   // Could be used by systems without access to kafka to create tasks
   rpc AddTask(AddTaskRequest) returns (AddTaskResponse);
 
-  // Fetch a new task to process.
+  // Fetch a new task activation to process.
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
 
-  // Update the state of a task with execution results. (also used in push models)
+  // Update the state of a task with execution results. (also used in push
+  // models)
   rpc SetTaskStatus(SetTaskStatusRequest) returns (SetTaskStatusResponse) {}
 }
 
@@ -117,4 +121,21 @@ message AddTaskRequest {
 message AddTaskResponse {
   bool ok = 1;
   optional string error = 2;
+}
+
+////////////////////////////
+// Worker messages and services
+////////////////////////////
+service WorkerService {
+  // Disptach a new activation to process, retains a long running
+  // connection
+  rpc Dispatch(DispatchRequest) returns (DispatchResponse) {}
+}
+
+message DispatchRequest {
+  TaskActivation task_activation = 1;
+}
+
+message DispatchResponse {
+  TaskActivationStatus status = 1;
 }
