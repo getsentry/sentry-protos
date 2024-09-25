@@ -25,6 +25,9 @@ Any proto packages that end in `alpha`, `beta`, or `test` are exempt from breaki
 
 For example: `sentry_protos.sentry.confabulator.v1test` would not be subject to backwards compatibility.
 
+Unstable protocols are not included in release packages in order to prevent them from being
+used in production workloads.
+
 # Local development workflow
 
 sentry-protos makes it easy to develop and test protobuf/grpc changes locally before making

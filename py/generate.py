@@ -1,5 +1,6 @@
 import glob
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -10,10 +11,25 @@ from os import path
 here = path.abspath(path.dirname(__file__))
 root_dir = path.abspath(os.path.join(path.dirname(__file__), ".."))
 
+unstable_package_pattern = re.compile(r"v\d+(?:alpha|beta|dev)")
+
+def is_unstable(proto: str) -> bool:
+    matches = unstable_package_pattern.search(proto)
+    return matches != None
+
+
 def build_protos():
+    build_unstable = int(os.getenv("SENTRY_PROTOS_BUILD_UNSTABLE", "0"))
+    if build_unstable:
+        print("Including unstable protos")
+
     protos = glob.glob(f"{root_dir}/proto/sentry_protos/**/*.proto", recursive=True)
     with tempfile.TemporaryDirectory() as tmpd:
         for proto in protos:
+            if build_unstable == 0 and is_unstable(proto):
+                print(f"Skipping {proto} it is an unstable protocol")
+                continue
+
             result = subprocess.run(
                 [
                     "python",
