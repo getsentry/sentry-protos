@@ -127,7 +127,7 @@ message AddTaskResponse {
 // Worker messages and services
 ////////////////////////////
 service WorkerService {
-  // Disptach a new activation to process, retains a long running
+  // Dispatch a new activation to process, retains a long running
   // connection
   rpc Dispatch(DispatchRequest) returns (DispatchResponse) {}
 }
