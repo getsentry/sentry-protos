@@ -133,7 +133,8 @@ service WorkerService {
 }
 
 message DispatchRequest {
-  TaskActivation task_activation = 1;
+  TaskActivation activation = 1;
+  google.protobuf.Timestamp processing_deadline = 2;
 }
 
 message DispatchResponse {
