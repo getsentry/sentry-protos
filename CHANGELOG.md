@@ -1,3 +1,34 @@
+## 0.1.23
+
+### Various fixes & improvements
+
+- account for sparse time series (#28) by @volokluev
+- add a table query with aggregate (#28) by @volokluev
+- add table example (#28) by @volokluev
+- make table endpoint more complete (#28) by @volokluev
+- rename to TraceItemTableRequest (#28) by @volokluev
+- include buckets in timeseries response (#28) by @volokluev
+- add example (#28) by @volokluev
+- make groupby attributes a map (#28) by @volokluev
+- OP_IN, OP_NOT_IN (#28) by @volokluev
+- Improve build output (#27) by @markstory
+- endpoint (#28) by @volokluev
+- aggregate_bucket -> timeseries (#28) by @volokluev
+- more consistent attribute endpoint naming (#28) by @volokluev
+- add null value possibility to AttributeValue (#28) by @volokluev
+- add NotFilter (#28) by @volokluev
+- address comments (#28) by @volokluev
+- v3 is deprecated (#35) by @joshuarli
+- add number of events and sampling rate to the TimeSeries response (#28) by @volokluev
+- typo (#28) by @volokluev
+- extra context (#28) by @volokluev
+- typo (#28) by @volokluev
+- rename (#28) by @volokluev
+- makrdown fix (#28) by @volokluev
+- make page token more explicit and still support offset (#28) by @volokluev
+
+_Plus 9 more_
+
 ## 0.1.22
 
 ### Various fixes & improvements
