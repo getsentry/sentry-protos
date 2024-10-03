@@ -37,6 +37,10 @@ message IntArray {
   repeated int64 values = 1;
 }
 
+message UIntArray {
+  repeated uint64 values = 1;
+}
+
 message AttributeValue {
   oneof value {
     bool val_bool = 1;
@@ -47,6 +51,8 @@ message AttributeValue {
     bool val_null = 5;
     StrArray val_str_array = 6;
     IntArray val_int_array = 7;
+    uint64 val_uint = 8;
+    UIntArray val_uint_array = 9;
   }
 }
 
