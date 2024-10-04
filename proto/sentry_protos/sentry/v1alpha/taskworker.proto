@@ -102,6 +102,7 @@ service ConsumerService {
 message GetTaskRequest {}
 message GetTaskResponse {
   optional TaskActivation task = 1;
+  google.protobuf.Timestamp processing_deadline = 2;
 }
 
 message SetTaskStatusRequest {
@@ -112,7 +113,10 @@ message SetTaskStatusRequest {
   optional bool fetch_next = 3;
 }
 message SetTaskStatusResponse {
+  // The next task the worker should execute. Requires fetch_next=True on the request.
   optional TaskActivation task = 1;
+  // The processing deadline for the new task
+  optional google.protobuf.Timestamp processing_deadline = 2;
 }
 
 message AddTaskRequest {
