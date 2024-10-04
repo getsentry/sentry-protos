@@ -102,7 +102,7 @@ service ConsumerService {
 message GetTaskRequest {}
 message GetTaskResponse {
   optional TaskActivation task = 1;
-  google.protobuf.Timestamp processing_deadline = 2;
+  optional google.protobuf.Timestamp processing_deadline = 2;
 }
 
 message SetTaskStatusRequest {
