@@ -1,0 +1,2281 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentry Protos</title>
+    <link rel="stylesheet" href="static/mystyles.css" />
+    <script src="static/fontawesome.js"></script>
+    <script src="static/lunr.js"></script>
+    <script src="static/theme.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="level pt-6 mb-5 pb-2 bottom-border">
+        <div class="level-left">
+          <p class="level-item has-text-centered is-size-3 has-text-weight-medium">
+            <a class="link is-info" href="index.html">
+              Sentry Protos
+            </a>
+          </p>
+        </div>
+
+        <div class="level-right">
+          
+          <form action="search.html" class="mr-2 has-text-centered">
+            <input type="text" name="query" class="input mr-3 navbar-search-query-input" placeholder="Search">
+            <input type="submit" class="button is-primary mr-5" value="Search" />
+          </form>
+          
+
+          <p class="level-item has-text-centered is-size-5">
+            <a href="https://github.com/getsentry/sentry-protos" class="link is-info mr-5" target="_blank">
+              
+              <span class="icon">
+                <i class="fa-brands fa-github"></i>
+              </span>
+              
+              <span>Source</span>
+            </a>
+
+            <button class="theme-toggle" id="theme-toggle" title="Toggles light & dark" aria-label="auto" aria-live="polite" type="button">
+              <svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
+                <mask class="moon" id="moon-mask">
+                  <rect x="0" y="0" width="100%" height="100%" fill="white" />
+                  <circle cx="24" cy="10" r="6" fill="black" />
+                </mask>
+                <circle class="sun" cx="12" cy="12" r="6" mask="url(#moon-mask)" fill="currentColor" />
+                <g class="sun-beams" stroke="currentColor">
+                  <line x1="12" y1="1" x2="12" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" />
+                  <line x1="21" y1="12" x2="23" y2="12" />
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </g>
+              </svg>
+            </button>
+          </p>
+        </div>
+      </nav>
+    </div>
+
+    <div id="main-content" class="container mb-6">
+  <p class="mb-2">
+    <a style="font-size: 0.9em" href="index.html">← Back to packages</a>
+  </p>
+  <h3 class="title is-3">
+    
+    Package <code>sentry_protos.snuba.v1alpha</code>
+    
+  </h3>
+
+  <div class="block">
+    
+
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.RequestMeta">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>RequestMeta</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.AttributeKey">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>AttributeKey</code> 
+        </a>
+      </p>
+      
+    
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.VirtualColumnContext">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>VirtualColumnContext</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.AttributeValue">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>AttributeValue</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.AndFilter">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>AndFilter</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.OrFilter">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>OrFilter</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.ComparisonFilter">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>ComparisonFilter</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.ExistsFilter">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>ExistsFilter</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.TraceItemFilter">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>TraceItemFilter</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.AggregateBucketRequest">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>AggregateBucketRequest</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.AggregateBucketResponse">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>AggregateBucketResponse</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.SpanSamplesRequest.OrderBy">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>OrderBy</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.SpanSamplesRequest">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>SpanSamplesRequest</code> 
+        </a>
+      </p>
+      
+    
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.SpanSample">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>SpanSample</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.SpanSamplesResponse">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>SpanSamplesResponse</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.TraceItemAttributesRequest">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>TraceItemAttributesRequest</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.TraceItemAttributesResponse.Tag">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>Tag</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.TraceItemAttributesResponse">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>TraceItemAttributesResponse</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.AttributeValuesRequest">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>AttributeValuesRequest</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.snuba.v1alpha.AttributeValuesResponse">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>AttributeValuesResponse</code> 
+        </a>
+      </p>
+      
+    
+
+    
+      <p>
+        <a href="#enum-sentry_protos.snuba.v1alpha.TraceItemName">
+          <span class="tag" style="min-width: 6em">Enum</span>
+          <code>TraceItemName</code> 
+        </a>
+      </p>
+    
+      <p>
+        <a href="#enum-sentry_protos.snuba.v1alpha.AttributeKey.Type">
+          <span class="tag" style="min-width: 6em">Enum</span>
+          <code>Type</code> 
+        </a>
+      </p>
+    
+      <p>
+        <a href="#enum-sentry_protos.snuba.v1alpha.ComparisonFilter.Op">
+          <span class="tag" style="min-width: 6em">Enum</span>
+          <code>Op</code> 
+        </a>
+      </p>
+    
+      <p>
+        <a href="#enum-sentry_protos.snuba.v1alpha.AggregateBucketRequest.Function">
+          <span class="tag" style="min-width: 6em">Enum</span>
+          <code>Function</code> 
+        </a>
+      </p>
+    
+  </div>
+
+  <div class="block">
+      
+  </div>
+
+  
+
+  
+
+    <h3 class="title is-3">
+      Messages
+    </h3>
+
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.RequestMeta">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.RequestMeta" title="sentry_protos.snuba.v1alpha.RequestMeta">message RequestMeta</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/request_common.proto#L6">sentry_protos/snuba/v1alpha/request_common.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        organization_id
+      </td>
+      <td>
+        <code title="uint64">
+          
+          <span>uint64</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        cogs_category
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        referrer
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td>
+        project_ids
+      </td>
+      <td>
+        <code title="uint64">
+          
+            repeated
+          
+          <span>uint64</span>
+        </code>
+      </td>
+      <td class="content"><p>can be empty</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td>
+        start_timestamp
+      </td>
+      <td>
+        <code title="google.protobuf.Timestamp">
+          
+          <span>google.protobuf.Timestamp</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td>
+        end_timestamp
+      </td>
+      <td>
+        <code title="google.protobuf.Timestamp">
+          
+          <span>google.protobuf.Timestamp</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>7</td>
+      <td>
+        trace_item_name
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.TraceItemName">
+          
+          <a href="sentry_protos.snuba.v1.html#enum-sentry_protos.snuba.v1alpha.TraceItemName"><span title="sentry_protos.snuba.v1alpha.TraceItemName">sentry_protos.snuba.v1alpha.TraceItemName</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.AttributeKey">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.AttributeKey" title="sentry_protos.snuba.v1alpha.AttributeKey">message AttributeKey</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/trace_item_attribute.proto#L4">sentry_protos/snuba/v1alpha/trace_item_attribute.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        type
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.AttributeKey.Type">
+          
+          <a href="sentry_protos.snuba.v1.html#enum-sentry_protos.snuba.v1alpha.AttributeKey.Type"><span title="sentry_protos.snuba.v1alpha.AttributeKey.Type">sentry_protos.snuba.v1alpha.AttributeKey.Type</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        name
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"><p>if you use span_id this will route to span.span_id,<br />
+if you use derp this will route to attr_{str,num}_{n}['derp']</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.VirtualColumnContext">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.VirtualColumnContext" title="sentry_protos.snuba.v1alpha.VirtualColumnContext">message VirtualColumnContext</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/trace_item_attribute.proto#L24">sentry_protos/snuba/v1alpha/trace_item_attribute.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p>custom mappings of column values which are not present in EAP storage<br />
+for example, project name is changeable by the user and not stored in EAP<br />
+but sorting by the project name may be desired. This struct carries that mapping<br />
+data</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        from_column_name
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        to_column_name
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        value_map
+      </td>
+      <td>
+        <code title="map&lt;string, string&gt;">
+          
+          <span>map&lt;string, string&gt;</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.AttributeValue">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.AttributeValue" title="sentry_protos.snuba.v1alpha.AttributeValue">message AttributeValue</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/trace_item_attribute.proto#L30">sentry_protos/snuba/v1alpha/trace_item_attribute.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    
+      
+        
+          <tr class="nohover"><td style="border: 0px"></td></tr>
+          <tr class="nohover">
+            <td class="oneof-heading" colspan="4">
+              <div class="oneof-heading">
+                <strong>oneof value</strong>
+              </div>
+            </td>
+          </tr>
+        
+
+        <tr>
+          <td>
+            1
+          </td>
+          <td>
+            val_bool
+          </td>
+          <td>
+            <code title="bool">
+              
+              <span>bool</span>
+            </code>
+          </td>
+          <td class="content"></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            2
+          </td>
+          <td>
+            val_str
+          </td>
+          <td>
+            <code title="string">
+              
+              <span>string</span>
+            </code>
+          </td>
+          <td class="content"></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            3
+          </td>
+          <td>
+            val_float
+          </td>
+          <td>
+            <code title="float">
+              
+              <span>float</span>
+            </code>
+          </td>
+          <td class="content"></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            4
+          </td>
+          <td>
+            val_int
+          </td>
+          <td>
+            <code title="int64">
+              
+              <span>int64</span>
+            </code>
+          </td>
+          <td class="content"></td>
+          
+        </tr>
+      
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.AndFilter">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.AndFilter" title="sentry_protos.snuba.v1alpha.AndFilter">message AndFilter</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/trace_item_filter.proto#L6">sentry_protos/snuba/v1alpha/trace_item_filter.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        filters
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.TraceItemFilter">
+          
+            repeated
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.TraceItemFilter"><span title="sentry_protos.snuba.v1alpha.TraceItemFilter">sentry_protos.snuba.v1alpha.TraceItemFilter</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.OrFilter">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.OrFilter" title="sentry_protos.snuba.v1alpha.OrFilter">message OrFilter</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/trace_item_filter.proto#L10">sentry_protos/snuba/v1alpha/trace_item_filter.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        filters
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.TraceItemFilter">
+          
+            repeated
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.TraceItemFilter"><span title="sentry_protos.snuba.v1alpha.TraceItemFilter">sentry_protos.snuba.v1alpha.TraceItemFilter</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.ComparisonFilter">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.ComparisonFilter" title="sentry_protos.snuba.v1alpha.ComparisonFilter">message ComparisonFilter</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/trace_item_filter.proto#L14">sentry_protos/snuba/v1alpha/trace_item_filter.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        key
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.AttributeKey">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.AttributeKey"><span title="sentry_protos.snuba.v1alpha.AttributeKey">sentry_protos.snuba.v1alpha.AttributeKey</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        op
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.ComparisonFilter.Op">
+          
+          <a href="sentry_protos.snuba.v1.html#enum-sentry_protos.snuba.v1alpha.ComparisonFilter.Op"><span title="sentry_protos.snuba.v1alpha.ComparisonFilter.Op">sentry_protos.snuba.v1alpha.ComparisonFilter.Op</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        value
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.AttributeValue">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.AttributeValue"><span title="sentry_protos.snuba.v1alpha.AttributeValue">sentry_protos.snuba.v1alpha.AttributeValue</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.ExistsFilter">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.ExistsFilter" title="sentry_protos.snuba.v1alpha.ExistsFilter">message ExistsFilter</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/trace_item_filter.proto#L31">sentry_protos/snuba/v1alpha/trace_item_filter.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        key
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.AttributeKey">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.AttributeKey"><span title="sentry_protos.snuba.v1alpha.AttributeKey">sentry_protos.snuba.v1alpha.AttributeKey</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.TraceItemFilter">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.TraceItemFilter" title="sentry_protos.snuba.v1alpha.TraceItemFilter">message TraceItemFilter</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/trace_item_filter.proto#L37">sentry_protos/snuba/v1alpha/trace_item_filter.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p>Represents a condition on searching for a particular "trace item"<br />
+(e.g., spans, replays, errors)</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    
+      
+        
+          <tr class="nohover"><td style="border: 0px"></td></tr>
+          <tr class="nohover">
+            <td class="oneof-heading" colspan="4">
+              <div class="oneof-heading">
+                <strong>oneof value</strong>
+              </div>
+            </td>
+          </tr>
+        
+
+        <tr>
+          <td>
+            1
+          </td>
+          <td>
+            and_filter
+          </td>
+          <td>
+            <code title="sentry_protos.snuba.v1alpha.AndFilter">
+              
+              <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.AndFilter"><span title="sentry_protos.snuba.v1alpha.AndFilter">sentry_protos.snuba.v1alpha.AndFilter</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            2
+          </td>
+          <td>
+            or_filter
+          </td>
+          <td>
+            <code title="sentry_protos.snuba.v1alpha.OrFilter">
+              
+              <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.OrFilter"><span title="sentry_protos.snuba.v1alpha.OrFilter">sentry_protos.snuba.v1alpha.OrFilter</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            3
+          </td>
+          <td>
+            comparison_filter
+          </td>
+          <td>
+            <code title="sentry_protos.snuba.v1alpha.ComparisonFilter">
+              
+              <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.ComparisonFilter"><span title="sentry_protos.snuba.v1alpha.ComparisonFilter">sentry_protos.snuba.v1alpha.ComparisonFilter</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"></td>
+          
+        </tr>
+      
+        
+
+        <tr>
+          <td>
+            4
+          </td>
+          <td>
+            exists_filter
+          </td>
+          <td>
+            <code title="sentry_protos.snuba.v1alpha.ExistsFilter">
+              
+              <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.ExistsFilter"><span title="sentry_protos.snuba.v1alpha.ExistsFilter">sentry_protos.snuba.v1alpha.ExistsFilter</span>
+    </a>
+            </code>
+          </td>
+          <td class="content"></td>
+          
+        </tr>
+      
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.AggregateBucketRequest">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.AggregateBucketRequest" title="sentry_protos.snuba.v1alpha.AggregateBucketRequest">message AggregateBucketRequest</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_aggregate_bucket.proto#L8">sentry_protos/snuba/v1alpha/endpoint_aggregate_bucket.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        meta
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.RequestMeta">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.RequestMeta"><span title="sentry_protos.snuba.v1alpha.RequestMeta">sentry_protos.snuba.v1alpha.RequestMeta</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td>
+        aggregate
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.AggregateBucketRequest.Function">
+          
+          <a href="sentry_protos.snuba.v1.html#enum-sentry_protos.snuba.v1alpha.AggregateBucketRequest.Function"><span title="sentry_protos.snuba.v1alpha.AggregateBucketRequest.Function">sentry_protos.snuba.v1alpha.AggregateBucketRequest.Function</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td>
+        filter
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.TraceItemFilter">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.TraceItemFilter"><span title="sentry_protos.snuba.v1alpha.TraceItemFilter">sentry_protos.snuba.v1alpha.TraceItemFilter</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td>
+        granularity_secs
+      </td>
+      <td>
+        <code title="uint64">
+          
+          <span>uint64</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>7</td>
+      <td>
+        key
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.AttributeKey">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.AttributeKey"><span title="sentry_protos.snuba.v1alpha.AttributeKey">sentry_protos.snuba.v1alpha.AttributeKey</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>8</td>
+      <td>
+        virtual_column_context
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.VirtualColumnContext">
+          
+            repeated
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.VirtualColumnContext"><span title="sentry_protos.snuba.v1alpha.VirtualColumnContext">sentry_protos.snuba.v1alpha.VirtualColumnContext</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.AggregateBucketResponse">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.AggregateBucketResponse" title="sentry_protos.snuba.v1alpha.AggregateBucketResponse">message AggregateBucketResponse</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_aggregate_bucket.proto#L30">sentry_protos/snuba/v1alpha/endpoint_aggregate_bucket.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        result
+      </td>
+      <td>
+        <code title="float">
+          
+            repeated
+          
+          <span>float</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.SpanSamplesRequest.OrderBy">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.SpanSamplesRequest.OrderBy" title="sentry_protos.snuba.v1alpha.SpanSamplesRequest.OrderBy">message OrderBy</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.SpanSamplesRequest"><span title="sentry_protos.snuba.v1alpha.SpanSamplesRequest">sentry_protos.snuba.v1alpha.SpanSamplesRequest</span>
+    </a>)</span>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_span_samples.proto#L9">sentry_protos/snuba/v1alpha/endpoint_span_samples.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        key
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.AttributeKey">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.AttributeKey"><span title="sentry_protos.snuba.v1alpha.AttributeKey">sentry_protos.snuba.v1alpha.AttributeKey</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        descending
+      </td>
+      <td>
+        <code title="bool">
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.SpanSamplesRequest">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.SpanSamplesRequest" title="sentry_protos.snuba.v1alpha.SpanSamplesRequest">message SpanSamplesRequest</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_span_samples.proto#L8">sentry_protos/snuba/v1alpha/endpoint_span_samples.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        meta
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.RequestMeta">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.RequestMeta"><span title="sentry_protos.snuba.v1alpha.RequestMeta">sentry_protos.snuba.v1alpha.RequestMeta</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        filter
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.TraceItemFilter">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.TraceItemFilter"><span title="sentry_protos.snuba.v1alpha.TraceItemFilter">sentry_protos.snuba.v1alpha.TraceItemFilter</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        order_by
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.SpanSamplesRequest.OrderBy">
+          
+            repeated
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.SpanSamplesRequest.OrderBy"><span title="sentry_protos.snuba.v1alpha.SpanSamplesRequest.OrderBy">sentry_protos.snuba.v1alpha.SpanSamplesRequest.OrderBy</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td>
+        keys
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.AttributeKey">
+          
+            repeated
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.AttributeKey"><span title="sentry_protos.snuba.v1alpha.AttributeKey">sentry_protos.snuba.v1alpha.AttributeKey</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td>
+        limit
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td>
+        virtual_column_contexts
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.VirtualColumnContext">
+          
+            repeated
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.VirtualColumnContext"><span title="sentry_protos.snuba.v1alpha.VirtualColumnContext">sentry_protos.snuba.v1alpha.VirtualColumnContext</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.SpanSample">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.SpanSample" title="sentry_protos.snuba.v1alpha.SpanSample">message SpanSample</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_span_samples.proto#L22">sentry_protos/snuba/v1alpha/endpoint_span_samples.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        results
+      </td>
+      <td>
+        <code title="map&lt;string, AttributeValue&gt;">
+          
+          <span>map&lt;string, AttributeValue&gt;</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.SpanSamplesResponse">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.SpanSamplesResponse" title="sentry_protos.snuba.v1alpha.SpanSamplesResponse">message SpanSamplesResponse</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_span_samples.proto#L26">sentry_protos/snuba/v1alpha/endpoint_span_samples.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        span_samples
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.SpanSample">
+          
+            repeated
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.SpanSample"><span title="sentry_protos.snuba.v1alpha.SpanSample">sentry_protos.snuba.v1alpha.SpanSample</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.TraceItemAttributesRequest">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.TraceItemAttributesRequest" title="sentry_protos.snuba.v1alpha.TraceItemAttributesRequest">message TraceItemAttributesRequest</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_tags_list.proto#L8">sentry_protos/snuba/v1alpha/endpoint_tags_list.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p>A request for "which tags are available for these projects between these dates" - used for things like autocompletion</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        meta
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.RequestMeta">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.RequestMeta"><span title="sentry_protos.snuba.v1alpha.RequestMeta">sentry_protos.snuba.v1alpha.RequestMeta</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        limit
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        offset
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td>
+        type
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.AttributeKey.Type">
+          
+          <a href="sentry_protos.snuba.v1.html#enum-sentry_protos.snuba.v1alpha.AttributeKey.Type"><span title="sentry_protos.snuba.v1alpha.AttributeKey.Type">sentry_protos.snuba.v1alpha.AttributeKey.Type</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.TraceItemAttributesResponse.Tag">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.TraceItemAttributesResponse.Tag" title="sentry_protos.snuba.v1alpha.TraceItemAttributesResponse.Tag">message Tag</a>
+  
+    <span style="font-size: 0.7em; font-weight: normal">(Nested in <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.TraceItemAttributesResponse"><span title="sentry_protos.snuba.v1alpha.TraceItemAttributesResponse">sentry_protos.snuba.v1alpha.TraceItemAttributesResponse</span>
+    </a>)</span>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_tags_list.proto#L16">sentry_protos/snuba/v1alpha/endpoint_tags_list.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        name
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        type
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.AttributeKey.Type">
+          
+          <a href="sentry_protos.snuba.v1.html#enum-sentry_protos.snuba.v1alpha.AttributeKey.Type"><span title="sentry_protos.snuba.v1alpha.AttributeKey.Type">sentry_protos.snuba.v1alpha.AttributeKey.Type</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.TraceItemAttributesResponse">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.TraceItemAttributesResponse" title="sentry_protos.snuba.v1alpha.TraceItemAttributesResponse">message TraceItemAttributesResponse</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_tags_list.proto#L15">sentry_protos/snuba/v1alpha/endpoint_tags_list.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        tags
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.TraceItemAttributesResponse.Tag">
+          
+            repeated
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.TraceItemAttributesResponse.Tag"><span title="sentry_protos.snuba.v1alpha.TraceItemAttributesResponse.Tag">sentry_protos.snuba.v1alpha.TraceItemAttributesResponse.Tag</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.AttributeValuesRequest">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.AttributeValuesRequest" title="sentry_protos.snuba.v1alpha.AttributeValuesRequest">message AttributeValuesRequest</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_tags_list.proto#L23">sentry_protos/snuba/v1alpha/endpoint_tags_list.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        meta
+      </td>
+      <td>
+        <code title="sentry_protos.snuba.v1alpha.RequestMeta">
+          
+          <a href="sentry_protos.snuba.v1.html#message-sentry_protos.snuba.v1alpha.RequestMeta"><span title="sentry_protos.snuba.v1alpha.RequestMeta">sentry_protos.snuba.v1alpha.RequestMeta</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        name
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td>
+        value_substring_match
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"><p>a substring of the value being searched,<br />
+only strict substring supported, no regex</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td>
+        limit
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td>
+        offset
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.snuba.v1alpha.AttributeValuesResponse">
+  <span>
+    <a href="#message-sentry_protos.snuba.v1alpha.AttributeValuesResponse" title="sentry_protos.snuba.v1alpha.AttributeValuesResponse">message AttributeValuesResponse</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_tags_list.proto#L33">sentry_protos/snuba/v1alpha/endpoint_tags_list.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        values
+      </td>
+      <td>
+        <code title="string">
+          
+            repeated
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+
+  
+
+  
+
+    <h3 class="title is-3">
+      Enums
+    </h3>
+
+    
+    <div class="block">
+      <h4 class="title is-4 type-heading" id="enum-sentry_protos.snuba.v1alpha.TraceItemName">
+  <a href="#enum-sentry_protos.snuba.v1alpha.TraceItemName" title="sentry_protos.snuba.v1alpha.TraceItemName">enum TraceItemName</a>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/request_common.proto#L17">sentry_protos/snuba/v1alpha/request_common.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p></p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td><code>TRACE_ITEM_NAME_UNSPECIFIED</code></td>
+      <td>0</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>TRACE_ITEM_NAME_EAP_SPANS</code></td>
+      <td>1</td>
+      <td class="content"></td>
+    </tr>
+    
+  </tbody>
+</table> 
+    </div>
+    
+    <div class="block">
+      <h4 class="title is-4 type-heading" id="enum-sentry_protos.snuba.v1alpha.AttributeKey.Type">
+  <a href="#enum-sentry_protos.snuba.v1alpha.AttributeKey.Type" title="sentry_protos.snuba.v1alpha.AttributeKey.Type">enum Type</a>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/trace_item_attribute.proto#L5">sentry_protos/snuba/v1alpha/trace_item_attribute.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p><p>this mostly reflects what types are able to be ingested, see eap_spans consumer for ingest details</p></p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td><code>TYPE_UNSPECIFIED</code></td>
+      <td>0</td>
+      <td class="content"><p>called "none" sometimes</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>TYPE_BOOLEAN</code></td>
+      <td>1</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>TYPE_STRING</code></td>
+      <td>2</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>TYPE_FLOAT</code></td>
+      <td>3</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>TYPE_INT</code></td>
+      <td>4</td>
+      <td class="content"><p>note: all numbers are stored as float64, so massive integers can be rounded. USE STRING FOR IDS.</p></td>
+    </tr>
+    
+  </tbody>
+</table> 
+    </div>
+    
+    <div class="block">
+      <h4 class="title is-4 type-heading" id="enum-sentry_protos.snuba.v1alpha.ComparisonFilter.Op">
+  <a href="#enum-sentry_protos.snuba.v1alpha.ComparisonFilter.Op" title="sentry_protos.snuba.v1alpha.ComparisonFilter.Op">enum Op</a>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/trace_item_filter.proto#L15">sentry_protos/snuba/v1alpha/trace_item_filter.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p></p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td><code>OP_UNSPECIFIED</code></td>
+      <td>0</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>OP_LESS_THAN</code></td>
+      <td>1</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>OP_GREATER_THAN</code></td>
+      <td>2</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>OP_LESS_THAN_OR_EQUALS</code></td>
+      <td>3</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>OP_GREATER_THAN_OR_EQUALS</code></td>
+      <td>4</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>OP_EQUALS</code></td>
+      <td>5</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>OP_NOT_EQUALS</code></td>
+      <td>6</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>OP_LIKE</code></td>
+      <td>7</td>
+      <td class="content"><p>string only</p></td>
+    </tr>
+    
+    <tr>
+      <td><code>OP_NOT_LIKE</code></td>
+      <td>8</td>
+      <td class="content"><p>string only</p></td>
+    </tr>
+    
+  </tbody>
+</table> 
+    </div>
+    
+    <div class="block">
+      <h4 class="title is-4 type-heading" id="enum-sentry_protos.snuba.v1alpha.AggregateBucketRequest.Function">
+  <a href="#enum-sentry_protos.snuba.v1alpha.AggregateBucketRequest.Function" title="sentry_protos.snuba.v1alpha.AggregateBucketRequest.Function">enum Function</a>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/snuba/v1alpha/endpoint_aggregate_bucket.proto#L10">sentry_protos/snuba/v1alpha/endpoint_aggregate_bucket.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p></p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td><code>FUNCTION_UNSPECIFIED</code></td>
+      <td>0</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>FUNCTION_SUM</code></td>
+      <td>1</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>FUNCTION_AVERAGE</code></td>
+      <td>2</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>FUNCTION_COUNT</code></td>
+      <td>3</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>FUNCTION_P50</code></td>
+      <td>4</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>FUNCTION_P95</code></td>
+      <td>5</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>FUNCTION_P99</code></td>
+      <td>6</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>FUNCTION_AVG</code></td>
+      <td>7</td>
+      <td class="content"></td>
+    </tr>
+    
+  </tbody>
+</table> 
+    </div>
+    
+
+  
+
+</div>
+
+    <footer class="footer">
+      <div class="content has-text-centered">
+        
+          <p>© 2024 Functional Software. All rights reserved.</p>
+        
+        <p>Built with <strong><a href="https://github.com/markvincze/sabledocs" target="_blank">sabledocs</a></strong>.</p>
+      </div>
+    </footer>
+  </body>
+</html>
