@@ -53,7 +53,7 @@ message AttributeValue {
 enum Function {
   FUNCTION_UNSPECIFIED = 0;
   FUNCTION_SUM = 1;
-  FUNCTION_AVERAGE = 2;
+  FUNCTION_AVERAGE = 2 [deprecated = true];
   FUNCTION_COUNT = 3;
   FUNCTION_P50 = 4;
   FUNCTION_P90 = 5;
