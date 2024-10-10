@@ -17,8 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          # token: ${{ secrets.GH_RELEASE_PAT }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_RELEASE_PAT }}
           fetch-depth: 0
 
       - name: Install protoc
@@ -33,10 +32,6 @@ jobs:
         run: |
           pip install virtualenv
           make docs
-
-      - name: debug
-        run: |
-          ls docs/build
 
       - uses: peaceiris/actions-gh-pages@v3.7.3
         name: Publish to GitHub Pages
