@@ -279,17 +279,15 @@ def test_example_find_traces() -> None:
     FindTracesRequest(
         meta=COMMON_META,
         filter=TraceFilter(
-            event_filter=EventFilter(
-                trace_item_name="spans",
-                filter=TraceItemFilter(
-                    comparison_filter=ComparisonFilter(
-                        key=AttributeKey(
-                            type=AttributeKey.TYPE_STRING,
-                            name="sentry.span_name",
-                        ),
-                        op=ComparisonFilter.OP_EQUALS,
-                        value=AttributeValue(val_str="database_query"),
+            trace_item_name="spans",
+            filter=TraceItemFilter(
+                comparison_filter=ComparisonFilter(
+                    key=AttributeKey(
+                        type=AttributeKey.TYPE_STRING,
+                        name="sentry.span_name",
                     ),
+                    op=ComparisonFilter.OP_EQUALS,
+                    value=AttributeValue(val_str="database_query"),
                 ),
             ),
         ),
@@ -300,29 +298,27 @@ def test_example_find_traces() -> None:
     FindTracesRequest(
         meta=COMMON_META,
         filter=TraceFilter(
-            event_filter=EventFilter(
-                trace_item_name="spans",
-                filter=TraceItemFilter(
-                    and_filter=AndFilter(
-                        filters=[
-                            ComparisonFilter(
-                                key=AttributeKey(
-                                    type=AttributeKey.TYPE_STRING,
-                                    name="sentry.span_name",
-                                ),
-                                op=ComparisonFilter.OP_EQUALS,
-                                value=AttributeValue(val_str="database_query"),
+            trace_item_name="spans",
+            filter=TraceItemFilter(
+                and_filter=AndFilter(
+                    filters=[
+                        ComparisonFilter(
+                            key=AttributeKey(
+                                type=AttributeKey.TYPE_STRING,
+                                name="sentry.span_name",
                             ),
-                            ComparisonFilter(
-                                key=AttributeKey(
-                                    type=AttributeKey.TYPE_STRING,
-                                    name="sentry.transaction_name",
-                                ),
-                                op=ComparisonFilter.OP_EQUALS,
-                                value=AttributeValue(val_str="GET /v1/rpc"),
+                            op=ComparisonFilter.OP_EQUALS,
+                            value=AttributeValue(val_str="database_query"),
+                        ),
+                        ComparisonFilter(
+                            key=AttributeKey(
+                                type=AttributeKey.TYPE_STRING,
+                                name="sentry.transaction_name",
                             ),
-                        ]
-                    ),
+                            op=ComparisonFilter.OP_EQUALS,
+                            value=AttributeValue(val_str="GET /v1/rpc"),
+                        ),
+                    ]
                 ),
             ),
         ),
@@ -332,37 +328,35 @@ def test_example_find_traces() -> None:
     # "database_query" and an error with a `group_id` of "1123"
     FindTracesRequest(
         meta=COMMON_META,
-        filter=TraceFilter(
-            and_filter=AndTraceFilter(
-                filters=[
-                    EventFilter(
-                        trace_item_name="spans",
-                        filter=TraceItemFilter(
-                            comparison_filter=ComparisonFilter(
-                                key=AttributeKey(
-                                    type=AttributeKey.TYPE_STRING,
-                                    name="sentry.span_name",
-                                ),
-                                op=ComparisonFilter.OP_EQUALS,
-                                value=AttributeValue(val_str="database_query"),
+        filter=AndTraceFilter(
+            filters=[
+                TraceFilter(
+                    trace_item_name="spans",
+                    filter=TraceItemFilter(
+                        comparison_filter=ComparisonFilter(
+                            key=AttributeKey(
+                                type=AttributeKey.TYPE_STRING,
+                                name="sentry.span_name",
                             ),
+                            op=ComparisonFilter.OP_EQUALS,
+                            value=AttributeValue(val_str="database_query"),
                         ),
                     ),
-                    EventFilter(
-                        trace_item_name="errors",
-                        filter=TraceItemFilter(
-                            comparison_filter=ComparisonFilter(
-                                key=AttributeKey(
-                                    type=AttributeKey.TYPE_STRING,
-                                    name="group_id",
-                                ),
-                                op=ComparisonFilter.OP_EQUALS,
-                                value=AttributeValue(val_str="1123"),
+                ),
+                TraceFilter(
+                    trace_item_name="errors",
+                    filter=TraceItemFilter(
+                        comparison_filter=ComparisonFilter(
+                            key=AttributeKey(
+                                type=AttributeKey.TYPE_STRING,
+                                name="group_id",
                             ),
+                            op=ComparisonFilter.OP_EQUALS,
+                            value=AttributeValue(val_str="1123"),
                         ),
                     ),
-                ],
-            ),
+                ),
+            ],
         ),
     )
 
@@ -370,37 +364,35 @@ def test_example_find_traces() -> None:
     # "database_query" and an error with a `group_id` of "1123"
     FindTracesRequest(
         meta=COMMON_META,
-        filter=TraceFilter(
-            and_filter=OrTraceFilter(
-                filters=[
-                    EventFilter(
-                        trace_item_name="spans",
-                        filter=TraceItemFilter(
-                            comparison_filter=ComparisonFilter(
-                                key=AttributeKey(
-                                    type=AttributeKey.TYPE_STRING,
-                                    name="sentry.span_name",
-                                ),
-                                op=ComparisonFilter.OP_EQUALS,
-                                value=AttributeValue(val_str="database_query"),
+        filter=OrTraceFilter(
+            filters=[
+                TraceFilter(
+                    trace_item_name="spans",
+                    filter=TraceItemFilter(
+                        comparison_filter=ComparisonFilter(
+                            key=AttributeKey(
+                                type=AttributeKey.TYPE_STRING,
+                                name="sentry.span_name",
                             ),
+                            op=ComparisonFilter.OP_EQUALS,
+                            value=AttributeValue(val_str="database_query"),
                         ),
                     ),
-                    EventFilter(
-                        trace_item_name="errors",
-                        filter=TraceItemFilter(
-                            comparison_filter=ComparisonFilter(
-                                key=AttributeKey(
-                                    type=AttributeKey.TYPE_STRING,
-                                    name="group_id",
-                                ),
-                                op=ComparisonFilter.OP_EQUALS,
-                                value=AttributeValue(val_str="1123"),
+                ),
+                EventFilter(
+                    trace_item_name="errors",
+                    filter=TraceItemFilter(
+                        comparison_filter=ComparisonFilter(
+                            key=AttributeKey(
+                                type=AttributeKey.TYPE_STRING,
+                                name="group_id",
                             ),
+                            op=ComparisonFilter.OP_EQUALS,
+                            value=AttributeValue(val_str="1123"),
                         ),
                     ),
-                ],
-            ),
+                ),
+            ],
         ),
     )
 
