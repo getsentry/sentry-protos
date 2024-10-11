@@ -37,6 +37,10 @@ message IntArray {
   repeated int64 values = 1;
 }
 
+message FloatArray {
+  repeated float values = 1;
+}
+
 message AttributeValue {
   oneof value {
     bool val_bool = 1;
@@ -47,6 +51,7 @@ message AttributeValue {
     bool val_null = 5;
     StrArray val_str_array = 6;
     IntArray val_int_array = 7;
+    FloatArray val_float_array = 8;
   }
 }
 
