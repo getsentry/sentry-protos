@@ -6,27 +6,6 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
-message AndTraceFilter {
-  repeated TraceFilter filters = 1;
-}
-
-message OrTraceFilter {
-  repeated TraceFilter filters = 1;
-}
-
-message NotTraceFilter {
-  repeated TraceFilter filters = 1;
-}
-
-message TraceFilter {
-  oneof filter {
-    AndTraceFilter and_filter = 1;
-    OrTraceFilter or_filter = 2;
-    NotTraceFilter not_filter = 3;
-    EventFilter event_filter = 4;
-  }
-}
-
 message FindTracesRequest {
   RequestMeta meta = 1;
   TraceFilter filter = 2;
