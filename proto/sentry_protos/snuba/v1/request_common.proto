@@ -28,5 +28,8 @@ message PageToken {
     // the server sends back a filter clause to be added on to the filter conditions
     // which skips the previous results altogether, avoiding extra scanning and sorting
     TraceItemFilter filter_offset = 2;
+    // For cross event queries, the server sends back a filter clause that also
+    // specifies the trace item name.
+    EventFilter event_filter = 3;
   }
 }

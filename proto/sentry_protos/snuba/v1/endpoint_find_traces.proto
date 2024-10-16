@@ -6,11 +6,6 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
-message EventFilter {
-  string trace_item_name = 1;
-  TraceItemFilter filter = 2;
-}
-
 message AndTraceFilter {
   repeated TraceFilter filters = 1;
 }

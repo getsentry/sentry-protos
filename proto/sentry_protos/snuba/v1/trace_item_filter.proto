@@ -50,3 +50,10 @@ message TraceItemFilter {
     ExistsFilter exists_filter = 5;
   }
 }
+
+// Wraps a TraceItemFilter and specifies the trace item name,
+// to be used for cross-event queries.
+message EventFilter {
+  string trace_item_name = 1;
+  TraceItemFilter filter = 2;
+}
