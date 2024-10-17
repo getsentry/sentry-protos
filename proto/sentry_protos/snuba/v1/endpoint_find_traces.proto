@@ -6,10 +6,17 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
+enum TraceOrderBy {
+  TRACE_ORDER_BY_UNSPECIFIED = 0;
+  TRACE_ORDER_BY_END_TIME = 1;
+  TRACE_ORDER_BY_TRACE_DURATION = 2;
+}
+
 message FindTracesRequest {
   RequestMeta meta = 1;
   TraceFilter filter = 2;
   PageToken page_token = 3;
+  TraceOrderBy order_by = 4;
 }
 
 message TraceResponse {

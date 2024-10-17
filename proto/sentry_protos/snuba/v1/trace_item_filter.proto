@@ -4,6 +4,12 @@ package sentry_protos.snuba.v1;
 
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 
+enum TraceItemName {
+  TRACE_ITEM_NAME_UNSPECIFIED = 0;
+  TRACE_ITEM_NAME_EAP_SPANS = 1;
+  TRACE_ITEM_NAME_EAP_ERRORS = 2;
+}
+
 message AndFilter {
   repeated TraceItemFilter filters = 1;
 }
@@ -54,7 +60,7 @@ message TraceItemFilter {
 // Wraps a TraceItemFilter and specifies the trace item name,
 // to be used for cross-event queries.
 message EventFilter {
-  string trace_item_name = 1;
+  TraceItemName trace_item_name = 1;
   TraceItemFilter filter = 2;
 }
 

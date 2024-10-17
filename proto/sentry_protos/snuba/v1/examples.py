@@ -21,18 +21,19 @@ from sentry_protos.snuba.v1.endpoint_trace_item_table_pb2 import (
 from sentry_protos.snuba.v1.endpoint_find_traces_pb2 import (
     FindTracesRequest,
     FindTracesResponse,
-    EventFilter,
-    AndTraceFilter,
-    OrTraceFilter,
     TraceResponse,
-    TraceFilter,
+    TraceOrderBy,
 )
 from sentry_protos.snuba.v1.request_common_pb2 import (
     RequestMeta,
-    TraceItemName,
     PageToken,
 )
 from sentry_protos.snuba.v1.trace_item_filter_pb2 import (
+    TraceItemName,
+    TraceFilter,
+    EventFilter,
+    AndTraceFilter,
+    OrTraceFilter,
     TraceItemFilter,
     ComparisonFilter,
     ExistsFilter,
@@ -280,7 +281,7 @@ def test_example_find_traces() -> None:
         meta=COMMON_META,
         filter=TraceFilter(
             event_filter=EventFilter(
-                trace_item_name="spans",
+                trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
                 filter=TraceItemFilter(
                     comparison_filter=ComparisonFilter(
                         key=AttributeKey(
@@ -293,6 +294,7 @@ def test_example_find_traces() -> None:
                 ),
             ),
         ),
+        order_by=TraceOrderBy.TRACE_ORDER_BY_END_TIME,
     )
 
     # Find traces with a single span event with a `span_name` of "database_query"
@@ -301,7 +303,7 @@ def test_example_find_traces() -> None:
         meta=COMMON_META,
         filter=TraceFilter(
             event_filter=EventFilter(
-                trace_item_name="spans",
+                trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
                 filter=TraceItemFilter(
                     and_filter=AndFilter(
                         filters=[
@@ -326,6 +328,7 @@ def test_example_find_traces() -> None:
                 ),
             ),
         ),
+        order_by=TraceOrderBy.TRACE_ORDER_BY_TRACE_DURATION,
     )
 
     # Find traces that contain two events: a span with a `span_name` of
@@ -337,7 +340,7 @@ def test_example_find_traces() -> None:
                 filters=[
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_name="spans",
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
@@ -352,7 +355,7 @@ def test_example_find_traces() -> None:
                     ),
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_name="errors",
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_ERRORS,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
@@ -379,7 +382,7 @@ def test_example_find_traces() -> None:
                 filters=[
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_name="spans",
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
@@ -394,7 +397,7 @@ def test_example_find_traces() -> None:
                     ),
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_name="errors",
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_ERRORS,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
