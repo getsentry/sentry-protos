@@ -4,12 +4,6 @@ package sentry_protos.snuba.v1;
 
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 
-enum TraceItemName {
-  TRACE_ITEM_NAME_UNSPECIFIED = 0;
-  TRACE_ITEM_NAME_EAP_SPANS = 1;
-  TRACE_ITEM_NAME_EAP_ERRORS = 2;
-}
-
 message AndFilter {
   repeated TraceItemFilter filters = 1;
 }
@@ -54,37 +48,5 @@ message TraceItemFilter {
     NotFilter not_filter = 3;
     ComparisonFilter comparison_filter = 4;
     ExistsFilter exists_filter = 5;
-  }
-}
-
-// Wraps a TraceItemFilter and specifies the trace item name,
-// to be used for cross-event queries.
-message EventFilter {
-  TraceItemName trace_item_name = 1;
-  TraceItemFilter filter = 2;
-}
-
-message AndTraceFilter {
-  repeated TraceFilter filters = 1;
-}
-
-message OrTraceFilter {
-  repeated TraceFilter filters = 1;
-}
-
-message NotTraceFilter {
-  repeated TraceFilter filters = 1;
-}
-
-// Represents a set of conditions for finding particular events
-// in a trace. Each EventFilter is meant to find one particular
-// type of event. Those can then be combined to find traces that
-// contain different combinations of events.
-message TraceFilter {
-  oneof filter {
-    AndTraceFilter and_filter = 1;
-    OrTraceFilter or_filter = 2;
-    NotTraceFilter not_filter = 3;
-    EventFilter event_filter = 4;
   }
 }

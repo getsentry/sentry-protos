@@ -12,10 +12,24 @@ enum TraceOrderBy {
   TRACE_ORDER_BY_TRACE_DURATION = 2;
 }
 
+message TracePageToken {
+  // This class exists to avoid circular imports with the PageToken class
+  // The next version of the proto will have a PageToken class that can be used
+  // for all endpoints, and this class can be removed.
+  oneof value {
+    uint64 offset = 1;
+    // Instead of using offset (which requires all the scanning and ordering),
+    // the server sends back a filter clause to be added on to the filter conditions
+    // which skips the previous results altogether, avoiding extra scanning and sorting
+    EventFilter event_filter = 2;
+    TraceFilter trace_filter = 3;
+  }
+}
+
 message FindTracesRequest {
   RequestMeta meta = 1;
   TraceFilter filter = 2;
-  PageToken page_token = 3;
+  TracePageToken page_token = 3;
   TraceOrderBy order_by = 4;
 }
 
@@ -27,5 +41,35 @@ message TraceResponse {
 
 message FindTracesResponse {
   repeated TraceResponse traces = 1;
-  PageToken page_token = 2;
+  TracePageToken page_token = 2;
+}
+
+message EventFilter {
+  TraceItemName trace_item_name = 1;
+  TraceItemFilter filter = 2;
+}
+
+message AndTraceFilter {
+  repeated TraceFilter filters = 1;
+}
+
+message OrTraceFilter {
+  repeated TraceFilter filters = 1;
+}
+
+message NotTraceFilter {
+  repeated TraceFilter filters = 1;
+}
+
+// Represents a set of conditions for finding particular events
+// in a trace. Each EventFilter is meant to find one particular
+// type of event. Those can then be combined to find traces that
+// contain different combinations of events.
+message TraceFilter {
+  oneof filter {
+    AndTraceFilter and_filter = 1;
+    OrTraceFilter or_filter = 2;
+    NotTraceFilter not_filter = 3;
+    EventFilter event_filter = 4;
+  }
 }
