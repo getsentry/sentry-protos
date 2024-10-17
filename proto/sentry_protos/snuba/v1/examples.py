@@ -18,12 +18,22 @@ from sentry_protos.snuba.v1.endpoint_trace_item_table_pb2 import (
     TraceItemTableRequest,
     TraceItemTableResponse,
 )
+from sentry_protos.snuba.v1.endpoint_find_traces_pb2 import (
+    FindTracesRequest,
+    FindTracesResponse,
+    TraceResponse,
+    TraceOrderBy,
+)
 from sentry_protos.snuba.v1.request_common_pb2 import (
     RequestMeta,
-    TraceItemName,
     PageToken,
 )
 from sentry_protos.snuba.v1.trace_item_filter_pb2 import (
+    TraceItemName,
+    TraceFilter,
+    EventFilter,
+    AndTraceFilter,
+    OrTraceFilter,
     TraceItemFilter,
     ComparisonFilter,
     ExistsFilter,
@@ -262,4 +272,168 @@ def test_example_table_with_aggregations() -> None:
         page_token=PageToken(
             offset=2
         ),  # if we're ordering by aggregate values, we can't paginate by anything except offset
+    )
+
+
+def test_example_find_traces() -> None:
+    # Find traces that contain a span event with a `span_name` of "database_query"
+    FindTracesRequest(
+        meta=COMMON_META,
+        filter=TraceFilter(
+            event_filter=EventFilter(
+                trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
+                filter=TraceItemFilter(
+                    comparison_filter=ComparisonFilter(
+                        key=AttributeKey(
+                            type=AttributeKey.TYPE_STRING,
+                            name="sentry.span_name",
+                        ),
+                        op=ComparisonFilter.OP_EQUALS,
+                        value=AttributeValue(val_str="database_query"),
+                    ),
+                ),
+            ),
+        ),
+        order_by=TraceOrderBy.TRACE_ORDER_BY_END_TIME,
+    )
+
+    # Find traces with a single span event with a `span_name` of "database_query"
+    # and a `transaction_name` of "GET /v1/rpc"
+    FindTracesRequest(
+        meta=COMMON_META,
+        filter=TraceFilter(
+            event_filter=EventFilter(
+                trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
+                filter=TraceItemFilter(
+                    and_filter=AndFilter(
+                        filters=[
+                            ComparisonFilter(
+                                key=AttributeKey(
+                                    type=AttributeKey.TYPE_STRING,
+                                    name="sentry.span_name",
+                                ),
+                                op=ComparisonFilter.OP_EQUALS,
+                                value=AttributeValue(val_str="database_query"),
+                            ),
+                            ComparisonFilter(
+                                key=AttributeKey(
+                                    type=AttributeKey.TYPE_STRING,
+                                    name="sentry.transaction_name",
+                                ),
+                                op=ComparisonFilter.OP_EQUALS,
+                                value=AttributeValue(val_str="GET /v1/rpc"),
+                            ),
+                        ]
+                    ),
+                ),
+            ),
+        ),
+        order_by=TraceOrderBy.TRACE_ORDER_BY_TRACE_DURATION,
+    )
+
+    # Find traces that contain two events: a span with a `span_name` of
+    # "database_query" and an error with a `group_id` of "1123"
+    FindTracesRequest(
+        meta=COMMON_META,
+        filter=TraceFilter(
+            and_filter=AndTraceFilter(
+                filters=[
+                    TraceFilter(
+                        event_filter=EventFilter(
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
+                            filter=TraceItemFilter(
+                                comparison_filter=ComparisonFilter(
+                                    key=AttributeKey(
+                                        type=AttributeKey.TYPE_STRING,
+                                        name="sentry.span_name",
+                                    ),
+                                    op=ComparisonFilter.OP_EQUALS,
+                                    value=AttributeValue(val_str="database_query"),
+                                ),
+                            ),
+                        ),
+                    ),
+                    TraceFilter(
+                        event_filter=EventFilter(
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_ERRORS,
+                            filter=TraceItemFilter(
+                                comparison_filter=ComparisonFilter(
+                                    key=AttributeKey(
+                                        type=AttributeKey.TYPE_STRING,
+                                        name="group_id",
+                                    ),
+                                    op=ComparisonFilter.OP_EQUALS,
+                                    value=AttributeValue(val_str="1123"),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            ),
+        ),
+    )
+
+    # Find traces that contain at least one of: a span with a `span_name` of
+    # "database_query" and an error with a `group_id` of "1123"
+    FindTracesRequest(
+        meta=COMMON_META,
+        filter=TraceFilter(
+            or_filter=OrTraceFilter(
+                filters=[
+                    TraceFilter(
+                        event_filter=EventFilter(
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
+                            filter=TraceItemFilter(
+                                comparison_filter=ComparisonFilter(
+                                    key=AttributeKey(
+                                        type=AttributeKey.TYPE_STRING,
+                                        name="sentry.span_name",
+                                    ),
+                                    op=ComparisonFilter.OP_EQUALS,
+                                    value=AttributeValue(val_str="database_query"),
+                                ),
+                            ),
+                        ),
+                    ),
+                    TraceFilter(
+                        event_filter=EventFilter(
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_ERRORS,
+                            filter=TraceItemFilter(
+                                comparison_filter=ComparisonFilter(
+                                    key=AttributeKey(
+                                        type=AttributeKey.TYPE_STRING,
+                                        name="group_id",
+                                    ),
+                                    op=ComparisonFilter.OP_EQUALS,
+                                    value=AttributeValue(val_str="1123"),
+                                ),
+                            ),
+                        ),
+                    ),
+                ],
+            ),
+        ),
+    )
+
+    FindTracesResponse(
+        traces=[
+            TraceResponse(
+                trace_id="1234567890abcdef",
+                start_timestamp=Timestamp(
+                    seconds=int(datetime(2024, 4, 20, 16, 20).timestamp())
+                ),
+                end_timestamp=Timestamp(
+                    seconds=int(datetime(2024, 4, 20, 17, 20).timestamp())
+                ),
+            ),
+            TraceResponse(
+                trace_id="fedcba0987654321",
+                start_timestamp=Timestamp(
+                    seconds=int(datetime(2024, 4, 20, 16, 20).timestamp())
+                ),
+                end_timestamp=Timestamp(
+                    seconds=int(datetime(2024, 4, 20, 17, 20).timestamp())
+                ),
+            ),
+        ],
     )

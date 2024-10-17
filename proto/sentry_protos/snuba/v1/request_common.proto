@@ -19,12 +19,13 @@ message RequestMeta {
 enum TraceItemName {
   TRACE_ITEM_NAME_UNSPECIFIED = 0;
   TRACE_ITEM_NAME_EAP_SPANS = 1;
+  TRACE_ITEM_NAME_EAP_ERRORS = 2;
 }
 
 message PageToken {
   oneof value {
     uint64 offset = 1;
-    // Instead of using offset (which requires all the scanning and ordering,
+    // Instead of using offset (which requires all the scanning and ordering),
     // the server sends back a filter clause to be added on to the filter conditions
     // which skips the previous results altogether, avoiding extra scanning and sorting
     TraceItemFilter filter_offset = 2;
