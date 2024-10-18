@@ -39,4 +39,6 @@ message TraceItemColumnValues {
 message TraceItemTableResponse {
   repeated TraceItemColumnValues column_values = 1;
   PageToken page_token = 2;
+  optional QueryStats query_stats = 3;
+  optional QueryMetadata query_metadata = 4;
 }
