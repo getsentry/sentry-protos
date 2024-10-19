@@ -33,13 +33,11 @@ message PageToken {
 
 message QueryStats {
   int64 rows_read = 1;
-  int64 bytes_read = 2;
-  double time_spent = 3;
+  int64 columns_read = 2;
   int32 blocks = 4;
   int64 progress_bytes = 5;
-  int32 result_rows = 6;
-  int32 result_cols = 7;
   int32 max_threads = 8;
+  TimingMarks timing_marks = 11;
 }
 
 message QueryMetadata {
@@ -49,8 +47,13 @@ message QueryMetadata {
   bool final = 4;
   string query_id = 6;
   bool consistent = 7;
-  string referrer = 8;
   bool cache_hit = 9;
   string cluster_name = 10;
-  map<string, int64> timing_marks = 11;
+}
+
+message TimingMarks {
+  int64 duration_ms = 1;
+  map<string, int64> marks_ms = 2;
+  map<string, string> tags = 3;
+  int64 timestamp = 4;
 }

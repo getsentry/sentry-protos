@@ -21,6 +21,7 @@ message TraceItemTableRequest {
   uint32 limit = 6;
   PageToken page_token = 7;
   repeated VirtualColumnContext virtual_column_contexts = 8;
+  bool debug = 10;
 }
 
 message Column {
