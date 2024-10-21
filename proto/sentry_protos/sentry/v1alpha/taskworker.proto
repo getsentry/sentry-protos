@@ -144,3 +144,29 @@ message DispatchRequest {
 message DispatchResponse {
   TaskActivationStatus status = 1;
 }
+
+///////////////////////////
+// Worker reply service
+///////////////////////////
+message ExecuteActivationRequest {
+  TaskActivation activation = 1;
+  google.protobuf.Timestamp processing_deadline = 2;
+  int32 reply_partition = 3;
+}
+
+message ExecuteActivationResponse {
+  bool ok = 1;
+  optional string error = 2;
+}
+
+// Message for task execution replies
+message ActivationResult {
+  string task_id = 1;
+  TaskActivationStatus status = 2;
+}
+
+service WorkerReplyService {
+  // Dispatch a new activation to process, retains a long running
+  // connection
+  rpc ExecuteActivation(ExecuteActivationRequest) returns (ExecuteActivationResponse) {}
+}
