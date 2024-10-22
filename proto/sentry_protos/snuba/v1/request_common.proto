@@ -20,9 +20,8 @@ message RequestMeta {
 
 message ResponseMeta {
   string request_id = 1;
-  // Optional fields that are included only if debug is true
-  repeated QueryStats query_stats = 3;
-  repeated QueryMetadata query_metadata = 4;
+  // Optional field that is included only if debug is true
+  repeated QueryInfo query_info = 2;
 }
 
 enum TraceItemName {
@@ -65,4 +64,9 @@ message TimingMarks {
   map<string, int64> marks_ms = 2;
   map<string, string> tags = 3;
   int64 timestamp = 4;
+}
+
+message QueryInfo {
+  QueryStats stats = 1;
+  QueryMetadata metadata = 2;
 }
