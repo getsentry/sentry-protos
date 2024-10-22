@@ -42,4 +42,5 @@ message TraceItemAttributeValuesRequest {
 message TraceItemAttributeValuesResponse {
   repeated string values = 1;
   PageToken page_token = 6;
+  ResponseMeta meta = 7;
 }
