@@ -36,4 +36,5 @@ message TimeSeries {
 
 message TimeSeriesResponse {
   repeated TimeSeries result_timeseries = 1;
+  ResponseMeta meta = 5;
 }
