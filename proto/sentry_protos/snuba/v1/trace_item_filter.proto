@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+
+message AndFilter {
+  repeated TraceItemFilter filters = 1;
+}
+
+message OrFilter {
+  repeated TraceItemFilter filters = 1;
+}
+
+message NotFilter {
+  repeated TraceItemFilter filters = 1;
+}
+
+message ComparisonFilter {
+  enum Op {
+    OP_UNSPECIFIED = 0;
+    OP_LESS_THAN = 1;
+    OP_GREATER_THAN = 2;
+    OP_LESS_THAN_OR_EQUALS = 3;
+    OP_GREATER_THAN_OR_EQUALS = 4;
+    OP_EQUALS = 5;
+    OP_NOT_EQUALS = 6;
+    OP_LIKE = 7; //string only
+    OP_NOT_LIKE = 8; //string only
+    OP_IN = 9; // array only
+    OP_NOT_IN = 10; // array only
+  }
+  AttributeKey key = 1;
+  Op op = 2;
+  AttributeValue value = 3;
+}
+
+message ExistsFilter {
+  AttributeKey key = 1;
+}
+
+// Represents a condition on searching for a particular "trace item"
+// (e.g., spans, replays, errors)
+message TraceItemFilter {
+  oneof value {
+    AndFilter and_filter = 1;
+    OrFilter or_filter = 2;
+    NotFilter not_filter = 3;
+    ComparisonFilter comparison_filter = 4;
+    ExistsFilter exists_filter = 5;
+  }
+}

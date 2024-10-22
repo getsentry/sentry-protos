@@ -1,0 +1,60 @@
+# Configures the main title of the documentation site.
+module-title = "Sentry Protos"
+
+# Specifies the name of the Protobuf descriptor file.
+# Default value: "descriptor.pb"
+input-descriptor-file = "descriptor.pb"
+
+# Specifies the file which contains the content to display on the main page above the package list.
+# Default value: ""
+# main-page-content-file = "intro.md"
+
+# The output folder to which the documentation is generated.
+# Default value: "sabledocs_output"
+output-dir = "build"
+
+# Controls whether the the search functionality is enabled with a prebuilt Lunr index.
+# Default value: true
+enable-lunr-search = true
+
+# Copyright message displayed in the footer.
+# Default value: ""
+footer-content = "© 2024 Functional Software. All rights reserved."
+
+# The following 3 fields configure the source control repository of the project.
+# They are used to generate deeplinks for the members of the Proto model pointing to the original source
+# code. By default these fields are not configured, and source code links are not included in the docs.
+# The repository-type field supports two possible values, "github" and "bitbucket".
+# The fields repository-url and repository-branch should be configured to point to the correct repository.
+# repository-dir should be set only if the root of your Protobuf module is in a specific directory inside your repository.
+repository-type = "github"
+repository-url = "https://github.com/getsentry/sentry-protos"
+repository-branch = "main"
+repository-dir = "proto"
+
+# In each comment, ignore everything that comes after (until end of the comment) one of the keywords.
+# Default value: []
+ignore-comments-after = ["@exclude"]
+# In each comment, ignore all lines that contain at least one keyword from the following list.
+# Default value: []
+ignore-comment-lines-containing = ["buf:lint"]
+
+# Packages can be hidden from the generated documentation by adding them to the hidden-packages
+# collection. In the templates, the field non_hidden_packages can be used to access the packages which are
+# not listed in hidden-packages. (And the packages field returns all packages.)
+# Default value: []
+hidden-packages = ["google.protobuf"]
+
+# By default, packages and members in a package are ordered alphabetically.
+# By setting the member-ordering option to "preserve", the original order present in the Protobuf
+# definitions will be preserved.
+# When using the "preserve" option and having multiple proto input files, the order of the members will
+# depend not just on the physical order in the Protobuf files, but also on the order in which the files
+# were listed in the input when `protoc` was executed.
+# Default value: ""
+member-ordering = "preserve"
+
+# The markdown extensions supported by the main-page-content-file
+# Default value: ["fenced_code"]
+# See: https://python-markdown.github.io/extensions/#officially-supported-extensions
+markdown-extensions = ["fenced_code", "nl2br"]

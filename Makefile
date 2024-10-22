@@ -52,3 +52,10 @@ update-vendor:
 
 .PHONY: build
 build: build-py build-rust
+
+
+.PHONY: docs
+docs:
+	pip install sabledocs
+	protoc ./proto/sentry_protos/*/*/*.proto -I ./proto/ -o ./docs/descriptor.pb --include_source_info
+	cd docs && sabledocs

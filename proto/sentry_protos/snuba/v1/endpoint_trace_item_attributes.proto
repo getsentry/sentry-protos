@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "sentry_protos/snuba/v1/request_common.proto";
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+
+//A request for "which queryable attributes are available for these projects between these dates"
+// - used for things like autocompletion
+// EAP does not make a distinction between data stored as columns on a table vs attributes stored
+// dynamically (e.g. tags, contexts, etc). To the user of the interface, they are the same
+message TraceItemAttributeNamesRequest {
+  RequestMeta meta = 1;
+  uint32 limit = 2;
+  uint32 offset = 3;
+  // different typed attributes are queried separately
+  // anything other than TYPE_STRING and TYPE_FLOAT will return empty
+  AttributeKey.Type type = 5;
+  string value_substring_match = 6;
+}
+
+message TraceItemAttributeNamesResponse {
+  message Attribute {
+    string name = 1;
+    AttributeKey.Type type = 2;
+  }
+  repeated Attribute attributes = 1;
+}
+
+// This endpoint only supports string values, it does not make sense
+// to get all the possible values of a numerical attribute
+message TraceItemAttributeValuesRequest {
+  RequestMeta meta = 1;
+  string name = 3;
+  // a substring of the value being searched,
+  // only strict substring supported, no regex
+  string value_substring_match = 4;
+  uint32 limit = 5;
+  PageToken page_token = 6;
+}
+
+message TraceItemAttributeValuesResponse {
+  repeated string values = 1;
+  PageToken page_token = 6;
+}

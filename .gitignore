@@ -145,9 +145,12 @@ data/
 /gocd/templates/vendor/
 /gocd/generated-pipelines/
 
-
 # Codecov
 .artifacts/
 
 # Generated bindings
-py/sentry_protos/*
+/py/sentry_protos/*
+
+# Generated documentation
+/docs/build/*
+/docs/descriptor.pb

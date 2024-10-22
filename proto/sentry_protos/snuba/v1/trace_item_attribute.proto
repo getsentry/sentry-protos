@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+message AttributeKey {
+  enum Type { //this mostly reflects what types are able to be ingested, see eap_spans consumer for ingest details
+    TYPE_UNSPECIFIED = 0; // protobuf requirement, do not send this
+    TYPE_STRING = 1;
+    TYPE_BOOLEAN = 2;
+    TYPE_FLOAT = 3;
+    TYPE_INT = 4; //note: all numbers are stored as float64, so massive integers can be rounded. USE STRING FOR IDS.
+  }
+
+  Type type = 1;
+
+  // the name of the trace item attribute, everything that sentry sends by default is prefixed with
+  // `sentry.` to allow users to send attributes of the same name.
+  // Exampe: `sentry.duration`, `sentry.span_id` etc
+  string name = 2;
+}
+
+// custom mappings of column values which are not present in EAP storage
+// for example, project name is changeable by the user and not stored in EAP
+// but sorting by the project name may be desired. This struct carries that mapping
+// data
+message VirtualColumnContext {
+  string from_column_name = 1;
+  string to_column_name = 2;
+  map<string, string> value_map = 3;
+}
+
+message StrArray {
+  repeated string values = 1;
+}
+
+message IntArray {
+  repeated int64 values = 1;
+}
+
+message FloatArray {
+  repeated float values = 1;
+}
+
+message AttributeValue {
+  oneof value {
+    bool val_bool = 1;
+    string val_str = 2;
+    float val_float = 3;
+    int64 val_int = 4;
+    // set to true if value is null
+    bool val_null = 5;
+    StrArray val_str_array = 6;
+    IntArray val_int_array = 7;
+    FloatArray val_float_array = 8;
+  }
+}
+
+enum Function {
+  FUNCTION_UNSPECIFIED = 0;
+  FUNCTION_SUM = 1;
+  FUNCTION_AVERAGE = 2 [deprecated = true];
+  FUNCTION_COUNT = 3;
+  FUNCTION_P50 = 4;
+  FUNCTION_P90 = 5;
+  FUNCTION_P95 = 6;
+  FUNCTION_P99 = 7;
+  FUNCTION_AVG = 8;
+  FUNCTION_MAX = 9;
+  FUNCTION_MIN = 10;
+  FUNCTION_UNIQ = 11;
+}
+
+enum ExtrapolationMode {
+  EXTRAPOLATION_MODE_UNSPECIFIED = 0;
+  EXTRAPOLATION_MODE_NONE = 1;
+  EXTRAPOLATION_MODE_SAMPLE_WEIGHTED = 2;
+}
+
+message AttributeAggregation {
+  Function aggregate = 1;
+  AttributeKey key = 2;
+  string label = 3;
+  ExtrapolationMode extrapolation_mode = 4;
+}

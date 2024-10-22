@@ -1,0 +1,47 @@
+name: sabledocs build
+
+on:
+  # push:
+  #   branches:
+  #     - release/**
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    name: sabledocs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_RELEASE_PAT }}
+          fetch-depth: 0
+
+      - name: Install protoc
+        uses: arduino/setup-protoc@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Build docs
+        run: |
+          pip install virtualenv
+          make docs
+
+      - uses: peaceiris/actions-gh-pages@v3.7.3
+        name: Publish to GitHub Pages
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build
+          force_orphan: true
+
+      - name: Archive Docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: docs/build

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "sentry_protos/snuba/v1/request_common.proto";
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+import "sentry_protos/snuba/v1/trace_item_filter.proto";
+
+// Serves requests for table views of the data
+message TraceItemTableRequest {
+  message OrderBy {
+    Column column = 1;
+    bool descending = 2;
+  }
+
+  RequestMeta meta = 1;
+  repeated Column columns = 2;
+  TraceItemFilter filter = 3;
+  repeated OrderBy order_by = 4;
+  repeated AttributeKey group_by = 5;
+  uint32 limit = 6;
+  PageToken page_token = 7;
+  repeated VirtualColumnContext virtual_column_contexts = 8;
+}
+
+message Column {
+  oneof column {
+    AttributeKey key = 1;
+    AttributeAggregation aggregation = 2;
+  }
+  string label = 3;
+}
+
+message TraceItemColumnValues {
+  string attribute_name = 1;
+  repeated AttributeValue results = 2;
+}
+
+message TraceItemTableResponse {
+  repeated TraceItemColumnValues column_values = 1;
+  PageToken page_token = 2;
+}
