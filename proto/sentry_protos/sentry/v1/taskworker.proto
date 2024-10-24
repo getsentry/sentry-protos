@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sentry_protos.sentry.v1alpha;
+package sentry_protos.sentry.v1;
 
 import "google/protobuf/timestamp.proto";
 
