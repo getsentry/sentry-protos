@@ -70,4 +70,5 @@ message TimingMarks {
 message QueryInfo {
   QueryStats stats = 1;
   QueryMetadata metadata = 2;
+  string trace_logs = 3;
 }
