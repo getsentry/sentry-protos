@@ -1,3 +1,34 @@
+## 0.1.29
+
+### Various fixes & improvements
+
+- Set taskworker proto to v1 (#53) by @john-z-yang
+- Add definitions for taskworker tasks (#52) by @john-z-yang
+- Add QueryStats and QueryMetadata to TraceItemTableResponse (#51) by @nachivrn
+- try to fix imports (#46) by @evanh
+- add orderby, use enum for item name (#46) by @evanh
+- add event filter to page token (#46) by @evanh
+- add event filter to page token (#46) by @evanh
+- Deprecate FUNCTION_AVERAGE (#50) by @volokluev
+- fix filters (#46) by @evanh
+- comment fixes (#46) by @evanh
+- Cleanup (#49) by @markstory
+- Try local secret (#49) by @markstory
+- Debug build files (#49) by @markstory
+- fix(docs) Need to install protoc for docs build (#48) by @markstory
+- Move docs off release build path (#45) by @markstory
+- Add an error proto to be returned by snuba RPc (#47) by @colin-sentry
+- feat(eap): Add an endpoint to find traces (#46) by @evanh
+- fix(docs) Update python used to build docs (#45) by @markstory
+- feat: Publish documentation on each release (#44) by @markstory
+- feat(filtering): Add float array (#43) by @wmak
+- feat(extrapolation): Add an option to enable extrapolation (#39) by @wmak
+- account for sparse time series (#28) by @volokluev
+- add a table query with aggregate (#28) by @volokluev
+- add table example (#28) by @volokluev
+
+_Plus 30 more_
+
 ## 0.1.22
 
 ### Various fixes & improvements
