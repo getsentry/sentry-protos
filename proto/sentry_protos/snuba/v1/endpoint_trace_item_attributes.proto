@@ -31,7 +31,8 @@ message TraceItemAttributeNamesResponse {
 // to get all the possible values of a numerical attribute
 message TraceItemAttributeValuesRequest {
   RequestMeta meta = 1;
-  string name = 3;
+  AttributeKey key = 2;
+  deprecated string name = 3 [deprecated = true]; //  use the `key` field instead, for API consistency
   // a substring of the value being searched,
   // only strict substring supported, no regex
   string value_substring_match = 4;
