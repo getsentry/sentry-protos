@@ -6,16 +6,16 @@ import "google/protobuf/timestamp.proto";
 
 message RetryState {
   // Current attempt number
-  int32 attempts = 1;
+  uint32 attempts = 1;
 
   // The classname or adapter type for the retry policy
   string kind = 2;
 
   // After this attempt the task should be discarded
-  optional int32 discard_after_attempt = 3;
+  optional uint32 discard_after_attempt = 3;
 
   // After this attempt the task should be put in the dead-letter-queue.
-  optional int32 deadletter_after_attempt = 4;
+  optional uint32 deadletter_after_attempt = 4;
 }
 
 enum TaskActivationStatus {
@@ -71,7 +71,7 @@ message InflightActivation {
   // The original offset that the WorkerTask message had
   // Used to find contiguous blocks of completed tasks so that offsets
   // can be commit to Kafka
-  int64 offset = 3;
+  uint64 offset = 3;
 
   // The timestamp this task was added to PendingTask storage
   google.protobuf.Timestamp added_at = 4;
