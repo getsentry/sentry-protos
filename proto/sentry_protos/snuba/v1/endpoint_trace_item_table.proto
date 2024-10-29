@@ -41,3 +41,11 @@ message TraceItemTableResponse {
   PageToken page_token = 2;
   ResponseMeta meta = 3;
 }
+
+message SubscriptionsRequest {
+  TraceItemTableRequest table_request = 1;
+  RequestMeta meta = 2;
+  uint64 project_id = 3;
+  uint32 time_window = 4;
+  uint32 resolution = 5;
+}
