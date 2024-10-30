@@ -5,18 +5,26 @@ package sentry_protos.snuba.v1;
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 
-//A request for "which queryable attributes are available for these projects between these dates"
+// TraceItemAttributeNamesRequest represents a request for "which queryable attributes are available for these projects between these dates"
 // - used for things like autocompletion
 // EAP does not make a distinction between data stored as columns on a table vs attributes stored
 // dynamically (e.g. tags, contexts, etc). To the user of the interface, they are the same
 message TraceItemAttributeNamesRequest {
   RequestMeta meta = 1;
   uint32 limit = 2;
-  uint32 offset = 3;
+
+  // use `page_token` instead
+  uint32 offset = 3 [deprecated = true];
+
   // different typed attributes are queried separately
   // anything other than TYPE_STRING and TYPE_FLOAT will return empty
   AttributeKey.Type type = 5;
+
+  // filter to only return attribute names that match the given substring
   string value_substring_match = 6;
+
+  // optional, used for pagination, the next page token will be returned in the last response
+  PageToken page_token = 7;
 }
 
 message TraceItemAttributeNamesResponse {
@@ -25,7 +33,11 @@ message TraceItemAttributeNamesResponse {
     AttributeKey.Type type = 2;
   }
   repeated Attribute attributes = 1;
-  ResponseMeta meta = 7;
+
+  // page token for the next page of results
+  PageToken page_token = 2;
+
+  ResponseMeta meta = 3;
 }
 
 // This endpoint only supports string values, it does not make sense
