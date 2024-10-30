@@ -25,6 +25,7 @@ message TraceItemAttributeNamesResponse {
     AttributeKey.Type type = 2;
   }
   repeated Attribute attributes = 1;
+  ResponseMeta meta = 7;
 }
 
 // This endpoint only supports string values, it does not make sense
