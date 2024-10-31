@@ -24,6 +24,10 @@ from sentry_protos.snuba.v1.endpoint_find_traces_pb2 import (
     TraceResponse,
     TraceOrderBy,
 )
+from sentry_protos.snuba.v1.endpoint_trace_item_table_subscription_pb2 import (
+    CreateTraceItemTableSubscriptionRequest,
+    CreateTraceItemTableSubscriptionResponse,
+)
 from sentry_protos.snuba.v1.request_common_pb2 import (
     RequestMeta,
     PageToken,
@@ -436,4 +440,39 @@ def test_example_find_traces() -> None:
                 ),
             ),
         ],
+    )
+
+
+def test_example_create_trace_item_table_subscription() -> None:
+    CreateTraceItemTableSubscriptionRequest(
+        table_request=TraceItemTableRequest(
+            meta=COMMON_META,
+            columns=[
+                Column(
+                    aggregation=AttributeAggregation(
+                        aggregate=Function.FUNCTION_COUNT,
+                        key=AttributeKey(
+                            type=AttributeKey.TYPE_INT, name="span.duration"
+                        ),
+                    ),
+                ),
+            ],
+            filter=TraceItemFilter(
+                comparison_filter=ComparisonFilter(
+                    key=AttributeKey(
+                        type=AttributeKey.TYPE_STRING,
+                        name="span.op",
+                    ),
+                    op=ComparisonFilter.OP_EQUALS,
+                    value=AttributeValue(val_str="http.client"),
+                ),
+            ),
+        ),
+        project_id=1,
+        time_window=3600,
+        resolution=180,
+    )
+
+    CreateTraceItemTableSubscriptionResponse(
+        subscription_id="123",
     )
