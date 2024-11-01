@@ -49,12 +49,14 @@ message TaskActivation {
   // The timestamp a task was stored in Kafka
   google.protobuf.Timestamp received_at = 6;
 
-  // The task deadline. After this time the task is expired and should not be
-  // executed.
-  optional google.protobuf.Timestamp deadline = 7;
+  // The duration in seconds that a worker has to complete task execution.
+  uint64 processing_deadline_duration = 7;
+
+  // The duration in seconds that a task can live before it's considered expired and should be executed.
+  uint64 expires = 8;
 
   // Retry state
-  RetryState retry_state = 8;
+  RetryState retry_state = 9;
 }
 
 // Once a TaskActivation has been received by the task consumer it is wrapped
