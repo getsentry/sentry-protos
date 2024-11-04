@@ -24,9 +24,9 @@ from sentry_protos.snuba.v1.endpoint_find_traces_pb2 import (
     TraceResponse,
     TraceOrderBy,
 )
-from sentry_protos.snuba.v1.endpoint_trace_item_table_subscription_pb2 import (
-    CreateTraceItemTableSubscriptionRequest,
-    CreateTraceItemTableSubscriptionResponse,
+from sentry_protos.snuba.v1.endpoint_create_subscription_pb2 import (
+    CreateSubscriptionRequest,
+    CreateSubscriptionResponse,
 )
 from sentry_protos.snuba.v1.request_common_pb2 import (
     RequestMeta,
@@ -443,18 +443,14 @@ def test_example_find_traces() -> None:
     )
 
 
-def test_example_create_trace_item_table_subscription() -> None:
-    CreateTraceItemTableSubscriptionRequest(
-        table_request=TraceItemTableRequest(
+def test_example_create_subscription() -> None:
+    CreateSubscriptionRequest(
+        table_request=TimeSeriesRequest(
             meta=COMMON_META,
-            columns=[
-                Column(
-                    aggregation=AttributeAggregation(
-                        aggregate=Function.FUNCTION_COUNT,
-                        key=AttributeKey(
-                            type=AttributeKey.TYPE_INT, name="span.duration"
-                        ),
-                    ),
+            aggregations=[
+                AttributeAggregation(
+                    aggregate=Function.FUNCTION_COUNT,
+                    key=AttributeKey(type=AttributeKey.TYPE_INT, name="span.duration"),
                 ),
             ],
             filter=TraceItemFilter(
@@ -467,12 +463,13 @@ def test_example_create_trace_item_table_subscription() -> None:
                     value=AttributeValue(val_str="http.client"),
                 ),
             ),
+            granularity_secs=3600,
         ),
         project_id=1,
-        time_window=3600,
-        resolution=180,
+        time_window_secs=3600,
+        resolution_secs=180,
     )
 
-    CreateTraceItemTableSubscriptionResponse(
+    CreateSubscriptionResponse(
         subscription_id="123",
     )
