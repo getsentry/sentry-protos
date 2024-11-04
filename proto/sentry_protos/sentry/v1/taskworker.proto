@@ -61,7 +61,7 @@ message TaskActivation {
   uint64 processing_deadline_duration = 9;
 
   // The duration in seconds that a task has to start execution.
-  // After this timebefore it's considered expired and should be executed.
+  // After received_at + expires has passed an activation is expired and will not be executed.
   optional uint64 expires = 10;
 }
 
