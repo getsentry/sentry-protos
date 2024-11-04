@@ -5,7 +5,7 @@ package sentry_protos.snuba.v1;
 import "sentry_protos/snuba/v1/endpoint_time_series.proto";
 
 message CreateSubscriptionRequest {
-  TimeSeriesRequest request = 1;
+  TimeSeriesRequest time_series_request = 1;
   uint64 project_id = 2;
   uint32 time_window_secs = 3;
   uint32 resolution_secs = 4;

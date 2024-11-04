@@ -445,7 +445,7 @@ def test_example_find_traces() -> None:
 
 def test_example_create_subscription() -> None:
     CreateSubscriptionRequest(
-        table_request=TimeSeriesRequest(
+        time_series_request=TimeSeriesRequest(
             meta=COMMON_META,
             aggregations=[
                 AttributeAggregation(
