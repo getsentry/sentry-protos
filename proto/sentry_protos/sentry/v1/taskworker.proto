@@ -109,8 +109,7 @@ service ConsumerService {
   // Fetch a new task activation to process.
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
 
-  // Update the state of a task with execution results. (also used in push
-  // models)
+  // Update the state of a task with execution results.
   rpc SetTaskStatus(SetTaskStatusRequest) returns (SetTaskStatusResponse) {}
 }
 
@@ -120,7 +119,6 @@ message GetTaskRequest {
 message GetTaskResponse {
   // If there are no tasks available, these will be empty
   optional TaskActivation task = 1;
-  optional google.protobuf.Timestamp processing_deadline = 2;
 
   optional Error error = 3;
 }
@@ -136,8 +134,6 @@ message SetTaskStatusRequest {
 message SetTaskStatusResponse {
   // The next task the worker should execute. Requires fetch_next=True on the request.
   optional TaskActivation task = 1;
-  // The processing deadline for the new task
-  optional google.protobuf.Timestamp processing_deadline = 2;
 
   optional Error error = 3;
 }
