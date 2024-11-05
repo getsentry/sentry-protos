@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.sentry.v1;
 
+import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
 message RetryState {
@@ -90,4 +91,53 @@ message InflightActivation {
   // The timestamp that processing is expected to be complete by.
   // If processing is not complete by this time, a retry will be attempted.
   optional google.protobuf.Timestamp processing_deadline = 6;
+}
+
+////////////////////////////
+// RPC messages and services
+////////////////////////////
+message Error {
+  // Taken directly from the grpc docs.
+  int32 code = 1;
+  string message = 2;
+
+  // A list of messages that carry any error details.
+  repeated google.protobuf.Any details = 3;
+}
+
+service ConsumerService {
+  // Fetch a new task activation to process.
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
+
+  // Update the state of a task with execution results. (also used in push
+  // models)
+  rpc SetTaskStatus(SetTaskStatusRequest) returns (SetTaskStatusResponse) {}
+}
+
+message GetTaskRequest {
+  optional string namespace = 1;
+}
+message GetTaskResponse {
+  // If there are no tasks available, these will be empty
+  optional TaskActivation task = 1;
+  optional google.protobuf.Timestamp processing_deadline = 2;
+
+  optional Error error = 3;
+}
+
+message SetTaskStatusRequest {
+  string id = 1;
+  string namespace = 2;
+  TaskActivationStatus status = 3;
+
+  // Set to true to have receive a new task in the response
+  optional bool fetch_next = 4;
+}
+message SetTaskStatusResponse {
+  // The next task the worker should execute. Requires fetch_next=True on the request.
+  optional TaskActivation task = 1;
+  // The processing deadline for the new task
+  optional google.protobuf.Timestamp processing_deadline = 2;
+
+  optional Error error = 3;
 }
