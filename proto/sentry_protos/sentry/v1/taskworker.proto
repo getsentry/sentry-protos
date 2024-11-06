@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.sentry.v1;
 
+import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
 message RetryState {
@@ -49,12 +50,20 @@ message TaskActivation {
   // The timestamp a task was stored in Kafka
   google.protobuf.Timestamp received_at = 6;
 
-  // The task deadline. After this time the task is expired and should not be
-  // executed.
-  optional google.protobuf.Timestamp deadline = 7;
+  // Unused. Use expires instead.
+  optional google.protobuf.Timestamp deadline = 7 [deprecated = true];
 
   // Retry state
   RetryState retry_state = 8;
+
+  // The duration in seconds that a worker has to complete task execution.
+  // When an activation is moved from pending -> processing a result is expected
+  // in this many seconds.
+  uint64 processing_deadline_duration = 9;
+
+  // The duration in seconds that a task has to start execution.
+  // After received_at + expires has passed an activation is expired and will not be executed.
+  optional uint64 expires = 10;
 }
 
 // Once a TaskActivation has been received by the task consumer it is wrapped
@@ -82,4 +91,46 @@ message InflightActivation {
   // The timestamp that processing is expected to be complete by.
   // If processing is not complete by this time, a retry will be attempted.
   optional google.protobuf.Timestamp processing_deadline = 6;
+}
+
+////////////////////////////
+// RPC messages and services
+////////////////////////////
+message Error {
+  // Taken directly from the grpc docs.
+  int32 code = 1;
+  string message = 2;
+
+  // A list of messages that carry any error details.
+  repeated google.protobuf.Any details = 3;
+}
+
+service ConsumerService {
+  // Fetch a new task activation to process.
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
+
+  // Update the state of a task with execution results.
+  rpc SetTaskStatus(SetTaskStatusRequest) returns (SetTaskStatusResponse) {}
+}
+
+message GetTaskRequest {}
+message GetTaskResponse {
+  // If there are no tasks available, these will be empty
+  optional TaskActivation task = 1;
+
+  optional Error error = 3;
+}
+
+message SetTaskStatusRequest {
+  string id = 1;
+  TaskActivationStatus status = 3;
+
+  // Set to true to have receive a new task in the response
+  optional bool fetch_next = 4;
+}
+message SetTaskStatusResponse {
+  // The next task the worker should execute. Requires fetch_next=True on the request.
+  optional TaskActivation task = 1;
+
+  optional Error error = 3;
 }

@@ -44,3 +44,7 @@ jobs:
       - name: build rust bindings
         run: |
           make build-rust
+
+      - name: run python tests/examples
+        run: |
+          make test-py
