@@ -511,7 +511,6 @@ def test_example_create_subscription() -> None:
             ),
             granularity_secs=3600,
         ),
-        project_id=1,
         time_window_secs=3600,
         resolution_secs=180,
     )
