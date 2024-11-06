@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "sentry_protos/snuba/v1/endpoint_trace_item_table.proto";
+
+message CreateTraceItemTableSubscriptionRequest {
+  option deprecated = true;
+  TraceItemTableRequest table_request = 1;
+  uint64 project_id = 2;
+  uint32 time_window = 3;
+  uint32 resolution = 4;
+}
+
+message CreateTraceItemTableSubscriptionResponse {
+  option deprecated = true;
+  string subscription_id = 1;
+}
