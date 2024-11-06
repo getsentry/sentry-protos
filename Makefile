@@ -59,3 +59,8 @@ docs:
 	pip install sabledocs
 	protoc ./proto/sentry_protos/*/*/*.proto -I ./proto/ -o ./docs/descriptor.pb --include_source_info
 	cd docs && sabledocs
+
+.PHONY: test-py
+test-py:
+	cd py && pip install -e .
+	pytest tests/

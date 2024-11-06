@@ -2,6 +2,7 @@ from datetime import datetime
 
 from google.protobuf.timestamp_pb2 import Timestamp
 from sentry_protos.snuba.v1.endpoint_time_series_pb2 import (
+    DataPoint,
     TimeSeries,
     TimeSeriesRequest,
     TimeSeriesResponse,
@@ -31,13 +32,16 @@ from sentry_protos.snuba.v1.endpoint_trace_item_table_subscription_pb2 import (
 from sentry_protos.snuba.v1.request_common_pb2 import (
     RequestMeta,
     PageToken,
-)
-from sentry_protos.snuba.v1.trace_item_filter_pb2 import (
     TraceItemName,
+)
+from sentry_protos.snuba.v1.endpoint_find_traces_pb2 import (
     TraceFilter,
     EventFilter,
     AndTraceFilter,
     OrTraceFilter,
+)
+
+from sentry_protos.snuba.v1.trace_item_filter_pb2 import (
     TraceItemFilter,
     ComparisonFilter,
     ExistsFilter,
@@ -93,7 +97,7 @@ def test_example_time_series():
                     "consumer_group": "snuba_outcomes_consumer",
                 },
                 buckets=[COMMON_META.start_timestamp for _ in range(60)],
-                data_points=[42 for _ in range(60)],
+                data_points=[DataPoint(data=42) for _ in range(60)],
                 num_events=1337,
                 avg_sampling_rate=0.1,
             ),
@@ -104,7 +108,7 @@ def test_example_time_series():
                     "consumer_group": "snuba_outcomes_consumer",
                 },
                 buckets=[COMMON_META.start_timestamp for _ in range(60)],
-                data_points=[42 for _ in range(60)],
+                data_points=[DataPoint(data=42) for _ in range(60)],
                 num_events=1337,
                 avg_sampling_rate=0.1,
             ),
@@ -115,7 +119,7 @@ def test_example_time_series():
                     "consumer_group": "snuba_outcomes_consumer",
                 },
                 buckets=[COMMON_META.start_timestamp for _ in range(60)],
-                data_points=[42 for _ in range(60)],
+                data_points=[DataPoint(data=42) for _ in range(60)],
                 num_events=1337,
                 avg_sampling_rate=0.1,
             ),
@@ -126,7 +130,7 @@ def test_example_time_series():
                     "consumer_group": "snuba_outcomes_consumer",
                 },
                 buckets=[COMMON_META.start_timestamp for _ in range(60)],
-                data_points=[42 for _ in range(60)],
+                data_points=[DataPoint(data=42) for _ in range(60)],
                 num_events=1337,
                 avg_sampling_rate=0.1,
             ),
@@ -311,22 +315,26 @@ def test_example_find_traces() -> None:
                 filter=TraceItemFilter(
                     and_filter=AndFilter(
                         filters=[
-                            ComparisonFilter(
-                                key=AttributeKey(
-                                    type=AttributeKey.TYPE_STRING,
-                                    name="sentry.span_name",
+                            TraceItemFilter(
+                                comparison_filter=ComparisonFilter(
+                                    key=AttributeKey(
+                                        type=AttributeKey.TYPE_STRING,
+                                        name="sentry.span_name",
+                                    ),
+                                    op=ComparisonFilter.OP_EQUALS,
+                                    value=AttributeValue(val_str="database_query"),
                                 ),
-                                op=ComparisonFilter.OP_EQUALS,
-                                value=AttributeValue(val_str="database_query"),
                             ),
-                            ComparisonFilter(
-                                key=AttributeKey(
-                                    type=AttributeKey.TYPE_STRING,
-                                    name="sentry.transaction_name",
+                            TraceItemFilter(
+                                comparison_filter=ComparisonFilter(
+                                    key=AttributeKey(
+                                        type=AttributeKey.TYPE_STRING,
+                                        name="sentry.transaction_name",
+                                    ),
+                                    op=ComparisonFilter.OP_EQUALS,
+                                    value=AttributeValue(val_str="GET /v1/rpc"),
                                 ),
-                                op=ComparisonFilter.OP_EQUALS,
-                                value=AttributeValue(val_str="GET /v1/rpc"),
-                            ),
+                            )
                         ]
                     ),
                 ),
@@ -401,7 +409,7 @@ def test_example_find_traces() -> None:
                     ),
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_ERRORS,
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_ERRORS,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
