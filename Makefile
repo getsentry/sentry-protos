@@ -63,4 +63,4 @@ docs:
 .PHONY: test-py
 test-py:
 	cd py && pip install -e .
-	pytest tests/
+	pytest py/tests/
