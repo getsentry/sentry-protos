@@ -113,9 +113,7 @@ service ConsumerService {
   rpc SetTaskStatus(SetTaskStatusRequest) returns (SetTaskStatusResponse) {}
 }
 
-message GetTaskRequest {
-  optional string namespace = 1;
-}
+message GetTaskRequest {}
 message GetTaskResponse {
   // If there are no tasks available, these will be empty
   optional TaskActivation task = 1;
@@ -125,7 +123,6 @@ message GetTaskResponse {
 
 message SetTaskStatusRequest {
   string id = 1;
-  string namespace = 2;
   TaskActivationStatus status = 3;
 
   // Set to true to have receive a new task in the response
