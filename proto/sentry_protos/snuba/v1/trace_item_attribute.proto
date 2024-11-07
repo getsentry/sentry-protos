@@ -61,6 +61,7 @@ enum Function {
   FUNCTION_AVERAGE = 2 [deprecated = true];
   FUNCTION_COUNT = 3;
   FUNCTION_P50 = 4;
+  FUNCTION_P75 = 12;
   FUNCTION_P90 = 5;
   FUNCTION_P95 = 6;
   FUNCTION_P99 = 7;
