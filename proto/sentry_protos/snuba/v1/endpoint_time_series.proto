@@ -21,6 +21,7 @@ message DataPoint {
   bool data_present = 2;
   float avg_sampling_rate = 3;
   bool is_reliable = 4;
+  // determines whether the aggregation is reliable using math based on confidence intervals and sample size
 }
 
 message TimeSeries {
