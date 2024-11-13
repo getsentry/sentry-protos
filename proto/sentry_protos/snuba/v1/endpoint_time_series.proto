@@ -34,10 +34,10 @@ message TimeSeries {
   repeated DataPoint data_points = 4;
   // number of events used to calculate this timeseries
   uint64 num_events = 5;
+  float avg_sampling_rate = 6 [deprecated = true];
 }
 
 message TimeSeriesResponse {
   repeated TimeSeries result_timeseries = 1;
   ResponseMeta meta = 5;
-  float avg_sampling_rate = 6 [deprecated = true];
 }
