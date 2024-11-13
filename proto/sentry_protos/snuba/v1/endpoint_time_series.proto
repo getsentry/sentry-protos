@@ -19,6 +19,8 @@ message DataPoint {
   float data = 1;
   // optional, if not set, assume true. Accounts for sparse time series
   bool data_present = 2;
+  float avg_sampling_rate = 3;
+  bool is_reliable = 4;
 }
 
 message TimeSeries {
@@ -31,7 +33,6 @@ message TimeSeries {
   repeated DataPoint data_points = 4;
   // number of events used to calculate this timeseries
   uint64 num_events = 5;
-  float avg_sampling_rate = 6;
 }
 
 message TimeSeriesResponse {
