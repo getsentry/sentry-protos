@@ -39,4 +39,5 @@ message TimeSeries {
 message TimeSeriesResponse {
   repeated TimeSeries result_timeseries = 1;
   ResponseMeta meta = 5;
+  float avg_sampling_rate = 6 [deprecated = true];
 }

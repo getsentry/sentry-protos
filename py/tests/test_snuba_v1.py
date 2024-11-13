@@ -104,6 +104,7 @@ def test_example_time_series():
                 buckets=[COMMON_META.start_timestamp for _ in range(60)],
                 data_points=[DataPoint(data=42) for _ in range(60)],
                 num_events=1337,
+                avg_sampling_rate=0.1,
             ),
             TimeSeries(
                 label="p50",
@@ -114,6 +115,7 @@ def test_example_time_series():
                 buckets=[COMMON_META.start_timestamp for _ in range(60)],
                 data_points=[DataPoint(data=42) for _ in range(60)],
                 num_events=1337,
+                avg_sampling_rate=0.1,
             ),
             TimeSeries(
                 label="p90",
@@ -124,6 +126,7 @@ def test_example_time_series():
                 buckets=[COMMON_META.start_timestamp for _ in range(60)],
                 data_points=[DataPoint(data=42) for _ in range(60)],
                 num_events=1337,
+                avg_sampling_rate=0.1,
             ),
             TimeSeries(
                 label="p90",
@@ -134,6 +137,7 @@ def test_example_time_series():
                 buckets=[COMMON_META.start_timestamp for _ in range(60)],
                 data_points=[DataPoint(data=42) for _ in range(60)],
                 num_events=1337,
+                avg_sampling_rate=0.1,
             ),
         ]
     )
