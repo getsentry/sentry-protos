@@ -86,6 +86,6 @@ message AttributeAggregation {
 
 enum Reliability {
   RELIABILITY_UNSPECIFIED = 0;
-  RELIABILITY_HIGH = 1;
-  RELIABILITY_LOW = 2;
+  RELIABILITY_LOW = 1;
+  RELIABILITY_HIGH = 2;
 }
