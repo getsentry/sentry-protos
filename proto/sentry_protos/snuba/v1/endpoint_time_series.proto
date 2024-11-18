@@ -20,8 +20,9 @@ message DataPoint {
   // optional, if not set, assume true. Accounts for sparse time series
   bool data_present = 2;
   float avg_sampling_rate = 3;
-  bool is_reliable = 4;
-  // determines whether the aggregation is reliable using math based on confidence intervals and sample size
+  bool is_reliable = 4 [deprecated = true];
+  // determines the reliability of the aggregation using math based on confidence intervals and sample size
+  Reliability reliability = 5;
 }
 
 message TimeSeries {
