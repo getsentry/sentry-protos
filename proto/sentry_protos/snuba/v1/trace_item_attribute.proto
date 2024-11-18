@@ -83,3 +83,9 @@ message AttributeAggregation {
   string label = 3;
   ExtrapolationMode extrapolation_mode = 4;
 }
+
+enum Reliability {
+  RELIABILITY_UNSPECIFIED = 0;
+  RELIABILITY_LOW = 1;
+  RELIABILITY_HIGH = 2;
+}
