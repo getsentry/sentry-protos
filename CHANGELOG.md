@@ -1,3 +1,34 @@
+## 0.1.37
+
+### Various fixes & improvements
+
+- ref(taskbroker) Add at_most_once flag to task activations (#66) by @evanh
+- Use a reliability enum instead of boolean (#65) by @davidtsuk
+- Add reliability to timeseries results (#64) by @davidtsuk
+- feat: add p75 (#63) by @wmak
+- feat(subscriptions): Create subscriptions uses timeseries request (#60) by @shruthilayaj
+- feat: Run examples as tests and add tests for taskworker (#62) by @markstory
+- feat(tasks): Add protos for the ConsumerService (#61) by @evanh
+- feat(taskworker): Add processing deadline and expiration (#59) by @enochtangg
+- feat(subscriptions): Adds protobuf for create table subscription endpoint (#58) by @edwardgou-sentry
+- feat: TraceItemAttributeNames, add response metadata to Response, add page tokens (#57) by @kylemumma
+- Use AttributeKey in TraceItemAttributeValuesRequest (#55) by @volokluev
+- Add trace logging support to ResponseMeta (#54) by @nachivrn
+- Set taskworker proto to v1 (#53) by @john-z-yang
+- Add definitions for taskworker tasks (#52) by @john-z-yang
+- Add QueryStats and QueryMetadata to TraceItemTableResponse (#51) by @nachivrn
+- try to fix imports (#46) by @evanh
+- add orderby, use enum for item name (#46) by @evanh
+- add event filter to page token (#46) by @evanh
+- add event filter to page token (#46) by @evanh
+- Deprecate FUNCTION_AVERAGE (#50) by @volokluev
+- fix filters (#46) by @evanh
+- comment fixes (#46) by @evanh
+- Cleanup (#49) by @markstory
+- Try local secret (#49) by @markstory
+
+_Plus 42 more_
+
 ## 0.1.22
 
 ### Various fixes & improvements
