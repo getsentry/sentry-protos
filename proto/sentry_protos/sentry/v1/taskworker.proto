@@ -17,6 +17,9 @@ message RetryState {
 
   // After this attempt the task should be put in the dead-letter-queue.
   optional int32 deadletter_after_attempt = 4;
+
+  // Whether a task should be executed at most once.
+  optional bool at_most_once = 5;
 }
 
 enum TaskActivationStatus {
