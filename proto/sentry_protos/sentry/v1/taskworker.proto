@@ -116,7 +116,9 @@ service ConsumerService {
   rpc SetTaskStatus(SetTaskStatusRequest) returns (SetTaskStatusResponse) {}
 }
 
-message GetTaskRequest {}
+message GetTaskRequest {
+  optional string namespace = 1;
+}
 message GetTaskResponse {
   // If there are no tasks available, these will be empty
   optional TaskActivation task = 1;
@@ -130,6 +132,7 @@ message SetTaskStatusRequest {
 
   // Set to true to have receive a new task in the response
   optional bool fetch_next = 4;
+  optional string fetch_next_namespace = 5;
 }
 message SetTaskStatusResponse {
   // The next task the worker should execute. Requires fetch_next=True on the request.
