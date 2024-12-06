@@ -1,3 +1,9 @@
+## 0.1.39
+
+### Various fixes & improvements
+
+- feat(taskbroker): Improve fetch_next (#69) by @enochtangg
+
 ## 0.1.38
 
 ### Various fixes & improvements
