@@ -126,16 +126,22 @@ message GetTaskResponse {
   optional Error error = 3;
 }
 
+message FetchNextTask {
+  optional string namespace = 1;
+}
+
 message SetTaskStatusRequest {
   string id = 1;
   TaskActivationStatus status = 3;
 
-  // Set to true to have receive a new task in the response
-  optional bool fetch_next = 4;
-  optional string fetch_next_namespace = 5;
+  // If fetch_next is provided, receive a new task in the response
+  optional bool fetch_next = 4 [deprecated = true];
+  optional string fetch_next_namespace = 5 [deprecated = true];
+  optional FetchNextTask fetch_next_task = 6;
 }
+
 message SetTaskStatusResponse {
-  // The next task the worker should execute. Requires fetch_next=True on the request.
+  // The next task the worker should execute. Requires fetch_next to be set on the request.
   optional TaskActivation task = 1;
 
   optional Error error = 3;
