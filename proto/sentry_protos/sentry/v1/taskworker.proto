@@ -132,11 +132,12 @@ message FetchNext {
 
 message SetTaskStatusRequest {
   string id = 1;
-  TaskActivationStatus status = 2;
+  TaskActivationStatus status = 3;
 
   // If fetch_next is provided, receive a new task in the response
-  optional FetchNext fetch_next = 3;
+  optional FetchNext fetch_next = 6;
 }
+
 message SetTaskStatusResponse {
   // The next task the worker should execute. Requires fetch_next to be set on the request.
   optional TaskActivation task = 1;
