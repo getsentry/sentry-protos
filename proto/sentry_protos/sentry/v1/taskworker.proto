@@ -126,7 +126,7 @@ message GetTaskResponse {
   optional Error error = 3;
 }
 
-message FetchNext {
+message FetchNextTask {
   optional string namespace = 1;
 }
 
@@ -135,7 +135,9 @@ message SetTaskStatusRequest {
   TaskActivationStatus status = 3;
 
   // If fetch_next is provided, receive a new task in the response
-  optional FetchNext fetch_next = 6;
+  optional bool fetch_next = 4 [deprecated = true];
+  optional string fetch_next_namespace = 5 [deprecated = true];
+  optional FetchNextTask fetch_next_task = 6;
 }
 
 message SetTaskStatusResponse {
