@@ -1,3 +1,9 @@
+## 0.1.40
+
+### Various fixes & improvements
+
+- Add default value to virtual column context (#70) by @davidtsuk
+
 ## 0.1.39
 
 ### Various fixes & improvements
