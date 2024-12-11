@@ -27,6 +27,7 @@ message VirtualColumnContext {
   string from_column_name = 1;
   string to_column_name = 2;
   map<string, string> value_map = 3;
+  string default_value = 4;
 }
 
 message StrArray {
