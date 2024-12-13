@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "sentry_protos/snuba/v1/request_common.proto";
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+import "sentry_protos/snuba/v1/trace_item_filter.proto";
+
+message TraceColumn {
+  enum Name {
+    NAME_UNSPECIFIED = 0;
+    NAME_TRACE_ID = 1;
+    NAME_START_TIMESTAMP = 2;
+    NAME_ROOT_SPAN_NAME = 3;
+    NAME_TOTAL_SPAN_COUNT = 4;
+    NAME_FILTERED_SPAN_COUNT = 5;
+  }
+
+  Name name = 1;
+  AttributeKey.Type type = 2;
+}
+
+message GetTracesRequest {
+  message OrderBy {
+    TraceColumn column = 1;
+    bool descending = 2;
+  }
+
+  RequestMeta meta = 1;
+  TraceItemFilter filter = 2;
+  PageToken page_token = 3;
+  uint32 limit = 4;
+
+  repeated OrderBy order_by = 5;
+  repeated TraceColumn columns = 6;
+}
+
+message GetTracesResponse {
+  message Trace {
+    message Column {
+      TraceColumn.Name name = 1;
+      AttributeValue value = 2;
+    }
+
+    repeated Column columns = 1;
+  }
+
+  repeated Trace traces = 1;
+
+  PageToken page_token = 2;
+  ResponseMeta meta = 3;
+}
