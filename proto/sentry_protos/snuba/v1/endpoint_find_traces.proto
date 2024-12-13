@@ -11,6 +11,9 @@ message TraceColumn {
     NAME_UNSPECIFIED = 0;
     NAME_TRACE_ID = 1;
     NAME_START_TIMESTAMP = 2;
+    NAME_ROOT_SPAN_NAME = 3;
+    NAME_TOTAL_SPAN_COUNT = 4;
+    NAME_FILTERED_SPAN_COUNT = 5;
   }
 
   Name name = 1;
