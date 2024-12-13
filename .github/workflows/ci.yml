@@ -12,14 +12,13 @@ jobs:
           ref: ${{ github.ref }}
       - uses: bufbuild/buf-setup-action@v1.34.0
 
-      - name: buf lint
-        run: |
-          buf lint
-
-      - name: buf breaking
-        uses: bufbuild/buf-breaking-action@v1
+      - name: buf lint and breaking
+        uses: bufbuild/buf-action@v1
         with:
-          against: 'https://github.com/getsentry/sentry-protos.git#branch=main'
+          lint: true
+          breaking: true
+          format: false
+          breaking_against: 'https://github.com/getsentry/sentry-protos.git#branch=main'
 
   codegen:
     runs-on: ubuntu-latest
