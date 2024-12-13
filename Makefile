@@ -53,9 +53,21 @@ update-vendor:
 .PHONY: build
 build: build-py build-rust
 
+# installs protoc if not already installed
+.PHONY: ensure-protoc
+ensure-protoc:
+	@which protoc >/dev/null 2>&1 || ( \
+		echo "Installing protoc..." && \
+		if [ "$$(uname)" = "Darwin" ]; then \
+			brew install protobuf; \
+		else \
+			echo "Error: Automatic protoc installation not supported on this OS, please install it manually"; \
+			exit 1; \
+		fi \
+	)
 
 .PHONY: docs
-docs:
+docs: ensure-protoc
 	pip install sabledocs
 	protoc ./proto/sentry_protos/*/*/*.proto -I ./proto/ -o ./docs/descriptor.pb --include_source_info
 	cd docs && sabledocs
