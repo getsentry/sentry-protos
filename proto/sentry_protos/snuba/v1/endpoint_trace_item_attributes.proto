@@ -5,25 +5,30 @@ package sentry_protos.snuba.v1;
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 
-// TraceItemAttributeNamesRequest represents a request for "which queryable attributes are available for these projects between these dates"
-// - used for things like autocompletion
-// EAP does not make a distinction between data stored as columns on a table vs attributes stored
-// dynamically (e.g. tags, contexts, etc). To the user of the interface, they are the same
+// TraceItemAttributeNamesRequest is a request to the TraceItemAttributeNames endpoint,
+// it returns the names of all queryable "TraceItemAttributes" that exist in the given projects,
+// date range, and other filters.
+//
+// TraceItem are things like: span, error, log, replay
+// TraceItemAttributes could be things like: sentry.duration,user_id cart_total, etc.
 message TraceItemAttributeNamesRequest {
+  // metadata about the request
   RequestMeta meta = 1;
+
+  // maximum number of attributes to return
   uint32 limit = 2;
 
-  // use `page_token` instead
+  // offset is deprecated, please use `page_token` instead
   uint32 offset = 3 [deprecated = true];
 
-  // different typed attributes are queried separately
-  // anything other than TYPE_STRING and TYPE_FLOAT will return empty
+  // The type of the attributes to return, must be specified,
+  // only TYPE_STRING and TYPE_FLOAT are supported, anything else will return empty response
   AttributeKey.Type type = 5;
 
-  // filter to only return attribute names that match the given substring
+  // optionalfilter to only return attribute names that match the given substring
   string value_substring_match = 6;
 
-  // optional, used for pagination, the next page token will be returned in the last response
+  // optional, used for pagination, the next page token will be returned in the response
   PageToken page_token = 7;
 }
 

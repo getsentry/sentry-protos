@@ -6,15 +6,32 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 message RequestMeta {
+  // id of the organization we are querying data for
   uint64 organization_id = 1;
+
+  // used for logging and metrics, ex: "snuba_admin", "eap", "replays", etc
   string cogs_category = 2;
+
+  // identifier for where the request is coming from
+  // ex: "api.profiling.landing-chart", "api.replay.details-page"
   string referrer = 3;
-  // can be empty
+
+  // ids of the projects we are querying data for
   repeated uint64 project_ids = 4;
+
+  // start timestamp we want to query data for
   google.protobuf.Timestamp start_timestamp = 5;
+
+  // end timestamp we want to query data for
   google.protobuf.Timestamp end_timestamp = 6;
+
+  // the type of trace item we want to query data for
   TraceItemName trace_item_name = 7;
+
+  // whether to include debug information in the response
   bool debug = 10;
+
+  // a unique identifier for the request, user doesnt need to set this
   string request_id = 11;
 }
 
@@ -32,7 +49,9 @@ enum TraceItemName {
 
 message PageToken {
   oneof value {
+    // standard limit/offset pagination
     uint64 offset = 1;
+
     // Instead of using offset (which requires all the scanning and ordering),
     // the server sends back a filter clause to be added on to the filter conditions
     // which skips the previous results altogether, avoiding extra scanning and sorting
