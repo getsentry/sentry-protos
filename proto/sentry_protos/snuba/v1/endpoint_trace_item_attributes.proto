@@ -22,7 +22,7 @@ message TraceItemAttributeNamesRequest {
   uint32 offset = 3 [deprecated = true];
 
   // The type of the attributes to return, must be specified,
-  // only TYPE_STRING and TYPE_FLOAT are supported, anything else will return empty
+  // only TYPE_STRING and TYPE_FLOAT are supported, anything else will return empty response
   AttributeKey.Type type = 5;
 
   // optionalfilter to only return attribute names that match the given substring
