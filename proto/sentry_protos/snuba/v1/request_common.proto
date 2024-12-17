@@ -36,7 +36,9 @@ message RequestMeta {
 }
 
 message ResponseMeta {
+  // id of the request that this response relates to
   string request_id = 1;
+
   // Optional field that is included only if debug is true
   repeated QueryInfo query_info = 2;
 }

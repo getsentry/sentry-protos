@@ -39,8 +39,14 @@ message ExistsFilter {
   AttributeKey key = 1;
 }
 
-// Represents a condition on searching for a particular "trace item"
-// (e.g., spans, replays, errors)
+// a condition used to filter for matching "trace items"
+//
+// ex: "exists span.duration" would mean
+// "only give me trace items that have the attribute 'span.duration'"
+//
+// ( traces contain trace items,
+//   eg. trace items are: span, replay, error, etc,
+//   trace items contain attributes like 'span.duration' )
 message TraceItemFilter {
   oneof value {
     AndFilter and_filter = 1;

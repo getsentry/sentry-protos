@@ -7,37 +7,79 @@ import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
+// This is a request to the TimeSeries endpoint,
+// it is used to do a timeseries aggregation of a given attribute
+// across traces.
+//
+// ex: avg(span.duration) group by db.system
+// this (conceptually) will return a 2d graph where y-axis is avg(span.duration),
+// x-axis is time, and there is a separate line/function on the graph for each db.system value
 message TimeSeriesRequest {
+  // metadata about the request
+  // used to filter time range, organization, project, etc.
   RequestMeta meta = 1;
+
+  // filters out spans (TraceItems) that dont meet the criteria
+  // ex: avg(span.duration) where span.environment = 'production'
   TraceItemFilter filter = 2;
+
+  // the actual aggregation to compute ex: avg(span.duration)
   repeated AttributeAggregation aggregations = 3;
+
+  // the level of detail in the timeseries graph,
+  // low granularity is very detailed, high is less detail.
+  // ex: if granularity is 1s you will have a data point every 1s,
+  //     if its 1m you have a data point every 1m
+  // tip: for performance, if the query is is over a large time period you should
+  //  have high granularity
   uint64 granularity_secs = 4;
+
+  // attribute key to group by
+  // ex: span.environment might give 3 timeseries lines,
+  //     one for prod, one for dev etc
   repeated AttributeKey group_by = 5;
 }
 
 message DataPoint {
   float data = 1;
-  // optional, if not set, assume true. Accounts for sparse time series
+
+  // false if this datapoint is empty, true otherwise.
+  // optional, if not set assume true.
+  // used for sparse time series
   bool data_present = 2;
+
+  // only set for extrapolated data points, 0 otherwise
+  // the extrapolated avg sampling rate for this data point
   float avg_sampling_rate = 3;
+
+  // deprecated
   bool is_reliable = 4 [deprecated = true];
-  // determines the reliability of the aggregation using math based on confidence intervals and sample size
+
+  // the reliability of the data value based on math based on confidence intervals and sample size
   Reliability reliability = 5;
 }
 
 message TimeSeries {
   string label = 1;
+
   // the names and values of the attribute keys which
   // were in the group by
   map<string, string> group_by_attributes = 2;
+
   // time bucket for each data point in the timeseries
   repeated google.protobuf.Timestamp buckets = 3;
+
   repeated DataPoint data_points = 4;
+
   // number of events used to calculate this timeseries
   uint64 num_events = 5;
+
+  // deprecated
   float avg_sampling_rate = 6 [deprecated = true];
 }
 
+// This is the response from the TimeSeries endpoint,
+// it is the counterpart of TimeSeriesRequest
 message TimeSeriesResponse {
   repeated TimeSeries result_timeseries = 1;
   ResponseMeta meta = 5;
