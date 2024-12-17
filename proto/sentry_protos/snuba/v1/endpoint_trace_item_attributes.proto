@@ -13,6 +13,7 @@ import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 // TraceItemAttributes could be things like: sentry.duration,user_id cart_total, etc.
 message TraceItemAttributeNamesRequest {
   // metadata about the request
+  // this is where you specify organization, project, time range etc.
   RequestMeta meta = 1;
 
   // maximum number of attributes to return
@@ -32,34 +33,61 @@ message TraceItemAttributeNamesRequest {
   PageToken page_token = 7;
 }
 
+// TraceItemAttributeNamesResponse is the response returned by the TraceItemAttributeNames endpoint.
+// It is the counterpart to TraceItemAttributeNamesRequest.
 message TraceItemAttributeNamesResponse {
   message Attribute {
     string name = 1;
     AttributeKey.Type type = 2;
   }
+  // all attributes that matched the filters in the request
   repeated Attribute attributes = 1;
 
   // page token for the next page of results
   PageToken page_token = 2;
 
+  // metadata about the response
   ResponseMeta meta = 3;
 }
 
+// TraceItemAttributeValuesRequest is a request to the TraceItemAttributeValues endpoint,
+// it returns the set of all possible values for the given attribute key, across the given
+// organization, project_id, timerange etc (specified in meta).
+//
 // This endpoint only supports string values, it does not make sense
 // to get all the possible values of a numerical attribute
 message TraceItemAttributeValuesRequest {
+  // metadata about the request
+  // this is where you specify organization, project, time range etc.
   RequestMeta meta = 1;
+
+  // attribute you want the values of
   AttributeKey key = 2;
-  string name = 3 [deprecated = true]; //  use the `key` field instead, for API consistency
-  // a substring of the value being searched,
+
+  // depricated, please use the `key` field instead
+  string name = 3 [deprecated = true];
+
+  // a substring of the value being searched for,
+  // only values matching this substring will be returned.
   // only strict substring supported, no regex
   string value_substring_match = 4;
+
+  // max number of values to return
   uint32 limit = 5;
+
+  // optional, used for pagination, the next page token will be returned in the response
   PageToken page_token = 6;
 }
 
+// TraceItemAttributeValuesResponse is a response from the TraceItemAttributeValues endpoint
+// it is the counterpart to TraceItemAttributesRequest
 message TraceItemAttributeValuesResponse {
+  // all the values that matched the criteria specified in the request
   repeated string values = 1;
+
+  // page token for the next page of results
   PageToken page_token = 6;
+
+  // metadata about the response
   ResponseMeta meta = 7;
 }
