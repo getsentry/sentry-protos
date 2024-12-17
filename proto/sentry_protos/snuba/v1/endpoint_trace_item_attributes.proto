@@ -64,7 +64,7 @@ message TraceItemAttributeValuesRequest {
   // attribute you want the values of
   AttributeKey key = 2;
 
-  // depricated, please use the `key` field instead
+  // deprecated, please use the `key` field instead
   string name = 3 [deprecated = true];
 
   // a substring of the value being searched for,
