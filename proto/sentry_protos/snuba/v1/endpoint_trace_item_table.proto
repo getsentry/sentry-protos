@@ -6,7 +6,11 @@ import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
-// Serves requests for table views of the data
+// This is a request to the TraceItemTable endpoint,
+// it is used to query for TraceItems (ex. spans)
+// it returns tabular data where each row is a TraceItem,
+// and the columns are the attributes of the TraceItem
+// it can also be used for aggregations
 message TraceItemTableRequest {
   message OrderBy {
     Column column = 1;
@@ -14,12 +18,22 @@ message TraceItemTableRequest {
   }
 
   RequestMeta meta = 1;
+
+  // the columns or aggregations you want to get
   repeated Column columns = 2;
+
+  // filter out trace items you dont want
   TraceItemFilter filter = 3;
+
   repeated OrderBy order_by = 4;
+
   repeated AttributeKey group_by = 5;
+
   uint32 limit = 6;
+
+  // optional, used for pagination, the next page token will be returned in the response
   PageToken page_token = 7;
+
   repeated VirtualColumnContext virtual_column_contexts = 8;
 }
 
@@ -33,12 +47,21 @@ message Column {
 
 message TraceItemColumnValues {
   string attribute_name = 1;
+
   repeated AttributeValue results = 2;
+
+  // reliability of the values based on confidence interval and sample size math
   repeated Reliability reliabilities = 3;
 }
 
+// this is a response from the TraceItemTable endpoint
+// it is the counterpart to TraceItemTableRequest
 message TraceItemTableResponse {
+  // the rows
   repeated TraceItemColumnValues column_values = 1;
+
+  // page token for the next page of results
   PageToken page_token = 2;
+
   ResponseMeta meta = 3;
 }
