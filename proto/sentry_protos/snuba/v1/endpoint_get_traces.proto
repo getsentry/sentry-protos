@@ -6,24 +6,25 @@ import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
-message TraceColumn {
-  enum Name {
-    NAME_UNSPECIFIED = 0;
-    NAME_TRACE_ID = 1;
-    NAME_START_TIMESTAMP = 2;
-    NAME_ROOT_SPAN_NAME = 3;
-    NAME_TOTAL_SPAN_COUNT = 4;
-    NAME_FILTERED_SPAN_COUNT = 5;
-    NAME_ROOT_SPAN_DURATION_MS = 6;
-  }
+enum TraceAttributeKey {
+  TRACE_ATTRIBUTE_KEY_UNSPECIFIED = 0;
+  TRACE_ATTRIBUTE_KEY_TRACE_ID = 1;
+  TRACE_ATTRIBUTE_KEY_START_TIMESTAMP = 2;
+  TRACE_ATTRIBUTE_KEY_ROOT_SPAN_NAME = 3;
+  TRACE_ATTRIBUTE_KEY_TOTAL_SPAN_COUNT = 4;
+  TRACE_ATTRIBUTE_KEY_FILTERED_SPAN_COUNT = 5;
+  TRACE_ATTRIBUTE_KEY_ROOT_SPAN_DURATION_MS = 6;
+}
 
-  Name name = 1;
+message TraceAttribute {
+  TraceAttributeKey key = 1;
   AttributeKey.Type type = 2;
+  AttributeValue value = 3;
 }
 
 message GetTracesRequest {
   message OrderBy {
-    TraceColumn column = 1;
+    TraceAttributeKey key = 1;
     bool descending = 2;
   }
 
@@ -36,22 +37,17 @@ message GetTracesRequest {
   PageToken page_token = 2;
   uint32 limit = 3;
 
-  repeated TraceItemFilter filters = 4;
+  repeated TraceFilter filters = 4;
   repeated OrderBy order_by = 5;
-  repeated TraceColumn columns = 6;
+  repeated TraceAttribute attributes = 6;
 }
 
 message GetTracesResponse {
   message Trace {
-    message Column {
-      TraceColumn.Name name = 1;
-      AttributeValue value = 2;
-    }
-
-    repeated Column columns = 1;
+    repeated TraceAttribute attributes = 1;
   }
 
-  repeated Trace traces = 1;
+  repeated Trace rows = 1;
 
   PageToken page_token = 2;
   ResponseMeta meta = 3;
