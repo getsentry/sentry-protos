@@ -6,29 +6,45 @@ import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
-enum TraceAttributeKey {
-  TRACE_ATTRIBUTE_KEY_UNSPECIFIED = 0;
-  TRACE_ATTRIBUTE_KEY_TRACE_ID = 1;
-  TRACE_ATTRIBUTE_KEY_START_TIMESTAMP = 2;
-  TRACE_ATTRIBUTE_KEY_ROOT_SPAN_NAME = 3;
-  TRACE_ATTRIBUTE_KEY_TOTAL_SPAN_COUNT = 4;
-  TRACE_ATTRIBUTE_KEY_FILTERED_SPAN_COUNT = 5;
-  TRACE_ATTRIBUTE_KEY_ROOT_SPAN_DURATION_MS = 6;
-}
-
+// TraceAttribute represents the attribute of a trace.
 message TraceAttribute {
-  TraceAttributeKey key = 1;
+  // Key lists the available trace attribute keys you can query.
+  enum Key {
+    KEY_UNSPECIFIED = 0;
+    KEY_TRACE_ID = 1;
+    // KEY_START_TIMESTAMP will return the earliest timestamp seen in the trace.
+    KEY_START_TIMESTAMP = 2;
+    // KEY_ROOT_SPAN_NAME will return the name of the root (segment) span of
+    // the trace.
+    KEY_ROOT_SPAN_NAME = 3;
+    // KEY_TOTAL_ITEM_COUNT will return the count of all the items in a trace,
+    // regardless of the conditions applied.
+    KEY_TOTAL_ITEM_COUNT = 4;
+    // KEY_FILTERED_ITEM_COUNT will return the count of items where the filters
+    // apply.
+    // For example, in a trace with 5 items (1 http.server span, 4 db spans),
+    // if we query for traces with span.op == "db", this will return 4.
+    KEY_FILTERED_ITEM_COUNT = 5;
+    // KEY_ROOT_SPAN_DURATION_MS will return the duration of the root span in
+    // milliseconds.
+    KEY_ROOT_SPAN_DURATION_MS = 6;
+  }
+
+  Key key = 1;
   AttributeKey.Type type = 2;
   AttributeValue value = 3;
 }
 
+// GetTracesRequest lets you query traces with various attributes.
 message GetTracesRequest {
   message OrderBy {
-    TraceAttributeKey key = 1;
+    TraceAttribute.Key key = 1;
     bool descending = 2;
   }
 
+  // TraceFilter specifies conditions to apply on the items contained in a trace.
   message TraceFilter {
+    // `item_name` is the item type we will apply the filter condition on.
     TraceItemName item_name = 1;
     TraceItemFilter filter = 2;
   }
@@ -37,18 +53,24 @@ message GetTracesRequest {
   PageToken page_token = 2;
   uint32 limit = 3;
 
+  // List of filters on items of the trace we'll use when querying.
   repeated TraceFilter filters = 4;
+  // List of attributes we'd like to order by.
   repeated OrderBy order_by = 5;
+  // List of attributes we want to query.
   repeated TraceAttribute attributes = 6;
 }
 
+// GetTracesResponse contains a list of traces returned by the request.
 message GetTracesResponse {
   message Trace {
+    // List of attributes queried.
     repeated TraceAttribute attributes = 1;
   }
 
-  repeated Trace rows = 1;
+  PageToken page_token = 1;
+  ResponseMeta meta = 2;
 
-  PageToken page_token = 2;
-  ResponseMeta meta = 3;
+  // List of traces matching conditions.
+  repeated Trace traces = 3;
 }
