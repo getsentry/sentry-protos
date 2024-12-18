@@ -16,3 +16,9 @@ repos:
         require_serial: true
         # These are generated, don't format them.
         exclude: ^py/
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.2.0
+    hooks:
+      - id: no-commit-to-branch
+        args: ['--branch', 'main']
+
