@@ -34,7 +34,6 @@ message TraceAttribute {
   }
 
   Key key = 1;
-  AttributeKey.Type type = 2;
   AttributeValue value = 3;
 }
 
