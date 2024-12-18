@@ -34,7 +34,11 @@ message TraceAttribute {
   }
 
   Key key = 1;
-  AttributeValue value = 3;
+  AttributeValue value = 2;
+
+  // AttributeKey.Type will specify the type of the attribute we return.
+  // It does not need to be sent when requesting an attribute.
+  AttributeKey.Type type = 3;
 }
 
 // GetTracesRequest lets you query traces with various attributes.
