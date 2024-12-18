@@ -28,6 +28,9 @@ message TraceAttribute {
     // KEY_ROOT_SPAN_DURATION_MS will return the duration of the root span in
     // milliseconds.
     KEY_ROOT_SPAN_DURATION_MS = 6;
+    // KEY_ROOT_SPAN_PROJECT_ID returns the project ID associated with the root
+    // span.
+    KEY_ROOT_SPAN_PROJECT_ID = 7;
   }
 
   Key key = 1;
