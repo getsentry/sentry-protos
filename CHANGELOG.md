@@ -1,3 +1,14 @@
+## 0.1.41
+
+### Various fixes & improvements
+
+- feat(eap): Add a GetTraces endpoint (#71) by @phacops
+- feat: add docs for TraceItemTable endpoint (#78) by @kylemumma
+- feat: improve docs of AttributeValues and Timeseries endpoint (#76) by @kylemumma
+- feat: improve documentation of TraceItemAttributeNames endpoint (#74) by @kylemumma
+- feat: add ensure-protoc to makefile (#73) by @kylemumma
+- chore: Update to buf-action (#72) by @markstory
+
 ## 0.1.40
 
 ### Various fixes & improvements
