@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/snuba/v1/request_common.proto";
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+
+// GetTraceRequest lets you query a trace with all its items.
+message GetTraceRequest {
+  RequestMeta meta = 1;
+  string trace_id = 2;
+
+  // A list of item types to return in the response.
+  repeated TraceItemName item_types = 3;
+}
+
+// GetTraceResponse returns a trace and all its items.
+message GetTraceResponse {
+  message Item {
+    message Attribute {
+      AttributeKey key = 1;
+      AttributeValue value = 2;
+    }
+
+    string item_id = 1;
+    TraceItemName item_type = 2;
+
+    // ID of the span the item is linked to.
+    string span_id = 3;
+
+    // This indicates when the event happened.
+    google.protobuf.Timestamp start_timestamp = 4;
+    repeated Attribute attributes = 5;
+  }
+
+  string trace_id = 1;
+  ResponseMeta meta = 2;
+
+  repeated Item items = 3;
+}
