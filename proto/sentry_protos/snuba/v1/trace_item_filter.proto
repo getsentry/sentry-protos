@@ -35,22 +35,6 @@ message ComparisonFilter {
   AttributeValue value = 3;
 }
 
-message AggregationFilter {
-  enum Op {
-    OP_UNSPECIFIED = 0;
-    OP_LESS_THAN = 1;
-    OP_GREATER_THAN = 2;
-    OP_LESS_THAN_OR_EQUALS = 3;
-    OP_GREATER_THAN_OR_EQUALS = 4;
-    OP_EQUALS = 5;
-    OP_NOT_EQUALS = 6;
-  }
-  Function aggregate = 1;
-  AttributeKey key = 2;
-  Op op = 3;
-  AttributeValue value = 4;
-}
-
 message ExistsFilter {
   AttributeKey key = 1;
 }
@@ -70,6 +54,5 @@ message TraceItemFilter {
     NotFilter not_filter = 3;
     ComparisonFilter comparison_filter = 4;
     ExistsFilter exists_filter = 5;
-    AggregationFilter aggregation_filter = 6;
   }
 }
