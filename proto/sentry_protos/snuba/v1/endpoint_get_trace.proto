@@ -8,11 +8,16 @@ import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 
 // GetTraceRequest lets you query a trace with all its items.
 message GetTraceRequest {
+  message TraceItem {
+    TraceItemName type = 1;
+    AttributeKey attributes = 2;
+  }
+
   RequestMeta meta = 1;
   string trace_id = 2;
 
-  // A list of item types to return in the response.
-  repeated TraceItemName item_types = 3;
+  // A list of items and their attributes to return in the response.
+  repeated TraceItem items = 3;
 }
 
 // GetTraceResponse returns a trace and all its items.
