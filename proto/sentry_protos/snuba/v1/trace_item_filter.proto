@@ -25,6 +25,7 @@ message ComparisonFilter {
     OP_GREATER_THAN_OR_EQUALS = 4;
     OP_EQUALS = 5;
     OP_NOT_EQUALS = 6;
+    OP_EQUALS_IGNORE_CASE = 11; // string only
     OP_LIKE = 7; //string only
     OP_NOT_LIKE = 8; //string only
     OP_IN = 9; // array only
