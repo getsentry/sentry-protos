@@ -6,7 +6,10 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 
-// GetTraceRequest lets you query a trace with all its items.
+// GetTraceRequest lets you query a trace by trace_id, returning all its items.
+//
+// Each item will return every attributes by default or you can pass a list of
+// attributes to return for each item type.
 message GetTraceRequest {
   message TraceItem {
     TraceItemName type = 1;
