@@ -34,9 +34,9 @@ message TraceAttribute {
     // KEY_EARLIEST_SPAN_NAME returns the name of the earliest span of a trace,
     // regardless if it's a root span or not
     KEY_EARLIEST_SPAN_NAME = 8;
-    // KEY_EARLIEST_NAVIGATION_SPAN returns the name of the earliest span being
-    // a navigation span (span op being `pageload` or `navigation`).
-    KEY_EARLIEST_NAVIGATION_SPAN = 9;
+    // KEY_EARLIEST_FRONTEND_SPAN returns the name of the earliest span emitted
+    // by the frontend (for example, span op being `pageload` or `navigation`).
+    KEY_EARLIEST_FRONTEND_SPAN = 9;
   }
 
   Key key = 1;
