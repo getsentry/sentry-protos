@@ -33,6 +33,9 @@ message ComparisonFilter {
   AttributeKey key = 1;
   Op op = 2;
   AttributeValue value = 3;
+
+  // optional, if set will ignore case for string comparisons
+  bool ignore_case = 4;
 }
 
 message ExistsFilter {
