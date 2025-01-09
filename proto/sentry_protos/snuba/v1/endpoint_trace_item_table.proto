@@ -35,6 +35,40 @@ message TraceItemTableRequest {
   PageToken page_token = 7;
 
   repeated VirtualColumnContext virtual_column_contexts = 8;
+
+  // filter out results using aggregate functions
+  AggregationFilter aggregation_filter = 9;
+}
+
+message AggregationAndFilter {
+  repeated AggregationFilter filters = 1;
+}
+
+message AggregationOrFilter {
+  repeated AggregationFilter filters = 1;
+}
+
+message AggregationComparisonFilter {
+  enum Op {
+    OP_UNSPECIFIED = 0;
+    OP_LESS_THAN = 1;
+    OP_GREATER_THAN = 2;
+    OP_LESS_THAN_OR_EQUALS = 3;
+    OP_GREATER_THAN_OR_EQUALS = 4;
+    OP_EQUALS = 5;
+    OP_NOT_EQUALS = 6;
+  }
+  Column column = 1;
+  Op op = 2;
+  AttributeValue value = 3;
+}
+
+message AggregationFilter {
+  oneof value {
+    AggregationAndFilter and_filter = 1;
+    AggregationOrFilter or_filter = 2;
+    AggregationComparisonFilter comparison_filter = 3;
+  }
 }
 
 message Column {
