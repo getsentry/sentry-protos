@@ -333,11 +333,11 @@ def test_example_table_with_aggregation_filter() -> None:
     TraceItemTableResponse(
         column_values=[
             TraceItemColumnValues(
-                attribute_name="span_name",
+                attribute_name="browser_name",
                 results=[AttributeValue(val_str="xyz"), AttributeValue(val_str="abc")],
             ),
             TraceItemColumnValues(
-                attribute_name="duration_p95",
+                attribute_name="duration_avg",
                 results=[AttributeValue(val_float=4.2), AttributeValue(val_float=6.9)],
             ),
         ],
