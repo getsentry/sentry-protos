@@ -313,7 +313,7 @@ def test_example_table_with_aggregation_filter() -> None:
         ],
         order_by=[TraceItemTableRequest.OrderBy(column=Column(label="duration_avg"))],
         aggregation_filter=AggregationFilter(
-            aggregation_comparison_filter=AggregationComparisonFilter(
+            comparison_filter=AggregationComparisonFilter(
                 column=Column(
                     aggregation=AttributeAggregation(
                         aggregate=Function.FUNCTION_COUNT,
