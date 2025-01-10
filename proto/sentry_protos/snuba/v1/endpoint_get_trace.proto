@@ -14,7 +14,7 @@ message GetTraceRequest {
   message TraceItem {
     TraceItemName type = 1;
     // If attributes is empty, all attributes will be returned for this type.
-    AttributeKey attributes = 2;
+    repeated AttributeKey attributes = 2;
   }
 
   RequestMeta meta = 1;
