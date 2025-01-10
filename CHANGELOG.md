@@ -1,3 +1,14 @@
+## 0.1.42
+
+### Various fixes & improvements
+
+- c (#84) by @xurui-c
+- feat(eap): Add aggregation filter (#81) by @davidtsuk
+- feat(eap): Add more span name fields to the trace (#79) by @phacops
+- feat: add ignore_case boolean to ComparisonFilter (#83) by @kylemumma
+-  bug: cant commit to any branch locally (#82) by @kylemumma
+- feat: no local commits to main branch (#77) by @kylemumma
+
 ## 0.1.41
 
 ### Various fixes & improvements
