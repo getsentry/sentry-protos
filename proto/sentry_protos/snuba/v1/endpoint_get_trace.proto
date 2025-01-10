@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/snuba/v1/request_common.proto";
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+
+// GetTraceRequest lets you query a trace by trace_id, returning all its items.
+//
+// Each item will return every attributes by default or you can pass a list of
+// attributes to return for each item type.
+message GetTraceRequest {
+  message TraceItem {
+    TraceItemName type = 1;
+    // If attributes is empty, all attributes will be returned for this type.
+    repeated AttributeKey attributes = 2;
+  }
+
+  RequestMeta meta = 1;
+  string trace_id = 2;
+
+  // A list of items and their attributes to return in the response.
+  repeated TraceItem items = 3;
+}
+
+// GetTraceResponse returns a trace and all its items.
+message GetTraceResponse {
+  message Item {
+    message Attribute {
+      AttributeKey key = 1;
+      AttributeValue value = 2;
+    }
+
+    string id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    repeated Attribute attributes = 3;
+  }
+
+  // ItemGroup is a list of items of a specific type.
+  message ItemGroup {
+    TraceItemName type = 1;
+    repeated Item items = 2;
+  }
+
+  string trace_id = 1;
+  ResponseMeta meta = 2;
+
+  repeated ItemGroup item_groups = 3;
+}
