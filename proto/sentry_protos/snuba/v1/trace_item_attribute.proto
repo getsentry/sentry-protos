@@ -57,13 +57,14 @@ message AttributeValue {
   oneof value {
     bool val_bool = 1;
     string val_str = 2;
-    float val_float = 3;
+    float val_float = 3 [deprecated = true];
     int64 val_int = 4;
     // set to true if value is null
     bool val_null = 5;
     StrArray val_str_array = 6;
     IntArray val_int_array = 7;
     FloatArray val_float_array = 8;
+    double val_double = 9;
   }
 }
 
