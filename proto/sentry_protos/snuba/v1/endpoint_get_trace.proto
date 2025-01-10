@@ -13,6 +13,7 @@ import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 message GetTraceRequest {
   message TraceItem {
     TraceItemName type = 1;
+    // If attributes is empty, all attributes will be returned for this type.
     AttributeKey attributes = 2;
   }
 
@@ -31,19 +32,19 @@ message GetTraceResponse {
       AttributeValue value = 2;
     }
 
-    string item_id = 1;
-    TraceItemName item_type = 2;
+    string id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    repeated Attribute attributes = 3;
+  }
 
-    // ID of the span the item is linked to.
-    string span_id = 3;
-
-    // This indicates when the event happened.
-    google.protobuf.Timestamp start_timestamp = 4;
-    repeated Attribute attributes = 5;
+  // ItemGroup is a list of items of a specific type.
+  message ItemGroup {
+    TraceItemName type = 1;
+    repeated Item items = 2;
   }
 
   string trace_id = 1;
   ResponseMeta meta = 2;
 
-  repeated Item items = 3;
+  repeated ItemGroup item_groups = 3;
 }
