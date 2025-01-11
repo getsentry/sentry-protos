@@ -49,22 +49,30 @@ message IntArray {
   repeated int64 values = 1;
 }
 
+// DEPRECATED, use DoubleArray instead
 message FloatArray {
   repeated float values = 1;
+}
+
+message DoubleArray {
+  repeated double values = 1;
 }
 
 message AttributeValue {
   oneof value {
     bool val_bool = 1;
     string val_str = 2;
+    // deprecated, use val_double instead
     float val_float = 3 [deprecated = true];
     int64 val_int = 4;
     // set to true if value is null
     bool val_null = 5;
     StrArray val_str_array = 6;
     IntArray val_int_array = 7;
-    FloatArray val_float_array = 8;
+    // deprecated, use val_double_array instead
+    FloatArray val_float_array = 8 [deprecated = true];
     double val_double = 9;
+    DoubleArray val_double_array = 10;
   }
 }
 
