@@ -1,3 +1,10 @@
+## 0.1.43
+
+### Various fixes & improvements
+
+- feat(eap): Add a GetTrace endpoint (#80) by @phacops
+- c (#85) by @xurui-c
+
 ## 0.1.42
 
 ### Various fixes & improvements
