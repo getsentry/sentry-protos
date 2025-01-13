@@ -1,3 +1,10 @@
+## 0.1.44
+
+### Various fixes & improvements
+
+- c (#87) by @xurui-c
+- c (#86) by @xurui-c
+
 ## 0.1.43
 
 ### Various fixes & improvements
