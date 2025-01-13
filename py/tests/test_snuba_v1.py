@@ -14,6 +14,8 @@ from sentry_protos.snuba.v1.endpoint_trace_item_attributes_pb2 import (
     TraceItemAttributeValuesResponse,
 )
 from sentry_protos.snuba.v1.endpoint_trace_item_table_pb2 import (
+    AggregationComparisonFilter,
+    AggregationFilter,
     Column,
     TraceItemColumnValues,
     TraceItemTableRequest,
@@ -56,6 +58,7 @@ from sentry_protos.snuba.v1.trace_item_attribute_pb2 import (
     AttributeAggregation,
     AttributeKey,
     AttributeValue,
+    ExtrapolationMode,
     Function,
 )
 
@@ -287,6 +290,58 @@ def test_example_table_with_aggregations() -> None:
         ),  # if we're ordering by aggregate values, we can't paginate by anything except offset
     )
 
+def test_example_table_with_aggregation_filter() -> None:
+    TraceItemTableRequest(
+        meta=COMMON_META,
+        columns=[
+            Column(
+                key=AttributeKey(
+                    type=AttributeKey.TYPE_STRING, name="sentry.browser.name"
+                ),
+                label="browser_name",
+            ),
+            Column(
+                aggregation=AttributeAggregation(
+                    aggregate=Function.FUNCTION_AVG,
+                    key=AttributeKey(
+                        type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
+                    ),
+                    extrapolation_mode=ExtrapolationMode.EXTRAPOLATION_MODE_NONE,
+                ),
+                label="duration_avg",
+            ),
+        ],
+        order_by=[TraceItemTableRequest.OrderBy(column=Column(label="duration_avg"))],
+        aggregation_filter=AggregationFilter(
+            comparison_filter=AggregationComparisonFilter(
+                aggregation=AttributeAggregation(
+                    aggregate=Function.FUNCTION_COUNT,
+                    key=AttributeKey(
+                        type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
+                    ),
+                    extrapolation_mode=ExtrapolationMode.EXTRAPOLATION_MODE_SAMPLE_WEIGHTED,
+                ),
+                op=AggregationComparisonFilter.OP_GREATER_THAN,
+                val=100,
+            ),
+        ),
+        limit=2,
+    )
+    TraceItemTableResponse(
+        column_values=[
+            TraceItemColumnValues(
+                attribute_name="browser_name",
+                results=[AttributeValue(val_str="xyz"), AttributeValue(val_str="abc")],
+            ),
+            TraceItemColumnValues(
+                attribute_name="duration_avg",
+                results=[AttributeValue(val_float=4.2), AttributeValue(val_float=6.9)],
+            ),
+        ],
+        page_token=PageToken(
+            offset=2
+        ), 
+    )
 
 def test_example_find_traces() -> None:
     # Find traces that contain a span event with a `span_name` of "database_query"
