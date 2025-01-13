@@ -171,7 +171,7 @@ def test_example_table() -> None:
                                 name="eap.measurement",
                             ),
                             op=ComparisonFilter.OP_LESS_THAN_OR_EQUALS,
-                            value=AttributeValue(val_float=101),
+                            value=AttributeValue(val_double=101),
                         ),
                     ),
                     TraceItemFilter(
@@ -181,7 +181,7 @@ def test_example_table() -> None:
                                 name="eap.measurement",
                             ),
                             op=ComparisonFilter.OP_GREATER_THAN,
-                            value=AttributeValue(val_float=999),
+                            value=AttributeValue(val_double=999),
                         ),
                     ),
                 ]
@@ -207,7 +207,7 @@ def test_example_table() -> None:
             ),
             TraceItemColumnValues(
                 attribute_name="duration",
-                results=[AttributeValue(val_float=4.2), AttributeValue(val_float=6.9)],
+                results=[AttributeValue(val_double=4.2), AttributeValue(val_double=6.9)],
             ),
         ],
         page_token=PageToken(
@@ -217,7 +217,7 @@ def test_example_table() -> None:
                         type=AttributeKey.TYPE_FLOAT, name="sentry.duration"
                     ),
                     op=ComparisonFilter.OP_GREATER_THAN_OR_EQUALS,
-                    value=AttributeValue(val_float=6.9),
+                    value=AttributeValue(val_double=6.9),
                 )
             )
         ),
@@ -254,7 +254,7 @@ def test_example_table_with_aggregations() -> None:
                                 name="eap.measurement",
                             ),
                             op=ComparisonFilter.OP_LESS_THAN_OR_EQUALS,
-                            value=AttributeValue(val_float=101),
+                            value=AttributeValue(val_double=101),
                         ),
                     ),
                     TraceItemFilter(
@@ -264,7 +264,7 @@ def test_example_table_with_aggregations() -> None:
                                 name="eap.measurement",
                             ),
                             op=ComparisonFilter.OP_GREATER_THAN,
-                            value=AttributeValue(val_float=999),
+                            value=AttributeValue(val_double=999),
                         ),
                     ),
                 ]
@@ -282,7 +282,7 @@ def test_example_table_with_aggregations() -> None:
             ),
             TraceItemColumnValues(
                 attribute_name="duration_p95",
-                results=[AttributeValue(val_float=4.2), AttributeValue(val_float=6.9)],
+                results=[AttributeValue(val_double=4.2), AttributeValue(val_double=6.9)],
             ),
         ],
         page_token=PageToken(
@@ -324,7 +324,7 @@ def test_example_table_with_aggregation_filter() -> None:
                     ),
                 ),
                 op=AggregationComparisonFilter.OP_GREATER_THAN,
-                value=AttributeValue(val_float=100),
+                value=AttributeValue(val_double=100),
             ),
         ),
         limit=2,
@@ -338,7 +338,7 @@ def test_example_table_with_aggregation_filter() -> None:
             ),
             TraceItemColumnValues(
                 attribute_name="duration_avg",
-                results=[AttributeValue(val_float=4.2), AttributeValue(val_float=6.9)],
+                results=[AttributeValue(val_double=4.2), AttributeValue(val_double=6.9)],
             ),
         ],
         page_token=PageToken(
