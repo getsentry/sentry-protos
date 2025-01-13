@@ -80,12 +80,12 @@ def test_example_time_series():
         aggregations=[
             AttributeAggregation(
                 aggregate=Function.FUNCTION_AVG,
-                key=AttributeKey(type=AttributeKey.TYPE_FLOAT, name="sentry.duration"),
+                key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"),
                 label="p50",
             ),
             AttributeAggregation(
                 aggregate=Function.FUNCTION_P95,
-                key=AttributeKey(type=AttributeKey.TYPE_FLOAT, name="sentry.duration"),
+                key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"),
                 label="p90",
             ),
         ],
@@ -157,7 +157,7 @@ def test_example_table() -> None:
                 label="span_name",
             ),
             Column(
-                key=AttributeKey(type=AttributeKey.TYPE_FLOAT, name="sentry.duration"),
+                key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"),
                 label="duration",
             ),
         ],
@@ -191,7 +191,7 @@ def test_example_table() -> None:
             TraceItemTableRequest.OrderBy(
                 column=Column(
                     key=AttributeKey(
-                        type=AttributeKey.TYPE_FLOAT, name="sentry.duration"
+                        type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
                     )
                 )
             )
@@ -214,7 +214,7 @@ def test_example_table() -> None:
             filter_offset=TraceItemFilter(
                 comparison_filter=ComparisonFilter(
                     key=AttributeKey(
-                        type=AttributeKey.TYPE_FLOAT, name="sentry.duration"
+                        type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
                     ),
                     op=ComparisonFilter.OP_GREATER_THAN_OR_EQUALS,
                     value=AttributeValue(val_double=6.9),
@@ -238,7 +238,7 @@ def test_example_table_with_aggregations() -> None:
                 aggregation=AttributeAggregation(
                     aggregate=Function.FUNCTION_P95,
                     key=AttributeKey(
-                        type=AttributeKey.TYPE_FLOAT, name="sentry.duration"
+                        type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
                     ),
                 ),
                 label="duration_p95",
@@ -304,7 +304,7 @@ def test_example_table_with_aggregation_filter() -> None:
                 aggregation=AttributeAggregation(
                     aggregate=Function.FUNCTION_AVG,
                     key=AttributeKey(
-                        type=AttributeKey.TYPE_FLOAT, name="sentry.duration"
+                        type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
                     ),
                     extrapolation_mode=ExtrapolationMode.EXTRAPOLATION_MODE_NONE,
                 ),
@@ -318,7 +318,7 @@ def test_example_table_with_aggregation_filter() -> None:
                     aggregation=AttributeAggregation(
                         aggregate=Function.FUNCTION_COUNT,
                         key=AttributeKey(
-                            type=AttributeKey.TYPE_FLOAT, name="sentry.duration"
+                            type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
                         ),
                         extrapolation_mode=ExtrapolationMode.EXTRAPOLATION_MODE_SAMPLE_WEIGHTED,
                     ),
