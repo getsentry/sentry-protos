@@ -1,3 +1,9 @@
+## 0.1.47
+
+### Various fixes & improvements
+
+- fix(eap-api): deprecate TYPE_DOUBLE (#92) by @xurui-c
+
 ## 0.1.46
 
 ### Various fixes & improvements
