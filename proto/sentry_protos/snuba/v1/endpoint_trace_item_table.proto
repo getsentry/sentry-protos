@@ -58,9 +58,9 @@ message AggregationComparisonFilter {
     OP_EQUALS = 5;
     OP_NOT_EQUALS = 6;
   }
-  Column column = 1 [deprecated = true];
+  Column column = 1 [deprecated = true]; // deprecated as columns should always be aggregated in a post aggregation filter
   Op op = 2;
-  AttributeValue value = 3 [deprecated = true];
+  AttributeValue value = 3 [deprecated = true]; // since only aggregated columns are supported, the value should be numeric
   AttributeAggregation aggregation = 4;
   double val = 5;
 }
