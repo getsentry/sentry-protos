@@ -314,19 +314,22 @@ def test_example_table_with_aggregation_filter() -> None:
         order_by=[TraceItemTableRequest.OrderBy(column=Column(label="duration_avg"))],
         aggregation_filter=AggregationFilter(
             comparison_filter=AggregationComparisonFilter(
-                aggregation=AttributeAggregation(
-                    aggregate=Function.FUNCTION_COUNT,
-                    key=AttributeKey(
-                        type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
+                column=Column(
+                    aggregation=AttributeAggregation(
+                        aggregate=Function.FUNCTION_COUNT,
+                        key=AttributeKey(
+                            type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
+                        ),
+                        extrapolation_mode=ExtrapolationMode.EXTRAPOLATION_MODE_SAMPLE_WEIGHTED,
                     ),
-                    extrapolation_mode=ExtrapolationMode.EXTRAPOLATION_MODE_SAMPLE_WEIGHTED,
                 ),
                 op=AggregationComparisonFilter.OP_GREATER_THAN,
-                val=100,
+                value=AttributeValue(val_double=100),
             ),
         ),
         limit=2,
     )
+
     TraceItemTableResponse(
         column_values=[
             TraceItemColumnValues(
@@ -335,7 +338,7 @@ def test_example_table_with_aggregation_filter() -> None:
             ),
             TraceItemColumnValues(
                 attribute_name="duration_avg",
-                results=[AttributeValue(val_float=4.2), AttributeValue(val_float=6.9)],
+                results=[AttributeValue(val_double=4.2), AttributeValue(val_double=6.9)],
             ),
         ],
         page_token=PageToken(
