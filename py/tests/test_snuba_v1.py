@@ -454,7 +454,7 @@ def test_example_find_traces() -> None:
                 filters=[
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
+                            trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
@@ -469,7 +469,7 @@ def test_example_find_traces() -> None:
                     ),
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_ERRORS,
+                            trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
