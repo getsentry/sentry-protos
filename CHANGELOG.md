@@ -1,3 +1,9 @@
+## 0.1.46
+
+### Various fixes & improvements
+
+- fix(eap): Only allow compraison between aggregation and a double in post aggregation filter (#89) by @davidtsuk
+
 ## 0.1.45
 
 ### Various fixes & improvements
