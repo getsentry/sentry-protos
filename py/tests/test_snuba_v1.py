@@ -38,7 +38,7 @@ from sentry_protos.snuba.v1.endpoint_trace_item_table_subscription_pb2 import (
 from sentry_protos.snuba.v1.request_common_pb2 import (
     RequestMeta,
     PageToken,
-    TraceItemName,
+    TraceItemType,
 )
 from sentry_protos.snuba.v1.endpoint_find_traces_pb2 import (
     TraceFilter,
@@ -70,7 +70,7 @@ COMMON_META = RequestMeta(
     referrer="something",
     start_timestamp=Timestamp(seconds=int(datetime(2024, 4, 20, 16, 20).timestamp())),
     end_timestamp=Timestamp(seconds=int(datetime(2024, 4, 20, 17, 20).timestamp())),
-    trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
+    trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
 )
 
 
@@ -349,7 +349,7 @@ def test_example_find_traces() -> None:
         meta=COMMON_META,
         filter=TraceFilter(
             event_filter=EventFilter(
-                trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
+                trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
                 filter=TraceItemFilter(
                     comparison_filter=ComparisonFilter(
                         key=AttributeKey(
@@ -371,7 +371,7 @@ def test_example_find_traces() -> None:
         meta=COMMON_META,
         filter=TraceFilter(
             event_filter=EventFilter(
-                trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
+                trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
                 filter=TraceItemFilter(
                     and_filter=AndFilter(
                         filters=[
@@ -412,7 +412,7 @@ def test_example_find_traces() -> None:
                 filters=[
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
+                            trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
@@ -427,7 +427,7 @@ def test_example_find_traces() -> None:
                     ),
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_ERRORS,
+                            trace_item_type=TraceItemType.TRACE_ITEM_TYPE_ERROR,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(

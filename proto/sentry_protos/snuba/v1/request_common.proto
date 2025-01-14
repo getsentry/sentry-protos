@@ -25,8 +25,11 @@ message RequestMeta {
   // end timestamp we want to query data for
   google.protobuf.Timestamp end_timestamp = 6;
 
-  // the type of trace item we want to query data for
-  TraceItemName trace_item_name = 7;
+  // DEPRECATED (not implemented) - use trace_item_type instead
+  TraceItemName trace_item_name = 7 [deprecated = true];
+
+  // the type of the trace item you are querying
+  TraceItemType trace_item_type = 8;
 
   // whether to include debug information in the response
   bool debug = 10;
@@ -43,11 +46,18 @@ message ResponseMeta {
   repeated QueryInfo query_info = 2;
 }
 
+// DEPRECATED: use TraceItemType instead
 enum TraceItemName {
   TRACE_ITEM_NAME_UNSPECIFIED = 0;
   TRACE_ITEM_NAME_EAP_SPANS = 1;
   TRACE_ITEM_NAME_EAP_ERRORS = 2;
-  TRACE_ITEM_NAME_OURLOGS = 3;
+}
+
+enum TraceItemType {
+  TRACE_ITEM_TYPE_UNSPECIFIED = 0;
+  TRACE_ITEM_TYPE_SPAN = 1;
+  TRACE_ITEM_TYPE_ERROR = 2;
+  TRACE_ITEM_TYPE_LOG = 3;
 }
 
 message PageToken {

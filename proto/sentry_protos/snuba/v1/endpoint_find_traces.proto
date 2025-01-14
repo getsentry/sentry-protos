@@ -26,6 +26,7 @@ message TracePageToken {
   }
 }
 
+//DEPRECATED: use GetTracesRequest
 message FindTracesRequest {
   RequestMeta meta = 1;
   TraceFilter filter = 2;
@@ -45,8 +46,9 @@ message FindTracesResponse {
 }
 
 message EventFilter {
-  TraceItemName trace_item_name = 1;
+  TraceItemName trace_item_name = 1 [deprecated = true];
   TraceItemFilter filter = 2;
+  TraceItemType trace_item_type = 3;
 }
 
 message AndTraceFilter {

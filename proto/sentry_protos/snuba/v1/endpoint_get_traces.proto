@@ -56,9 +56,11 @@ message GetTracesRequest {
 
   // TraceFilter specifies conditions to apply on the items contained in a trace.
   message TraceFilter {
-    // `item_name` is the item type we will apply the filter condition on.
-    TraceItemName item_name = 1;
+    // DEPRECATED: use item_type
+    TraceItemName item_name = 1 [deprecated = true];
     TraceItemFilter filter = 2;
+    // the item type we will apply the filter condition on.
+    TraceItemType item_type = 3;
   }
 
   RequestMeta meta = 1;
