@@ -7,10 +7,10 @@ message AttributeKey {
     TYPE_UNSPECIFIED = 0; // protobuf requirement, do not send this
     TYPE_STRING = 1;
     TYPE_BOOLEAN = 2;
-    // deprecated, use TYPE_DOUBLE instead
-    TYPE_FLOAT = 3 [deprecated = true];
+    TYPE_FLOAT = 3;
     TYPE_INT = 4; //note: all numbers are stored as float64, so massive integers can be rounded. USE STRING FOR IDS.
-    TYPE_DOUBLE = 5;
+    // deprecated, use TYPE_DOUBLE instead
+    TYPE_DOUBLE = 5 [deprecated = true];
   }
 
   Type type = 1;
