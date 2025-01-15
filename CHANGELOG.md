@@ -1,3 +1,9 @@
+## 0.1.51
+
+### Various fixes & improvements
+
+- fix(eap-api): remove comment about deprecation (#96) by @xurui-c
+
 ## 0.1.50
 
 ### Various fixes & improvements
