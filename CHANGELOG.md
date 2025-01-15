@@ -1,3 +1,9 @@
+## 0.1.50
+
+### Various fixes & improvements
+
+- fix(eap-api): add TYPE_DOUBLE (#95) by @xurui-c
+
 ## 0.1.49
 
 ### Various fixes & improvements
