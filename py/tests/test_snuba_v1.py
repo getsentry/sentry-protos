@@ -39,6 +39,7 @@ from sentry_protos.snuba.v1.request_common_pb2 import (
     RequestMeta,
     PageToken,
     TraceItemType,
+    TraceItemName
 )
 from sentry_protos.snuba.v1.endpoint_find_traces_pb2 import (
     TraceFilter,
@@ -349,7 +350,7 @@ def test_example_find_traces() -> None:
         meta=COMMON_META,
         filter=TraceFilter(
             event_filter=EventFilter(
-                trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
+                trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
                 filter=TraceItemFilter(
                     comparison_filter=ComparisonFilter(
                         key=AttributeKey(
@@ -371,7 +372,7 @@ def test_example_find_traces() -> None:
         meta=COMMON_META,
         filter=TraceFilter(
             event_filter=EventFilter(
-                trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
+                trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
                 filter=TraceItemFilter(
                     and_filter=AndFilter(
                         filters=[
@@ -412,7 +413,7 @@ def test_example_find_traces() -> None:
                 filters=[
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
@@ -427,7 +428,7 @@ def test_example_find_traces() -> None:
                     ),
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_type=TraceItemType.TRACE_ITEM_TYPE_ERROR,
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_ERRORS,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
@@ -454,7 +455,7 @@ def test_example_find_traces() -> None:
                 filters=[
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_SPANS,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
@@ -469,7 +470,7 @@ def test_example_find_traces() -> None:
                     ),
                     TraceFilter(
                         event_filter=EventFilter(
-                            trace_item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
+                            trace_item_name=TraceItemName.TRACE_ITEM_NAME_EAP_ERRORS,
                             filter=TraceItemFilter(
                                 comparison_filter=ComparisonFilter(
                                     key=AttributeKey(
