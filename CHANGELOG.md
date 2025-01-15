@@ -1,3 +1,9 @@
+## 0.1.49
+
+### Various fixes & improvements
+
+- chore: Refactor trace_item_name enum into trace_item_type, add log object (#94) by @colin-sentry
+
 ## 0.1.48
 
 ### Various fixes & improvements
