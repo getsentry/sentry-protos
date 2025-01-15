@@ -13,7 +13,7 @@ import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 message GetTraceRequest {
   message TraceItem {
     //DEPRECATED: use item_type instead
-    TraceItemName type = 1;
+    TraceItemName type = 1 [deprecated = true];
     // If attributes is empty, all attributes will be returned for this type.
     repeated AttributeKey attributes = 2;
     TraceItemType item_type = 3;
