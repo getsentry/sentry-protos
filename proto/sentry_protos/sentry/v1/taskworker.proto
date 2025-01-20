@@ -60,9 +60,6 @@ message TaskActivation {
   // The timestamp a task was stored in Kafka
   google.protobuf.Timestamp received_at = 6;
 
-  // Unused. Use expires instead.
-  optional google.protobuf.Timestamp deadline = 7 [deprecated = true];
-
   // Retry state
   RetryState retry_state = 8;
 
@@ -112,11 +109,10 @@ message FetchNextTask {
 
 message SetTaskStatusRequest {
   string id = 1;
+
   TaskActivationStatus status = 3;
 
   // If fetch_next is provided, receive a new task in the response
-  optional bool fetch_next = 4 [deprecated = true];
-  optional string fetch_next_namespace = 5 [deprecated = true];
   optional FetchNextTask fetch_next_task = 6;
 }
 
