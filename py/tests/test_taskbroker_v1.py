@@ -18,7 +18,6 @@ def test_task_activation():
         received_at=Timestamp(seconds=int(now.timestamp())),
         retry_state=RetryState(
             attempts=5,
-            kind="sentry.taskworker.retry.Retry",
             max_attempts=5,
             on_attempts_exceeded=(
                 OnAttemptsExceeded.ON_ATTEMPTS_EXCEEDED_DISCARD
