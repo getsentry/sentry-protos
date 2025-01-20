@@ -5,6 +5,13 @@ package sentry_protos.sentry.v1;
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
+// The action to take after the attempts_remaining is exceeded.
+enum OnAttemptsExceeded {
+  ON_ATTEMPTS_EXCEEDED_UNSPECIFIED = 0;
+  ON_ATTEMPTS_EXCEEDED_DISCARD = 1;
+  ON_ATTEMPTS_EXCEEDED_DEADLETTER = 2;
+}
+
 message RetryState {
   // Current attempt number
   int32 attempts = 1;
@@ -12,14 +19,14 @@ message RetryState {
   // The classname or adapter type for the retry policy
   string kind = 2;
 
-  // After this attempt the task should be discarded
-  optional int32 discard_after_attempt = 3;
-
-  // After this attempt the task should be put in the dead-letter-queue.
-  optional int32 deadletter_after_attempt = 4;
-
   // Whether a task should be executed at most once.
   optional bool at_most_once = 5;
+
+  // After this number of attempts, the task is either discarded or deadlettered.
+  optional uint32 attempts_remaining = 6;
+
+  // The action to take after the attempts_remaining is exceeded.
+  optional OnAttemptsExceeded on_attempts_exceeded = 7;
 }
 
 enum TaskActivationStatus {
