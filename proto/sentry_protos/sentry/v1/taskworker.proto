@@ -76,33 +76,6 @@ message TaskActivation {
   optional uint64 expires = 10;
 }
 
-// Once a TaskActivation has been received by the task consumer it is wrapped
-// with InflightActivation so that processing state can be tracked.
-// This proto might not be used as InflightActivations don't need to cross
-// process boundaries.
-message InflightActivation {
-  // The TaskActivation being tracked.
-  TaskActivation activation = 1;
-
-  // The current status
-  TaskActivationStatus status = 2;
-
-  // The original offset that the WorkerTask message had
-  // Used to find contiguous blocks of completed tasks so that offsets
-  // can be commit to Kafka
-  int64 offset = 3;
-
-  // The timestamp this task was added to PendingTask storage
-  google.protobuf.Timestamp added_at = 4;
-
-  // The timestamp that this task expires and should be deadlettered.
-  google.protobuf.Timestamp deadletter_at = 5;
-
-  // The timestamp that processing is expected to be complete by.
-  // If processing is not complete by this time, a retry will be attempted.
-  optional google.protobuf.Timestamp processing_deadline = 6;
-}
-
 ////////////////////////////
 // RPC messages and services
 ////////////////////////////
