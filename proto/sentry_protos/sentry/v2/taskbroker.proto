@@ -13,7 +13,7 @@ enum OnAttemptsExceeded {
 
 message RetryState {
   // Current attempt number
-  int32 attempts = 1;
+  uint32 attempts = 1;
 
   // The classname or adapter type for the retry policy
   string kind = 2;
