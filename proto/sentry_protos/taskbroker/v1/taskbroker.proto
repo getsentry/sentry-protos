@@ -1,8 +1,7 @@
 syntax = "proto3";
 
-package sentry_protos.sentry.v2;
+package sentry_protos.taskbroker.v1;
 
-import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
 enum OnAttemptsExceeded {
@@ -15,17 +14,14 @@ message RetryState {
   // Current attempt number
   uint32 attempts = 1;
 
-  // The classname or adapter type for the retry policy
-  string kind = 2;
-
   // After this number of attempts, the task is either discarded or deadlettered.
-  uint32 max_attempts = 3;
+  uint32 max_attempts = 2;
 
-  // The action to take after the attempts_limit is exceeded.
-  OnAttemptsExceeded on_attempts_exceeded = 4;
+  // The action to take after the max_attempts is exceeded.
+  OnAttemptsExceeded on_attempts_exceeded = 3;
 
   // Whether a task should be executed at most once.
-  optional bool at_most_once = 5;
+  optional bool at_most_once = 4;
 }
 
 enum TaskActivationStatus {
@@ -37,9 +33,7 @@ enum TaskActivationStatus {
   TASK_ACTIVATION_STATUS_COMPLETE = 5;
 }
 
-// Task message that is stored in Kafka.
-// Once consumed, TaskActivations are wrapped with InflightActivation to track
-// additional state
+// Task message that is stored in Kafka and shared over RPC.
 message TaskActivation {
   // A GUID for the task. Used to update tasks
   string id = 1;
@@ -75,15 +69,6 @@ message TaskActivation {
 ////////////////////////////
 // RPC messages and services
 ////////////////////////////
-message Error {
-  // Taken directly from the grpc docs.
-  int32 code = 1;
-  string message = 2;
-
-  // A list of messages that carry any error details.
-  repeated google.protobuf.Any details = 3;
-}
-
 service ConsumerService {
   // Fetch a new task activation to process.
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
@@ -99,8 +84,6 @@ message GetTaskRequest {
 message GetTaskResponse {
   // If there are no tasks available, this will be empty
   optional TaskActivation task = 1;
-
-  optional Error error = 2;
 }
 
 message FetchNextTask {
@@ -119,6 +102,4 @@ message SetTaskStatusRequest {
 message SetTaskStatusResponse {
   // The next task the worker should execute. Requires fetch_next to be set on the request.
   optional TaskActivation task = 1;
-
-  optional Error error = 2;
 }

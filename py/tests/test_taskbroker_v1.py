@@ -1,6 +1,6 @@
 from datetime import datetime
 from google.protobuf.timestamp_pb2 import Timestamp
-from sentry_protos.sentry.v2.taskbroker_pb2 import (
+from sentry_protos.taskbroker.v1.taskbroker_pb2 import (
     OnAttemptsExceeded,
     TaskActivation,
     RetryState,
