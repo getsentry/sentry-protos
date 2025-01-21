@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package sentry_protos.taskbroker.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum OnAttemptsExceeded {
+  ON_ATTEMPTS_EXCEEDED_UNSPECIFIED = 0;
+  ON_ATTEMPTS_EXCEEDED_DISCARD = 1;
+  ON_ATTEMPTS_EXCEEDED_DEADLETTER = 2;
+}
+
+message RetryState {
+  // Current attempt number
+  uint32 attempts = 1;
+
+  // After this number of attempts, the task is either discarded or deadlettered.
+  uint32 max_attempts = 2;
+
+  // The action to take after the max_attempts is exceeded.
+  OnAttemptsExceeded on_attempts_exceeded = 3;
+
+  // Whether a task should be executed at most once.
+  optional bool at_most_once = 4;
+}
+
+enum TaskActivationStatus {
+  TASK_ACTIVATION_STATUS_UNSPECIFIED = 0;
+  TASK_ACTIVATION_STATUS_PENDING = 1;
+  TASK_ACTIVATION_STATUS_PROCESSING = 2;
+  TASK_ACTIVATION_STATUS_FAILURE = 3;
+  TASK_ACTIVATION_STATUS_RETRY = 4;
+  TASK_ACTIVATION_STATUS_COMPLETE = 5;
+}
+
+// Task message that is stored in Kafka and shared over RPC.
+message TaskActivation {
+  // A GUID for the task. Used to update tasks
+  string id = 1;
+
+  // The task namespace
+  string namespace = 2;
+
+  // The name of the task. This name is resolved within the worker
+  string taskname = 3;
+
+  // An opaque parameter collection. Could be JSON or protobuf encoded
+  string parameters = 4;
+
+  // A map of headers for the task.
+  map<string, string> headers = 5;
+
+  // The timestamp a task was stored in Kafka
+  google.protobuf.Timestamp received_at = 6;
+
+  // Retry state
+  RetryState retry_state = 7;
+
+  // The duration in seconds that a worker has to complete task execution.
+  // When an activation is moved from pending -> processing a result is expected
+  // in this many seconds.
+  uint64 processing_deadline_duration = 8;
+
+  // The duration in seconds that a task has to start execution.
+  // After received_at + expires has passed an activation is expired and will not be executed.
+  optional uint64 expires = 9;
+}
+
+////////////////////////////
+// RPC messages and services
+////////////////////////////
+service ConsumerService {
+  // Fetch a new task activation to process.
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
+
+  // Update the state of a task with execution results.
+  rpc SetTaskStatus(SetTaskStatusRequest) returns (SetTaskStatusResponse) {}
+}
+
+message GetTaskRequest {
+  optional string namespace = 1;
+}
+
+message GetTaskResponse {
+  // If there are no tasks available, this will be empty
+  optional TaskActivation task = 1;
+}
+
+message FetchNextTask {
+  optional string namespace = 1;
+}
+
+message SetTaskStatusRequest {
+  string id = 1;
+
+  TaskActivationStatus status = 2;
+
+  // If fetch_next is provided, receive a new task in the response
+  optional FetchNextTask fetch_next_task = 3;
+}
+
+message SetTaskStatusResponse {
+  // The next task the worker should execute. Requires fetch_next to be set on the request.
+  optional TaskActivation task = 1;
+}

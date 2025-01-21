@@ -1,8 +1,9 @@
 from datetime import datetime
 from google.protobuf.timestamp_pb2 import Timestamp
-from sentry_protos.sentry.v1.taskworker_pb2 import (
+from sentry_protos.taskbroker.v1.taskbroker_pb2 import (
+    OnAttemptsExceeded,
     TaskActivation,
-    RetryState
+    RetryState,
 )
 
 now = datetime.now()
@@ -17,9 +18,10 @@ def test_task_activation():
         received_at=Timestamp(seconds=int(now.timestamp())),
         retry_state=RetryState(
             attempts=5,
-            kind="sentry.taskworker.retry.Retry",
-            discard_after_attempt=5,
-            deadletter_after_attempt=9
+            max_attempts=5,
+            on_attempts_exceeded=(
+                OnAttemptsExceeded.ON_ATTEMPTS_EXCEEDED_DISCARD
+            )
         ),
         processing_deadline_duration=5,
         expires=500
