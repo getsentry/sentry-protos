@@ -36,7 +36,7 @@ message TraceItemTableRequest {
 
   repeated VirtualColumnContext virtual_column_contexts = 8;
 
-  // filter out results using aggregate functions
+  // optional, filter out results of aggregates, same as SQL HAVING
   AggregationFilter aggregation_filter = 9;
 }
 
