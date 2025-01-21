@@ -1,3 +1,9 @@
+## 0.1.52
+
+### Various fixes & improvements
+
+- ref(taskbroker): Simplify task activation and retry state (#97) by @enochtangg
+
 ## 0.1.51
 
 ### Various fixes & improvements
