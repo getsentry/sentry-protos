@@ -58,6 +58,7 @@ enum TraceItemType {
   TRACE_ITEM_TYPE_SPAN = 1;
   TRACE_ITEM_TYPE_ERROR = 2;
   TRACE_ITEM_TYPE_LOG = 3;
+  TRACE_ITEM_TYPE_UPTIME_CHECK = 4;
 }
 
 message PageToken {
