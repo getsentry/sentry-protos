@@ -1,3 +1,10 @@
+## 0.1.53
+
+### Various fixes & improvements
+
+- feat(eap-rpc): Add support for uptime check item type (#99) by @phacops
+- chore: Update a comment in endpoint_trace_item_table.proto (#98) by @kylemumma
+
 ## 0.1.52
 
 ### Various fixes & improvements
