@@ -1,3 +1,9 @@
+## 0.1.54
+
+### Various fixes & improvements
+
+- add trace attributes (#102) by @davidtsuk
+
 ## 0.1.53
 
 ### Various fixes & improvements
