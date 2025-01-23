@@ -37,6 +37,16 @@ message TraceAttribute {
     // KEY_EARLIEST_FRONTEND_SPAN returns the name of the earliest span emitted
     // by the frontend (for example, span op being `pageload` or `navigation`).
     KEY_EARLIEST_FRONTEND_SPAN = 9;
+    // KEY_END_TIMESTAMP will return the latest timestamp seen in the trace.
+    KEY_END_TIMESTAMP = 10;
+    // KEY_EARLIEST_SPAN_PROJECT_ID returns the project ID associated with the earliest span.
+    KEY_EARLIEST_SPAN_PROJECT_ID = 11;
+    // KEY_EARLIEST_SPAN_DURATION_MS will return the duration of the earliest span in milliseconds.
+    KEY_EARLIEST_SPAN_DURATION_MS = 12;
+    // KEY_EARLIEST_FRONTEND_SPAN_PROJECT_ID returns the project ID associated with the earliest frontend span.
+    KEY_EARLIEST_FRONTEND_SPAN_PROJECT_ID = 13;
+    // KEY_EARLIEST_FRONTEND_SPAN_DURATION_MS will return the duration of the earliest frontend span in milliseconds.
+    KEY_EARLIEST_FRONTEND_SPAN_DURATION_MS = 14;
   }
 
   Key key = 1;
