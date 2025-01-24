@@ -75,6 +75,8 @@ message AttributeValue {
     FloatArray val_float_array = 8 [deprecated = true];
     double val_double = 9;
     DoubleArray val_double_array = 10;
+    // true if the value is null
+    bool is_null = 11;
   }
 }
 
