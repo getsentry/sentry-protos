@@ -88,6 +88,10 @@ message TraceItemColumnValues {
 
   // reliability of the values based on confidence interval and sample size math
   repeated Reliability reliabilities = 3;
+
+  // true if the value is present, false if it is not
+  // this is used to distinguish between a value of 0 and a value that is not present (e.g. an aggregation over an empty set of rows)
+  repeated bool data_present = 4;
 }
 
 // this is a response from the TraceItemTable endpoint
