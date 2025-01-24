@@ -57,6 +57,9 @@ message DataPoint {
 
   // the reliability of the data value based on math based on confidence intervals and sample size
   Reliability reliability = 5;
+
+  // the sample count for this data point
+  int64 sample_count = 6;
 }
 
 message TimeSeries {
