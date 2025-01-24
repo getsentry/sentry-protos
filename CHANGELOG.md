@@ -1,3 +1,9 @@
+## 0.1.55
+
+### Various fixes & improvements
+
+- fix(eap-api): add sample count to DataPoint for time series (#103) by @xurui-c
+
 ## 0.1.54
 
 ### Various fixes & improvements
