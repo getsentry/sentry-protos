@@ -1,3 +1,9 @@
+## 0.1.56
+
+### Various fixes & improvements
+
+- feat(eap): Add an is_null field for to AttributeValue (#104) by @davidtsuk
+
 ## 0.1.55
 
 ### Various fixes & improvements
