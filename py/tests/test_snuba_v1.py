@@ -63,7 +63,8 @@ from sentry_protos.snuba.v1.trace_item_attribute_pb2 import (
     Function,
 )
 from sentry_protos.snuba.v1.endpoint_trace_item_stats_pb2 import (
-    TraceItemStatsRequest, TraceItemStatsResponse, TraceItemStats
+    TraceItemStatsRequest, TraceItemStatsResponse, TraceItemStats,
+    TraceItemResult, StatsDataPoint
 )
 
 
@@ -581,7 +582,7 @@ def test_example_create_subscription() -> None:
 
 def test_example_trace_item_stats_request() -> None:
     TraceItemStatsRequest(
-       filter= TraceItemFilter(
+       filter=TraceItemFilter(
             comparison_filter=ComparisonFilter(
                 key=AttributeKey(
                     type=AttributeKey.TYPE_STRING,
@@ -594,29 +595,34 @@ def test_example_trace_item_stats_request() -> None:
         meta=COMMON_META,
         limit=100,
         limit_keys_by=10,
+        types=[TraceItemStatsRequest.Type.TYPE_STATS],
     )
 
     TraceItemStatsResponse(
-        stats=[
-            TraceItemStats(
-                attribute_key="eap.string.attr",
-                attribute_type=TraceItemStats.AttributeType.ATTRIBUTE_TYPE_STRING,
-                aggregation="count(span.duration)",
-                data=[
-                    TraceItemStats.AttributeResults(label="0", value=40),
-                    TraceItemStats.AttributeResults(label="1", value=40),
-                    TraceItemStats.AttributeResults(label="2", value=40),
-                ],
-            ),
-            TraceItemStats(
-                attribute_key="server.name",
-                attribute_type=TraceItemStats.AttributeType.ATTRIBUTE_TYPE_STRING,
-                aggregation="count(span.duration)",
-                data=[
-                    TraceItemStats.AttributeResults(label="production-canary-49da29592f-42rhd", value=66.0),
-                    TraceItemStats.AttributeResults(label="production-ebbfd4432-drd8d", value=50.0),
-                    TraceItemStats.AttributeResults(label="production-d817329ff-hb5pk", value=40.0),
-                ],
-            )
+        results=[
+            TraceItemResult(stats=[
+                TraceItemStats(
+                    data_points=[
+                        StatsDataPoint(
+                            key=AttributeKey(name="eap.string.attr", type=AttributeKey.TYPE_STRING),
+                            aggregation="count(span.duration)",
+                            data=[
+                                TraceItemStats.AttributeResults(label="0", value=40),
+                                TraceItemStats.AttributeResults(label="1", value=40),
+                                TraceItemStats.AttributeResults(label="2", value=40),
+                            ],
+                        ),
+                        StatsDataPoint(
+                            key=AttributeKey(name="server.name", type=AttributeKey.TYPE_STRING),
+                            aggregation="count(span.duration)",
+                            data=[
+                                TraceItemStats.AttributeResults(label="production-canary-49da29592f-42rhd", value=66.0),
+                                TraceItemStats.AttributeResults(label="production-ebbfd4432-drd8d", value=50.0),
+                                TraceItemStats.AttributeResults(label="production-d817329ff-hb5pk", value=40.0),
+                            ],
+                        ),
+                    ]
+                )
+            ])
         ]
     )

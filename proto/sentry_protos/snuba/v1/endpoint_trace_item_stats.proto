@@ -3,43 +3,54 @@ syntax = "proto3";
 package sentry_protos.snuba.v1;
 
 import "sentry_protos/snuba/v1/request_common.proto";
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 message TraceItemStatsRequest {
-  RequestMeta meta = 1;
+  // We expect to add more types here: histograms and totals
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_STATS = 1;
+  }
 
+  RequestMeta meta = 1;
   // filter out trace items you dont want
   TraceItemFilter filter = 2;
 
   uint32 limit = 3;
   uint32 limit_keys_by = 4;
 
+  repeated Type types = 5;
+
   // optional, used for pagination, the next page token will be returned in the response
-  PageToken page_token = 5;
+  PageToken page_token = 6;
 }
 
-message TraceItemStats {
-  enum AttributeType {
-    ATTRIBUTE_TYPE_UNSPECIFIED = 0;
-    ATTRIBUTE_TYPE_STRING = 1;
-    ATTRIBUTE_TYPE_NUMERIC = 2;
-  }
-
+message StatsDataPoint {
   message AttributeResults {
     string label = 1;
     float value = 2;
   }
 
   string aggregation = 1;
-  string attribute_key = 2;
-  AttributeType attribute_type = 3;
-  repeated AttributeResults data = 4;
+  AttributeKey key = 2;
+  repeated AttributeResults data = 3;
+}
+
+message TraceItemStats {
+  repeated StatsDataPoint data_points = 1;
+}
+
+message TraceItemResult {
+  oneof result {
+    TraceItemStats stats = 1;
+  }
 }
 
 // this is a response from the TraceItemStats endpoint
 // it is the counterpart to TraceItemStatsRequest
 message TraceItemStatsResponse {
-  repeated TraceItemStats stats = 1;
+  repeated TraceItemResult results = 1;
   PageToken page_token = 2;
   ResponseMeta meta = 3;
 }
