@@ -600,29 +600,27 @@ def test_example_trace_item_stats_request() -> None:
 
     TraceItemStatsResponse(
         results=[
-            TraceItemResult(stats=[
-                TraceItemStats(
-                    data_points=[
-                        StatsDataPoint(
-                            key=AttributeKey(name="eap.string.attr", type=AttributeKey.TYPE_STRING),
-                            aggregation="count(span.duration)",
-                            data=[
-                                StatsDataPoint.AttributeResults(label="0", value=40),
-                                StatsDataPoint.AttributeResults(label="1", value=40),
-                                StatsDataPoint.AttributeResults(label="2", value=40),
-                            ],
-                        ),
-                        StatsDataPoint(
-                            key=AttributeKey(name="server.name", type=AttributeKey.TYPE_STRING),
-                            aggregation="count(span.duration)",
-                            data=[
-                                StatsDataPoint.AttributeResults(label="production-canary-49da29592f-42rhd", value=66.0),
-                                StatsDataPoint.AttributeResults(label="production-ebbfd4432-drd8d", value=50.0),
-                                StatsDataPoint.AttributeResults(label="production-d817329ff-hb5pk", value=40.0),
-                            ],
-                        ),
-                    ]
-                )
-            ])
+            TraceItemResult(stats=TraceItemStats(
+                data_points=[
+                    StatsDataPoint(
+                        key=AttributeKey(name="eap.string.attr", type=AttributeKey.TYPE_STRING),
+                        aggregation="count(span.duration)",
+                        data=[
+                            StatsDataPoint.AttributeResults(label="0", value=40),
+                            StatsDataPoint.AttributeResults(label="1", value=40),
+                            StatsDataPoint.AttributeResults(label="2", value=40),
+                        ],
+                    ),
+                    StatsDataPoint(
+                        key=AttributeKey(name="server.name", type=AttributeKey.TYPE_STRING),
+                        aggregation="count(span.duration)",
+                        data=[
+                            StatsDataPoint.AttributeResults(label="production-canary-49da29592f-42rhd", value=66.0),
+                            StatsDataPoint.AttributeResults(label="production-ebbfd4432-drd8d", value=50.0),
+                            StatsDataPoint.AttributeResults(label="production-d817329ff-hb5pk", value=40.0),
+                        ],
+                    ),
+                ]
+            ))
         ]
     )
