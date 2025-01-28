@@ -23,8 +23,11 @@ message TimeSeriesRequest {
   // ex: avg(span.duration) where span.environment = 'production'
   TraceItemFilter filter = 2;
 
-  // the actual aggregation to compute ex: avg(span.duration)
-  repeated AttributeAggregation aggregations = 3;
+  // deprecated, please use selected_aggregations instead
+  repeated AttributeAggregation aggregations = 3 [deprecated = true];
+
+  // the actual aggregation to compute ex: avg(span.duration) or avg(span.duration) / sum(span.duration)
+  repeated SelectedAggregation selected_aggregations = 6;
 
   // the level of detail in the timeseries graph,
   // low granularity is very detailed, high is less detail.
@@ -38,6 +41,26 @@ message TimeSeriesRequest {
   // ex: span.environment might give 3 timeseries lines,
   //     one for prod, one for dev etc
   repeated AttributeKey group_by = 5;
+}
+
+message SelectedAggregation {
+  oneof selected_aggregation {
+    AttributeAggregation aggregation = 1;
+    BinaryFormula formula = 2;
+  }
+
+  message BinaryFormula {
+    enum Op {
+      OP_UNSPECIFIED = 0;
+      OP_DIVIDE = 1;
+      OP_MULTIPLY = 2;
+      OP_ADD = 3;
+      OP_SUBTRACT = 4;
+    }
+    Op op = 1;
+    SelectedAggregation arg1 = 2;
+    SelectedAggregation arg2 = 3;
+  }
 }
 
 message DataPoint {
