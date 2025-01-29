@@ -61,8 +61,8 @@ message DoubleArray {
 }
 
 message AttributeValue {
-  // true if the value is null
-  bool is_null = 11;
+  // DEPRECATED since we already have val_null
+  bool is_null = 11 [deprecated = true];
   oneof value {
     bool val_bool = 1;
     string val_str = 2;
