@@ -68,7 +68,7 @@ from sentry_protos.snuba.v1.endpoint_trace_item_stats_pb2 import (
     StatsType,
     AttributeDistribution,
     AttributesDistribution,
-    TraceItemStatsResults,
+    TraceItemStatsResult,
     AttributesDistributionRequest,
 )
 
@@ -602,7 +602,7 @@ def test_example_trace_item_stats_request() -> None:
 
     TraceItemStatsResponse(
         results=[
-            TraceItemStatsResults(attributes_distribution=AttributesDistribution(
+            TraceItemStatsResult(attributes_distribution=AttributesDistribution(
                 attributes=[
                     AttributeDistribution(
                         attribute_name="eap.string.attr",

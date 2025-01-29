@@ -39,7 +39,7 @@ message AttributesDistribution {
   repeated AttributeDistribution attributes = 1;
 }
 
-message TraceItemStatsResults {
+message TraceItemStatsResult {
   oneof result {
     AttributesDistribution attributes_distribution = 1;
   }
@@ -48,7 +48,7 @@ message TraceItemStatsResults {
 // this is a response from the TraceItemStats endpoint
 // it is the counterpart to TraceItemStatsRequest
 message TraceItemStatsResponse {
-  repeated TraceItemStatsResults results = 1;
+  repeated TraceItemStatsResult results = 1;
   PageToken page_token = 2;
   ResponseMeta meta = 3;
 }
