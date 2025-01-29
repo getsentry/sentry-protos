@@ -69,6 +69,7 @@ from sentry_protos.snuba.v1.endpoint_trace_item_stats_pb2 import (
     AttributeDistributions,
     TraceItemStatsResult,
     AttributeDistributionsRequest,
+    StatsType,
 )
 
 COMMON_META = RequestMeta(
@@ -596,7 +597,11 @@ def test_example_trace_item_stats_request() -> None:
             ),
         ),
         meta=COMMON_META,
-        stats_types=[AttributeDistributionsRequest(max_attributes=10, max_buckets=10)],
+        stats_types=[StatsType(
+                    attribute_distributions=AttributeDistributionsRequest(
+                        max_buckets=10, max_attributes=100
+                    )
+                )],
     )
 
     TraceItemStatsResponse(
