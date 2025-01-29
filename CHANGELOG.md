@@ -1,3 +1,10 @@
+## 0.1.57
+
+### Various fixes & improvements
+
+- feat: Add protos required for EndpointTraceItemStats endpoint (#101) by @shruthilayaj
+- feat: formulas in timeseries and traceitemtable endpoints (#105) by @kylemumma
+
 ## 0.1.56
 
 ### Various fixes & improvements
