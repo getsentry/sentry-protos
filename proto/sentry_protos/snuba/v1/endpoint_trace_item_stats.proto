@@ -6,6 +6,7 @@ import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 message AttributesDistributionRequest {
+  // max_buckets and limit wouldn't apply to other stats types (like totals)
   uint32 max_buckets = 1;
   uint32 limit = 2;
 }
