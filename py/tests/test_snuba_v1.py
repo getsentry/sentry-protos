@@ -591,7 +591,7 @@ def test_example_trace_item_stats_request() -> None:
             ),
         ),
         meta=COMMON_META,
-        stats_types=[AttributesDistributionRequest(limit=10, max_buckets=10)],
+        stats_types=[StatsType(type=AttributesDistributionRequest(limit=10, max_buckets=10))],
     )
 
     TraceItemStatsResponse(
