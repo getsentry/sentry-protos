@@ -5,15 +5,15 @@ package sentry_protos.snuba.v1;
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
-message AttributesDistributionRequest {
+message AttributeDistributionsRequest {
   // max_buckets and limit wouldn't apply to other stats types (like totals)
   uint32 max_buckets = 1;
-  uint32 limit = 2;
+  uint32 max_attributes = 2;
 }
 
 message StatsType {
   oneof type {
-    AttributesDistributionRequest attributes_distribution = 1;
+    AttributeDistributionsRequest attributes_distribution = 1;
   }
 }
 
@@ -30,18 +30,17 @@ message AttributeDistribution {
     float value = 2;
   }
 
-  string aggregation = 1;
-  string attribute_name = 2;
-  repeated Bucket buckets = 3;
+  string attribute_name = 1;
+  repeated Bucket buckets = 2;
 }
 
-message AttributesDistribution {
+message AttributeDistributions {
   repeated AttributeDistribution attributes = 1;
 }
 
 message TraceItemStatsResult {
   oneof result {
-    AttributesDistribution attributes_distribution = 1;
+    AttributeDistributions attributes_distribution = 1;
   }
 }
 

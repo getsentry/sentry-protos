@@ -66,9 +66,9 @@ from sentry_protos.snuba.v1.endpoint_trace_item_stats_pb2 import (
     TraceItemStatsRequest,
     TraceItemStatsResponse,
     AttributeDistribution,
-    AttributesDistribution,
+    AttributeDistributions,
     TraceItemStatsResult,
-    AttributesDistributionRequest,
+    AttributeDistributionsRequest,
 )
 
 COMMON_META = RequestMeta(
@@ -596,16 +596,15 @@ def test_example_trace_item_stats_request() -> None:
             ),
         ),
         meta=COMMON_META,
-        stats_types=[AttributesDistributionRequest(limit=10, max_buckets=10)],
+        stats_types=[AttributeDistributionsRequest(max_attributes=10, max_buckets=10)],
     )
 
     TraceItemStatsResponse(
         results=[
-            TraceItemStatsResult(attributes_distribution=AttributesDistribution(
+            TraceItemStatsResult(attributes_distribution=AttributeDistributions(
                 attributes=[
                     AttributeDistribution(
                         attribute_name="eap.string.attr",
-                        aggregation="count(span.duration)",
                         buckets=[
                             AttributeDistribution.Bucket(label="0", value=40),
                             AttributeDistribution.Bucket(label="1", value=40),
@@ -614,7 +613,6 @@ def test_example_trace_item_stats_request() -> None:
                     ),
                     AttributeDistribution(
                         attribute_name="server.name",
-                        aggregation="count(span.duration)",
                         data=[
                             AttributeDistribution.Bucket(label="production-canary-49da29592f-42rhd", value=66.0),
                             AttributeDistribution.Bucket(label="production-ebbfd4432-drd8d", value=50.0),
