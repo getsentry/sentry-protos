@@ -62,7 +62,15 @@ from sentry_protos.snuba.v1.trace_item_attribute_pb2 import (
     ExtrapolationMode,
     Function,
 )
-
+from sentry_protos.snuba.v1.endpoint_trace_item_stats_pb2 import (
+    TraceItemStatsRequest,
+    TraceItemStatsResponse,
+    AttributeDistribution,
+    AttributeDistributions,
+    TraceItemStatsResult,
+    AttributeDistributionsRequest,
+    StatsType,
+)
 
 COMMON_META = RequestMeta(
     project_ids=[1, 2, 3],
@@ -573,4 +581,50 @@ def test_example_create_subscription() -> None:
 
     CreateSubscriptionResponse(
         subscription_id="123",
+    )
+
+
+def test_example_trace_item_stats_request() -> None:
+    TraceItemStatsRequest(
+       filter=TraceItemFilter(
+            comparison_filter=ComparisonFilter(
+                key=AttributeKey(
+                    type=AttributeKey.TYPE_STRING,
+                    name="eap.measurement",
+                ),
+                op=ComparisonFilter.OP_GREATER_THAN,
+                value=AttributeValue(val_double=999),
+            ),
+        ),
+        meta=COMMON_META,
+        stats_types=[StatsType(
+                    attribute_distributions=AttributeDistributionsRequest(
+                        max_buckets=10, max_attributes=100
+                    )
+                )],
+    )
+
+    TraceItemStatsResponse(
+        results=[
+            TraceItemStatsResult(attribute_distributions=AttributeDistributions(
+                attributes=[
+                    AttributeDistribution(
+                        attribute_name="eap.string.attr",
+                        buckets=[
+                            AttributeDistribution.Bucket(label="0", value=40),
+                            AttributeDistribution.Bucket(label="1", value=40),
+                            AttributeDistribution.Bucket(label="2", value=40),
+                        ],
+                    ),
+                    AttributeDistribution(
+                        attribute_name="server.name",
+                        buckets=[
+                            AttributeDistribution.Bucket(label="production-canary-49da29592f-42rhd", value=66.0),
+                            AttributeDistribution.Bucket(label="production-ebbfd4432-drd8d", value=50.0),
+                            AttributeDistribution.Bucket(label="production-d817329ff-hb5pk", value=40.0),
+                        ],
+                    ),
+                ]
+            ))
+        ]
     )

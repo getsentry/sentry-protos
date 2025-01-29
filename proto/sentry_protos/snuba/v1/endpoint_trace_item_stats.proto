@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "sentry_protos/snuba/v1/request_common.proto";
+import "sentry_protos/snuba/v1/trace_item_filter.proto";
+
+message AttributeDistributionsRequest {
+  // max_buckets and limit wouldn't apply to other stats types (like totals)
+  uint32 max_buckets = 1;
+  uint32 max_attributes = 2;
+}
+
+message StatsType {
+  oneof type {
+    AttributeDistributionsRequest attribute_distributions = 1;
+  }
+}
+
+message TraceItemStatsRequest {
+  RequestMeta meta = 1;
+  // same filter applies to all stats types requested
+  TraceItemFilter filter = 2;
+  repeated StatsType stats_types = 3;
+}
+
+message AttributeDistribution {
+  message Bucket {
+    string label = 1;
+    float value = 2;
+  }
+
+  string attribute_name = 1;
+  repeated Bucket buckets = 2;
+}
+
+message AttributeDistributions {
+  repeated AttributeDistribution attributes = 1;
+}
+
+message TraceItemStatsResult {
+  oneof result {
+    AttributeDistributions attribute_distributions = 1;
+  }
+}
+
+// this is a response from the TraceItemStats endpoint
+// it is the counterpart to TraceItemStatsRequest
+message TraceItemStatsResponse {
+  repeated TraceItemStatsResult results = 1;
+  PageToken page_token = 2;
+  ResponseMeta meta = 3;
+}
