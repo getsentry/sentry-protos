@@ -63,7 +63,13 @@ from sentry_protos.snuba.v1.trace_item_attribute_pb2 import (
     Function,
 )
 from sentry_protos.snuba.v1.endpoint_trace_item_stats_pb2 import (
-    TraceItemStatsRequest, TraceItemStatsResponse, StatsType, AttributeDistribution, AttributesDistribution, TraceItemStatsResults, AttributesDistributionRequest,
+    TraceItemStatsRequest,
+    TraceItemStatsResponse,
+    StatsType,
+    AttributeDistribution,
+    AttributesDistribution,
+    TraceItemStatsResults,
+    AttributesDistributionRequest,
 )
 
 COMMON_META = RequestMeta(
