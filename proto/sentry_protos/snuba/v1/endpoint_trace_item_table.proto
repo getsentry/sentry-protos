@@ -90,8 +90,8 @@ message Column {
       OP_SUBTRACT = 4;
     }
     Op op = 1;
-    Column arg1 = 2;
-    Column arg2 = 3;
+    Column left = 2;
+    Column right = 3;
   }
 }
 
