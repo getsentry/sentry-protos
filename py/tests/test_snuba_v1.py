@@ -618,7 +618,7 @@ def test_example_trace_item_stats_request() -> None:
                     ),
                     AttributeDistribution(
                         attribute_name="server.name",
-                        data=[
+                        buckets=[
                             AttributeDistribution.Bucket(label="production-canary-49da29592f-42rhd", value=66.0),
                             AttributeDistribution.Bucket(label="production-ebbfd4432-drd8d", value=50.0),
                             AttributeDistribution.Bucket(label="production-d817329ff-hb5pk", value=40.0),
