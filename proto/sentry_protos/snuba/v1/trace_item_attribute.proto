@@ -61,8 +61,8 @@ message DoubleArray {
 }
 
 message AttributeValue {
-  // DEPRECATED since we already have val_null
-  bool is_null = 11 [deprecated = true];
+  // true if the value is null
+  bool is_null = 11;
   oneof value {
     bool val_bool = 1;
     string val_str = 2;
@@ -70,7 +70,7 @@ message AttributeValue {
     float val_float = 3 [deprecated = true];
     int64 val_int = 4;
     // set to true if value is null
-    bool val_null = 5;
+    bool val_null = 5 [deprecated = true];
     StrArray val_str_array = 6;
     IntArray val_int_array = 7;
     // deprecated, use val_double_array instead
