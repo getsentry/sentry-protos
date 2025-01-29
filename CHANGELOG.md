@@ -1,3 +1,28 @@
+## 0.1.56
+
+### Various fixes & improvements
+
+- feat(eap): Add an is_null field for to AttributeValue (#104) by @davidtsuk
+
+## 0.1.55
+
+### Various fixes & improvements
+
+- fix(eap-api): add sample count to DataPoint for time series (#103) by @xurui-c
+
+## 0.1.54
+
+### Various fixes & improvements
+
+- add trace attributes (#102) by @davidtsuk
+
+## 0.1.53
+
+### Various fixes & improvements
+
+- feat(eap-rpc): Add support for uptime check item type (#99) by @phacops
+- chore: Update a comment in endpoint_trace_item_table.proto (#98) by @kylemumma
+
 ## 0.1.52
 
 ### Various fixes & improvements
