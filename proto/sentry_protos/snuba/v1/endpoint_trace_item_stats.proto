@@ -13,7 +13,7 @@ message AttributeDistributionsRequest {
 
 message StatsType {
   oneof type {
-    AttributeDistributionsRequest attributes_distribution = 1;
+    AttributeDistributionsRequest attribute_distributions = 1;
   }
 }
 
@@ -40,7 +40,7 @@ message AttributeDistributions {
 
 message TraceItemStatsResult {
   oneof result {
-    AttributeDistributions attributes_distribution = 1;
+    AttributeDistributions attribute_distributions = 1;
   }
 }
 

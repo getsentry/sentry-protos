@@ -601,7 +601,7 @@ def test_example_trace_item_stats_request() -> None:
 
     TraceItemStatsResponse(
         results=[
-            TraceItemStatsResult(attributes_distribution=AttributeDistributions(
+            TraceItemStatsResult(attribute_distributions=AttributeDistributions(
                 attributes=[
                     AttributeDistribution(
                         attribute_name="eap.string.attr",
