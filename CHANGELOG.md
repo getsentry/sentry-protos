@@ -1,3 +1,9 @@
+## 0.1.58
+
+### Various fixes & improvements
+
+- fix(eap): deprecate val_null field (#107) by @davidtsuk
+
 ## 0.1.57
 
 ### Various fixes & improvements
