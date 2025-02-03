@@ -6,6 +6,7 @@ from sentry_protos.snuba.v1.endpoint_time_series_pb2 import (
     TimeSeries,
     TimeSeriesRequest,
     TimeSeriesResponse,
+    Expression,
 )
 from sentry_protos.snuba.v1.endpoint_trace_item_attributes_pb2 import (
     TraceItemAttributeNamesRequest,
@@ -86,17 +87,45 @@ COMMON_META = RequestMeta(
 def test_example_time_series():
     TimeSeriesRequest(
         meta=COMMON_META,
-        aggregations=[
-            AttributeAggregation(
-                aggregate=Function.FUNCTION_AVG,
-                key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"),
+        expressions=[
+            Expression(
+                aggregation=AttributeAggregation(
+                    aggregate=Function.FUNCTION_AVG,
+                    key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"),
+                    label="p50",
+                ),
                 label="p50",
             ),
-            AttributeAggregation(
-                aggregate=Function.FUNCTION_P95,
-                key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"),
+            Expression(
+                aggregation=AttributeAggregation(
+                    aggregate=Function.FUNCTION_P95,
+                    key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"),
+                    label="p90",
+                ),
                 label="p90",
             ),
+            Expression(
+                formula=Expression.BinaryFormula(
+                    op=Expression.BinaryFormula.OP_DIVIDE,
+                    left=Expression(
+                        aggregation=AttributeAggregation(
+                            aggregate=Function.FUNCTION_AVG,
+                            key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"),
+                            label="p50",
+                        ),
+                        label="p50",
+                    ),
+                    right=Expression(
+                        aggregation=AttributeAggregation(
+                            aggregate=Function.FUNCTION_P95,
+                            key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"),
+                            label="p90",
+                        ),
+                        label="p90",
+                    ),
+                ),
+                label="p50 / p90"
+            )
         ],
         granularity_secs=60,
         group_by=[
