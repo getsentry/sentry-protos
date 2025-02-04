@@ -48,6 +48,7 @@ message Expression {
     AttributeAggregation aggregation = 1;
     BinaryFormula formula = 2;
   }
+  string label = 3;
 
   message BinaryFormula {
     enum Op {
