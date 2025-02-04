@@ -1,3 +1,9 @@
+## 0.1.59
+
+### Various fixes & improvements
+
+- chore: add label to timeseries expression (#108) by @kylemumma
+
 ## 0.1.58
 
 ### Various fixes & improvements
