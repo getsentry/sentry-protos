@@ -63,7 +63,7 @@ message AggregationComparisonFilter {
   Op op = 2;
   AttributeValue value = 3 [deprecated = true]; // since only aggregated columns are supported, the value should be numeric
   double val = 5;
-  AttributeAggregation aggregation = 4 [deprecated = true];
+  AttributeAggregation aggregation = 4;
   AttributeConditionalAggregation conditional_aggregation = 6;
 }
 

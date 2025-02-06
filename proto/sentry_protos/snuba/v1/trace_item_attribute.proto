@@ -103,7 +103,6 @@ enum ExtrapolationMode {
 }
 
 message AttributeAggregation {
-  option deprecated = true;
   Function aggregate = 1;
   AttributeKey key = 2;
   string label = 3;
