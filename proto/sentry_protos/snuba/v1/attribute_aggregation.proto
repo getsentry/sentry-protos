@@ -5,10 +5,10 @@ package sentry_protos.snuba.v1;
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
-message AttributeAggregation {
+message AttributeConditionalAggregation {
   Function aggregate = 1;
   AttributeKey key = 2;
   string label = 3;
   ExtrapolationMode extrapolation_mode = 4;
-  TraceItemFilter filter = 5;
+  TraceItemFilter conditional_filter_on_aggregation = 5;
 }
