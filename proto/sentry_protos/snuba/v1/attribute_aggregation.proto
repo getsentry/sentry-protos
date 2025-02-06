@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+import "sentry_protos/snuba/v1/trace_item_filter.proto";
+
+message AttributeAggregation {
+  Function aggregate = 1;
+  AttributeKey key = 2;
+  string label = 3;
+  ExtrapolationMode extrapolation_mode = 4;
+  TraceItemFilter filter = 5;
+}

@@ -102,13 +102,6 @@ enum ExtrapolationMode {
   EXTRAPOLATION_MODE_SAMPLE_WEIGHTED = 2;
 }
 
-message AttributeAggregation {
-  Function aggregate = 1;
-  AttributeKey key = 2;
-  string label = 3;
-  ExtrapolationMode extrapolation_mode = 4;
-}
-
 enum Reliability {
   RELIABILITY_UNSPECIFIED = 0;
   RELIABILITY_LOW = 1;
