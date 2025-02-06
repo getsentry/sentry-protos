@@ -1,3 +1,9 @@
+## 0.1.60
+
+### Various fixes & improvements
+
+- feat(eap-api): supports conditional aggregations (#109) by @xurui-c
+
 ## 0.1.59
 
 ### Various fixes & improvements
