@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.snuba.v1;
 
+import "sentry_protos/snuba/v1/attribute_conditional_aggregation.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
@@ -63,6 +64,7 @@ message AggregationComparisonFilter {
   AttributeValue value = 3 [deprecated = true]; // since only aggregated columns are supported, the value should be numeric
   AttributeAggregation aggregation = 4;
   double val = 5;
+  AttributeConditionalAggregation conditional_aggregation = 6;
 }
 
 message AggregationFilter {
@@ -77,6 +79,7 @@ message Column {
   oneof column {
     AttributeKey key = 1;
     AttributeAggregation aggregation = 2;
+    AttributeConditionalAggregation conditional_aggregation = 5;
     BinaryFormula formula = 4;
   }
   string label = 3;
