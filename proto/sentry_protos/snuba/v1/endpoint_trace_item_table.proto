@@ -62,9 +62,11 @@ message AggregationComparisonFilter {
   Column column = 1 [deprecated = true]; // deprecated as columns should always be aggregated in a post aggregation filter
   Op op = 2;
   AttributeValue value = 3 [deprecated = true]; // since only aggregated columns are supported, the value should be numeric
-  AttributeAggregation aggregation = 4;
   double val = 5;
-  AttributeConditionalAggregation conditional_aggregation = 6;
+  oneof attribute_aggregation_type {
+    AttributeAggregation aggregation = 4;
+    AttributeConditionalAggregation conditional_aggregation = 6;
+  }
 }
 
 message AggregationFilter {

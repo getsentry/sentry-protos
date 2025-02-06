@@ -10,5 +10,5 @@ message AttributeConditionalAggregation {
   AttributeKey key = 2;
   string label = 3;
   ExtrapolationMode extrapolation_mode = 4;
-  TraceItemFilter conditional_filter_on_aggregation = 5;
+  TraceItemFilter filter = 5;
 }
