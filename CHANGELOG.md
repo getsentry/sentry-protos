@@ -1,3 +1,9 @@
+## 0.1.61
+
+### Various fixes & improvements
+
+- fix: bump tonic (#110) by @JoshFerge
+
 ## 0.1.60
 
 ### Various fixes & improvements
