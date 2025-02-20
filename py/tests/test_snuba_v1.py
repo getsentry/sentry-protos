@@ -388,14 +388,14 @@ def test_example_table_with_aggregation_filter() -> None:
     )
 
 
-def text_trace_item_details() -> None:
+def test_trace_item_details() -> None:
     TraceItemDetailsRequest(
         meta=COMMON_META,
         item_uuid='50a5923d-96bc-44ad-95fa-999530472b78',
         trace_id='41c1fcc9-6e12-44a9-bc83-2d9c949032fd',
     )
 
-    TraceItemTableResponse(
+    TraceItemDetailsResponse(
         attributes=[
             TraceItemDetailsAttribute(
                 name="sentry.db.operation",
