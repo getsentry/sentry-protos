@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "sentry_protos/snuba/v1/request_common.proto";
+import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+
+// This is a request to the TraceItemDetails endpoint,
+// it is used to query for TraceItems (ex. spans or logs)
+// it returns all of the information for a specific trace item.
+message TraceItemDetailsRequest {
+  RequestMeta meta = 1;
+
+  //required: the UUID of the item you are looking for
+  string item_uuid = 2;
+  //OPTIONAL: improves performance if included
+  string trace_id = 3;
+}
+
+message TraceItemDetailsAttribute {
+  string name = 1;
+  AttributeValue value = 2;
+}
+
+// this is a response from the TraceItemTable endpoint
+// it is the counterpart to TraceItemTableRequest
+message TraceItemDetailsResponse {
+  repeated TraceItemDetailsAttribute attributes = 1;
+}
