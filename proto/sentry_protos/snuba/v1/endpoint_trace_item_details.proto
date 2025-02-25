@@ -11,8 +11,8 @@ import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 message TraceItemDetailsRequest {
   RequestMeta meta = 1;
 
-  //required: the UUID of the item you are looking for
-  string item_uuid = 2;
+  //required: the ID (hex string) of the item you are looking for
+  string item_id = 2;
   //OPTIONAL: improves performance if included
   string trace_id = 3;
 }

@@ -391,7 +391,7 @@ def test_example_table_with_aggregation_filter() -> None:
 def test_trace_item_details() -> None:
     TraceItemDetailsRequest(
         meta=COMMON_META,
-        item_uuid='50a5923d-96bc-44ad-95fa-999530472b78',
+        item_id='1234567812345678aabbccddeeff',
         trace_id='41c1fcc9-6e12-44a9-bc83-2d9c949032fd',
     )
 
