@@ -378,7 +378,7 @@ def test_example_table_with_aggregation_filter() -> None:
         ],
         page_token=PageToken(
             offset=2
-        ), 
+        ),
     )
 
 def test_example_find_traces() -> None:
@@ -656,4 +656,28 @@ def test_example_trace_item_stats_request() -> None:
                 ]
             ))
         ]
+    )
+
+
+def test_example_attribute_names_request() -> None:
+    request = TraceItemAttributeNamesRequest(
+        meta=COMMON_META,
+        limit=100,
+        type=AttributeKey.Type.TYPE_STRING,
+        value_substring_match="a",
+        # find attributes which also have `span.op` and `http.client`
+        intersecting_attributes_filter=TraceItemFilter(
+            comparison_filter=ComparisonFilter(
+                    key=AttributeKey(
+                        type=AttributeKey.TYPE_STRING,
+                        name="span.op",
+                    ),
+                    op=ComparisonFilter.OP_EQUALS,
+                    value=AttributeValue(val_str="http.client"),
+                ),
+        )
+    )
+
+    response = TraceItemAttributeNamesResponse(
+        attributes=[TraceItemAttributeNamesResponse.Attribute(name="foo", type=AttributeKey.Type.TYPE_STRING)]
     )
