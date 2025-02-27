@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.snuba.v1;
 
+import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
@@ -24,6 +25,8 @@ message TraceItemDetailsAttribute {
 
 // this is a response from the TraceItemDetails endpoint
 message TraceItemDetailsResponse {
-  repeated TraceItemDetailsAttribute attributes = 1;
-  ResponseMeta meta = 2;
+  string item_id = 1;
+  google.protobuf.Timestamp start_timestamp = 2;
+  repeated TraceItemDetailsAttribute attributes = 3;
+  ResponseMeta meta = 4;
 }
