@@ -4,6 +4,7 @@ package sentry_protos.snuba.v1;
 
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 // This is a request to the TraceItemDetails endpoint,
 // it is used to query for TraceItems (ex. spans or logs)
@@ -13,8 +14,7 @@ message TraceItemDetailsRequest {
 
   //required: the ID (hex string) of the item you are looking for
   string item_id = 2;
-  //OPTIONAL: improves performance if included
-  string trace_id = 3;
+  TraceItemFilter filter = 3;
 }
 
 message TraceItemDetailsAttribute {
@@ -22,8 +22,8 @@ message TraceItemDetailsAttribute {
   AttributeValue value = 2;
 }
 
-// this is a response from the TraceItemTable endpoint
-// it is the counterpart to TraceItemTableRequest
+// this is a response from the TraceItemDetails endpoint
 message TraceItemDetailsResponse {
   repeated TraceItemDetailsAttribute attributes = 1;
+  ResponseMeta meta = 2;
 }
