@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentry Protos</title>
+    <link rel="stylesheet" href="static/mystyles.css" />
+    <script src="static/fontawesome.js"></script>
+    <script src="static/lunr.js"></script>
+    <script src="static/theme.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="level pt-6 mb-5 pb-2 bottom-border">
+        <div class="level-left">
+          <p class="level-item has-text-centered is-size-3 has-text-weight-medium">
+            <a class="link is-info" href="index.html">
+              Sentry Protos
+            </a>
+          </p>
+        </div>
+
+        <div class="level-right">
+          
+          <form action="search.html" class="mr-2 has-text-centered">
+            <input type="text" name="query" class="input mr-3 navbar-search-query-input" placeholder="Search">
+            <input type="submit" class="button is-primary mr-5" value="Search" />
+          </form>
+          
+
+          <p class="level-item has-text-centered is-size-5">
+            <a href="https://github.com/getsentry/sentry-protos" class="link is-info mr-5" target="_blank">
+              
+              <span class="icon">
+                <i class="fa-brands fa-github"></i>
+              </span>
+              
+              <span>Source</span>
+            </a>
+
+            <button class="theme-toggle" id="theme-toggle" title="Toggles light & dark" aria-label="auto" aria-live="polite" type="button">
+              <svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
+                <mask class="moon" id="moon-mask">
+                  <rect x="0" y="0" width="100%" height="100%" fill="white" />
+                  <circle cx="24" cy="10" r="6" fill="black" />
+                </mask>
+                <circle class="sun" cx="12" cy="12" r="6" mask="url(#moon-mask)" fill="currentColor" />
+                <g class="sun-beams" stroke="currentColor">
+                  <line x1="12" y1="1" x2="12" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" />
+                  <line x1="21" y1="12" x2="23" y2="12" />
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </g>
+              </svg>
+            </button>
+          </p>
+        </div>
+      </nav>
+    </div>
+
+    <div id="main-content" class="container mb-6">
+  <p class="mb-2">
+    <a style="font-size: 0.9em" href="index.html">← Back to packages</a>
+  </p>
+  <h3 class="title is-3">
+    
+    Package <code>sentry_protos.taskbroker.v1</code>
+    
+  </h3>
+
+  <div class="block">
+    
+    <p>
+      <a href="#service-sentry_protos.taskbroker.v1.ConsumerService">
+        <span class="tag" style="min-width: 6em">Service</span>
+        <code>ConsumerService</code> 
+      </a>
+    </p>
+    
+
+    
+      
+      <p>
+        <a href="#message-sentry_protos.taskbroker.v1.RetryState">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>RetryState</code> 
+        </a>
+      </p>
+      
+    
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.taskbroker.v1.TaskActivation">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>TaskActivation</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.taskbroker.v1.GetTaskRequest">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>GetTaskRequest</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.taskbroker.v1.GetTaskResponse">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>GetTaskResponse</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.taskbroker.v1.FetchNextTask">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>FetchNextTask</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.taskbroker.v1.SetTaskStatusRequest">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>SetTaskStatusRequest</code> 
+        </a>
+      </p>
+      
+    
+      
+      <p>
+        <a href="#message-sentry_protos.taskbroker.v1.SetTaskStatusResponse">
+          <span class="tag" style="min-width: 6em">Message</span>
+          <code>SetTaskStatusResponse</code> 
+        </a>
+      </p>
+      
+    
+
+    
+      <p>
+        <a href="#enum-sentry_protos.taskbroker.v1.OnAttemptsExceeded">
+          <span class="tag" style="min-width: 6em">Enum</span>
+          <code>OnAttemptsExceeded</code> 
+        </a>
+      </p>
+    
+      <p>
+        <a href="#enum-sentry_protos.taskbroker.v1.TaskActivationStatus">
+          <span class="tag" style="min-width: 6em">Enum</span>
+          <code>TaskActivationStatus</code> 
+        </a>
+      </p>
+    
+  </div>
+
+  <div class="block">
+      
+  </div>
+
+  
+
+  <div class="block">
+    <h3 class="title is-3">
+      Services
+    </h3>
+
+    
+    <div>
+      
+
+<h4 class="title is-4 type-heading" id="service-sentry_protos.taskbroker.v1.ConsumerService">
+  <a href="#service-sentry_protos.taskbroker.v1.ConsumerService" title="sentry_protos.taskbroker.v1.ConsumerService">service ConsumerService</a>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/taskbroker/v1/taskbroker.proto#L71">sentry_protos/taskbroker/v1/taskbroker.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p><p>//////////////////////////<br />
+ RPC messages and services<br />
+//////////////////////////</p></p>
+</div>
+
+
+<div class="box">
+  <div class="block">
+    <h5 class="title is-5" id="service-sentry_protos.taskbroker.v1.ConsumerService-GetTask">
+      <a href="#service-sentry_protos.taskbroker.v1.ConsumerService-GetTask">
+        rpc <code>GetTask</code>
+      </a>
+    </h5>
+    Request: <code><a href="sentry_protos.taskbroker.v1.html#message-sentry_protos.taskbroker.v1.GetTaskRequest"><span title="sentry_protos.taskbroker.v1.GetTaskRequest">sentry_protos.taskbroker.v1.GetTaskRequest</span>
+    </a></code><br>
+    Response: <code><a href="sentry_protos.taskbroker.v1.html#message-sentry_protos.taskbroker.v1.GetTaskResponse"><span title="sentry_protos.taskbroker.v1.GetTaskResponse">sentry_protos.taskbroker.v1.GetTaskResponse</span>
+    </a></code><br>
+  </div>
+
+  
+  <div class="block">
+    <p><p>Fetch a new task activation to process.</p></p>
+  </div>
+  
+</div>
+
+<div class="box">
+  <div class="block">
+    <h5 class="title is-5" id="service-sentry_protos.taskbroker.v1.ConsumerService-SetTaskStatus">
+      <a href="#service-sentry_protos.taskbroker.v1.ConsumerService-SetTaskStatus">
+        rpc <code>SetTaskStatus</code>
+      </a>
+    </h5>
+    Request: <code><a href="sentry_protos.taskbroker.v1.html#message-sentry_protos.taskbroker.v1.SetTaskStatusRequest"><span title="sentry_protos.taskbroker.v1.SetTaskStatusRequest">sentry_protos.taskbroker.v1.SetTaskStatusRequest</span>
+    </a></code><br>
+    Response: <code><a href="sentry_protos.taskbroker.v1.html#message-sentry_protos.taskbroker.v1.SetTaskStatusResponse"><span title="sentry_protos.taskbroker.v1.SetTaskStatusResponse">sentry_protos.taskbroker.v1.SetTaskStatusResponse</span>
+    </a></code><br>
+  </div>
+
+  
+  <div class="block">
+    <p><p>Update the state of a task with execution results.</p></p>
+  </div>
+  
+</div>
+ 
+    </div>
+    
+  </div>
+
+  
+
+  
+
+    <h3 class="title is-3">
+      Messages
+    </h3>
+
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.taskbroker.v1.RetryState">
+  <span>
+    <a href="#message-sentry_protos.taskbroker.v1.RetryState" title="sentry_protos.taskbroker.v1.RetryState">message RetryState</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/taskbroker/v1/taskbroker.proto#L12">sentry_protos/taskbroker/v1/taskbroker.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        attempts
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>Current attempt number</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        max_attempts
+      </td>
+      <td>
+        <code title="uint32">
+          
+          <span>uint32</span>
+        </code>
+      </td>
+      <td class="content"><p>After this number of attempts, the task is either discarded or deadlettered.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        on_attempts_exceeded
+      </td>
+      <td>
+        <code title="sentry_protos.taskbroker.v1.OnAttemptsExceeded">
+          
+          <a href="sentry_protos.taskbroker.v1.html#enum-sentry_protos.taskbroker.v1.OnAttemptsExceeded"><span title="sentry_protos.taskbroker.v1.OnAttemptsExceeded">sentry_protos.taskbroker.v1.OnAttemptsExceeded</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"><p>The action to take after the max_attempts is exceeded.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td>
+        at_most_once
+      </td>
+      <td>
+        <code title="bool">
+          
+            optional
+          
+          <span>bool</span>
+        </code>
+      </td>
+      <td class="content"><p>Whether a task should be executed at most once.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.taskbroker.v1.TaskActivation">
+  <span>
+    <a href="#message-sentry_protos.taskbroker.v1.TaskActivation" title="sentry_protos.taskbroker.v1.TaskActivation">message TaskActivation</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/taskbroker/v1/taskbroker.proto#L36">sentry_protos/taskbroker/v1/taskbroker.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p>Task message that is stored in Kafka and shared over RPC.</p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        id
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"><p>A GUID for the task. Used to update tasks</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        namespace
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"><p>The task namespace</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        taskname
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"><p>The name of the task. This name is resolved within the worker</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>4</td>
+      <td>
+        parameters
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"><p>An opaque parameter collection. Could be JSON or protobuf encoded</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>5</td>
+      <td>
+        headers
+      </td>
+      <td>
+        <code title="map&lt;string, string&gt;">
+          
+          <span>map&lt;string, string&gt;</span>
+        </code>
+      </td>
+      <td class="content"><p>A map of headers for the task.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>6</td>
+      <td>
+        received_at
+      </td>
+      <td>
+        <code title="google.protobuf.Timestamp">
+          
+          <span>google.protobuf.Timestamp</span>
+        </code>
+      </td>
+      <td class="content"><p>The timestamp a task was stored in Kafka</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>7</td>
+      <td>
+        retry_state
+      </td>
+      <td>
+        <code title="sentry_protos.taskbroker.v1.RetryState">
+          
+          <a href="sentry_protos.taskbroker.v1.html#message-sentry_protos.taskbroker.v1.RetryState"><span title="sentry_protos.taskbroker.v1.RetryState">sentry_protos.taskbroker.v1.RetryState</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"><p>Retry state</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>8</td>
+      <td>
+        processing_deadline_duration
+      </td>
+      <td>
+        <code title="uint64">
+          
+          <span>uint64</span>
+        </code>
+      </td>
+      <td class="content"><p>The duration in seconds that a worker has to complete task execution.<br />
+When an activation is moved from pending -&gt; processing a result is expected<br />
+in this many seconds.</p></td>
+      
+    </tr>
+    
+    <tr>
+      <td>9</td>
+      <td>
+        expires
+      </td>
+      <td>
+        <code title="uint64">
+          
+            optional
+          
+          <span>uint64</span>
+        </code>
+      </td>
+      <td class="content"><p>The duration in seconds that a task has to start execution.<br />
+After received_at + expires has passed an activation is expired and will not be executed.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.taskbroker.v1.GetTaskRequest">
+  <span>
+    <a href="#message-sentry_protos.taskbroker.v1.GetTaskRequest" title="sentry_protos.taskbroker.v1.GetTaskRequest">message GetTaskRequest</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/taskbroker/v1/taskbroker.proto#L79">sentry_protos/taskbroker/v1/taskbroker.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        namespace
+      </td>
+      <td>
+        <code title="string">
+          
+            optional
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.taskbroker.v1.GetTaskResponse">
+  <span>
+    <a href="#message-sentry_protos.taskbroker.v1.GetTaskResponse" title="sentry_protos.taskbroker.v1.GetTaskResponse">message GetTaskResponse</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/taskbroker/v1/taskbroker.proto#L83">sentry_protos/taskbroker/v1/taskbroker.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        task
+      </td>
+      <td>
+        <code title="sentry_protos.taskbroker.v1.TaskActivation">
+          
+            optional
+          
+          <a href="sentry_protos.taskbroker.v1.html#message-sentry_protos.taskbroker.v1.TaskActivation"><span title="sentry_protos.taskbroker.v1.TaskActivation">sentry_protos.taskbroker.v1.TaskActivation</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"><p>If there are no tasks available, this will be empty</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.taskbroker.v1.FetchNextTask">
+  <span>
+    <a href="#message-sentry_protos.taskbroker.v1.FetchNextTask" title="sentry_protos.taskbroker.v1.FetchNextTask">message FetchNextTask</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/taskbroker/v1/taskbroker.proto#L88">sentry_protos/taskbroker/v1/taskbroker.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        namespace
+      </td>
+      <td>
+        <code title="string">
+          
+            optional
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.taskbroker.v1.SetTaskStatusRequest">
+  <span>
+    <a href="#message-sentry_protos.taskbroker.v1.SetTaskStatusRequest" title="sentry_protos.taskbroker.v1.SetTaskStatusRequest">message SetTaskStatusRequest</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/taskbroker/v1/taskbroker.proto#L92">sentry_protos/taskbroker/v1/taskbroker.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        id
+      </td>
+      <td>
+        <code title="string">
+          
+          <span>string</span>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>2</td>
+      <td>
+        status
+      </td>
+      <td>
+        <code title="sentry_protos.taskbroker.v1.TaskActivationStatus">
+          
+          <a href="sentry_protos.taskbroker.v1.html#enum-sentry_protos.taskbroker.v1.TaskActivationStatus"><span title="sentry_protos.taskbroker.v1.TaskActivationStatus">sentry_protos.taskbroker.v1.TaskActivationStatus</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"></td>
+      
+    </tr>
+    
+    <tr>
+      <td>3</td>
+      <td>
+        fetch_next_task
+      </td>
+      <td>
+        <code title="sentry_protos.taskbroker.v1.FetchNextTask">
+          
+            optional
+          
+          <a href="sentry_protos.taskbroker.v1.html#message-sentry_protos.taskbroker.v1.FetchNextTask"><span title="sentry_protos.taskbroker.v1.FetchNextTask">sentry_protos.taskbroker.v1.FetchNextTask</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"><p>If fetch_next is provided, receive a new task in the response</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+      
+      <div class="block">
+        
+
+<h4 class="title is-4 type-heading" id="message-sentry_protos.taskbroker.v1.SetTaskStatusResponse">
+  <span>
+    <a href="#message-sentry_protos.taskbroker.v1.SetTaskStatusResponse" title="sentry_protos.taskbroker.v1.SetTaskStatusResponse">message SetTaskStatusResponse</a>
+  
+  </span>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/taskbroker/v1/taskbroker.proto#L101">sentry_protos/taskbroker/v1/taskbroker.proto</a>
+  
+</h4>
+
+<div class="block content">
+  
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>1</td>
+      <td>
+        task
+      </td>
+      <td>
+        <code title="sentry_protos.taskbroker.v1.TaskActivation">
+          
+            optional
+          
+          <a href="sentry_protos.taskbroker.v1.html#message-sentry_protos.taskbroker.v1.TaskActivation"><span title="sentry_protos.taskbroker.v1.TaskActivation">sentry_protos.taskbroker.v1.TaskActivation</span>
+    </a>
+        </code>
+      </td>
+      <td class="content"><p>The next task the worker should execute. Requires fetch_next to be set on the request.</p></td>
+      
+    </tr>
+    
+    
+  </tbody>
+</table>
+ 
+      </div>
+      
+    
+
+  
+
+  
+
+    <h3 class="title is-3">
+      Enums
+    </h3>
+
+    
+    <div class="block">
+      <h4 class="title is-4 type-heading" id="enum-sentry_protos.taskbroker.v1.OnAttemptsExceeded">
+  <a href="#enum-sentry_protos.taskbroker.v1.OnAttemptsExceeded" title="sentry_protos.taskbroker.v1.OnAttemptsExceeded">enum OnAttemptsExceeded</a>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/taskbroker/v1/taskbroker.proto#L6">sentry_protos/taskbroker/v1/taskbroker.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p></p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td><code>ON_ATTEMPTS_EXCEEDED_UNSPECIFIED</code></td>
+      <td>0</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>ON_ATTEMPTS_EXCEEDED_DISCARD</code></td>
+      <td>1</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>ON_ATTEMPTS_EXCEEDED_DEADLETTER</code></td>
+      <td>2</td>
+      <td class="content"></td>
+    </tr>
+    
+  </tbody>
+</table> 
+    </div>
+    
+    <div class="block">
+      <h4 class="title is-4 type-heading" id="enum-sentry_protos.taskbroker.v1.TaskActivationStatus">
+  <a href="#enum-sentry_protos.taskbroker.v1.TaskActivationStatus" title="sentry_protos.taskbroker.v1.TaskActivationStatus">enum TaskActivationStatus</a>
+  
+    <a class="type-source-link" href="https://github.com/getsentry/sentry-protos/blob/main/proto/sentry_protos/taskbroker/v1/taskbroker.proto#L26">sentry_protos/taskbroker/v1/taskbroker.proto</a>
+  
+</h4>
+
+<div class="block content">
+  <p></p>
+</div>
+
+<table class="table is-fullwidth is-hoverable is-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td><code>TASK_ACTIVATION_STATUS_UNSPECIFIED</code></td>
+      <td>0</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>TASK_ACTIVATION_STATUS_PENDING</code></td>
+      <td>1</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>TASK_ACTIVATION_STATUS_PROCESSING</code></td>
+      <td>2</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>TASK_ACTIVATION_STATUS_FAILURE</code></td>
+      <td>3</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>TASK_ACTIVATION_STATUS_RETRY</code></td>
+      <td>4</td>
+      <td class="content"></td>
+    </tr>
+    
+    <tr>
+      <td><code>TASK_ACTIVATION_STATUS_COMPLETE</code></td>
+      <td>5</td>
+      <td class="content"></td>
+    </tr>
+    
+  </tbody>
+</table> 
+    </div>
+    
+
+  
+
+</div>
+
+    <footer class="footer">
+      <div class="content has-text-centered">
+        
+          <p>© 2024 Functional Software. All rights reserved.</p>
+        
+        <p>Built with <strong><a href="https://github.com/markvincze/sabledocs" target="_blank">sabledocs</a></strong>.</p>
+      </div>
+    </footer>
+  </body>
+</html>
