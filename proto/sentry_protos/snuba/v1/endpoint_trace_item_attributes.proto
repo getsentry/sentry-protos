@@ -4,6 +4,7 @@ package sentry_protos.snuba.v1;
 
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
+import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 // TraceItemAttributeNamesRequest is a request to the TraceItemAttributeNames endpoint,
 // it returns the names of all queryable "TraceItemAttributes" that exist in the given projects,
@@ -31,6 +32,12 @@ message TraceItemAttributeNamesRequest {
 
   // optional, used for pagination, the next page token will be returned in the response
   PageToken page_token = 7;
+  // A filter to only get relevant attribute keys
+  // including this makes sure that only attribute keys are returned
+  // which *intersect* with the ones specified in the filter.
+  // This is a BEST-EFFORT operation. If no co-occurring keys are found within
+  // 1 second, the endpoint returns without taking the intersecing attributes into account
+  TraceItemFilter intersecting_attributes_filter = 8;
 }
 
 // TraceItemAttributeNamesResponse is the response returned by the TraceItemAttributeNames endpoint.
