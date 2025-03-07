@@ -1,3 +1,9 @@
+## 0.1.62
+
+### Various fixes & improvements
+
+- feat: Add a "trace item details" endpoint to get everything for a single item (#111) by @colin-sentry
+
 ## 0.1.61
 
 ### Various fixes & improvements

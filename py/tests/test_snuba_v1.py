@@ -73,6 +73,12 @@ from sentry_protos.snuba.v1.endpoint_trace_item_stats_pb2 import (
     StatsType,
 )
 
+from sentry_protos.snuba.v1.endpoint_trace_item_details_pb2 import (
+    TraceItemDetailsRequest,
+    TraceItemDetailsAttribute,
+    TraceItemDetailsResponse,
+)
+
 COMMON_META = RequestMeta(
     project_ids=[1, 2, 3],
     organization_id=1,
@@ -379,6 +385,32 @@ def test_example_table_with_aggregation_filter() -> None:
         page_token=PageToken(
             offset=2
         ),
+    )
+
+
+def test_trace_item_details() -> None:
+    TraceItemDetailsRequest(
+        meta=COMMON_META,
+        item_id='1234567812345678aabbccddeeff',
+        filter=TraceItemFilter(
+            comparison_filter=ComparisonFilter(
+                key=AttributeKey(
+                    type=AttributeKey.TYPE_STRING,
+                    name="eap.measurement",
+                ),
+                op=ComparisonFilter.OP_LESS_THAN_OR_EQUALS,
+                value=AttributeValue(val_double=101),
+            )
+        )
+    )
+
+    TraceItemDetailsResponse(
+        attributes=[
+            TraceItemDetailsAttribute(
+                name="sentry.db.operation",
+                value=AttributeValue(val_str="database_query")
+            )
+        ]
     )
 
 def test_example_find_traces() -> None:
