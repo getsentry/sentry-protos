@@ -1,3 +1,9 @@
+## 0.1.63
+
+### Various fixes & improvements
+
+- feat(smart-autocomplete): make api changes for smart autocomplete (#112) by @volokluev
+
 ## 0.1.62
 
 ### Various fixes & improvements
