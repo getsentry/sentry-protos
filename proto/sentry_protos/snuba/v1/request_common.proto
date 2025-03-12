@@ -3,7 +3,6 @@ syntax = "proto3";
 package sentry_protos.snuba.v1;
 
 import "google/protobuf/timestamp.proto";
-import "sentry_protos/snuba/v1/trace_item.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 message RequestMeta {
@@ -52,6 +51,14 @@ enum TraceItemName {
   TRACE_ITEM_NAME_UNSPECIFIED = 0;
   TRACE_ITEM_NAME_EAP_SPANS = 1;
   TRACE_ITEM_NAME_EAP_ERRORS = 2;
+}
+
+enum TraceItemType {
+  TRACE_ITEM_TYPE_UNSPECIFIED = 0;
+  TRACE_ITEM_TYPE_SPAN = 1;
+  TRACE_ITEM_TYPE_ERROR = 2;
+  TRACE_ITEM_TYPE_LOG = 3;
+  TRACE_ITEM_TYPE_UPTIME_CHECK = 4;
 }
 
 message PageToken {

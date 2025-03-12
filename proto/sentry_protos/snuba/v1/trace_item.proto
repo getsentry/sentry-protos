@@ -4,14 +4,7 @@ package sentry_protos.snuba.v1;
 
 import "google/protobuf/timestamp.proto";
 import "opentelemetry/proto/common/v1/common.proto";
-
-enum TraceItemType {
-  TRACE_ITEM_TYPE_UNSPECIFIED = 0;
-  TRACE_ITEM_TYPE_SPAN = 1;
-  TRACE_ITEM_TYPE_ERROR = 2;
-  TRACE_ITEM_TYPE_LOG = 3;
-  TRACE_ITEM_TYPE_UPTIME_CHECK = 4;
-}
+import "sentry_protos/snuba/v1/request_common.proto";
 
 message TraceItem {
   uint64 organization_id = 1;

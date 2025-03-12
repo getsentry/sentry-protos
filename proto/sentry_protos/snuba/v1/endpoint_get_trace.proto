@@ -4,7 +4,6 @@ package sentry_protos.snuba.v1;
 
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
-import "sentry_protos/snuba/v1/trace_item.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 
 // GetTraceRequest lets you query a trace by trace_id, returning all its items.
