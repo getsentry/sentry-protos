@@ -10,7 +10,8 @@ message TraceItem {
   uint64 organization_id = 1;
   uint64 project_id = 2;
   string trace_id = 3;
-  uint64 item_id = 4;
+  // item_id as bytes, little endian
+  bytes item_id = 4;
   TraceItemType item_type = 5;
   google.protobuf.Timestamp timestamp = 6;
   repeated opentelemetry.proto.common.v1.KeyValue attributes = 7;
