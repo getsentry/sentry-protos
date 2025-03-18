@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.snuba.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/snuba/v1/downsampled_storage.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 message RequestMeta {
@@ -36,6 +37,9 @@ message RequestMeta {
 
   // a unique identifier for the request, user doesnt need to set this
   string request_id = 11;
+
+  // how to query the downsampled storages
+  DownsampledStorageConfig downsampled_storage_config = 12;
 }
 
 message ResponseMeta {
@@ -44,6 +48,9 @@ message ResponseMeta {
 
   // Optional field that is included only if debug is true
   repeated QueryInfo query_info = 2;
+
+  // metadata of how the query interacted wit the downsampled storages
+  DownsampledStorageMeta downsampled_storage_meta = 3;
 }
 
 // DEPRECATED: use TraceItemType instead
