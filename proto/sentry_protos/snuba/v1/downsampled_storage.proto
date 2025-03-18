@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+message DownsampledStorageConfig {
+  enum Mode {
+    MODE_UNSPECIFIED = 0;
+    MODE_PREFLIGHT = 1;
+    MODE_BEST_EFFORT = 2;
+  }
+  Mode mode = 1;
+}
+
+message DownsampledStorageMeta {
+  enum SelectedTier {
+    SELECTED_TIER_UNSPECIFIED = 0;
+    SELECTED_TIER_1 = 1;
+    SELECTED_TIER_8 = 2;
+    SELECTED_TIER_64 = 3;
+    SELECTED_TIER_512 = 4;
+  }
+  SelectedTier tier = 1;
+  // how many rows did the estimator think this query would scan
+  // 0 means the estimator was not run
+  uint64 estimated_num_rows = 2;
+}
