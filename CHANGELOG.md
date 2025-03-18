@@ -1,3 +1,9 @@
+## 0.1.64
+
+### Various fixes & improvements
+
+- feat(sampling-in-storage): api changes (#114) by @xurui-c
+
 ## 0.1.63
 
 ### Various fixes & improvements
