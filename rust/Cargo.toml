@@ -15,7 +15,6 @@ prost = "0.13"
 prost-types = "0.13"
 regex = "1.10.5"
 
-
 [dependencies]
 tonic = "0.12.3"
 prost = "0.13"
