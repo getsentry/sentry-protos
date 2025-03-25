@@ -4,6 +4,7 @@ package sentry_protos.snuba.v1;
 
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/attribute_conditional_aggregation.proto";
+import "sentry_protos/snuba/v1/formula.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
@@ -49,6 +50,7 @@ message Expression {
     AttributeAggregation aggregation = 1;
     BinaryFormula formula = 2;
     AttributeConditionalAggregation conditional_aggregation = 4;
+    Literal literal = 5;
   }
   string label = 3;
 
