@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.snuba.v1;
 
 import "sentry_protos/snuba/v1/attribute_conditional_aggregation.proto";
+import "sentry_protos/snuba/v1/formula.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
@@ -81,6 +82,7 @@ message Column {
     AttributeAggregation aggregation = 2;
     AttributeConditionalAggregation conditional_aggregation = 5;
     BinaryFormula formula = 4;
+    Literal literal = 6;
   }
   string label = 3;
 

@@ -63,6 +63,7 @@ from sentry_protos.snuba.v1.trace_item_attribute_pb2 import (
     ExtrapolationMode,
     Function,
 )
+from sentry_protos.snuba.v1.formula_pb2 import Literal
 from sentry_protos.snuba.v1.endpoint_trace_item_stats_pb2 import (
     TraceItemStatsRequest,
     TraceItemStatsResponse,
@@ -131,7 +132,11 @@ def test_example_time_series():
                     ),
                 ),
                 label="p50 / p90"
-            )
+            ),
+            Expression(
+                literal=Literal(val_double=1.0),
+                label="constant",
+            ),
         ],
         granularity_secs=60,
         group_by=[

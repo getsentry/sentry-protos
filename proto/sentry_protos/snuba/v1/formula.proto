@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+message Literal {
+  oneof value {
+    double val_double = 1;
+  }
+}
