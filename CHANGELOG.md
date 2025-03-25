@@ -1,3 +1,9 @@
+## 0.1.65
+
+### Various fixes & improvements
+
+- fea(eap): add literals to expression and columns (#115) by @davidtsuk
+
 ## 0.1.64
 
 ### Various fixes & improvements
