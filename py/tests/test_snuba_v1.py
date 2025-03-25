@@ -63,7 +63,7 @@ from sentry_protos.snuba.v1.trace_item_attribute_pb2 import (
     ExtrapolationMode,
     Function,
 )
-from py.sentry_protos.snuba.v1.formula_pb2 import Literal
+from sentry_protos.snuba.v1.formula_pb2 import Literal
 from sentry_protos.snuba.v1.endpoint_trace_item_stats_pb2 import (
     TraceItemStatsRequest,
     TraceItemStatsResponse,
