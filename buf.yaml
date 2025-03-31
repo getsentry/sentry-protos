@@ -7,5 +7,3 @@ breaking:
   use:
     - FILE
   ignore_unstable_packages: true
-  ignore:
-    - google/proto

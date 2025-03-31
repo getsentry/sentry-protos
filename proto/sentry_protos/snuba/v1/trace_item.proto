@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "google/protobuf/timestamp.proto";
+import "opentelemetry/proto/common/v1/common.proto";
+import "sentry_protos/snuba/v1/request_common.proto";
+
+message TraceItem {
+  uint64 organization_id = 1;
+  uint64 project_id = 2;
+  string trace_id = 3;
+  // item_id as bytes, little endian
+  bytes item_id = 4;
+  TraceItemType item_type = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  repeated opentelemetry.proto.common.v1.KeyValue attributes = 7;
+
+  // Internal fields
+  uint32 retention_days = 100;
+  google.protobuf.Timestamp received = 101;
+}
