@@ -1,3 +1,9 @@
+## 0.1.67
+
+### Various fixes & improvements
+
+- feat(eap): Add schema for TraceItem (#113) by @phacops
+
 ## 0.1.66
 
 ### Various fixes & improvements
