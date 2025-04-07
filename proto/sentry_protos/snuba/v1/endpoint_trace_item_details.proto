@@ -15,7 +15,7 @@ message TraceItemDetailsRequest {
 
   //required: the ID (hex string) of the item you are looking for
   string item_id = 2;
-  // required: the trace ID of the item. 
+  // required: the trace ID of the item.
   string trace_id = 4;
   TraceItemFilter filter = 3;
 }
