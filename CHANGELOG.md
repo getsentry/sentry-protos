@@ -1,3 +1,9 @@
+## 0.1.66
+
+### Various fixes & improvements
+
+- Make trace_id a first class field in TraceItemDetails (#116) by @volokluev
+
 ## 0.1.65
 
 ### Various fixes & improvements
