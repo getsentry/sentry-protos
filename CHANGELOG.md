@@ -1,3 +1,9 @@
+## 0.1.68
+
+### Various fixes & improvements
+
+- feat(taskworker): add optional delay value to ktasks (#117) by @john-z-yang
+
 ## 0.1.67
 
 ### Various fixes & improvements
