@@ -64,6 +64,10 @@ message TaskActivation {
   // The duration in seconds that a task has to start execution.
   // After received_at + expires has passed an activation is expired and will not be executed.
   optional uint64 expires = 9;
+
+  // The duration in seconds that a task must wait to begin execution after it is emitted.
+  // After received_at + delay has passed, the activation will become pending.
+  optional uint64 delay = 11;
 }
 
 ////////////////////////////
