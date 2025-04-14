@@ -65,6 +65,8 @@ message Expression {
     Op op = 1;
     Expression left = 2;
     Expression right = 3;
+    // optional, if the formula is invalid, use this value
+    optional double default_value = 4;
   }
 }
 

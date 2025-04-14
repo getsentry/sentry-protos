@@ -97,6 +97,8 @@ message Column {
     Op op = 1;
     Column left = 2;
     Column right = 3;
+    // optional, if the formula is invalid, use this value
+    optional double default_value = 4;
   }
 }
 
