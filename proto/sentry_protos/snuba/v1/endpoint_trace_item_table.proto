@@ -98,7 +98,10 @@ message Column {
     Column left = 2;
     Column right = 3;
     // optional, if the formula is invalid, use this value
-    optional double default_value = 4;
+    oneof default_value {
+      double default_value_double = 4;
+      int64 default_value_int64 = 5;
+    }
   }
 }
 

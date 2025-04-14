@@ -130,6 +130,7 @@ def test_example_time_series():
                         ),
                         label="p90",
                     ),
+                    default_value_double=1.0,
                 ),
                 label="p50 / p90"
             ),
