@@ -65,7 +65,8 @@ message Expression {
     Op op = 1;
     Expression left = 2;
     Expression right = 3;
-    // optional, if the formula is invalid, use this value
+    // optional, if the formula evalutates to null this value is returned
+    // formula can evaluate to null if an attribute is missing for example
     oneof default_value {
       double default_value_double = 4;
       int64 default_value_int64 = 5;
