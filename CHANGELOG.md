@@ -1,3 +1,9 @@
+## 0.1.70
+
+### Various fixes & improvements
+
+- feat: default value for formulas (#119) by @kylemumma
+
 ## 0.1.69
 
 ### Various fixes & improvements
