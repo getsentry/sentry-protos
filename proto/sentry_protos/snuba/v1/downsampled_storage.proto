@@ -7,6 +7,7 @@ message DownsampledStorageConfig {
     MODE_UNSPECIFIED = 0;
     MODE_PREFLIGHT = 1;
     MODE_BEST_EFFORT = 2;
+    MODE_NORMAL = 3;
   }
   Mode mode = 1;
 }
