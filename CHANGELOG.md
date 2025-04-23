@@ -1,3 +1,9 @@
+## 0.1.72
+
+### Various fixes & improvements
+
+- feat(storage-routing): indicate if there is a higher accuracy tier (#121) by @xurui-c
+
 ## 0.1.71
 
 ### Various fixes & improvements
