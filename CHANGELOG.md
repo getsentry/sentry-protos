@@ -1,3 +1,9 @@
+## 0.1.71
+
+### Various fixes & improvements
+
+- feat(storage-routing): NORMAL mode (#120) by @xurui-c
+
 ## 0.1.70
 
 ### Various fixes & improvements
