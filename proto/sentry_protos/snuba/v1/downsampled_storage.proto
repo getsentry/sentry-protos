@@ -5,8 +5,14 @@ package sentry_protos.snuba.v1;
 message DownsampledStorageConfig {
   enum Mode {
     MODE_UNSPECIFIED = 0;
+    // deprecated, treated as NORMAL mode
     MODE_PREFLIGHT = 1;
+    // deprecated, treated as NORMAL mode
     MODE_BEST_EFFORT = 2;
+    // NORMAL queries are served faster and should not time out
+    // EAP will route to whatever tier it needs to in order to facilitate this
+    // The return payload from EAP will inform the client if there is a higher fidelity tier to scan
+    MODE_NORMAL = 3;
   }
   Mode mode = 1;
 }
