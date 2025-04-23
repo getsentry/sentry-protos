@@ -25,8 +25,14 @@ message DownsampledStorageMeta {
     SELECTED_TIER_64 = 3;
     SELECTED_TIER_512 = 4;
   }
+  // deprecated, only use can_go_to_higher_accuracy_tier
   SelectedTier tier = 1;
   // how many rows did the estimator think this query would scan
   // 0 means the estimator was not run
+  // deprecated, only use can_go_to_higher_accuracy_tier
   uint64 estimated_num_rows = 2;
+
+  // if there exists a higher accuracy tier that this query could route to
+  // note that if this query goes to a higher accuracy tier, it could potentially time out
+  bool can_go_to_higher_accuracy_tier = 3;
 }
