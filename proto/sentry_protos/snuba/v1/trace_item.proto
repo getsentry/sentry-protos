@@ -40,6 +40,9 @@ message TraceItem {
   google.protobuf.Timestamp timestamp = 6;
   map<string, AnyValue> attributes = 7;
 
+  double client_sample_rate = 8;
+  double server_sample_rate = 9;
+
   // Internal fields
   uint32 retention_days = 100;
   google.protobuf.Timestamp received = 101;
