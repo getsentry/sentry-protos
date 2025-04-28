@@ -6,6 +6,9 @@ import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
 message RetryState {
+  // use sentry_protos.taskbroker.v1.RetryState instead.
+  option deprecated = true;
+
   // Current attempt number
   int32 attempts = 1;
 
@@ -23,6 +26,9 @@ message RetryState {
 }
 
 enum TaskActivationStatus {
+  // use sentry_protos.taskbroker.v1.TaskActivationStatus instead.
+  option deprecated = true;
+
   TASK_ACTIVATION_STATUS_UNSPECIFIED = 0;
   TASK_ACTIVATION_STATUS_PENDING = 1;
   TASK_ACTIVATION_STATUS_PROCESSING = 2;
@@ -35,6 +41,9 @@ enum TaskActivationStatus {
 // Once consumed, TaskActivations are wrapped with InflightActivation to track
 // additional state
 message TaskActivation {
+  // use sentry_protos.taskbroker.v1.TaskActivation instead.
+  option deprecated = true;
+
   // A GUID for the task. Used to update tasks
   string id = 1;
 
@@ -78,6 +87,9 @@ message TaskActivation {
 // This proto might not be used as InflightActivations don't need to cross
 // process boundaries.
 message InflightActivation {
+  // No replacement, was not used.
+  option deprecated = true;
+
   // The TaskActivation being tracked.
   TaskActivation activation = 1;
 
@@ -104,6 +116,9 @@ message InflightActivation {
 // RPC messages and services
 ////////////////////////////
 message Error {
+  // No replacement, was not used.
+  option deprecated = true;
+
   // Taken directly from the grpc docs.
   int32 code = 1;
   string message = 2;
@@ -113,6 +128,9 @@ message Error {
 }
 
 service ConsumerService {
+  // Use sentry_protos.taskbroker.v1.ConsumerService instead.
+  option deprecated = true;
+
   // Fetch a new task activation to process.
   rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {}
 
@@ -121,9 +139,15 @@ service ConsumerService {
 }
 
 message GetTaskRequest {
+  // Use sentry_protos.taskbroker.v1.GetTaskRequest instead.
+  option deprecated = true;
+
   optional string namespace = 1;
 }
 message GetTaskResponse {
+  // Use sentry_protos.taskbroker.v1.GetTaskResponse instead.
+  option deprecated = true;
+
   // If there are no tasks available, these will be empty
   optional TaskActivation task = 1;
 
@@ -131,10 +155,16 @@ message GetTaskResponse {
 }
 
 message FetchNextTask {
+  // Use sentry_protos.taskbroker.v1.FetchNextTask instead.
+  option deprecated = true;
+
   optional string namespace = 1;
 }
 
 message SetTaskStatusRequest {
+  // Use sentry_protos.taskbroker.v1.SetTaskStatusRequest instead.
+  option deprecated = true;
+
   string id = 1;
   TaskActivationStatus status = 3;
 
@@ -145,6 +175,9 @@ message SetTaskStatusRequest {
 }
 
 message SetTaskStatusResponse {
+  // Use sentry_protos.taskbroker.v1.SetTaskStatusResponse instead.
+  option deprecated = true;
+
   // The next task the worker should execute. Requires fetch_next to be set on the request.
   optional TaskActivation task = 1;
 
