@@ -1,3 +1,9 @@
+## 0.1.73
+
+### Various fixes & improvements
+
+- feat(eap): Add sample rates to the trace item schema as root fields (#122) by @phacops
+
 ## 0.1.72
 
 ### Various fixes & improvements
