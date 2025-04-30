@@ -13,6 +13,8 @@ message DownsampledStorageConfig {
     // EAP will route to whatever tier it needs to in order to facilitate this
     // The return payload from EAP will inform the client if there is a higher fidelity tier to scan
     MODE_NORMAL = 3;
+    // HIGHEST_ACCURACY queries go straight to tier 1
+    MODE_HIGHEST_ACCURACY = 4;
   }
   Mode mode = 1;
 }
