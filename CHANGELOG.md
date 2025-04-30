@@ -1,3 +1,11 @@
+## 0.1.74
+
+### Various fixes & improvements
+
+- feat(storage-routing): HIGHEST_ACCURACY mode (#125) by @xurui-c
+- chore: Remove deprecated taskworker protos (#124) by @markstory
+- chore(taskbroker) Deprecate unused messages and grpc (#123) by @markstory
+
 ## 0.1.73
 
 ### Various fixes & improvements
