@@ -38,7 +38,7 @@ jobs:
         id: token
         uses: actions/create-github-app-token@v2
         with:
-          app_id: ${{ variable.SENTRY_INTERNAL_APP_ID }}
+          app_id: ${{ vars.SENTRY_INTERNAL_APP_ID }}
           private_key: ${{ secrets.SENTRY_INTERNAL_APP_PRIVATE_KEY }}
 
       - name: Commit generated Rust code
