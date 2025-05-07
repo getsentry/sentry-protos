@@ -29,6 +29,23 @@ jobs:
 
       - name: Install protoc
         uses: arduino/setup-protoc@v3
+ 
+      - name: build rust bindings
+        run: |
+          make build-rust
+
+      - name: Get a GitHub application token
+        id: token
+        uses: getsentry/action-github-app-token@v3.0.0
+        with:
+          app_id: ${{ variable.SENTRY_INTERNAL_APP_ID }}
+          private_key: ${{ secrets.SENTRY_RELEASE_BOT_PRIVATE_KEY }}
+
+      - name: Commit generated Rust code
+        uses: getsentry/action-github-commit@v2.0.0
+        with:
+          message: "chore: Regenerate Rust bindings"
+          github-token: ${{ steps.token.outputs.token }}
 
       - uses: actions/setup-python@v2
         with:
@@ -38,15 +55,6 @@ jobs:
         run: |
           pip install -r requirements.txt
           make build-py
-
-      - name: build rust bindings
-        run: |
-          make build-rust
-
-      - name: Commit generated Rust code
-        uses: getsentry/action-github-commit@v2.0.0
-        with:
-          message: "chore: Regenerate Rust bindings"
 
       - name: run python tests/examples
         run: |
