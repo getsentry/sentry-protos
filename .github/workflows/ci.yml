@@ -34,6 +34,19 @@ jobs:
         run: |
           make build-rust
 
+      - name: Get a GitHub application token
+        id: token
+        uses: actions/create-github-app-token@v2
+        with:
+          app_id: ${{ variable.SENTRY_INTERNAL_APP_ID }}
+          private_key: ${{ secrets.SENTRY_INTERNAL_APP_PRIVATE_KEY }}
+
+      - name: Commit generated Rust code
+        uses: getsentry/action-github-commit@v2.0.0
+        with:
+          message: "chore: Regenerate Rust bindings"
+          github-token: ${{ steps.token.outputs.token }}
+
       - name: Commit generated Rust bindings
         uses: getsentry/action-github-commit@v2.0.0
         with:
