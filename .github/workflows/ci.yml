@@ -20,7 +20,7 @@ jobs:
           format: false
           breaking_against: 'https://github.com/getsentry/sentry-protos.git#branch=main'
 
-  codegen:
+  codegen-rust:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -30,23 +30,18 @@ jobs:
       - name: Install protoc
         uses: arduino/setup-protoc@v3
  
-      - name: build rust bindings
+      - name: Build Rust bindings
         run: |
           make build-rust
 
-      - name: Get a GitHub application token
-        id: token
-        uses: getsentry/action-github-app-token@v3.0.0
-        with:
-          app_id: ${{ vars.SENTRY_RELEASE_BOT_CLIENT_ID }}
-          private_key: ${{ secrets.SENTRY_RELEASE_BOT_PRIVATE_KEY }}
-
-      - name: Commit generated Rust code
+      - name: Commit generated Rust bindings
         uses: getsentry/action-github-commit@v2.0.0
         with:
           message: "chore: Regenerate Rust bindings"
-          github-token: ${{ steps.token.outputs.token }}
 
+  codegen-python:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/setup-python@v2
         with:
           python-version: 3.11
