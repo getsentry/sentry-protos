@@ -1,9 +1,3 @@
-pub mod sentry {
-    pub mod v1 {
-       include!("sentry_protos.sentry.v1.rs");
-   }
-}
-
 pub mod snuba {
     pub mod v1 {
        include!("sentry_protos.snuba.v1.rs");
@@ -28,6 +22,12 @@ pub mod relay {
 pub mod options {
     pub mod v1 {
        include!("sentry_protos.options.v1.rs");
+   }
+}
+
+pub mod sentry {
+    pub mod v1 {
+       include!("sentry_protos.sentry.v1.rs");
    }
 }
 
