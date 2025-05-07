@@ -3,6 +3,10 @@ name: ci
 on:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   buf-checks:
     runs-on: ubuntu-latest
@@ -34,7 +38,16 @@ jobs:
         run: |
           make build-rust
 
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'proto/**'
+              - 'build_rust/**'
+
       - name: Get a GitHub application token
+        if: steps.changes.outputs.src == 'true'
         id: token
         uses: actions/create-github-app-token@v2
         with:
@@ -42,6 +55,7 @@ jobs:
           private-key: ${{ secrets.SENTRY_INTERNAL_APP_PRIVATE_KEY }}
 
       - name: Commit generated Rust bindings
+        if: steps.changes.outputs.src == 'true'
         uses: getsentry/action-github-commit@main
         with:
           message: "chore: Regenerate Rust bindings"
