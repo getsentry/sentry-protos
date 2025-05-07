@@ -13,6 +13,9 @@ pub struct RetryState {
     /// Whether a task should be executed at most once.
     #[prost(bool, optional, tag = "4")]
     pub at_most_once: ::core::option::Option<bool>,
+    /// Duration in seconds that a task must wait to begin execution after it is retried.
+    #[prost(uint64, optional, tag = "5")]
+    pub delay_on_retry: ::core::option::Option<u64>,
 }
 /// Task message that is stored in Kafka and shared over RPC.
 #[derive(Clone, PartialEq, ::prost::Message)]
