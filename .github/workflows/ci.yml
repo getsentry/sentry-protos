@@ -44,8 +44,9 @@ jobs:
           make build-rust
 
       - name: Commit generated Rust code
-        run: |
-          ./scripts/commit-generated-rust-files.sh
+        uses: getsentry/action-github-commit@v2.0.0
+        with:
+          message: "chore: Regenerate Rust bindings"
 
       - name: run python tests/examples
         run: |
