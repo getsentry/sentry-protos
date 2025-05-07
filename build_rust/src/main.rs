@@ -5,7 +5,7 @@ use std::fs;
 use std::str;
 use glob::glob;
 use regex::Regex;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 #[derive(Clone, Debug)]
 struct ModuleInfo {
@@ -61,18 +61,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Compile rust code for all proto files.
-    // You can use .out_dir("./src") to generate code into files for local inspection.
     println!("Generating proto bindings");
     tonic_build::configure()
         .emit_rerun_if_changed(false)
-        .compile(&proto_files, &["./proto"])
+        .out_dir("./rust/src")
+        .compile_protos(&proto_files, &["./proto"])
         .unwrap();
 
     let mut visited: Vec<&str> = vec![];
 
     let mut code = String::new();
     use std::fmt::Write;
-    let mut module_map = HashMap::<&str, Vec<&ModuleInfo>>::new();
+    let mut module_map = BTreeMap::<&str, Vec<&ModuleInfo>>::new();
 
 
     for module in module_metadata.iter() {
@@ -90,7 +90,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let module_version = &module.version;
             let module_path = &module.path;
             writeln!(code, "    pub mod {module_version} {{").unwrap();
-            writeln!(code, "       tonic::include_proto!(\"{module_path}\");").unwrap();
+            writeln!(code, "       include!(\"{module_path}.rs\");").unwrap();
             writeln!(code, "   }}").unwrap();
         }
         writeln!(code, "}}").unwrap();
@@ -100,7 +100,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Generate lib.rs with the proto modules.
     println!("Generating src/lib.rs");
     std::fs::write(
-        Path::new("./src/lib.rs"),
+        Path::new("./rust/src/lib.rs"),
         code
     )
     .expect("Failed to write lib.rs");
