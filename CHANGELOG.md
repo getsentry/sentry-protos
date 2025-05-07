@@ -1,3 +1,9 @@
+## 0.2.0
+
+### Various fixes & improvements
+
+- feat: Generate Protobuf files for release (#127) by @phacops
+
 ## 0.1.75
 
 ### Various fixes & improvements
