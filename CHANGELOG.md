@@ -1,3 +1,9 @@
+## 0.1.75
+
+### Various fixes & improvements
+
+- feat(taskbroker): Add option to delay on retry (#126) by @john-z-yang
+
 ## 0.1.74
 
 ### Various fixes & improvements
