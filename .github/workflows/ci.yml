@@ -43,6 +43,10 @@ jobs:
         run: |
           make build-rust
 
+      - name: Commit generated Rust code
+        run: |
+          ./scripts/commit-generated-rust-files.sh
+
       - name: run python tests/examples
         run: |
           make test-py
