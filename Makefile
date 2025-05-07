@@ -28,7 +28,7 @@ clean-py:
 # Rust client targets
 .PHONY: build-rust
 build-rust:
-	SENTRY_PROTOS_BUILD_UNSTABLE=$(SENTRY_PROTOS_BUILD_UNSTABLE) cd rust && cargo build
+	SENTRY_PROTOS_BUILD_UNSTABLE=$(SENTRY_PROTOS_BUILD_UNSTABLE) cargo run -p build_sentry_protos
 
 .PHONY: clean-rust
 clean-rust:

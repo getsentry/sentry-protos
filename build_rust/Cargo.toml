@@ -1,22 +1,18 @@
 [package]
-name = "sentry_protos"
-version = "0.1.74"
+name = "build_sentry_protos"
+version = "1.0.0"
 edition = "2021"
 readme = "README.md"
-description = "Rust bindings for sentry-protos"
+description = "Build Rust bindings for sentry-protos"
 license-file = "LICENSE.md"
 authors = ["Sentry <hello@sentry.io>"]
 repository = "https://github.com/getsentry/sentry-protos"
 
-[build-dependencies]
+[dependencies]
 glob = "0.3.1"
 prost = "0.13"
 prost-types = "0.13"
 regex = "1.10.5"
-
-
-[dependencies]
-tonic = "0.12.3"
-prost = "0.13"
-prost-types = "0.13"
 tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
+tonic = "0.12.3"
+tonic-build = "0.12"
