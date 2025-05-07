@@ -22,6 +22,9 @@ message RetryState {
 
   // Whether a task should be executed at most once.
   optional bool at_most_once = 4;
+
+  // Duration in seconds that a task must wait to begin execution after it is retried.
+  optional uint64 delay_on_retry = 5;
 }
 
 enum TaskActivationStatus {
