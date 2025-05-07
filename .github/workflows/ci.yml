@@ -41,13 +41,14 @@ jobs:
       - uses: dorny/paths-filter@v3
         id: changes
         with:
+          token: ${{ github.token }}
           filters: |
-            src:
+            files:
               - 'proto/**'
-              - 'build_rust/**'
+              - 'build_rust/src/main.rs'
 
       - name: Get a GitHub application token
-        if: steps.changes.outputs.src == 'true'
+        if: steps.changes.outputs.files == 'true'
         id: token
         uses: actions/create-github-app-token@v2
         with:
@@ -55,7 +56,7 @@ jobs:
           private-key: ${{ secrets.SENTRY_INTERNAL_APP_PRIVATE_KEY }}
 
       - name: Commit generated Rust bindings
-        if: steps.changes.outputs.src == 'true'
+        if: steps.changes.outputs.files == 'true'
         uses: getsentry/action-github-commit@main
         with:
           message: "chore: Regenerate Rust bindings"

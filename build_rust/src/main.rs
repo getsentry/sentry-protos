@@ -5,7 +5,7 @@ use std::fs;
 use std::str;
 use glob::glob;
 use regex::Regex;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 #[derive(Clone, Debug)]
 struct ModuleInfo {
@@ -73,7 +73,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut code = String::new();
     use std::fmt::Write;
-    let mut module_map = HashMap::<&str, Vec<&ModuleInfo>>::new();
+    let mut module_map = BTreeMap::<&str, Vec<&ModuleInfo>>::new();
 
 
     for module in module_metadata.iter() {
