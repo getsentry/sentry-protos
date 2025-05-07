@@ -61,7 +61,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Compile rust code for all proto files.
-    // You can use .out_dir("./src") to generate code into files for local inspection.
     println!("Generating proto bindings");
     tonic_build::configure()
         .emit_rerun_if_changed(false)
