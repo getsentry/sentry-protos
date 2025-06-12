@@ -1586,10 +1586,20 @@ pub struct TraceItemTableRequest {
 pub mod trace_item_table_request {
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct OrderBy {
-        #[prost(message, optional, tag = "1")]
-        pub column: ::core::option::Option<super::Column>,
         #[prost(bool, tag = "2")]
         pub descending: bool,
+        #[prost(oneof = "order_by::Orderby", tags = "1, 3")]
+        pub orderby: ::core::option::Option<order_by::Orderby>,
+    }
+    /// Nested message and enum types in `OrderBy`.
+    pub mod order_by {
+        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        pub enum Orderby {
+            #[prost(message, tag = "1")]
+            Column(super::super::Column),
+            #[prost(string, tag = "3")]
+            Label(::prost::alloc::string::String),
+        }
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
