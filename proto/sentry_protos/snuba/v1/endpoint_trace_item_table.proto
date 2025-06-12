@@ -15,7 +15,10 @@ import "sentry_protos/snuba/v1/trace_item_filter.proto";
 // it can also be used for aggregations
 message TraceItemTableRequest {
   message OrderBy {
-    Column column = 1;
+    oneof orderby {
+      Column column = 1;
+      string label = 3;
+    }
     bool descending = 2;
   }
 
