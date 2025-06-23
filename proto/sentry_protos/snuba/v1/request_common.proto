@@ -66,6 +66,7 @@ enum TraceItemType {
   TRACE_ITEM_TYPE_ERROR = 2;
   TRACE_ITEM_TYPE_LOG = 3;
   TRACE_ITEM_TYPE_UPTIME_CHECK = 4;
+  TRACE_ITEM_TYPE_UPTIME_RESULT = 5;
 }
 
 message PageToken {
