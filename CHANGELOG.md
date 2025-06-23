@@ -1,3 +1,9 @@
+## 0.2.1
+
+### Various fixes & improvements
+
+- feat(uptime): Add new `TraceItemType` for uptime results (#130) by @wedamija
+
 ## 0.2.0
 
 ### Various fixes & improvements
