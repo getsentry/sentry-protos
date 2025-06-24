@@ -1,3 +1,10 @@
+## 0.3.0
+
+### Various fixes & improvements
+
+- ref(rust): Update tonic to 0.13 (#131) by @Dav1dde
+- feat(uptime): Add new `TraceItemType` for uptime results (#130) by @wedamija
+
 ## 0.2.0
 
 ### Various fixes & improvements
