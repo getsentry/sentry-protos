@@ -9,7 +9,9 @@ authors = ["Sentry <hello@sentry.io>"]
 repository = "https://github.com/getsentry/sentry-protos"
 
 [dependencies]
-tonic = "0.12.3"
+tonic = "0.13"
 prost = "0.13"
 prost-types = "0.13"
+
+[dev-dependencies]
 tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
