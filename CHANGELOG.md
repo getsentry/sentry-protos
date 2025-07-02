@@ -1,3 +1,11 @@
+## 0.3.1
+
+### Various fixes & improvements
+
+- feat(replay): Add trace-item type for replay events (#129) by @cmanallen
+- ref(rust): Update tonic to 0.13 (#131) by @Dav1dde
+- feat(uptime): Add new `TraceItemType` for uptime results (#130) by @wedamija
+
 ## 0.2.0
 
 ### Various fixes & improvements
