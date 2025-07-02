@@ -723,6 +723,7 @@ pub enum TraceItemType {
     Log = 3,
     UptimeCheck = 4,
     UptimeResult = 5,
+    Replay = 6,
 }
 impl TraceItemType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -737,6 +738,7 @@ impl TraceItemType {
             TraceItemType::Log => "TRACE_ITEM_TYPE_LOG",
             TraceItemType::UptimeCheck => "TRACE_ITEM_TYPE_UPTIME_CHECK",
             TraceItemType::UptimeResult => "TRACE_ITEM_TYPE_UPTIME_RESULT",
+            TraceItemType::Replay => "TRACE_ITEM_TYPE_REPLAY",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -748,6 +750,7 @@ impl TraceItemType {
             "TRACE_ITEM_TYPE_LOG" => Some(Self::Log),
             "TRACE_ITEM_TYPE_UPTIME_CHECK" => Some(Self::UptimeCheck),
             "TRACE_ITEM_TYPE_UPTIME_RESULT" => Some(Self::UptimeResult),
+            "TRACE_ITEM_TYPE_REPLAY" => Some(Self::Replay),
             _ => None,
         }
     }
