@@ -1,5 +1,5 @@
 build
-protobuf==5.27.3
+protobuf==5.29.5
 grpcio==1.65.4
 grpc-stubs==1.53.0.5
 grpcio-tools==1.65.4
