@@ -66,6 +66,7 @@ message AggregationComparisonFilter {
   double val = 5;
   AttributeAggregation aggregation = 4;
   AttributeConditionalAggregation conditional_aggregation = 6;
+  Column.BinaryFormula formula = 7;
 }
 
 message AggregationFilter {
