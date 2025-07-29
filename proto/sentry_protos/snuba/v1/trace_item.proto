@@ -46,4 +46,5 @@ message TraceItem {
   // Internal fields
   uint32 retention_days = 100;
   google.protobuf.Timestamp received = 101;
+  uint32 downsampled_retention_days = 102;
 }
