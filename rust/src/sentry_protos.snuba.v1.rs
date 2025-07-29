@@ -167,6 +167,7 @@ pub struct AttributeAggregation {
 pub enum Function {
     Unspecified = 0,
     Sum = 1,
+    /// deprecated, use FUNCTION_AVG instead
     Average = 2,
     Count = 3,
     P50 = 4,
