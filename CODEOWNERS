@@ -1,2 +1,2 @@
-/proto/sentry_protos/snuba                       @getsentry/performance @getsentry/owners-snuba
+/proto/sentry_protos/snuba                       @getsentry/owners-snuba
 /proto/sentry_protos/taskbroker                  @getsentry/taskbroker

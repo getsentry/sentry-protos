@@ -1914,4 +1914,6 @@ pub struct TraceItem {
     pub retention_days: u32,
     #[prost(message, optional, tag = "101")]
     pub received: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(uint32, tag = "102")]
+    pub downsampled_retention_days: u32,
 }
