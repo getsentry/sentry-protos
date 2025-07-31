@@ -1626,8 +1626,6 @@ pub struct AggregationComparisonFilter {
     pub aggregation: ::core::option::Option<AttributeAggregation>,
     #[prost(message, optional, tag = "6")]
     pub conditional_aggregation: ::core::option::Option<AttributeConditionalAggregation>,
-    #[prost(message, optional, tag = "7")]
-    pub formula: ::core::option::Option<column::BinaryFormula>,
 }
 /// Nested message and enum types in `AggregationComparisonFilter`.
 pub mod aggregation_comparison_filter {
