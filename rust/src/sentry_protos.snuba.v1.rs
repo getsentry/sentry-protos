@@ -167,6 +167,7 @@ pub struct AttributeAggregation {
 pub enum Function {
     Unspecified = 0,
     Sum = 1,
+    /// deprecated, use FUNCTION_AVG instead
     Average = 2,
     Count = 3,
     P50 = 4,
@@ -1626,6 +1627,8 @@ pub struct AggregationComparisonFilter {
     pub aggregation: ::core::option::Option<AttributeAggregation>,
     #[prost(message, optional, tag = "6")]
     pub conditional_aggregation: ::core::option::Option<AttributeConditionalAggregation>,
+    #[prost(message, optional, tag = "7")]
+    pub formula: ::core::option::Option<column::BinaryFormula>,
 }
 /// Nested message and enum types in `AggregationComparisonFilter`.
 pub mod aggregation_comparison_filter {
@@ -1913,4 +1916,6 @@ pub struct TraceItem {
     pub retention_days: u32,
     #[prost(message, optional, tag = "101")]
     pub received: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(uint32, tag = "102")]
+    pub downsampled_retention_days: u32,
 }
