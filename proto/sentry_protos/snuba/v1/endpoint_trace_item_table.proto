@@ -40,6 +40,8 @@ message TraceItemTableRequest {
 
   // optional, filter out results of aggregates, same as SQL HAVING
   AggregationFilter aggregation_filter = 9;
+
+  repeated TraceItemFilterWithType trace_filters = 10;
 }
 
 message AggregationAndFilter {

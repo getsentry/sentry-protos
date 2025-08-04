@@ -43,6 +43,8 @@ message TimeSeriesRequest {
   // ex: span.environment might give 3 timeseries lines,
   //     one for prod, one for dev etc
   repeated AttributeKey group_by = 5;
+
+  repeated TraceItemFilterWithType trace_filters = 7;
 }
 
 message Expression {
