@@ -167,6 +167,7 @@ pub struct AttributeAggregation {
 pub enum Function {
     Unspecified = 0,
     Sum = 1,
+    /// deprecated, use FUNCTION_AVG instead
     Average = 2,
     Count = 3,
     P50 = 4,
@@ -609,6 +610,13 @@ pub struct ResponseMeta {
     pub downsampled_storage_meta: ::core::option::Option<DownsampledStorageMeta>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TraceItemFilterWithType {
+    #[prost(enumeration = "TraceItemType", tag = "1")]
+    pub item_type: i32,
+    #[prost(message, optional, tag = "2")]
+    pub filter: ::core::option::Option<TraceItemFilter>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PageToken {
     #[prost(oneof = "page_token::Value", tags = "1, 2")]
     pub value: ::core::option::Option<page_token::Value>,
@@ -792,6 +800,8 @@ pub struct TimeSeriesRequest {
     ///      one for prod, one for dev etc
     #[prost(message, repeated, tag = "5")]
     pub group_by: ::prost::alloc::vec::Vec<AttributeKey>,
+    #[prost(message, repeated, tag = "7")]
+    pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Expression {
@@ -1587,6 +1597,8 @@ pub struct TraceItemTableRequest {
     /// optional, filter out results of aggregates, same as SQL HAVING
     #[prost(message, optional, tag = "9")]
     pub aggregation_filter: ::core::option::Option<AggregationFilter>,
+    #[prost(message, repeated, tag = "10")]
+    pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
 }
 /// Nested message and enum types in `TraceItemTableRequest`.
 pub mod trace_item_table_request {
@@ -1626,6 +1638,8 @@ pub struct AggregationComparisonFilter {
     pub aggregation: ::core::option::Option<AttributeAggregation>,
     #[prost(message, optional, tag = "6")]
     pub conditional_aggregation: ::core::option::Option<AttributeConditionalAggregation>,
+    #[prost(message, optional, tag = "7")]
+    pub formula: ::core::option::Option<column::BinaryFormula>,
 }
 /// Nested message and enum types in `AggregationComparisonFilter`.
 pub mod aggregation_comparison_filter {
@@ -1913,4 +1927,6 @@ pub struct TraceItem {
     pub retention_days: u32,
     #[prost(message, optional, tag = "101")]
     pub received: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(uint32, tag = "102")]
+    pub downsampled_retention_days: u32,
 }
