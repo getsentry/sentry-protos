@@ -800,6 +800,9 @@ pub struct TimeSeriesRequest {
     ///      one for prod, one for dev etc
     #[prost(message, repeated, tag = "5")]
     pub group_by: ::prost::alloc::vec::Vec<AttributeKey>,
+    /// A list of filters applied to each item type provided. Enables cross-item queries.
+    /// If specified, the endpoint will only consider traces that match all the filters.
+    /// ex: Find the number of spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
     #[prost(message, repeated, tag = "7")]
     pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
 }
@@ -1597,6 +1600,9 @@ pub struct TraceItemTableRequest {
     /// optional, filter out results of aggregates, same as SQL HAVING
     #[prost(message, optional, tag = "9")]
     pub aggregation_filter: ::core::option::Option<AggregationFilter>,
+    /// A list of filters applied to each item type provided. Enables cross-item queries.
+    /// If specified, the endpoint will only consider traces that match all the filters.
+    /// ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
     #[prost(message, repeated, tag = "10")]
     pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
 }
