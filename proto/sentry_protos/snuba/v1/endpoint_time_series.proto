@@ -44,6 +44,9 @@ message TimeSeriesRequest {
   //     one for prod, one for dev etc
   repeated AttributeKey group_by = 5;
 
+  // A list of filters applied to each item type provided. Enables cross-item queries.
+  // If specified, the endpoint will only consider traces that match all the filters.
+  // ex: Find the number of spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
   repeated TraceItemFilterWithType trace_filters = 7;
 }
 

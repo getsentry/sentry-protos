@@ -41,6 +41,9 @@ message TraceItemTableRequest {
   // optional, filter out results of aggregates, same as SQL HAVING
   AggregationFilter aggregation_filter = 9;
 
+  // A list of filters applied to each item type provided. Enables cross-item queries.
+  // If specified, the endpoint will only consider traces that match all the filters.
+  // ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
   repeated TraceItemFilterWithType trace_filters = 10;
 }
 
