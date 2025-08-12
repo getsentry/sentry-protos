@@ -70,6 +70,11 @@ enum TraceItemType {
   TRACE_ITEM_TYPE_REPLAY = 6;
 }
 
+message TraceItemFilterWithType {
+  TraceItemType item_type = 1;
+  TraceItemFilter filter = 2;
+}
+
 message PageToken {
   oneof value {
     // standard limit/offset pagination

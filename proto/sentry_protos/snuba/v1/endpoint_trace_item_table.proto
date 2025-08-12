@@ -40,6 +40,12 @@ message TraceItemTableRequest {
 
   // optional, filter out results of aggregates, same as SQL HAVING
   AggregationFilter aggregation_filter = 9;
+
+  // A list of filters applied to each item type provided. These filters will be applied on a trace level to find traces
+  // that contain each of the provided items with matching conditions. The overall request will then only apply on those traces.
+  // If specified, the endpoint will only consider traces that match all the filters.
+  // ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
+  repeated TraceItemFilterWithType trace_filters = 10;
 }
 
 message AggregationAndFilter {

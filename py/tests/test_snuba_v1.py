@@ -39,6 +39,7 @@ from sentry_protos.snuba.v1.endpoint_trace_item_table_subscription_pb2 import (
 from sentry_protos.snuba.v1.request_common_pb2 import (
     RequestMeta,
     PageToken,
+    TraceItemFilterWithType,
     TraceItemType,
     TraceItemName
 )
@@ -718,4 +719,59 @@ def test_example_attribute_names_request() -> None:
 
     response = TraceItemAttributeNamesResponse(
         attributes=[TraceItemAttributeNamesResponse.Attribute(name="foo", type=AttributeKey.Type.TYPE_STRING)]
+    )
+
+
+def test_example_time_series_cross_item_query() -> None:
+    """
+    Find the number of spans with http.client over time in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
+    """
+    TimeSeriesRequest(
+        meta=COMMON_META,
+        expressions=[
+            Expression(
+                aggregation=AttributeAggregation(
+                    aggregate=Function.FUNCTION_COUNT,
+                    key=AttributeKey(type=AttributeKey.TYPE_INT, name="span.duration"),
+                ),
+            ),
+        ],
+        filter=TraceItemFilter(
+            comparison_filter=ComparisonFilter(
+                key=AttributeKey(
+                    type=AttributeKey.TYPE_STRING,
+                    name="span.op",
+                ),
+                op=ComparisonFilter.OP_EQUALS,
+                value=AttributeValue(val_str="http.client"),
+            ),
+        ),
+        trace_filters=[
+            TraceItemFilterWithType(
+                item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
+                filter=TraceItemFilter(
+                    comparison_filter=ComparisonFilter(
+                        key=AttributeKey(
+                            type=AttributeKey.TYPE_STRING,
+                            name="span.op",
+                        ),
+                        op=ComparisonFilter.OP_EQUALS,
+                        value=AttributeValue(val_str="db"),
+                    ),
+                ),
+            ),
+            TraceItemFilterWithType(
+                item_type=TraceItemType.TRACE_ITEM_TYPE_ERROR,
+                filter=TraceItemFilter(
+                    comparison_filter=ComparisonFilter(
+                        key=AttributeKey(
+                            type=AttributeKey.TYPE_STRING,
+                            name="error.message",
+                        ),
+                        op=ComparisonFilter.OP_EQUALS,
+                        value=AttributeValue(val_str="timeout"),
+                    ),
+                ),
+            ),
+        ],
     )

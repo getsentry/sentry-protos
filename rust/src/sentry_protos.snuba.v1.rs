@@ -610,6 +610,13 @@ pub struct ResponseMeta {
     pub downsampled_storage_meta: ::core::option::Option<DownsampledStorageMeta>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TraceItemFilterWithType {
+    #[prost(enumeration = "TraceItemType", tag = "1")]
+    pub item_type: i32,
+    #[prost(message, optional, tag = "2")]
+    pub filter: ::core::option::Option<TraceItemFilter>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PageToken {
     #[prost(oneof = "page_token::Value", tags = "1, 2")]
     pub value: ::core::option::Option<page_token::Value>,
@@ -793,6 +800,12 @@ pub struct TimeSeriesRequest {
     ///      one for prod, one for dev etc
     #[prost(message, repeated, tag = "5")]
     pub group_by: ::prost::alloc::vec::Vec<AttributeKey>,
+    /// A list of filters applied to each item type provided. These filters will be applied on a trace level to find traces
+    /// that contain each of the provided items with matching conditions. The overall request will then only apply on those traces.
+    /// If specified, the endpoint will only consider traces that match all the filters.
+    /// ex: Find the number of spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
+    #[prost(message, repeated, tag = "7")]
+    pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Expression {
@@ -1588,6 +1601,12 @@ pub struct TraceItemTableRequest {
     /// optional, filter out results of aggregates, same as SQL HAVING
     #[prost(message, optional, tag = "9")]
     pub aggregation_filter: ::core::option::Option<AggregationFilter>,
+    /// A list of filters applied to each item type provided. These filters will be applied on a trace level to find traces
+    /// that contain each of the provided items with matching conditions. The overall request will then only apply on those traces.
+    /// If specified, the endpoint will only consider traces that match all the filters.
+    /// ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
+    #[prost(message, repeated, tag = "10")]
+    pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
 }
 /// Nested message and enum types in `TraceItemTableRequest`.
 pub mod trace_item_table_request {
