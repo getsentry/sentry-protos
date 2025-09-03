@@ -1503,17 +1503,30 @@ pub struct AttributeDistributionsRequest {
     #[prost(uint32, tag = "2")]
     pub max_attributes: u32,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct HeatmapRequest {
+    #[prost(uint32, tag = "1")]
+    pub max_attribute_value_buckets: u32,
+    #[prost(uint32, tag = "2")]
+    pub max_attributes: u32,
+    #[prost(uint32, tag = "3")]
+    pub num_heatmap_buckets: u32,
+    #[prost(string, tag = "4")]
+    pub numerical_grouping_attribute_name: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StatsType {
-    #[prost(oneof = "stats_type::Type", tags = "1")]
+    #[prost(oneof = "stats_type::Type", tags = "1, 2")]
     pub r#type: ::core::option::Option<stats_type::Type>,
 }
 /// Nested message and enum types in `StatsType`.
 pub mod stats_type {
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Type {
         #[prost(message, tag = "1")]
         AttributeDistributions(super::AttributeDistributionsRequest),
+        #[prost(message, tag = "2")]
+        Heatmap(super::HeatmapRequest),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1549,8 +1562,41 @@ pub struct AttributeDistributions {
     pub attributes: ::prost::alloc::vec::Vec<AttributeDistribution>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Heatmap {
+    #[prost(string, tag = "1")]
+    pub numerical_grouping_attribute_name: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub attribute_heatmaps: ::prost::alloc::vec::Vec<AttributeHeatmap>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AttributeHeatmap {
+    #[prost(string, tag = "1")]
+    pub attribute_name: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub buckets: ::prost::alloc::vec::Vec<attribute_heatmap::Bucket>,
+}
+/// Nested message and enum types in `AttributeHeatmap`.
+pub mod attribute_heatmap {
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    pub struct InnerBucket {
+        #[prost(int32, tag = "1")]
+        pub range_start: i32,
+        #[prost(int32, tag = "2")]
+        pub range_end: i32,
+        #[prost(float, tag = "3")]
+        pub value: f32,
+    }
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct Bucket {
+        #[prost(string, tag = "1")]
+        pub value: ::prost::alloc::string::String,
+        #[prost(message, repeated, tag = "2")]
+        pub inner_buckets: ::prost::alloc::vec::Vec<InnerBucket>,
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TraceItemStatsResult {
-    #[prost(oneof = "trace_item_stats_result::Result", tags = "1")]
+    #[prost(oneof = "trace_item_stats_result::Result", tags = "1, 2")]
     pub result: ::core::option::Option<trace_item_stats_result::Result>,
 }
 /// Nested message and enum types in `TraceItemStatsResult`.
@@ -1559,6 +1605,8 @@ pub mod trace_item_stats_result {
     pub enum Result {
         #[prost(message, tag = "1")]
         AttributeDistributions(super::AttributeDistributions),
+        #[prost(message, tag = "2")]
+        Heatmap(super::Heatmap),
     }
 }
 /// this is a response from the TraceItemStats endpoint
