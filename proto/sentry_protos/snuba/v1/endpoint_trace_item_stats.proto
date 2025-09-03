@@ -11,9 +11,17 @@ message AttributeDistributionsRequest {
   uint32 max_attributes = 2;
 }
 
+message HeatmapRequest {
+  uint32 max_attribute_value_buckets = 1;
+  uint32 max_attributes = 2;
+  uint32 num_heatmap_buckets = 3;
+  string numerical_grouping_attribute_name = 4;
+}
+
 message StatsType {
   oneof type {
     AttributeDistributionsRequest attribute_distributions = 1;
+    HeatmapRequest heatmap = 2;
   }
 }
 
@@ -38,9 +46,30 @@ message AttributeDistributions {
   repeated AttributeDistribution attributes = 1;
 }
 
+message Heatmap {
+  repeated AttributeHeatmap attribute_heatmaps = 1;
+}
+
+message AttributeHeatmap {
+  message InnerBucket {
+    int32 range_start = 1;
+    int32 range_end = 2;
+    float value = 3;
+  }
+
+  message Bucket {
+    string label = 1;
+    repeated InnerBucket inner_buckets = 2;
+  }
+
+  string attribute_name = 1;
+  repeated Bucket buckets = 2;
+}
+
 message TraceItemStatsResult {
   oneof result {
     AttributeDistributions attribute_distributions = 1;
+    Heatmap heatmap = 2;
   }
 }
 
