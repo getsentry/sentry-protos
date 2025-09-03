@@ -47,7 +47,8 @@ message AttributeDistributions {
 }
 
 message Heatmap {
-  repeated AttributeHeatmap attribute_heatmaps = 1;
+  string numerical_grouping_attribute_name = 1;
+  repeated AttributeHeatmap attribute_heatmaps = 2;
 }
 
 message AttributeHeatmap {
@@ -58,7 +59,7 @@ message AttributeHeatmap {
   }
 
   message Bucket {
-    string label = 1;
+    string value = 1;
     repeated InnerBucket inner_buckets = 2;
   }
 
