@@ -1,3 +1,9 @@
+pub mod conduit {
+    pub mod v1alpha {
+       include!("sentry_protos.conduit.v1alpha.rs");
+   }
+}
+
 pub mod events {
     pub mod v1 {
        include!("sentry_protos.kafka.events.v1.rs");
