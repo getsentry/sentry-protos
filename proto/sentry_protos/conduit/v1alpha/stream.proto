@@ -14,24 +14,21 @@ enum Phase {
 }
 
 message StreamEvent {
-  // Protocol version for backwards compatibility
-  uint32 protocol_version = 1;
-
   // Channel identifier for routing
-  string channel_id = 2;
+  string channel_id = 1;
 
   // Unique message identifier for deduplication and idempotency
-  string message_id = 3;
+  string message_id = 2;
 
   // Timestamp when publisher sent the event
-  google.protobuf.Timestamp client_timestamp = 4;
+  google.protobuf.Timestamp client_timestamp = 3;
 
   // Current phase of the streaming lifecycle
-  Phase phase = 5;
+  Phase phase = 4;
 
   // Monotonically increasing sequence number within a stream
-  uint64 sequence = 6;
+  uint64 sequence = 5;
 
   // Application-specific payload data
-  google.protobuf.Struct payload = 7;
+  google.protobuf.Struct payload = 6;
 }

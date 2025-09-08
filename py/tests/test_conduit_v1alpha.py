@@ -12,7 +12,6 @@ payload.update({"value": "test"})
 
 def test_stream_event():
     StreamEvent(
-        protocol_version=1,
         channel_id="abc123",
         message_id="def456",
         client_timestamp=Timestamp().FromDatetime(now),
