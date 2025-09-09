@@ -10,6 +10,7 @@ now = datetime.now()
 payload = Struct()
 payload.update({"value": "test"})
 
+
 def test_stream_event():
     StreamEvent(
         channel_id="abc123",
