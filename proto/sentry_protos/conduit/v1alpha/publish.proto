@@ -13,14 +13,14 @@ enum Phase {
   PHASE_ERROR = 4; // Stream encountered an error
 }
 
-message StreamEvent {
+message PublishRequest {
   // Channel identifier for routing
   string channel_id = 1;
 
   // Unique message identifier for deduplication and idempotency
   string message_id = 2;
 
-  // Timestamp when publisher sent the event
+  // Timestamp when client sent the event
   google.protobuf.Timestamp client_timestamp = 3;
 
   // Current phase of the streaming lifecycle
