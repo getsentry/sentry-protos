@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package sentry_protos.conduit.v1alpha;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+enum Phase {
+  PHASE_UNSPECIFIED = 0;
+  PHASE_START = 1; // Initial event to establish stream
+  PHASE_DELTA = 2; // Incremental updates
+  PHASE_END = 3; // Clean stream termination
+  PHASE_ERROR = 4; // Stream encountered an error
+}
+
+message PublishRequest {
+  // Channel identifier for routing
+  string channel_id = 1;
+
+  // Unique message identifier for deduplication and idempotency
+  string message_id = 2;
+
+  // Timestamp when client sent the event
+  google.protobuf.Timestamp client_timestamp = 3;
+
+  // Current phase of the streaming lifecycle
+  Phase phase = 4;
+
+  // Monotonically increasing sequence number within a stream
+  uint64 sequence = 5;
+
+  // Application-specific payload data
+  google.protobuf.Struct payload = 6;
+}
