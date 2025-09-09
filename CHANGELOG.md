@@ -1,3 +1,18 @@
+## 0.3.5
+
+### Various fixes & improvements
+
+- feat(conduit): Add v1alpha streaming event proto (#139) by @IanWoodard
+- chore(readme): Cleaning up the readme (#137) by @IanWoodard
+- feat(cross-item-queries): Add trace item filters with type in trace item table and time series endpoints (#136) by @davidtsuk
+- feat(eap): add BinaryFormula to AggregationComparisonFilter (#133) by @onewland
+- feat(eap): Allow to pass a different retention for downsampled data (#135) by @phacops
+- Clarify alternative to `FUNCTION_AVERAGE` (#134) by @thetruecpaul
+- chore: upgrade protobuf dependency version (#132) by @kylemumma
+- feat(replay): Add trace-item type for replay events (#129) by @cmanallen
+- ref(rust): Update tonic to 0.13 (#131) by @Dav1dde
+- feat(uptime): Add new `TraceItemType` for uptime results (#130) by @wedamija
+
 ## 0.2.0
 
 ### Various fixes & improvements
