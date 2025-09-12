@@ -455,6 +455,8 @@ pub mod downsampled_storage_config {
         Normal = 3,
         /// HIGHEST_ACCURACY queries go straight to tier 1
         HighestAccuracy = 4,
+        /// queries go to tier 1 but may have their time range truncated based on data volume
+        HighestAccuracyFlextime = 5,
     }
     impl Mode {
         /// String value of the enum field names used in the ProtoBuf definition.
@@ -468,6 +470,7 @@ pub mod downsampled_storage_config {
                 Mode::BestEffort => "MODE_BEST_EFFORT",
                 Mode::Normal => "MODE_NORMAL",
                 Mode::HighestAccuracy => "MODE_HIGHEST_ACCURACY",
+                Mode::HighestAccuracyFlextime => "MODE_HIGHEST_ACCURACY_FLEXTIME",
             }
         }
         /// Creates an enum from field names used in the ProtoBuf definition.
@@ -478,6 +481,7 @@ pub mod downsampled_storage_config {
                 "MODE_BEST_EFFORT" => Some(Self::BestEffort),
                 "MODE_NORMAL" => Some(Self::Normal),
                 "MODE_HIGHEST_ACCURACY" => Some(Self::HighestAccuracy),
+                "MODE_HIGHEST_ACCURACY_FLEXTIME" => Some(Self::HighestAccuracyFlextime),
                 _ => None,
             }
         }
