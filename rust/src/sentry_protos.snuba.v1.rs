@@ -501,9 +501,19 @@ pub struct DownsampledStorageMeta {
     /// note that if this query goes to a higher accuracy tier, it could potentially time out
     #[prost(bool, tag = "3")]
     pub can_go_to_higher_accuracy_tier: bool,
+    #[prost(message, optional, tag = "4")]
+    pub page_token: ::core::option::Option<downsampled_storage_meta::PageToken>,
 }
 /// Nested message and enum types in `DownsampledStorageMeta`.
 pub mod downsampled_storage_meta {
+    /// This is for logs only, where we may truncate the start/end time of the query in order to meet the time deadline and in the PageToken, responds with the actual time boundaries
+    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    pub struct PageToken {
+        #[prost(int64, tag = "1")]
+        pub start_timestamp: i64,
+        #[prost(int64, tag = "2")]
+        pub end_timestamp: i64,
+    }
     #[derive(
         Clone,
         Copy,
