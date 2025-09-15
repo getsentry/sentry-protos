@@ -11,11 +11,30 @@ message AttributeDistributionsRequest {
   uint32 max_attributes = 2;
 }
 
+/*
+   This is a request for a heatmap, the x-axis is every distinct value of x_attribute,
+   the y-axis is the numerical_y_attribute divided into num_y_buckets buckets. A
+   single x,y coordinate has the count of trace-items that fit into that bucket.
+
+   Example Request:
+   x_attribute = "span.op"
+   numerical_y_attribute = "eap.duration"
+   num_y_buckets = 4
+
+   Example Response:
+   span.op = "db.query"
+    - duration 0-100ms: 10
+    - duration 100-200ms: 30
+    - duration 200-300ms: 20
+    - duration 300-400ms: 0
+
+   span.op = "http.server"
+   ...
+*/
 message HeatmapRequest {
-  uint32 max_attribute_value_buckets = 1;
-  uint32 max_attributes = 2;
-  uint32 num_heatmap_buckets = 3;
-  string numerical_grouping_attribute_name = 4;
+  string x_attribute = 1;
+  string numerical_y_attribute = 2;
+  uint32 num_y_buckets = 3;
 }
 
 message StatsType {
@@ -46,25 +65,35 @@ message AttributeDistributions {
   repeated AttributeDistribution attributes = 1;
 }
 
-message Heatmap {
-  string numerical_grouping_attribute_name = 1;
-  repeated AttributeHeatmap attribute_heatmaps = 2;
+message Range {
+  float start = 1;
+  float end = 2;
 }
 
-message AttributeHeatmap {
-  message InnerBucket {
-    int32 range_start = 1;
-    int32 range_end = 2;
-    float value = 3;
-  }
+message MatrixColumn {
+  repeated float values = 1;
+}
 
-  message Bucket {
-    string value = 1;
-    repeated InnerBucket inner_buckets = 2;
-  }
+/*
+   This is a heatmap, example heatmap:
+   x_attribute = "span.op"
+   x_labels = ["db.query", "http.server"]
+   numerical_y_attribute = "duration"
+   y_buckets = [0-100, 100-200, 200-300, 300-400]
+   data = [
+     [10, 20, 30, 40],
+     [50, 60, 70, 80],
+   ]
 
-  string attribute_name = 1;
-  repeated Bucket buckets = 2;
+   this means there are 20 trace-items with span.op = "db.query" and duration 100-200ms,
+   etc.
+*/
+message Heatmap {
+  string x_attribute = 1;
+  repeated string x_labels = 2;
+  string numerical_y_attribute = 3;
+  repeated Range y_buckets = 4;
+  repeated MatrixColumn data = 5;
 }
 
 message TraceItemStatsResult {
