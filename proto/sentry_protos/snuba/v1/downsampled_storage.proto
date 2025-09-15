@@ -39,4 +39,11 @@ message DownsampledStorageMeta {
   // if there exists a higher accuracy tier that this query could route to
   // note that if this query goes to a higher accuracy tier, it could potentially time out
   bool can_go_to_higher_accuracy_tier = 3;
+
+  // This is for logs only, where we may truncate the start/end time of the query in order to meet the time deadline and in the PageToken, responds with the actual time boundaries
+  message PageToken {
+    int64 start_timestamp = 1;
+    int64 end_timestamp = 2;
+  }
+  optional PageToken page_token = 4;
 }
