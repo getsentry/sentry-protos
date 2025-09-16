@@ -33,8 +33,8 @@ message AttributeDistributionsRequest {
    ...
 */
 message HeatmapRequest {
-  string x_attribute = 1;
-  string numerical_y_attribute = 2;
+  AttributeKey x_attribute = 1;
+  AttributeKey y_attribute = 2;
   uint32 num_y_buckets = 3;
 }
 
