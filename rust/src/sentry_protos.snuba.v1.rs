@@ -1528,10 +1528,10 @@ pub struct AttributeDistributionsRequest {
 /// ...
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HeatmapRequest {
-    #[prost(string, tag = "1")]
-    pub x_attribute: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub numerical_y_attribute: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "1")]
+    pub x_attribute: ::core::option::Option<AttributeKey>,
+    #[prost(message, optional, tag = "2")]
+    pub y_attribute: ::core::option::Option<AttributeKey>,
     #[prost(uint32, tag = "3")]
     pub num_y_buckets: u32,
 }
