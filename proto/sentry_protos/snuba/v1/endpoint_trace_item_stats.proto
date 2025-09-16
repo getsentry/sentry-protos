@@ -66,11 +66,6 @@ message AttributeDistributions {
   repeated AttributeDistribution attributes = 1;
 }
 
-message Range {
-  float start = 1;
-  float end = 2;
-}
-
 message MatrixColumn {
   AttributeValue x_label = 1;
   repeated float values = 2;
