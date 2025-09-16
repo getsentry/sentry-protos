@@ -1582,13 +1582,6 @@ pub struct AttributeDistributions {
     #[prost(message, repeated, tag = "1")]
     pub attributes: ::prost::alloc::vec::Vec<AttributeDistribution>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct Range {
-    #[prost(float, tag = "1")]
-    pub start: f32,
-    #[prost(float, tag = "2")]
-    pub end: f32,
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MatrixColumn {
     #[prost(message, optional, tag = "1")]
