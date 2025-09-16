@@ -1591,33 +1591,33 @@ pub struct Range {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MatrixColumn {
-    #[prost(float, repeated, tag = "1")]
+    #[prost(message, optional, tag = "1")]
+    pub x_label: ::core::option::Option<AttributeValue>,
+    #[prost(float, repeated, tag = "2")]
     pub values: ::prost::alloc::vec::Vec<f32>,
 }
 ///
 /// This is a heatmap, example heatmap:
 /// x_attribute = "span.op"
-/// x_labels = \["db.query", "http.server"\]
-/// numerical_y_attribute = "duration"
+/// y_attribute = "duration"
 /// y_buckets = \[0-100, 100-200, 200-300, 300-400\]
 /// data = [
-/// \[10, 20, 30, 40\],
-/// \[50, 60, 70, 80\],
+/// "db_query": \[10, 20, 30, 40\],
+/// "http_server": \[50, 60, 70, 80\],
 /// ]
 ///
 /// this means there are 20 trace-items with span.op = "db.query" and duration 100-200ms,
 /// etc.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Heatmap {
-    #[prost(string, tag = "1")]
-    pub x_attribute: ::prost::alloc::string::String,
-    #[prost(string, repeated, tag = "2")]
-    pub x_labels: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, tag = "3")]
-    pub numerical_y_attribute: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "1")]
+    pub x_attribute: ::core::option::Option<AttributeKey>,
+    #[prost(message, optional, tag = "2")]
+    pub y_attribute: ::core::option::Option<AttributeKey>,
+    #[prost(string, repeated, tag = "3")]
+    pub y_buckets: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// the `values` array in each MatrixColumn and `y_buckets` are associative arrays
     #[prost(message, repeated, tag = "4")]
-    pub y_buckets: ::prost::alloc::vec::Vec<Range>,
-    #[prost(message, repeated, tag = "5")]
     pub data: ::prost::alloc::vec::Vec<MatrixColumn>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
