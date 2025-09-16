@@ -35,7 +35,9 @@ message AttributeDistributionsRequest {
 message HeatmapRequest {
   AttributeKey x_attribute = 1;
   AttributeKey y_attribute = 2;
-  uint32 num_y_buckets = 3;
+  // these are only used if the attribute is numeric and needs to be bucketed
+  optional uint32 num_y_buckets = 3;
+  optional uint32 num_x_buckets = 4;
 }
 
 message StatsType {
