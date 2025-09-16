@@ -1607,8 +1607,8 @@ pub struct Heatmap {
     pub x_attribute: ::core::option::Option<AttributeKey>,
     #[prost(message, optional, tag = "2")]
     pub y_attribute: ::core::option::Option<AttributeKey>,
-    #[prost(string, repeated, tag = "3")]
-    pub y_buckets: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, repeated, tag = "3")]
+    pub y_buckets: ::prost::alloc::vec::Vec<AttributeValue>,
     /// the `values` array in each MatrixColumn and `y_buckets` are associative arrays
     #[prost(message, repeated, tag = "4")]
     pub data: ::prost::alloc::vec::Vec<MatrixColumn>,
