@@ -1532,8 +1532,11 @@ pub struct HeatmapRequest {
     pub x_attribute: ::core::option::Option<AttributeKey>,
     #[prost(message, optional, tag = "2")]
     pub y_attribute: ::core::option::Option<AttributeKey>,
-    #[prost(uint32, tag = "3")]
-    pub num_y_buckets: u32,
+    /// these are only used if the attribute is numeric and needs to be bucketed
+    #[prost(uint32, optional, tag = "3")]
+    pub num_y_buckets: ::core::option::Option<u32>,
+    #[prost(uint32, optional, tag = "4")]
+    pub num_x_buckets: ::core::option::Option<u32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StatsType {
