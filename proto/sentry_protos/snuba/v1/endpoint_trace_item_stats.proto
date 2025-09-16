@@ -87,7 +87,7 @@ message MatrixColumn {
 message Heatmap {
   AttributeKey x_attribute = 1;
   AttributeKey y_attribute = 2;
-  repeated string y_buckets = 3;
+  repeated AttributeValue y_buckets = 3;
   // the `values` array in each MatrixColumn and `y_buckets` are associative arrays
   repeated MatrixColumn data = 4;
 }
