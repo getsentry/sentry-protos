@@ -982,8 +982,8 @@ pub struct CreateSubscriptionResponse {
 pub struct DeleteTraceItemsRequest {
     #[prost(message, optional, tag = "1")]
     pub meta: ::core::option::Option<RequestMeta>,
-    #[prost(string, tag = "2")]
-    pub trace_id: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "2")]
+    pub trace_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(message, optional, tag = "3")]
     pub filter: ::core::option::Option<TraceItemFilterWithType>,
 }
