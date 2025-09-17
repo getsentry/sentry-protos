@@ -973,22 +973,25 @@ pub struct CreateSubscriptionResponse {
     #[prost(string, tag = "1")]
     pub subscription_id: ::prost::alloc::string::String,
 }
-/// DeleteTraceRequest initiates a delete of all items in a trace. It
-/// should also remove downsampled copies.
+/// DeleteTraceItemsRequest initiates a delete of all matching items in a trace.
+/// It should also remove downsampled copies.
 ///
 /// The response will be an acknowledgement of a request, but not
 /// a guarantee that the delete has been fulfilled.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteTraceRequest {
+pub struct DeleteTraceItemsRequest {
     #[prost(message, optional, tag = "1")]
     pub meta: ::core::option::Option<RequestMeta>,
     #[prost(string, tag = "2")]
     pub trace_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub filter: ::core::option::Option<TraceItemFilterWithType>,
 }
-/// DeleteTraceResponse notifies acceptance of the delete and returns
-/// a count of items matched by the request.
+/// DeleteTraceItemsResponse notifies acceptance of the delete and returns
+/// a count of items matched by the request at query time. This count
+/// could change by the time the delete is executed.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DeleteTraceResponse {
+pub struct DeleteTraceItemsResponse {
     #[prost(message, optional, tag = "1")]
     pub meta: ::core::option::Option<ResponseMeta>,
     #[prost(uint32, tag = "2")]
