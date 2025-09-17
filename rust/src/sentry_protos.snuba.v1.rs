@@ -1507,17 +1507,50 @@ pub struct AttributeDistributionsRequest {
     #[prost(uint32, tag = "2")]
     pub max_attributes: u32,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+///
+/// This is a request for a heatmap, the x-axis is every distinct value of x_attribute,
+/// the y-axis is the numerical_y_attribute divided into num_y_buckets buckets. A
+/// single x,y coordinate has the count of trace-items that fit into that bucket.
+///
+/// Example Request:
+/// x_attribute = "span.op"
+/// numerical_y_attribute = "eap.duration"
+/// num_y_buckets = 4
+///
+/// Example Response:
+/// span.op = "db.query"
+/// - duration 0-100ms: 10
+/// - duration 100-200ms: 30
+/// - duration 200-300ms: 20
+/// - duration 300-400ms: 0
+///
+/// span.op = "http.server"
+/// ...
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct HeatmapRequest {
+    #[prost(message, optional, tag = "1")]
+    pub x_attribute: ::core::option::Option<AttributeKey>,
+    #[prost(message, optional, tag = "2")]
+    pub y_attribute: ::core::option::Option<AttributeKey>,
+    /// these are only used if the attribute is numeric and needs to be bucketed
+    #[prost(uint32, optional, tag = "3")]
+    pub num_y_buckets: ::core::option::Option<u32>,
+    #[prost(uint32, optional, tag = "4")]
+    pub num_x_buckets: ::core::option::Option<u32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StatsType {
-    #[prost(oneof = "stats_type::Type", tags = "1")]
+    #[prost(oneof = "stats_type::Type", tags = "1, 2")]
     pub r#type: ::core::option::Option<stats_type::Type>,
 }
 /// Nested message and enum types in `StatsType`.
 pub mod stats_type {
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Type {
         #[prost(message, tag = "1")]
         AttributeDistributions(super::AttributeDistributionsRequest),
+        #[prost(message, tag = "2")]
+        Heatmap(super::HeatmapRequest),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1553,8 +1586,39 @@ pub struct AttributeDistributions {
     pub attributes: ::prost::alloc::vec::Vec<AttributeDistribution>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MatrixColumn {
+    #[prost(message, optional, tag = "1")]
+    pub x_label: ::core::option::Option<AttributeValue>,
+    #[prost(float, repeated, tag = "2")]
+    pub values: ::prost::alloc::vec::Vec<f32>,
+}
+///
+/// This is a heatmap, example heatmap:
+/// x_attribute = "span.op"
+/// y_attribute = "duration"
+/// y_buckets = \[0-100, 100-200, 200-300, 300-400\]
+/// data = [
+/// "db_query": \[10, 20, 30, 40\],
+/// "http_server": \[50, 60, 70, 80\],
+/// ]
+///
+/// this means there are 20 trace-items with span.op = "db.query" and duration 100-200ms,
+/// etc.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Heatmap {
+    #[prost(message, optional, tag = "1")]
+    pub x_attribute: ::core::option::Option<AttributeKey>,
+    #[prost(message, optional, tag = "2")]
+    pub y_attribute: ::core::option::Option<AttributeKey>,
+    #[prost(message, repeated, tag = "3")]
+    pub y_buckets: ::prost::alloc::vec::Vec<AttributeValue>,
+    /// the `values` array in each MatrixColumn and `y_buckets` are associative arrays
+    #[prost(message, repeated, tag = "4")]
+    pub data: ::prost::alloc::vec::Vec<MatrixColumn>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TraceItemStatsResult {
-    #[prost(oneof = "trace_item_stats_result::Result", tags = "1")]
+    #[prost(oneof = "trace_item_stats_result::Result", tags = "1, 2")]
     pub result: ::core::option::Option<trace_item_stats_result::Result>,
 }
 /// Nested message and enum types in `TraceItemStatsResult`.
@@ -1563,6 +1627,8 @@ pub mod trace_item_stats_result {
     pub enum Result {
         #[prost(message, tag = "1")]
         AttributeDistributions(super::AttributeDistributions),
+        #[prost(message, tag = "2")]
+        Heatmap(super::Heatmap),
     }
 }
 /// this is a response from the TraceItemStats endpoint
