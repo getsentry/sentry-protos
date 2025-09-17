@@ -24,6 +24,13 @@ message GetTraceRequest {
 
   // A list of items and their attributes to return in the response.
   repeated TraceItem items = 3;
+
+  // Optional page token for pagination. If provided, returns the next page of results.
+  PageToken page_token = 4;
+
+  // Optional limit on the number of items to return per page. If not specified,
+  // a default limit will be applied by the server.
+  uint32 limit = 5;
 }
 
 // GetTraceResponse returns a trace and all its items.
@@ -51,4 +58,7 @@ message GetTraceResponse {
   ResponseMeta meta = 2;
 
   repeated ItemGroup item_groups = 3;
+
+  // Page token for the next page of results.
+  PageToken page_token = 4;
 }
