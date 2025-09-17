@@ -3,7 +3,7 @@ syntax = "proto3";
 package sentry_protos.snuba.v1;
 
 import "sentry_protos/snuba/v1/request_common.proto";
-import "sentry_protos/snuba/v1/trace_item_filter.proto";
+// import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 // DeleteTraceItemsRequest initiates a delete of all matching items in a trace.
 // It should also remove downsampled copies.
@@ -13,7 +13,7 @@ import "sentry_protos/snuba/v1/trace_item_filter.proto";
 message DeleteTraceItemsRequest {
   RequestMeta meta = 1;
   string trace_id = 2;
-  TraceItemFilter filter = 3;
+  TraceItemFilterWithType filter = 3;
 }
 
 // DeleteTraceItemsResponse notifies acceptance of the delete and returns
