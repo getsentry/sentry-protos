@@ -973,6 +973,27 @@ pub struct CreateSubscriptionResponse {
     #[prost(string, tag = "1")]
     pub subscription_id: ::prost::alloc::string::String,
 }
+/// DeleteTraceRequest initiates a delete of all items in a trace. It
+/// should also remove downsampled copies.
+///
+/// The response will be an acknowledgement of a request, but not
+/// a guarantee that the delete has been fulfilled.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteTraceRequest {
+    #[prost(message, optional, tag = "1")]
+    pub meta: ::core::option::Option<RequestMeta>,
+    #[prost(string, tag = "2")]
+    pub trace_id: ::prost::alloc::string::String,
+}
+/// DeleteTraceResponse notifies acceptance of the delete and returns
+/// a count of items matched by the request.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeleteTraceResponse {
+    #[prost(message, optional, tag = "1")]
+    pub meta: ::core::option::Option<ResponseMeta>,
+    #[prost(uint32, tag = "2")]
+    pub matching_items_count: u32,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TracePageToken {
     /// This class exists to avoid circular imports with the PageToken class
@@ -1113,6 +1134,13 @@ pub struct GetTraceRequest {
     /// A list of items and their attributes to return in the response.
     #[prost(message, repeated, tag = "3")]
     pub items: ::prost::alloc::vec::Vec<get_trace_request::TraceItem>,
+    /// Optional page token for pagination. If provided, returns the next page of results.
+    #[prost(message, optional, tag = "4")]
+    pub page_token: ::core::option::Option<PageToken>,
+    /// Optional limit on the number of items to return per page. If not specified,
+    /// a default limit will be applied by the server.
+    #[prost(uint32, tag = "5")]
+    pub limit: u32,
 }
 /// Nested message and enum types in `GetTraceRequest`.
 pub mod get_trace_request {
@@ -1138,6 +1166,9 @@ pub struct GetTraceResponse {
     pub meta: ::core::option::Option<ResponseMeta>,
     #[prost(message, repeated, tag = "3")]
     pub item_groups: ::prost::alloc::vec::Vec<get_trace_response::ItemGroup>,
+    /// Page token for the next page of results.
+    #[prost(message, optional, tag = "4")]
+    pub page_token: ::core::option::Option<PageToken>,
 }
 /// Nested message and enum types in `GetTraceResponse`.
 pub mod get_trace_response {
