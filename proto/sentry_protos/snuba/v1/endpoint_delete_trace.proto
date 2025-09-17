@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.snuba.v1;
+
+import "sentry_protos/snuba/v1/request_common.proto";
+
+// DeleteTraceRequest initiates a delete of all items in a trace. It
+// should also remove downsampled copies.
+//
+// The response will be an acknowledgement of a request, but not
+// a guarantee that the delete has been fulfilled.
+message DeleteTraceRequest {
+  RequestMeta meta = 1;
+  string trace_id = 2;
+}
+
+// DeleteTraceResponse notifies acceptance of the delete and returns
+// a count of items matched by the request.
+message DeleteTraceResponse {
+  ResponseMeta meta = 1;
+  uint32 matching_items_count = 2;
+}
