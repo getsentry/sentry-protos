@@ -5,7 +5,7 @@ package sentry_protos.snuba.v1;
 import "sentry_protos/snuba/v1/request_common.proto";
 
 // DeleteTraceItemsRequest either
-//   1. initiates a delete of all matching items in a trace.
+//   1. initiates a delete of all items in provided trace_ids
 //   2. deletes all items matching a set of TraceItemFilterWithType[s]
 // Behavior is unspecified if both trace_ids and filters are provided.
 //
