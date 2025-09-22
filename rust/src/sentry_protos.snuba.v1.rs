@@ -622,7 +622,7 @@ pub struct TraceItemFilterWithType {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PageToken {
-    #[prost(oneof = "page_token::Value", tags = "1, 2")]
+    #[prost(oneof = "page_token::Value", tags = "1, 2, 3")]
     pub value: ::core::option::Option<page_token::Value>,
 }
 /// Nested message and enum types in `PageToken`.
@@ -632,11 +632,14 @@ pub mod page_token {
         /// standard limit/offset pagination
         #[prost(uint64, tag = "1")]
         Offset(u64),
-        /// Instead of using offset (which requires all the scanning and ordering),
-        /// the server sends back a filter clause to be added on to the filter conditions
-        /// which skips the previous results altogether, avoiding extra scanning and sorting
+        /// the server may also encode other information indirectly through this filter offset. The client
+        /// is not expected and HIGHLY DISCOURAGED from inspecting or modifying the contents of this filter offset
         #[prost(message, tag = "2")]
         FilterOffset(super::TraceItemFilter),
+        /// Signifies the end of the pagination sequence. The time window is fully exhausted of results.
+        /// if this is not set, there may still be results. If this IS set, there is definitely no more results
+        #[prost(bool, tag = "3")]
+        EndPagination(bool),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
