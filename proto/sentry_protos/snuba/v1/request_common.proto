@@ -83,7 +83,14 @@ message PageToken {
     // Instead of using offset (which requires all the scanning and ordering),
     // the server sends back a filter clause to be added on to the filter conditions
     // which skips the previous results altogether, avoiding extra scanning and sorting
+
+    // the server may also encode other information indirectly through this filter offset. The client
+    // is not expected and HIGHLY DISCOURAGED from inspecting or modifying the contents of this filter offset
     TraceItemFilter filter_offset = 2;
+
+    // Signifies the end of the pagination sequence. The time window is fully exhausted of results. 
+    // if this is not set, there may still be results. If this IS set, there is definitely no more results
+    bool end_pagination = 3;
   }
 }
 
