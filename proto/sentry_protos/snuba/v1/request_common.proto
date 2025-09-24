@@ -68,6 +68,7 @@ enum TraceItemType {
   TRACE_ITEM_TYPE_UPTIME_CHECK = 4;
   TRACE_ITEM_TYPE_UPTIME_RESULT = 5;
   TRACE_ITEM_TYPE_REPLAY = 6;
+  TRACE_ITEM_TYPE_OCCURRENCE = 7;
 }
 
 message TraceItemFilterWithType {
@@ -88,7 +89,7 @@ message PageToken {
     // is not expected and HIGHLY DISCOURAGED from inspecting or modifying the contents of this filter offset
     TraceItemFilter filter_offset = 2;
 
-    // Signifies the end of the pagination sequence. The time window is fully exhausted of results. 
+    // Signifies the end of the pagination sequence. The time window is fully exhausted of results.
     // if this is not set, there may still be results. If this IS set, there is definitely no more results
     bool end_pagination = 3;
   }
