@@ -70,6 +70,7 @@ enum TraceItemType {
   TRACE_ITEM_TYPE_REPLAY = 6;
   TRACE_ITEM_TYPE_OCCURRENCE = 7;
   TRACE_ITEM_TYPE_METRIC = 8;
+  TRACE_ITEM_TYPE_PROFILE_FUNCTION = 9;
 }
 
 message TraceItemFilterWithType {
