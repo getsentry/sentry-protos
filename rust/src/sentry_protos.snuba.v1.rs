@@ -228,6 +228,8 @@ pub enum ExtrapolationMode {
     Unspecified = 0,
     None = 1,
     SampleWeighted = 2,
+    ClientOnly = 3,
+    ServerOnly = 4,
 }
 impl ExtrapolationMode {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -239,6 +241,8 @@ impl ExtrapolationMode {
             ExtrapolationMode::Unspecified => "EXTRAPOLATION_MODE_UNSPECIFIED",
             ExtrapolationMode::None => "EXTRAPOLATION_MODE_NONE",
             ExtrapolationMode::SampleWeighted => "EXTRAPOLATION_MODE_SAMPLE_WEIGHTED",
+            ExtrapolationMode::ClientOnly => "EXTRAPOLATION_MODE_CLIENT_ONLY",
+            ExtrapolationMode::ServerOnly => "EXTRAPOLATION_MODE_SERVER_ONLY",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -247,6 +251,8 @@ impl ExtrapolationMode {
             "EXTRAPOLATION_MODE_UNSPECIFIED" => Some(Self::Unspecified),
             "EXTRAPOLATION_MODE_NONE" => Some(Self::None),
             "EXTRAPOLATION_MODE_SAMPLE_WEIGHTED" => Some(Self::SampleWeighted),
+            "EXTRAPOLATION_MODE_CLIENT_ONLY" => Some(Self::ClientOnly),
+            "EXTRAPOLATION_MODE_SERVER_ONLY" => Some(Self::ServerOnly),
             _ => None,
         }
     }
