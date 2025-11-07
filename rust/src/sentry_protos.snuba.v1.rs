@@ -463,7 +463,8 @@ pub mod downsampled_storage_config {
         HighestAccuracy = 4,
         /// queries go to tier 1 but may have their time range truncated based on data volume
         HighestAccuracyFlextime = 5,
-        /// queries go to tier 1 by default but will be downsampled if the cluster is busy
+        /// queries behave the same as NORMAL by default but are opted in
+        /// to lose precision if the cluster is overloaded
         LowPriority = 6,
     }
     impl Mode {
