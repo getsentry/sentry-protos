@@ -463,6 +463,8 @@ pub mod downsampled_storage_config {
         HighestAccuracy = 4,
         /// queries go to tier 1 but may have their time range truncated based on data volume
         HighestAccuracyFlextime = 5,
+        /// queries go to tier 1 by default but will be downsampled if the cluster is busy
+        LowPriority = 6,
     }
     impl Mode {
         /// String value of the enum field names used in the ProtoBuf definition.
@@ -477,6 +479,7 @@ pub mod downsampled_storage_config {
                 Mode::Normal => "MODE_NORMAL",
                 Mode::HighestAccuracy => "MODE_HIGHEST_ACCURACY",
                 Mode::HighestAccuracyFlextime => "MODE_HIGHEST_ACCURACY_FLEXTIME",
+                Mode::LowPriority => "MODE_LOW_PRIORITY",
             }
         }
         /// Creates an enum from field names used in the ProtoBuf definition.
@@ -488,6 +491,7 @@ pub mod downsampled_storage_config {
                 "MODE_NORMAL" => Some(Self::Normal),
                 "MODE_HIGHEST_ACCURACY" => Some(Self::HighestAccuracy),
                 "MODE_HIGHEST_ACCURACY_FLEXTIME" => Some(Self::HighestAccuracyFlextime),
+                "MODE_LOW_PRIORITY" => Some(Self::LowPriority),
                 _ => None,
             }
         }
