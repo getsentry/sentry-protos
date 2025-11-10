@@ -17,6 +17,9 @@ message DownsampledStorageConfig {
     MODE_HIGHEST_ACCURACY = 4;
     // queries go to tier 1 but may have their time range truncated based on data volume
     MODE_HIGHEST_ACCURACY_FLEXTIME = 5;
+    // queries behave the same as NORMAL by default but are opted in
+    // to lose precision if the cluster is overloaded
+    MODE_LOW_PRIORITY = 6;
   }
   Mode mode = 1;
 }
