@@ -38,9 +38,6 @@ pub mod snuba {
     pub mod v1 {
        include!("sentry_protos.snuba.v1.rs");
    }
-    pub mod v1alpha {
-       include!("sentry_protos.snuba.v1alpha.rs");
-   }
 }
 
 pub mod taskbroker {
