@@ -11,6 +11,7 @@ message AttributeKey {
     TYPE_FLOAT = 3 [deprecated = true];
     TYPE_INT = 4; //note: all numbers are stored as float64, so massive integers can be rounded. USE STRING FOR IDS.
     TYPE_DOUBLE = 5;
+    TYPE_ARRAY = 6;
   }
 
   Type type = 1;
@@ -44,39 +45,47 @@ message VirtualColumnContext {
 }
 
 message StrArray {
+  option deprecated = true;
   repeated string values = 1;
 }
 
 message IntArray {
+  option deprecated = true;
   repeated int64 values = 1;
 }
 
-// DEPRECATED, use DoubleArray instead
 message FloatArray {
+  option deprecated = true;
   repeated float values = 1;
 }
 
 message DoubleArray {
+  option deprecated = true;
   repeated double values = 1;
+}
+
+message Array {
+  repeated AttributeValue values = 1;
 }
 
 message AttributeValue {
   // true if the value is null
   bool is_null = 11;
+
   oneof value {
     bool val_bool = 1;
     string val_str = 2;
-    // deprecated, use val_double instead
-    float val_float = 3 [deprecated = true];
     int64 val_int = 4;
-    // set to true if value is null
-    bool val_null = 5 [deprecated = true];
-    StrArray val_str_array = 6;
-    IntArray val_int_array = 7;
-    // deprecated, use val_double_array instead
-    FloatArray val_float_array = 8 [deprecated = true];
     double val_double = 9;
-    DoubleArray val_double_array = 10;
+    Array val_array = 12;
+
+    // Deprecated fields
+    float val_float = 3 [deprecated = true];
+    FloatArray val_float_array = 8 [deprecated = true];
+    DoubleArray val_double_array = 10 [deprecated = true];
+    IntArray val_int_array = 7 [deprecated = true];
+    StrArray val_str_array = 6 [deprecated = true];
+    bool val_null = 5 [deprecated = true];
   }
 }
 
