@@ -11,7 +11,7 @@ message AttributeDistributionsRequest {
   uint32 max_buckets = 1;
   uint32 max_attributes = 2;
   // if specified, only the attributes in the allow list will be returned
-  repeated AttributeKey attribute_allow_list = 3;
+  repeated AttributeKey attributes = 3;
 }
 
 /*
