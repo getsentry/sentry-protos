@@ -1,3 +1,28 @@
+## 0.4.6
+
+- feat(eap): Add an array type with support for any value type by @phacops in [#153](https://github.com/getsentry/sentry-protos/pull/153)
+- remove v1alpha protos, stale README by @onewland in [#152](https://github.com/getsentry/sentry-protos/pull/152)
+- add LOW_PRIORITY query mode enum by @onewland in [#151](https://github.com/getsentry/sentry-protos/pull/151)
+- feat(eap): add client only and server only extrapolation modes by @davidtsuk in [#150](https://github.com/getsentry/sentry-protos/pull/150)
+- feat(profiling): add item_type for profile functions by @viglia in [#148](https://github.com/getsentry/sentry-protos/pull/148)
+- ref(tracemetrics): Add metric item type by @k-fish in [#147](https://github.com/getsentry/sentry-protos/pull/147)
+- add occurrence item type to capture errors/issue occurrences by @onewland in [#146](https://github.com/getsentry/sentry-protos/pull/146)
+- Add end_pagination field in page token by @volokluev in [#145](https://github.com/getsentry/sentry-protos/pull/145)
+- add DeleteTrace endpoint request/response by @onewland in [#144](https://github.com/getsentry/sentry-protos/pull/144)
+- feat(eap): add page tokens to the get trace endpoint for pagination by @davidtsuk in [#143](https://github.com/getsentry/sentry-protos/pull/143)
+- feat: add heatmap type to traceitemstats by @kylemumma in [#142](https://github.com/getsentry/sentry-protos/pull/142)
+- Add MODE_HIGHEST_ACCURACY_FLEXTIME to downsampled_storage by @volokluev in [#140](https://github.com/getsentry/sentry-protos/pull/140)
+- feat(conduit): Add v1alpha streaming event proto by @IanWoodard in [#139](https://github.com/getsentry/sentry-protos/pull/139)
+- chore(readme): Cleaning up the readme by @IanWoodard in [#137](https://github.com/getsentry/sentry-protos/pull/137)
+- feat(cross-item-queries): Add trace item filters with type in trace item table and time series endpoints by @davidtsuk in [#136](https://github.com/getsentry/sentry-protos/pull/136)
+- feat(eap): add BinaryFormula to AggregationComparisonFilter by @onewland in [#133](https://github.com/getsentry/sentry-protos/pull/133)
+- feat(eap): Allow to pass a different retention for downsampled data by @phacops in [#135](https://github.com/getsentry/sentry-protos/pull/135)
+- Clarify alternative to `FUNCTION_AVERAGE` by @thetruecpaul in [#134](https://github.com/getsentry/sentry-protos/pull/134)
+- chore: upgrade protobuf dependency version by @kylemumma in [#132](https://github.com/getsentry/sentry-protos/pull/132)
+- feat(replay): Add trace-item type for replay events by @cmanallen in [#129](https://github.com/getsentry/sentry-protos/pull/129)
+- ref(rust): Update tonic to 0.13 by @Dav1dde in [#131](https://github.com/getsentry/sentry-protos/pull/131)
+- feat(uptime): Add new `TraceItemType` for uptime results by @wedamija in [#130](https://github.com/getsentry/sentry-protos/pull/130)
+
 ## 0.2.0
 
 ### Various fixes & improvements
