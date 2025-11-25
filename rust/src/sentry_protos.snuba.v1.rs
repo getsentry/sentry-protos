@@ -1569,13 +1569,16 @@ pub struct TraceItemDetailsResponse {
     #[prost(message, optional, tag = "4")]
     pub meta: ::core::option::Option<ResponseMeta>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AttributeDistributionsRequest {
     /// max_buckets and limit wouldn't apply to other stats types (like totals)
     #[prost(uint32, tag = "1")]
     pub max_buckets: u32,
     #[prost(uint32, tag = "2")]
     pub max_attributes: u32,
+    /// if specified, only the attributes in the allow list will be returned
+    #[prost(message, repeated, tag = "3")]
+    pub attributes: ::prost::alloc::vec::Vec<AttributeKey>,
 }
 ///
 /// This is a request for a heatmap, the x-axis is every distinct value of x_attribute,
