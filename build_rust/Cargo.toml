@@ -2,6 +2,7 @@
 name = "build_sentry_protos"
 version = "1.0.0"
 edition = "2021"
+publish = false
 readme = "README.md"
 description = "Build Rust bindings for sentry-protos"
 license-file = "LICENSE.md"
