@@ -10,6 +10,8 @@ message AttributeDistributionsRequest {
   // max_buckets and limit wouldn't apply to other stats types (like totals)
   uint32 max_buckets = 1;
   uint32 max_attributes = 2;
+  // if specified, only the attributes in the allow list will be returned
+  repeated AttributeKey attribute_allow_list = 3;
 }
 
 /*
