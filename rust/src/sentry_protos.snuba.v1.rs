@@ -34,6 +34,7 @@ pub mod attribute_key {
         /// note: all numbers are stored as float64, so massive integers can be rounded. USE STRING FOR IDS.
         Int = 4,
         Double = 5,
+        Array = 6,
     }
     impl Type {
         /// String value of the enum field names used in the ProtoBuf definition.
@@ -48,6 +49,7 @@ pub mod attribute_key {
                 Type::Float => "TYPE_FLOAT",
                 Type::Int => "TYPE_INT",
                 Type::Double => "TYPE_DOUBLE",
+                Type::Array => "TYPE_ARRAY",
             }
         }
         /// Creates an enum from field names used in the ProtoBuf definition.
@@ -59,6 +61,7 @@ pub mod attribute_key {
                 "TYPE_FLOAT" => Some(Self::Float),
                 "TYPE_INT" => Some(Self::Int),
                 "TYPE_DOUBLE" => Some(Self::Double),
+                "TYPE_ARRAY" => Some(Self::Array),
                 _ => None,
             }
         }
@@ -103,7 +106,6 @@ pub struct IntArray {
     #[prost(int64, repeated, tag = "1")]
     pub values: ::prost::alloc::vec::Vec<i64>,
 }
-/// DEPRECATED, use DoubleArray instead
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FloatArray {
     #[prost(float, repeated, tag = "1")]
@@ -115,11 +117,19 @@ pub struct DoubleArray {
     pub values: ::prost::alloc::vec::Vec<f64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Array {
+    #[prost(message, repeated, tag = "1")]
+    pub values: ::prost::alloc::vec::Vec<AttributeValue>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AttributeValue {
     /// true if the value is null
     #[prost(bool, tag = "11")]
     pub is_null: bool,
-    #[prost(oneof = "attribute_value::Value", tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10")]
+    #[prost(
+        oneof = "attribute_value::Value",
+        tags = "1, 2, 4, 9, 12, 3, 8, 10, 7, 6, 5"
+    )]
     pub value: ::core::option::Option<attribute_value::Value>,
 }
 /// Nested message and enum types in `AttributeValue`.
@@ -130,25 +140,25 @@ pub mod attribute_value {
         ValBool(bool),
         #[prost(string, tag = "2")]
         ValStr(::prost::alloc::string::String),
-        /// deprecated, use val_double instead
-        #[prost(float, tag = "3")]
-        ValFloat(f32),
         #[prost(int64, tag = "4")]
         ValInt(i64),
-        /// set to true if value is null
-        #[prost(bool, tag = "5")]
-        ValNull(bool),
-        #[prost(message, tag = "6")]
-        ValStrArray(super::StrArray),
-        #[prost(message, tag = "7")]
-        ValIntArray(super::IntArray),
-        /// deprecated, use val_double_array instead
-        #[prost(message, tag = "8")]
-        ValFloatArray(super::FloatArray),
         #[prost(double, tag = "9")]
         ValDouble(f64),
+        #[prost(message, tag = "12")]
+        ValArray(super::Array),
+        /// Deprecated fields
+        #[prost(float, tag = "3")]
+        ValFloat(f32),
+        #[prost(message, tag = "8")]
+        ValFloatArray(super::FloatArray),
         #[prost(message, tag = "10")]
         ValDoubleArray(super::DoubleArray),
+        #[prost(message, tag = "7")]
+        ValIntArray(super::IntArray),
+        #[prost(message, tag = "6")]
+        ValStrArray(super::StrArray),
+        #[prost(bool, tag = "5")]
+        ValNull(bool),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1559,13 +1569,16 @@ pub struct TraceItemDetailsResponse {
     #[prost(message, optional, tag = "4")]
     pub meta: ::core::option::Option<ResponseMeta>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AttributeDistributionsRequest {
     /// max_buckets and limit wouldn't apply to other stats types (like totals)
     #[prost(uint32, tag = "1")]
     pub max_buckets: u32,
     #[prost(uint32, tag = "2")]
     pub max_attributes: u32,
+    /// if specified, only the attributes in the allow list will be returned
+    #[prost(message, repeated, tag = "3")]
+    pub attributes: ::prost::alloc::vec::Vec<AttributeKey>,
 }
 ///
 /// This is a request for a heatmap, the x-axis is every distinct value of x_attribute,
