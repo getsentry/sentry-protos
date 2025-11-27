@@ -763,6 +763,7 @@ pub enum TraceItemType {
     Occurrence = 7,
     Metric = 8,
     ProfileFunction = 9,
+    Attachment = 10,
 }
 impl TraceItemType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -781,6 +782,7 @@ impl TraceItemType {
             TraceItemType::Occurrence => "TRACE_ITEM_TYPE_OCCURRENCE",
             TraceItemType::Metric => "TRACE_ITEM_TYPE_METRIC",
             TraceItemType::ProfileFunction => "TRACE_ITEM_TYPE_PROFILE_FUNCTION",
+            TraceItemType::Attachment => "TRACE_ITEM_TYPE_ATTACHMENT",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -796,6 +798,7 @@ impl TraceItemType {
             "TRACE_ITEM_TYPE_OCCURRENCE" => Some(Self::Occurrence),
             "TRACE_ITEM_TYPE_METRIC" => Some(Self::Metric),
             "TRACE_ITEM_TYPE_PROFILE_FUNCTION" => Some(Self::ProfileFunction),
+            "TRACE_ITEM_TYPE_ATTACHMENT" => Some(Self::Attachment),
             _ => None,
         }
     }
