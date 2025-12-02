@@ -71,6 +71,9 @@ message TaskActivation {
   // The duration in seconds that a task must wait to begin execution after it is emitted.
   // After received_at + delay has passed, the activation will become pending.
   optional uint64 delay = 11;
+
+  // The application or client use-case that an activation belongs to.
+  optional string usecase = 12;
 }
 
 ////////////////////////////
@@ -85,7 +88,10 @@ service ConsumerService {
 }
 
 message GetTaskRequest {
+  // The namespace to filter activations by.
   optional string namespace = 1;
+  // The application use-case to filter by.
+  optional string usecase = 2;
 }
 
 message GetTaskResponse {
@@ -94,7 +100,10 @@ message GetTaskResponse {
 }
 
 message FetchNextTask {
+  // The namespace to filter activations by.
   optional string namespace = 1;
+  // The application use-case to filter by.
+  optional string usecase = 2;
 }
 
 message SetTaskStatusRequest {
