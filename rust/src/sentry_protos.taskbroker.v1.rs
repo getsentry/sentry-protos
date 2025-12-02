@@ -57,11 +57,18 @@ pub struct TaskActivation {
     /// After received_at + delay has passed, the activation will become pending.
     #[prost(uint64, optional, tag = "11")]
     pub delay: ::core::option::Option<u64>,
+    /// The application or client use-case that an activation belongs to.
+    #[prost(string, optional, tag = "12")]
+    pub usecase: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTaskRequest {
+    /// The namespace to filter activations by.
     #[prost(string, optional, tag = "1")]
     pub namespace: ::core::option::Option<::prost::alloc::string::String>,
+    /// The application use-case to filter by.
+    #[prost(string, optional, tag = "2")]
+    pub usecase: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTaskResponse {
@@ -71,8 +78,12 @@ pub struct GetTaskResponse {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FetchNextTask {
+    /// The namespace to filter activations by.
     #[prost(string, optional, tag = "1")]
     pub namespace: ::core::option::Option<::prost::alloc::string::String>,
+    /// The application use-case to filter by.
+    #[prost(string, optional, tag = "2")]
+    pub usecase: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SetTaskStatusRequest {
