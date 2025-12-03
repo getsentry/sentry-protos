@@ -1,3 +1,9 @@
+## 0.4.8
+
+### New Features ✨
+
+- feat: Add trace item type attachment by @jjbayer in [#156](https://github.com/getsentry/sentry-protos/pull/156)
+
 ## 0.4.7
 
 - feat: add attribute allow list to TraceItemStats by @kylemumma in [#154](https://github.com/getsentry/sentry-protos/pull/154)
