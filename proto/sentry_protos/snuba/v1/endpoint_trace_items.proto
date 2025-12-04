@@ -5,13 +5,13 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item.proto";
 
-message GetTraceItemsRequest {
+message GetTraceItemsExportRequest {
   google.protobuf.Timestamp start_timestamp = 1;
   google.protobuf.Timestamp end_timestamp = 2;
   PageToken page_token = 3;
 }
 
-message GetTraceItemsResponse {
+message GetTraceItemsExportResponse {
   repeated TraceItem trace_items = 1;
   PageToken page_token = 2;
 }
