@@ -1,3 +1,9 @@
+## 0.4.9
+
+### New Features ✨
+
+- feat(eap): add data export endpoint for GDPR purposes by @xurui-c in [#158](https://github.com/getsentry/sentry-protos/pull/158)
+
 ## 0.4.8
 
 ### New Features ✨
