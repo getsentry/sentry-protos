@@ -1999,18 +1999,6 @@ pub struct CreateTraceItemTableSubscriptionResponse {
     pub subscription_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Error {
-    /// The HTTP status code corresponding to this error
-    #[prost(int32, tag = "1")]
-    pub code: i32,
-    /// The developer-facing message
-    #[prost(string, tag = "2")]
-    pub message: ::prost::alloc::string::String,
-    /// Additional error information
-    #[prost(message, repeated, tag = "3")]
-    pub details: ::prost::alloc::vec::Vec<::prost_types::Any>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AnyValue {
     #[prost(oneof = "any_value::Value", tags = "1, 2, 3, 4, 5, 6, 7")]
     pub value: ::core::option::Option<any_value::Value>,
@@ -2083,4 +2071,30 @@ pub struct TraceItem {
     pub received: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(uint32, tag = "102")]
     pub downsampled_retention_days: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ExportTraceItemsRequest {
+    #[prost(message, optional, tag = "1")]
+    pub meta: ::core::option::Option<RequestMeta>,
+    #[prost(message, optional, tag = "2")]
+    pub page_token: ::core::option::Option<PageToken>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ExportTraceItemsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub trace_items: ::prost::alloc::vec::Vec<TraceItem>,
+    #[prost(message, optional, tag = "2")]
+    pub page_token: ::core::option::Option<PageToken>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Error {
+    /// The HTTP status code corresponding to this error
+    #[prost(int32, tag = "1")]
+    pub code: i32,
+    /// The developer-facing message
+    #[prost(string, tag = "2")]
+    pub message: ::prost::alloc::string::String,
+    /// Additional error information
+    #[prost(message, repeated, tag = "3")]
+    pub details: ::prost::alloc::vec::Vec<::prost_types::Any>,
 }

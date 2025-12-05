@@ -1,0 +1,15 @@
+syntax = "proto3";
+package sentry_protos.snuba.v1;
+
+import "sentry_protos/snuba/v1/request_common.proto";
+import "sentry_protos/snuba/v1/trace_item.proto";
+
+message ExportTraceItemsRequest {
+  RequestMeta meta = 1;
+  PageToken page_token = 2;
+}
+
+message ExportTraceItemsResponse {
+  repeated TraceItem trace_items = 1;
+  PageToken page_token = 2;
+}
