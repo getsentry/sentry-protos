@@ -1,14 +1,12 @@
 syntax = "proto3";
 package sentry_protos.snuba.v1;
 
-import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item.proto";
 
 message GetTraceItemsExportRequest {
-  google.protobuf.Timestamp start_timestamp = 1;
-  google.protobuf.Timestamp end_timestamp = 2;
-  PageToken page_token = 3;
+  RequestMeta meta = 1;
+  PageToken page_token = 2;
 }
 
 message GetTraceItemsExportResponse {
