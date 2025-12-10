@@ -1,3 +1,9 @@
+## 0.4.10
+
+### New Features ✨
+
+- feat(preprod): add preprod item type by @trevor-e in [#159](https://github.com/getsentry/sentry-protos/pull/159)
+
 ## 0.4.9
 
 ### New Features ✨
