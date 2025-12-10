@@ -72,6 +72,7 @@ enum TraceItemType {
   TRACE_ITEM_TYPE_METRIC = 8;
   TRACE_ITEM_TYPE_PROFILE_FUNCTION = 9;
   TRACE_ITEM_TYPE_ATTACHMENT = 10;
+  TRACE_ITEM_TYPE_PREPROD = 11;
 }
 
 message TraceItemFilterWithType {
