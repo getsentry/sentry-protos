@@ -88,9 +88,9 @@ service ConsumerService {
 }
 
 message GetTaskRequest {
-  // The namespace to filter activations by.
+  // The namespace to filter activations with.
   optional string namespace = 1;
-  // The application use-case to filter by.
+  // The client application to filter activations with.
   optional string application = 2;
 }
 
@@ -102,7 +102,7 @@ message GetTaskResponse {
 message FetchNextTask {
   // The namespace to filter activations by.
   optional string namespace = 1;
-  // The client application to filter by.
+  // The client application to filter activations by.
   optional string application = 2;
 }
 

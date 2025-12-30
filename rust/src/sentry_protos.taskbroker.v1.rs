@@ -63,10 +63,10 @@ pub struct TaskActivation {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTaskRequest {
-    /// The namespace to filter activations by.
+    /// The namespace to filter activations with.
     #[prost(string, optional, tag = "1")]
     pub namespace: ::core::option::Option<::prost::alloc::string::String>,
-    /// The application use-case to filter by.
+    /// The client application to filter activations with.
     #[prost(string, optional, tag = "2")]
     pub application: ::core::option::Option<::prost::alloc::string::String>,
 }
@@ -81,7 +81,7 @@ pub struct FetchNextTask {
     /// The namespace to filter activations by.
     #[prost(string, optional, tag = "1")]
     pub namespace: ::core::option::Option<::prost::alloc::string::String>,
-    /// The client application to filter by.
+    /// The client application to filter activations by.
     #[prost(string, optional, tag = "2")]
     pub application: ::core::option::Option<::prost::alloc::string::String>,
 }
