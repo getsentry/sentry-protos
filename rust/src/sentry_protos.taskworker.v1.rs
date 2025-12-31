@@ -13,10 +13,12 @@ pub struct AddTaskResponse {
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GetQueueSizeRequest {}
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetQueueSizeResponse {
     #[prost(uint32, tag = "1")]
     pub length: u32,
+    #[prost(string, tag = "2")]
+    pub address: ::prost::alloc::string::String,
 }
 /// Generated client implementations.
 pub mod worker_service_client {
@@ -109,7 +111,7 @@ pub mod worker_service_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
-        /// Receives an activation to execute.
+        /// Receives a task to execute.
         pub async fn add_task(
             &mut self,
             request: impl tonic::IntoRequest<super::AddTaskRequest>,
@@ -184,7 +186,7 @@ pub mod worker_service_server {
     /// Generated trait containing gRPC methods that should be implemented for use with WorkerServiceServer.
     #[async_trait]
     pub trait WorkerService: std::marker::Send + std::marker::Sync + 'static {
-        /// Receives an activation to execute.
+        /// Receives a task to execute.
         async fn add_task(
             &self,
             request: tonic::Request<super::AddTaskRequest>,
