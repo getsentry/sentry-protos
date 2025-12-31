@@ -46,3 +46,9 @@ pub mod taskbroker {
    }
 }
 
+pub mod taskworker {
+    pub mod v1 {
+       include!("sentry_protos.taskworker.v1.rs");
+   }
+}
+
