@@ -82,7 +82,25 @@ service ConsumerService {
 
   // Update the state of a task with execution results.
   rpc SetTaskStatus(SetTaskStatusRequest) returns (SetTaskStatusResponse) {}
+
+  // Add a worker to the broker's inner worker pool.
+  rpc AddWorker(AddWorkerRequest) returns (AddWorkerResponse) {}
+
+  // Remove a worker from the broker's inner worker pool.
+  rpc RemoveWorker(RemoveWorkerRequest) returns (RemoveWorkerResponse) {}
 }
+
+message AddWorkerRequest {
+  string address = 1;
+}
+
+message AddWorkerResponse {}
+
+message RemoveWorkerRequest {
+  string address = 1;
+}
+
+message RemoveWorkerResponse {}
 
 message GetTaskRequest {
   optional string namespace = 1;

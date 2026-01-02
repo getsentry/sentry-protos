@@ -59,6 +59,20 @@ pub struct TaskActivation {
     pub delay: ::core::option::Option<u64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddWorkerRequest {
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct AddWorkerResponse {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RemoveWorkerRequest {
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct RemoveWorkerResponse {}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTaskRequest {
     #[prost(string, optional, tag = "1")]
     pub namespace: ::core::option::Option<::prost::alloc::string::String>,
@@ -311,6 +325,66 @@ pub mod consumer_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// Add a worker to the broker's inner worker pool.
+        pub async fn add_worker(
+            &mut self,
+            request: impl tonic::IntoRequest<super::AddWorkerRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::AddWorkerResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sentry_protos.taskbroker.v1.ConsumerService/AddWorker",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "sentry_protos.taskbroker.v1.ConsumerService",
+                        "AddWorker",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        /// Remove a worker from the broker's inner worker pool.
+        pub async fn remove_worker(
+            &mut self,
+            request: impl tonic::IntoRequest<super::RemoveWorkerRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::RemoveWorkerResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sentry_protos.taskbroker.v1.ConsumerService/RemoveWorker",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "sentry_protos.taskbroker.v1.ConsumerService",
+                        "RemoveWorker",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -337,6 +411,22 @@ pub mod consumer_service_server {
             request: tonic::Request<super::SetTaskStatusRequest>,
         ) -> std::result::Result<
             tonic::Response<super::SetTaskStatusResponse>,
+            tonic::Status,
+        >;
+        /// Add a worker to the broker's inner worker pool.
+        async fn add_worker(
+            &self,
+            request: tonic::Request<super::AddWorkerRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::AddWorkerResponse>,
+            tonic::Status,
+        >;
+        /// Remove a worker from the broker's inner worker pool.
+        async fn remove_worker(
+            &self,
+            request: tonic::Request<super::RemoveWorkerRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::RemoveWorkerResponse>,
             tonic::Status,
         >;
     }
@@ -495,6 +585,96 @@ pub mod consumer_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = SetTaskStatusSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/sentry_protos.taskbroker.v1.ConsumerService/AddWorker" => {
+                    #[allow(non_camel_case_types)]
+                    struct AddWorkerSvc<T: ConsumerService>(pub Arc<T>);
+                    impl<
+                        T: ConsumerService,
+                    > tonic::server::UnaryService<super::AddWorkerRequest>
+                    for AddWorkerSvc<T> {
+                        type Response = super::AddWorkerResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::AddWorkerRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ConsumerService>::add_worker(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = AddWorkerSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/sentry_protos.taskbroker.v1.ConsumerService/RemoveWorker" => {
+                    #[allow(non_camel_case_types)]
+                    struct RemoveWorkerSvc<T: ConsumerService>(pub Arc<T>);
+                    impl<
+                        T: ConsumerService,
+                    > tonic::server::UnaryService<super::RemoveWorkerRequest>
+                    for RemoveWorkerSvc<T> {
+                        type Response = super::RemoveWorkerResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::RemoveWorkerRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ConsumerService>::remove_worker(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = RemoveWorkerSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
