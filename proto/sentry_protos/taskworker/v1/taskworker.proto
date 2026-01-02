@@ -6,24 +6,15 @@ import "sentry_protos/taskbroker/v1/taskbroker.proto";
 
 service WorkerService {
   // Receives a task to execute.
-  rpc AddTask(AddTaskRequest) returns (AddTaskResponse) {}
-
-  // Returns the length of the task queue.
-  rpc GetQueueSize(GetQueueSizeRequest) returns (GetQueueSizeResponse) {}
+  rpc PushTask(PushTaskRequest) returns (PushTaskResponse) {}
 }
 
-message AddTaskRequest {
+message PushTaskRequest {
   sentry_protos.taskbroker.v1.TaskActivation task = 1;
   string callback_url = 2;
 }
 
-message AddTaskResponse {
+message PushTaskResponse {
   bool added = 1;
-}
-
-message GetQueueSizeRequest {}
-
-message GetQueueSizeResponse {
-  uint32 length = 1;
-  string address = 2;
+  uint32 queue_size = 2;
 }
