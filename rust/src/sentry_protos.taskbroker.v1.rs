@@ -97,6 +97,8 @@ pub struct SetTaskStatusRequest {
     /// If fetch_next is provided, receive a new task in the response
     #[prost(message, optional, tag = "3")]
     pub fetch_next_task: ::core::option::Option<FetchNextTask>,
+    #[prost(string, tag = "4")]
+    pub address: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SetTaskStatusResponse {
