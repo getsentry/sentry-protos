@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.taskworker.v1;
+
+import "sentry_protos/taskbroker/v1/taskbroker.proto";
+
+service WorkerService {
+  // Receives a task to execute.
+  rpc PushTask(PushTaskRequest) returns (PushTaskResponse) {}
+}
+
+message PushTaskRequest {
+  sentry_protos.taskbroker.v1.TaskActivation task = 1;
+  string callback_url = 2;
+}
+
+message PushTaskResponse {
+  bool added = 1;
+  uint32 queue_size = 2;
+}
