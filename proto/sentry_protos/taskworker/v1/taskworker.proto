@@ -4,7 +4,7 @@ package sentry_protos.taskworker.v1;
 
 import "sentry_protos/taskbroker/v1/taskbroker.proto";
 
-service WorkerService {
+service WorkerrService {
   // Receives a task to execute.
   rpc PushTask(PushTaskRequest) returns (PushTaskResponse) {}
 }

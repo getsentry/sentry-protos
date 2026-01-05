@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from sentry_protos.taskbroker.v1 import taskbroker_pb2 as sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n,sentry_protos/taskworker/v1/taskworker.proto\x12\x1bsentry_protos.taskworker.v1\x1a,sentry_protos/taskbroker/v1/taskbroker.proto\"b\n\x0fPushTaskRequest\x12\x39\n\x04task\x18\x01 \x01(\x0b\x32+.sentry_protos.taskbroker.v1.TaskActivation\x12\x14\n\x0c\x63\x61llback_url\x18\x02 \x01(\t\"5\n\x10PushTaskResponse\x12\r\n\x05\x61\x64\x64\x65\x64\x18\x01 \x01(\x08\x12\x12\n\nqueue_size\x18\x02 \x01(\r2z\n\rWorkerService\x12i\n\x08PushTask\x12,.sentry_protos.taskworker.v1.PushTaskRequest\x1a-.sentry_protos.taskworker.v1.PushTaskResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n,sentry_protos/taskworker/v1/taskworker.proto\x12\x1bsentry_protos.taskworker.v1\x1a,sentry_protos/taskbroker/v1/taskbroker.proto\"b\n\x0fPushTaskRequest\x12\x39\n\x04task\x18\x01 \x01(\x0b\x32+.sentry_protos.taskbroker.v1.TaskActivation\x12\x14\n\x0c\x63\x61llback_url\x18\x02 \x01(\t\"5\n\x10PushTaskResponse\x12\r\n\x05\x61\x64\x64\x65\x64\x18\x01 \x01(\x08\x12\x12\n\nqueue_size\x18\x02 \x01(\r2{\n\x0eWorkerrService\x12i\n\x08PushTask\x12,.sentry_protos.taskworker.v1.PushTaskRequest\x1a-.sentry_protos.taskworker.v1.PushTaskResponse\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -26,6 +26,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_PUSHTASKREQUEST']._serialized_end=221
   _globals['_PUSHTASKRESPONSE']._serialized_start=223
   _globals['_PUSHTASKRESPONSE']._serialized_end=276
-  _globals['_WORKERSERVICE']._serialized_start=278
-  _globals['_WORKERSERVICE']._serialized_end=400
+  _globals['_WORKERRSERVICE']._serialized_start=278
+  _globals['_WORKERRSERVICE']._serialized_end=401
 # @@protoc_insertion_point(module_scope)

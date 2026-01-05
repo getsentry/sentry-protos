@@ -17,7 +17,7 @@ class _MaybeAsyncIterator(collections.abc.AsyncIterator[_T], collections.abc.Ite
 class _ServicerContext(grpc.ServicerContext, grpc.aio.ServicerContext):  # type: ignore[misc, type-arg]
     ...
 
-class WorkerServiceStub:
+class WorkerrServiceStub:
     def __init__(self, channel: typing.Union[grpc.Channel, grpc.aio.Channel]) -> None: ...
     PushTask: grpc.UnaryUnaryMultiCallable[
         sentry_protos.taskworker.v1.taskworker_pb2.PushTaskRequest,
@@ -25,14 +25,14 @@ class WorkerServiceStub:
     ]
     """Receives a task to execute."""
 
-class WorkerServiceAsyncStub:
+class WorkerrServiceAsyncStub:
     PushTask: grpc.aio.UnaryUnaryMultiCallable[
         sentry_protos.taskworker.v1.taskworker_pb2.PushTaskRequest,
         sentry_protos.taskworker.v1.taskworker_pb2.PushTaskResponse,
     ]
     """Receives a task to execute."""
 
-class WorkerServiceServicer(metaclass=abc.ABCMeta):
+class WorkerrServiceServicer(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def PushTask(
         self,
@@ -41,4 +41,4 @@ class WorkerServiceServicer(metaclass=abc.ABCMeta):
     ) -> typing.Union[sentry_protos.taskworker.v1.taskworker_pb2.PushTaskResponse, collections.abc.Awaitable[sentry_protos.taskworker.v1.taskworker_pb2.PushTaskResponse]]:
         """Receives a task to execute."""
 
-def add_WorkerServiceServicer_to_server(servicer: WorkerServiceServicer, server: typing.Union[grpc.Server, grpc.aio.Server]) -> None: ...
+def add_WorkerrServiceServicer_to_server(servicer: WorkerrServiceServicer, server: typing.Union[grpc.Server, grpc.aio.Server]) -> None: ...

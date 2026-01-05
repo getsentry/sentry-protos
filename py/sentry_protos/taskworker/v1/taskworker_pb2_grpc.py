@@ -30,7 +30,7 @@ if _version_not_supported:
     )
 
 
-class WorkerServiceStub(object):
+class WorkerrServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -40,13 +40,13 @@ class WorkerServiceStub(object):
             channel: A grpc.Channel.
         """
         self.PushTask = channel.unary_unary(
-                '/sentry_protos.taskworker.v1.WorkerService/PushTask',
+                '/sentry_protos.taskworker.v1.WorkerrService/PushTask',
                 request_serializer=sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.PushTaskRequest.SerializeToString,
                 response_deserializer=sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.PushTaskResponse.FromString,
                 _registered_method=True)
 
 
-class WorkerServiceServicer(object):
+class WorkerrServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def PushTask(self, request, context):
@@ -57,7 +57,7 @@ class WorkerServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_WorkerServiceServicer_to_server(servicer, server):
+def add_WorkerrServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'PushTask': grpc.unary_unary_rpc_method_handler(
                     servicer.PushTask,
@@ -66,13 +66,13 @@ def add_WorkerServiceServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'sentry_protos.taskworker.v1.WorkerService', rpc_method_handlers)
+            'sentry_protos.taskworker.v1.WorkerrService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('sentry_protos.taskworker.v1.WorkerService', rpc_method_handlers)
+    server.add_registered_method_handlers('sentry_protos.taskworker.v1.WorkerrService', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
-class WorkerService(object):
+class WorkerrService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
@@ -89,7 +89,7 @@ class WorkerService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/sentry_protos.taskworker.v1.WorkerService/PushTask',
+            '/sentry_protos.taskworker.v1.WorkerrService/PushTask',
             sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.PushTaskRequest.SerializeToString,
             sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.PushTaskResponse.FromString,
             options,
