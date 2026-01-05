@@ -14,7 +14,7 @@ pub struct PushTaskResponse {
     pub queue_size: u32,
 }
 /// Generated client implementations.
-pub mod worker_service_client {
+pub mod workerr_service_client {
     #![allow(
         unused_variables,
         dead_code,
@@ -25,10 +25,10 @@ pub mod worker_service_client {
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
     #[derive(Debug, Clone)]
-    pub struct WorkerServiceClient<T> {
+    pub struct WorkerrServiceClient<T> {
         inner: tonic::client::Grpc<T>,
     }
-    impl WorkerServiceClient<tonic::transport::Channel> {
+    impl WorkerrServiceClient<tonic::transport::Channel> {
         /// Attempt to create a new client by connecting to a given endpoint.
         pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
         where
@@ -39,7 +39,7 @@ pub mod worker_service_client {
             Ok(Self::new(conn))
         }
     }
-    impl<T> WorkerServiceClient<T>
+    impl<T> WorkerrServiceClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::Body>,
         T::Error: Into<StdError>,
@@ -57,7 +57,7 @@ pub mod worker_service_client {
         pub fn with_interceptor<F>(
             inner: T,
             interceptor: F,
-        ) -> WorkerServiceClient<InterceptedService<T, F>>
+        ) -> WorkerrServiceClient<InterceptedService<T, F>>
         where
             F: tonic::service::Interceptor,
             T::ResponseBody: Default,
@@ -71,7 +71,7 @@ pub mod worker_service_client {
                 http::Request<tonic::body::Body>,
             >>::Error: Into<StdError> + std::marker::Send + std::marker::Sync,
         {
-            WorkerServiceClient::new(InterceptedService::new(inner, interceptor))
+            WorkerrServiceClient::new(InterceptedService::new(inner, interceptor))
         }
         /// Compress requests with the given encoding.
         ///
@@ -122,13 +122,13 @@ pub mod worker_service_client {
                 })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
-                "/sentry_protos.taskworker.v1.WorkerService/PushTask",
+                "/sentry_protos.taskworker.v1.WorkerrService/PushTask",
             );
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(
                     GrpcMethod::new(
-                        "sentry_protos.taskworker.v1.WorkerService",
+                        "sentry_protos.taskworker.v1.WorkerrService",
                         "PushTask",
                     ),
                 );
@@ -137,7 +137,7 @@ pub mod worker_service_client {
     }
 }
 /// Generated server implementations.
-pub mod worker_service_server {
+pub mod workerr_service_server {
     #![allow(
         unused_variables,
         dead_code,
@@ -146,9 +146,9 @@ pub mod worker_service_server {
         clippy::let_unit_value,
     )]
     use tonic::codegen::*;
-    /// Generated trait containing gRPC methods that should be implemented for use with WorkerServiceServer.
+    /// Generated trait containing gRPC methods that should be implemented for use with WorkerrServiceServer.
     #[async_trait]
-    pub trait WorkerService: std::marker::Send + std::marker::Sync + 'static {
+    pub trait WorkerrService: std::marker::Send + std::marker::Sync + 'static {
         /// Receives a task to execute.
         async fn push_task(
             &self,
@@ -159,14 +159,14 @@ pub mod worker_service_server {
         >;
     }
     #[derive(Debug)]
-    pub struct WorkerServiceServer<T> {
+    pub struct WorkerrServiceServer<T> {
         inner: Arc<T>,
         accept_compression_encodings: EnabledCompressionEncodings,
         send_compression_encodings: EnabledCompressionEncodings,
         max_decoding_message_size: Option<usize>,
         max_encoding_message_size: Option<usize>,
     }
-    impl<T> WorkerServiceServer<T> {
+    impl<T> WorkerrServiceServer<T> {
         pub fn new(inner: T) -> Self {
             Self::from_arc(Arc::new(inner))
         }
@@ -217,9 +217,9 @@ pub mod worker_service_server {
             self
         }
     }
-    impl<T, B> tonic::codegen::Service<http::Request<B>> for WorkerServiceServer<T>
+    impl<T, B> tonic::codegen::Service<http::Request<B>> for WorkerrServiceServer<T>
     where
-        T: WorkerService,
+        T: WorkerrService,
         B: Body + std::marker::Send + 'static,
         B::Error: Into<StdError> + std::marker::Send + 'static,
     {
@@ -234,11 +234,11 @@ pub mod worker_service_server {
         }
         fn call(&mut self, req: http::Request<B>) -> Self::Future {
             match req.uri().path() {
-                "/sentry_protos.taskworker.v1.WorkerService/PushTask" => {
+                "/sentry_protos.taskworker.v1.WorkerrService/PushTask" => {
                     #[allow(non_camel_case_types)]
-                    struct PushTaskSvc<T: WorkerService>(pub Arc<T>);
+                    struct PushTaskSvc<T: WorkerrService>(pub Arc<T>);
                     impl<
-                        T: WorkerService,
+                        T: WorkerrService,
                     > tonic::server::UnaryService<super::PushTaskRequest>
                     for PushTaskSvc<T> {
                         type Response = super::PushTaskResponse;
@@ -252,7 +252,7 @@ pub mod worker_service_server {
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                <T as WorkerService>::push_task(&inner, request).await
+                                <T as WorkerrService>::push_task(&inner, request).await
                             };
                             Box::pin(fut)
                         }
@@ -301,7 +301,7 @@ pub mod worker_service_server {
             }
         }
     }
-    impl<T> Clone for WorkerServiceServer<T> {
+    impl<T> Clone for WorkerrServiceServer<T> {
         fn clone(&self) -> Self {
             let inner = self.inner.clone();
             Self {
@@ -314,8 +314,8 @@ pub mod worker_service_server {
         }
     }
     /// Generated gRPC service name
-    pub const SERVICE_NAME: &str = "sentry_protos.taskworker.v1.WorkerService";
-    impl<T> tonic::server::NamedService for WorkerServiceServer<T> {
+    pub const SERVICE_NAME: &str = "sentry_protos.taskworker.v1.WorkerrService";
+    impl<T> tonic::server::NamedService for WorkerrServiceServer<T> {
         const NAME: &'static str = SERVICE_NAME;
     }
 }
