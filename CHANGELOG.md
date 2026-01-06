@@ -1,3 +1,7 @@
+## 0.4.11
+
+- feat(tasks) Add usecase to TaskActivation & rpc methods. by @markstory in [#157](https://github.com/getsentry/sentry-protos/pull/157)
+
 ## 0.4.10
 
 ### New Features ✨
