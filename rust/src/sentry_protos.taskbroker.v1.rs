@@ -23,7 +23,9 @@ pub struct TaskActivation {
     /// A GUID for the task. Used to update tasks
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
-    /// The task namespace
+    /// The task namespace. Applications can contain multiple namespaces.
+    /// While namespaces within an application must be unique, different
+    /// applications can have overlapping namespace values.
     #[prost(string, tag = "2")]
     pub namespace: ::prost::alloc::string::String,
     /// The name of the task. This name is resolved within the worker
@@ -58,6 +60,9 @@ pub struct TaskActivation {
     #[prost(uint64, optional, tag = "11")]
     pub delay: ::core::option::Option<u64>,
     /// The client application that an activation belongs to.
+    /// Each activation *must* belong to an application. This requirement
+    /// is enforced during taskbroker ingestion as adding required fields to a protobuf
+    /// is a breaking change.
     #[prost(string, optional, tag = "12")]
     pub application: ::core::option::Option<::prost::alloc::string::String>,
 }
