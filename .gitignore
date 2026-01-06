@@ -149,7 +149,7 @@ data/
 .artifacts/
 
 # Generated bindings
-/py/sentry_protos/*
+# /py/sentry_protos/*
 
 # Generated documentation
 /docs/build/*
