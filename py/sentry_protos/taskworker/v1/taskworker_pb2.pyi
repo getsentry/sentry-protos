@@ -12,39 +12,33 @@ import typing
 DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 
 @typing.final
-class PushTaskRequest(google.protobuf.message.Message):
+class RunTaskRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     TASK_FIELD_NUMBER: builtins.int
-    CALLBACK_URL_FIELD_NUMBER: builtins.int
-    callback_url: builtins.str
     @property
     def task(self) -> sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivation: ...
     def __init__(
         self,
         *,
         task: sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivation | None = ...,
-        callback_url: builtins.str = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["task", b"task"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["callback_url", b"callback_url", "task", b"task"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["task", b"task"]) -> None: ...
 
-global___PushTaskRequest = PushTaskRequest
+global___RunTaskRequest = RunTaskRequest
 
 @typing.final
-class PushTaskResponse(google.protobuf.message.Message):
+class RunTaskResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
-    ADDED_FIELD_NUMBER: builtins.int
-    QUEUE_SIZE_FIELD_NUMBER: builtins.int
-    added: builtins.bool
-    queue_size: builtins.int
+    STATUS_FIELD_NUMBER: builtins.int
+    status: sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivationStatus.ValueType
     def __init__(
         self,
         *,
-        added: builtins.bool = ...,
-        queue_size: builtins.int = ...,
+        status: sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivationStatus.ValueType = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["added", b"added", "queue_size", b"queue_size"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["status", b"status"]) -> None: ...
 
-global___PushTaskResponse = PushTaskResponse
+global___RunTaskResponse = RunTaskResponse

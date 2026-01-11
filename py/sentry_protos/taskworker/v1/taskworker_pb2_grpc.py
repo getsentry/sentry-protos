@@ -39,17 +39,17 @@ class WorkerServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.PushTask = channel.unary_unary(
-                '/sentry_protos.taskworker.v1.WorkerService/PushTask',
-                request_serializer=sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.PushTaskRequest.SerializeToString,
-                response_deserializer=sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.PushTaskResponse.FromString,
+        self.RunTask = channel.unary_unary(
+                '/sentry_protos.taskworker.v1.WorkerService/RunTask',
+                request_serializer=sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.RunTaskRequest.SerializeToString,
+                response_deserializer=sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.RunTaskResponse.FromString,
                 _registered_method=True)
 
 
 class WorkerServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def PushTask(self, request, context):
+    def RunTask(self, request, context):
         """Receives a task to execute.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -59,10 +59,10 @@ class WorkerServiceServicer(object):
 
 def add_WorkerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'PushTask': grpc.unary_unary_rpc_method_handler(
-                    servicer.PushTask,
-                    request_deserializer=sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.PushTaskRequest.FromString,
-                    response_serializer=sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.PushTaskResponse.SerializeToString,
+            'RunTask': grpc.unary_unary_rpc_method_handler(
+                    servicer.RunTask,
+                    request_deserializer=sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.RunTaskRequest.FromString,
+                    response_serializer=sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.RunTaskResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -76,7 +76,7 @@ class WorkerService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def PushTask(request,
+    def RunTask(request,
             target,
             options=(),
             channel_credentials=None,
@@ -89,9 +89,9 @@ class WorkerService(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/sentry_protos.taskworker.v1.WorkerService/PushTask',
-            sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.PushTaskRequest.SerializeToString,
-            sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.PushTaskResponse.FromString,
+            '/sentry_protos.taskworker.v1.WorkerService/RunTask',
+            sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.RunTaskRequest.SerializeToString,
+            sentry__protos_dot_taskworker_dot_v1_dot_taskworker__pb2.RunTaskResponse.FromString,
             options,
             channel_credentials,
             insecure,

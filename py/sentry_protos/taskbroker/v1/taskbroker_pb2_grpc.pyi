@@ -36,18 +36,6 @@ class ConsumerServiceStub:
     ]
     """Update the state of a task with execution results."""
 
-    AddWorker: grpc.UnaryUnaryMultiCallable[
-        sentry_protos.taskbroker.v1.taskbroker_pb2.AddWorkerRequest,
-        sentry_protos.taskbroker.v1.taskbroker_pb2.AddWorkerResponse,
-    ]
-    """Add a worker to the broker's inner worker pool."""
-
-    RemoveWorker: grpc.UnaryUnaryMultiCallable[
-        sentry_protos.taskbroker.v1.taskbroker_pb2.RemoveWorkerRequest,
-        sentry_protos.taskbroker.v1.taskbroker_pb2.RemoveWorkerResponse,
-    ]
-    """Remove a worker from the broker's inner worker pool."""
-
 class ConsumerServiceAsyncStub:
     """//////////////////////////
     RPC messages and services
@@ -65,18 +53,6 @@ class ConsumerServiceAsyncStub:
         sentry_protos.taskbroker.v1.taskbroker_pb2.SetTaskStatusResponse,
     ]
     """Update the state of a task with execution results."""
-
-    AddWorker: grpc.aio.UnaryUnaryMultiCallable[
-        sentry_protos.taskbroker.v1.taskbroker_pb2.AddWorkerRequest,
-        sentry_protos.taskbroker.v1.taskbroker_pb2.AddWorkerResponse,
-    ]
-    """Add a worker to the broker's inner worker pool."""
-
-    RemoveWorker: grpc.aio.UnaryUnaryMultiCallable[
-        sentry_protos.taskbroker.v1.taskbroker_pb2.RemoveWorkerRequest,
-        sentry_protos.taskbroker.v1.taskbroker_pb2.RemoveWorkerResponse,
-    ]
-    """Remove a worker from the broker's inner worker pool."""
 
 class ConsumerServiceServicer(metaclass=abc.ABCMeta):
     """//////////////////////////
@@ -99,21 +75,5 @@ class ConsumerServiceServicer(metaclass=abc.ABCMeta):
         context: _ServicerContext,
     ) -> typing.Union[sentry_protos.taskbroker.v1.taskbroker_pb2.SetTaskStatusResponse, collections.abc.Awaitable[sentry_protos.taskbroker.v1.taskbroker_pb2.SetTaskStatusResponse]]:
         """Update the state of a task with execution results."""
-
-    @abc.abstractmethod
-    def AddWorker(
-        self,
-        request: sentry_protos.taskbroker.v1.taskbroker_pb2.AddWorkerRequest,
-        context: _ServicerContext,
-    ) -> typing.Union[sentry_protos.taskbroker.v1.taskbroker_pb2.AddWorkerResponse, collections.abc.Awaitable[sentry_protos.taskbroker.v1.taskbroker_pb2.AddWorkerResponse]]:
-        """Add a worker to the broker's inner worker pool."""
-
-    @abc.abstractmethod
-    def RemoveWorker(
-        self,
-        request: sentry_protos.taskbroker.v1.taskbroker_pb2.RemoveWorkerRequest,
-        context: _ServicerContext,
-    ) -> typing.Union[sentry_protos.taskbroker.v1.taskbroker_pb2.RemoveWorkerResponse, collections.abc.Awaitable[sentry_protos.taskbroker.v1.taskbroker_pb2.RemoveWorkerResponse]]:
-        """Remove a worker from the broker's inner worker pool."""
 
 def add_ConsumerServiceServicer_to_server(servicer: ConsumerServiceServicer, server: typing.Union[grpc.Server, grpc.aio.Server]) -> None: ...

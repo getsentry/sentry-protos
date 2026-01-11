@@ -19,26 +19,26 @@ class _ServicerContext(grpc.ServicerContext, grpc.aio.ServicerContext):  # type:
 
 class WorkerServiceStub:
     def __init__(self, channel: typing.Union[grpc.Channel, grpc.aio.Channel]) -> None: ...
-    PushTask: grpc.UnaryUnaryMultiCallable[
-        sentry_protos.taskworker.v1.taskworker_pb2.PushTaskRequest,
-        sentry_protos.taskworker.v1.taskworker_pb2.PushTaskResponse,
+    RunTask: grpc.UnaryUnaryMultiCallable[
+        sentry_protos.taskworker.v1.taskworker_pb2.RunTaskRequest,
+        sentry_protos.taskworker.v1.taskworker_pb2.RunTaskResponse,
     ]
     """Receives a task to execute."""
 
 class WorkerServiceAsyncStub:
-    PushTask: grpc.aio.UnaryUnaryMultiCallable[
-        sentry_protos.taskworker.v1.taskworker_pb2.PushTaskRequest,
-        sentry_protos.taskworker.v1.taskworker_pb2.PushTaskResponse,
+    RunTask: grpc.aio.UnaryUnaryMultiCallable[
+        sentry_protos.taskworker.v1.taskworker_pb2.RunTaskRequest,
+        sentry_protos.taskworker.v1.taskworker_pb2.RunTaskResponse,
     ]
     """Receives a task to execute."""
 
 class WorkerServiceServicer(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def PushTask(
+    def RunTask(
         self,
-        request: sentry_protos.taskworker.v1.taskworker_pb2.PushTaskRequest,
+        request: sentry_protos.taskworker.v1.taskworker_pb2.RunTaskRequest,
         context: _ServicerContext,
-    ) -> typing.Union[sentry_protos.taskworker.v1.taskworker_pb2.PushTaskResponse, collections.abc.Awaitable[sentry_protos.taskworker.v1.taskworker_pb2.PushTaskResponse]]:
+    ) -> typing.Union[sentry_protos.taskworker.v1.taskworker_pb2.RunTaskResponse, collections.abc.Awaitable[sentry_protos.taskworker.v1.taskworker_pb2.RunTaskResponse]]:
         """Receives a task to execute."""
 
 def add_WorkerServiceServicer_to_server(servicer: WorkerServiceServicer, server: typing.Union[grpc.Server, grpc.aio.Server]) -> None: ...
