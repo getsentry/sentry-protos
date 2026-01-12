@@ -2081,6 +2081,8 @@ pub struct ExportTraceItemsRequest {
     pub meta: ::core::option::Option<RequestMeta>,
     #[prost(message, optional, tag = "2")]
     pub page_token: ::core::option::Option<PageToken>,
+    #[prost(uint32, tag = "3")]
+    pub limit: u32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExportTraceItemsResponse {
