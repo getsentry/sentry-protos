@@ -52,16 +52,6 @@ class ConsumerServiceStub(object):
                 request_serializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.SetTaskStatusRequest.SerializeToString,
                 response_deserializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.SetTaskStatusResponse.FromString,
                 _registered_method=True)
-        self.AddWorker = channel.unary_unary(
-                '/sentry_protos.taskbroker.v1.ConsumerService/AddWorker',
-                request_serializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.AddWorkerRequest.SerializeToString,
-                response_deserializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.AddWorkerResponse.FromString,
-                _registered_method=True)
-        self.RemoveWorker = channel.unary_unary(
-                '/sentry_protos.taskbroker.v1.ConsumerService/RemoveWorker',
-                request_serializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.RemoveWorkerRequest.SerializeToString,
-                response_deserializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.RemoveWorkerResponse.FromString,
-                _registered_method=True)
 
 
 class ConsumerServiceServicer(object):
@@ -84,20 +74,6 @@ class ConsumerServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def AddWorker(self, request, context):
-        """Add a worker to the broker's inner worker pool.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def RemoveWorker(self, request, context):
-        """Remove a worker from the broker's inner worker pool.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
 
 def add_ConsumerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -110,16 +86,6 @@ def add_ConsumerServiceServicer_to_server(servicer, server):
                     servicer.SetTaskStatus,
                     request_deserializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.SetTaskStatusRequest.FromString,
                     response_serializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.SetTaskStatusResponse.SerializeToString,
-            ),
-            'AddWorker': grpc.unary_unary_rpc_method_handler(
-                    servicer.AddWorker,
-                    request_deserializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.AddWorkerRequest.FromString,
-                    response_serializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.AddWorkerResponse.SerializeToString,
-            ),
-            'RemoveWorker': grpc.unary_unary_rpc_method_handler(
-                    servicer.RemoveWorker,
-                    request_deserializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.RemoveWorkerRequest.FromString,
-                    response_serializer=sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.RemoveWorkerResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -179,60 +145,6 @@ class ConsumerService(object):
             '/sentry_protos.taskbroker.v1.ConsumerService/SetTaskStatus',
             sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.SetTaskStatusRequest.SerializeToString,
             sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.SetTaskStatusResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def AddWorker(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/sentry_protos.taskbroker.v1.ConsumerService/AddWorker',
-            sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.AddWorkerRequest.SerializeToString,
-            sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.AddWorkerResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def RemoveWorker(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/sentry_protos.taskbroker.v1.ConsumerService/RemoveWorker',
-            sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.RemoveWorkerRequest.SerializeToString,
-            sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2.RemoveWorkerResponse.FromString,
             options,
             channel_credentials,
             insecure,
