@@ -296,10 +296,8 @@ class SetTaskStatusRequest(google.protobuf.message.Message):
     ID_FIELD_NUMBER: builtins.int
     STATUS_FIELD_NUMBER: builtins.int
     FETCH_NEXT_TASK_FIELD_NUMBER: builtins.int
-    ADDRESS_FIELD_NUMBER: builtins.int
     id: builtins.str
     status: global___TaskActivationStatus.ValueType
-    address: builtins.str
     @property
     def fetch_next_task(self) -> global___FetchNextTask:
         """If fetch_next is provided, receive a new task in the response"""
@@ -310,10 +308,9 @@ class SetTaskStatusRequest(google.protobuf.message.Message):
         id: builtins.str = ...,
         status: global___TaskActivationStatus.ValueType = ...,
         fetch_next_task: global___FetchNextTask | None = ...,
-        address: builtins.str = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["_fetch_next_task", b"_fetch_next_task", "fetch_next_task", b"fetch_next_task"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["_fetch_next_task", b"_fetch_next_task", "address", b"address", "fetch_next_task", b"fetch_next_task", "id", b"id", "status", b"status"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["_fetch_next_task", b"_fetch_next_task", "fetch_next_task", b"fetch_next_task", "id", b"id", "status", b"status"]) -> None: ...
     def WhichOneof(self, oneof_group: typing.Literal["_fetch_next_task", b"_fetch_next_task"]) -> typing.Literal["fetch_next_task"] | None: ...
 
 global___SetTaskStatusRequest = SetTaskStatusRequest
