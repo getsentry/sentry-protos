@@ -122,8 +122,6 @@ message SetTaskStatusRequest {
 
   // If fetch_next is provided, receive a new task in the response
   optional FetchNextTask fetch_next_task = 3;
-
-  string address = 4;
 }
 
 message SetTaskStatusResponse {

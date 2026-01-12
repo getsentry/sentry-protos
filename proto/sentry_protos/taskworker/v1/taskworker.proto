@@ -15,6 +15,5 @@ message PushTaskRequest {
 }
 
 message PushTaskResponse {
-  bool added = 1;
   uint32 queue_size = 2;
 }

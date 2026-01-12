@@ -35,16 +35,13 @@ global___PushTaskRequest = PushTaskRequest
 class PushTaskResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
-    ADDED_FIELD_NUMBER: builtins.int
     QUEUE_SIZE_FIELD_NUMBER: builtins.int
-    added: builtins.bool
     queue_size: builtins.int
     def __init__(
         self,
         *,
-        added: builtins.bool = ...,
         queue_size: builtins.int = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["added", b"added", "queue_size", b"queue_size"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["queue_size", b"queue_size"]) -> None: ...
 
 global___PushTaskResponse = PushTaskResponse
