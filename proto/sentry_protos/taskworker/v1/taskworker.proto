@@ -14,7 +14,4 @@ message PushTaskRequest {
   string callback_url = 2;
 }
 
-message PushTaskResponse {
-  bool added = 1;
-  uint32 queue_size = 2;
-}
+message PushTaskResponse {}

@@ -7,12 +7,7 @@ pub struct PushTaskRequest {
     pub callback_url: ::prost::alloc::string::String,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct PushTaskResponse {
-    #[prost(bool, tag = "1")]
-    pub added: bool,
-    #[prost(uint32, tag = "2")]
-    pub queue_size: u32,
-}
+pub struct PushTaskResponse {}
 /// Generated client implementations.
 pub mod worker_service_client {
     #![allow(
