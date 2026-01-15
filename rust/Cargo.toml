@@ -1,6 +1,6 @@
 [package]
 name = "sentry_protos"
-version = "0.4.11"
+version = "0.4.12"
 edition = "2021"
 readme = "README.md"
 description = "Rust bindings for sentry-protos"

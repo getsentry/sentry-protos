@@ -1,3 +1,13 @@
+## 0.4.12
+
+### New Features ✨
+
+- (eap) Add limit to export endpoint's request by @xurui-c in [#162](https://github.com/getsentry/sentry-protos/pull/162)
+
+### Build / dependencies / internal 🔧
+
+- (release) Switch from action-prepare-release to Craft by @BYK in [#161](https://github.com/getsentry/sentry-protos/pull/161)
+
 ## 0.4.11
 
 - feat(tasks) Add usecase to TaskActivation & rpc methods. by @markstory in [#157](https://github.com/getsentry/sentry-protos/pull/157)
