@@ -104,6 +104,7 @@ enum Function {
   FUNCTION_MAX = 9;
   FUNCTION_MIN = 10;
   FUNCTION_UNIQ = 11;
+  FUNCTION_ANY = 13;
 }
 
 enum ExtrapolationMode {
