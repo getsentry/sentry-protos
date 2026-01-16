@@ -189,6 +189,7 @@ pub enum Function {
     Max = 9,
     Min = 10,
     Uniq = 11,
+    Any = 13,
 }
 impl Function {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -210,6 +211,7 @@ impl Function {
             Function::Max => "FUNCTION_MAX",
             Function::Min => "FUNCTION_MIN",
             Function::Uniq => "FUNCTION_UNIQ",
+            Function::Any => "FUNCTION_ANY",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -228,6 +230,7 @@ impl Function {
             "FUNCTION_MAX" => Some(Self::Max),
             "FUNCTION_MIN" => Some(Self::Min),
             "FUNCTION_UNIQ" => Some(Self::Uniq),
+            "FUNCTION_ANY" => Some(Self::Any),
             _ => None,
         }
     }
