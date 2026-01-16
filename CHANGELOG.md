@@ -1,3 +1,9 @@
+## 0.4.13
+
+### New Features ✨
+
+- (snuba) Add FUNCTION_ANY aggregation function by @phacops in [#163](https://github.com/getsentry/sentry-protos/pull/163)
+
 ## 0.4.12
 
 ### New Features ✨
