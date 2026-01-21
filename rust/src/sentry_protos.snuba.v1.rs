@@ -1660,6 +1660,8 @@ pub mod attribute_distribution {
         pub label: ::prost::alloc::string::String,
         #[prost(float, tag = "2")]
         pub value: f32,
+        #[prost(message, optional, tag = "3")]
+        pub last_seen: ::core::option::Option<::prost_types::Timestamp>,
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
