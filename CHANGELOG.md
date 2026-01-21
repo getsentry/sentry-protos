@@ -1,3 +1,9 @@
+## 0.4.14
+
+### New Features ✨
+
+- (snuba) Add last_seen field to AttributeDistribution Bucket by @phacops in [#164](https://github.com/getsentry/sentry-protos/pull/164)
+
 ## 0.4.13
 
 ### New Features ✨
