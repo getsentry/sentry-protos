@@ -41,7 +41,7 @@ pub mod event_stream_message {
         Excludegroupsmessage(super::Excludegroupsmessage),
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Startmergemessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -52,7 +52,7 @@ pub struct Startmergemessage {
 }
 /// Nested message and enum types in `Startmergemessage`.
 pub mod startmergemessage {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Startmergemessage2 {
         #[prost(string, tag = "1")]
         pub transaction_id: ::prost::alloc::string::String,
@@ -66,7 +66,7 @@ pub mod startmergemessage {
         pub datetime: ::prost::alloc::string::String,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Endmergemessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -77,7 +77,7 @@ pub struct Endmergemessage {
 }
 /// Nested message and enum types in `Endmergemessage`.
 pub mod endmergemessage {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Endmergemessage2 {
         #[prost(string, tag = "1")]
         pub transaction_id: ::prost::alloc::string::String,
@@ -91,7 +91,7 @@ pub mod endmergemessage {
         pub datetime: ::prost::alloc::string::String,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Startdeletegroupsmessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -102,7 +102,7 @@ pub struct Startdeletegroupsmessage {
 }
 /// Nested message and enum types in `Startdeletegroupsmessage`.
 pub mod startdeletegroupsmessage {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Startdeletegroupsmessage2 {
         #[prost(string, tag = "1")]
         pub transaction_id: ::prost::alloc::string::String,
@@ -114,7 +114,7 @@ pub mod startdeletegroupsmessage {
         pub datetime: ::prost::alloc::string::String,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Enddeletegroupsmessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -125,7 +125,7 @@ pub struct Enddeletegroupsmessage {
 }
 /// Nested message and enum types in `Enddeletegroupsmessage`.
 pub mod enddeletegroupsmessage {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Enddeletegroupsmessage2 {
         #[prost(string, tag = "1")]
         pub transaction_id: ::prost::alloc::string::String,
@@ -137,7 +137,7 @@ pub mod enddeletegroupsmessage {
         pub datetime: ::prost::alloc::string::String,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Startunmergemessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -148,13 +148,13 @@ pub struct Startunmergemessage {
 }
 /// Nested message and enum types in `Startunmergemessage`.
 pub mod startunmergemessage {
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Startunmergemessage2 {
         #[prost(int64, tag = "1")]
         pub project_id: i64,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Startunmergehierarchicalmessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -167,13 +167,13 @@ pub struct Startunmergehierarchicalmessage {
 }
 /// Nested message and enum types in `Startunmergehierarchicalmessage`.
 pub mod startunmergehierarchicalmessage {
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Startunmergehierarchicalmessage2 {
         #[prost(int64, tag = "1")]
         pub project_id: i64,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Startdeletetagmessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -184,13 +184,13 @@ pub struct Startdeletetagmessage {
 }
 /// Nested message and enum types in `Startdeletetagmessage`.
 pub mod startdeletetagmessage {
-    #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Startdeletetagmessage2 {
         #[prost(int64, tag = "1")]
         pub project_id: i64,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Endunmergemessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -201,7 +201,7 @@ pub struct Endunmergemessage {
 }
 /// Nested message and enum types in `Endunmergemessage`.
 pub mod endunmergemessage {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Endunmergemessage2 {
         #[prost(string, tag = "1")]
         pub transaction_id: ::prost::alloc::string::String,
@@ -217,7 +217,7 @@ pub mod endunmergemessage {
         pub datetime: ::prost::alloc::string::String,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Endunmergehierarchicalmessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -230,7 +230,7 @@ pub struct Endunmergehierarchicalmessage {
 }
 /// Nested message and enum types in `Endunmergehierarchicalmessage`.
 pub mod endunmergehierarchicalmessage {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Endunmergehierarchicalmessage2 {
         #[prost(int64, tag = "1")]
         pub project_id: i64,
@@ -246,7 +246,7 @@ pub mod endunmergehierarchicalmessage {
         pub datetime: ::prost::alloc::string::String,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Enddeletetagmessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -257,7 +257,7 @@ pub struct Enddeletetagmessage {
 }
 /// Nested message and enum types in `Enddeletetagmessage`.
 pub mod enddeletetagmessage {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Enddeletetagmessage2 {
         #[prost(string, tag = "1")]
         pub tag: ::prost::alloc::string::String,
@@ -267,7 +267,7 @@ pub mod enddeletetagmessage {
         pub project_id: i64,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Tombstoneeventsmessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -278,7 +278,7 @@ pub struct Tombstoneeventsmessage {
 }
 /// Nested message and enum types in `Tombstoneeventsmessage`.
 pub mod tombstoneeventsmessage {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Tombstoneeventsmessage2 {
         #[prost(int64, tag = "1")]
         pub project_id: i64,
@@ -297,14 +297,14 @@ pub mod tombstoneeventsmessage {
     }
     /// Nested message and enum types in `Tombstoneeventsmessage2`.
     pub mod tombstoneeventsmessage2 {
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasOldPrimaryHash {
             #[prost(string, tag = "3")]
             OldPrimaryHash(::prost::alloc::string::String),
         }
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Replacegroupmessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -315,7 +315,7 @@ pub struct Replacegroupmessage {
 }
 /// Nested message and enum types in `Replacegroupmessage`.
 pub mod replacegroupmessage {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Replacegroupmessage2 {
         #[prost(string, repeated, tag = "1")]
         pub event_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
@@ -333,7 +333,7 @@ pub mod replacegroupmessage {
         pub new_group_id: i64,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Excludegroupsmessage {
     #[prost(int64, tag = "1")]
     pub a0: i64,
@@ -344,7 +344,7 @@ pub struct Excludegroupsmessage {
 }
 /// Nested message and enum types in `Excludegroupsmessage`.
 pub mod excludegroupsmessage {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct Excludegroupsmessage2 {
         #[prost(int64, tag = "1")]
         pub project_id: i64,
@@ -352,7 +352,7 @@ pub mod excludegroupsmessage {
         pub group_ids: ::prost::alloc::vec::Vec<i64>,
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Contexts {
     #[prost(oneof = "contexts::HasReplay", tags = "1")]
     pub has_replay: ::core::option::Option<contexts::HasReplay>,
@@ -361,20 +361,20 @@ pub struct Contexts {
 }
 /// Nested message and enum types in `Contexts`.
 pub mod contexts {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct ContextsReplay {
         #[prost(oneof = "contexts_replay::HasReplayId", tags = "1")]
         pub has_replay_id: ::core::option::Option<contexts_replay::HasReplayId>,
     }
     /// Nested message and enum types in `ContextsReplay`.
     pub mod contexts_replay {
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasReplayId {
             #[prost(string, tag = "1")]
             ReplayId(::prost::alloc::string::String),
         }
     }
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct ContextsTrace {
         #[prost(oneof = "contexts_trace::HasSampled", tags = "1")]
         pub has_sampled: ::core::option::Option<contexts_trace::HasSampled>,
@@ -385,28 +385,28 @@ pub mod contexts {
     }
     /// Nested message and enum types in `ContextsTrace`.
     pub mod contexts_trace {
-        #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasSampled {
             #[prost(bool, tag = "1")]
             Sampled(bool),
         }
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasSpanId {
             #[prost(string, tag = "2")]
             SpanId(::prost::alloc::string::String),
         }
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasTraceId {
             #[prost(string, tag = "3")]
             TraceId(::prost::alloc::string::String),
         }
     }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasReplay {
         #[prost(message, tag = "1")]
         Replay(ContextsReplay),
     }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasTrace {
         #[prost(message, tag = "2")]
         Trace(ContextsTrace),
@@ -452,7 +452,7 @@ pub struct Errordata {
 }
 /// Nested message and enum types in `Errordata`.
 pub mod errordata {
-    #[derive(Clone, PartialEq, ::prost::Message)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
     pub struct ErrordataContexts {
         #[prost(oneof = "errordata_contexts::HasReplay", tags = "1")]
         pub has_replay: ::core::option::Option<errordata_contexts::HasReplay>,
@@ -461,7 +461,7 @@ pub mod errordata {
     }
     /// Nested message and enum types in `ErrordataContexts`.
     pub mod errordata_contexts {
-        #[derive(Clone, PartialEq, ::prost::Message)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
         pub struct ErrordataContextsReplay {
             #[prost(oneof = "errordata_contexts_replay::HasReplayId", tags = "1")]
             pub has_replay_id: ::core::option::Option<
@@ -470,13 +470,13 @@ pub mod errordata {
         }
         /// Nested message and enum types in `ErrordataContextsReplay`.
         pub mod errordata_contexts_replay {
-            #[derive(Clone, PartialEq, ::prost::Oneof)]
+            #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
             pub enum HasReplayId {
                 #[prost(string, tag = "1")]
                 ReplayId(::prost::alloc::string::String),
             }
         }
-        #[derive(Clone, PartialEq, ::prost::Message)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
         pub struct ErrordataContextsTrace {
             #[prost(oneof = "errordata_contexts_trace::HasSampled", tags = "1")]
             pub has_sampled: ::core::option::Option<
@@ -491,28 +491,28 @@ pub mod errordata {
         }
         /// Nested message and enum types in `ErrordataContextsTrace`.
         pub mod errordata_contexts_trace {
-            #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+            #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
             pub enum HasSampled {
                 #[prost(bool, tag = "1")]
                 Sampled(bool),
             }
-            #[derive(Clone, PartialEq, ::prost::Oneof)]
+            #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
             pub enum HasSpanId {
                 #[prost(string, tag = "2")]
                 SpanId(::prost::alloc::string::String),
             }
-            #[derive(Clone, PartialEq, ::prost::Oneof)]
+            #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
             pub enum HasTraceId {
                 #[prost(string, tag = "3")]
                 TraceId(::prost::alloc::string::String),
             }
         }
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasReplay {
             #[prost(message, tag = "1")]
             Replay(ErrordataContextsReplay),
         }
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasTrace {
             #[prost(message, tag = "2")]
             Trace(ErrordataContextsTrace),
@@ -600,17 +600,17 @@ pub mod errordata {
                 }
                 /// Nested message and enum types in `ErrordataExceptionValuesStacktraceFrames`.
                 pub mod errordata_exception_values_stacktrace_frames {
-                    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+                    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
                     pub enum HasColno {
                         #[prost(int64, tag = "2")]
                         Colno(i64),
                     }
-                    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+                    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
                     pub enum HasInApp {
                         #[prost(bool, tag = "5")]
                         InApp(bool),
                     }
-                    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+                    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
                     pub enum HasLineno {
                         #[prost(int64, tag = "6")]
                         Lineno(i64),
@@ -690,7 +690,7 @@ pub mod errordata {
                 #[prost(message, tag = "1")]
                 Id(::prost_types::Value),
             }
-            #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+            #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
             pub enum HasMain {
                 #[prost(bool, tag = "2")]
                 Main(bool),
@@ -715,13 +715,13 @@ pub mod errordata {
     }
     /// Nested message and enum types in `ErrordataUser`.
     pub mod errordata_user {
-        #[derive(Clone, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasIpAddress {
             #[prost(string, tag = "4")]
             IpAddress(::prost::alloc::string::String),
         }
     }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasContexts {
         #[prost(message, tag = "1")]
         Contexts(ErrordataContexts),
@@ -731,7 +731,7 @@ pub mod errordata {
         #[prost(message, tag = "4")]
         Exception(ErrordataException),
     }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasLocation {
         #[prost(string, tag = "6")]
         Location(::prost::alloc::string::String),
@@ -756,7 +756,7 @@ pub mod errordata {
         #[prost(message, tag = "15")]
         User(ErrordataUser),
     }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasVersion {
         #[prost(string, tag = "16")]
         Version(::prost::alloc::string::String),
@@ -785,12 +785,12 @@ pub struct Errormessage {
 }
 /// Nested message and enum types in `Errormessage`.
 pub mod errormessage {
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasPlatform {
         #[prost(string, tag = "6")]
         Platform(::prost::alloc::string::String),
     }
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasRetentionDays {
         #[prost(int64, tag = "9")]
         RetentionDays(i64),
@@ -870,17 +870,17 @@ pub mod exception {
             }
             /// Nested message and enum types in `ExceptionValuesStacktraceFrames`.
             pub mod exception_values_stacktrace_frames {
-                #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+                #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
                 pub enum HasColno {
                     #[prost(int64, tag = "2")]
                     Colno(i64),
                 }
-                #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+                #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
                 pub enum HasInApp {
                     #[prost(bool, tag = "5")]
                     InApp(bool),
                 }
-                #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+                #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
                 pub enum HasLineno {
                     #[prost(int64, tag = "6")]
                     Lineno(i64),
@@ -969,17 +969,17 @@ pub mod exceptionvalue {
         }
         /// Nested message and enum types in `ExceptionvalueStacktraceFrames`.
         pub mod exceptionvalue_stacktrace_frames {
-            #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+            #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
             pub enum HasColno {
                 #[prost(int64, tag = "2")]
                 Colno(i64),
             }
-            #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+            #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
             pub enum HasInApp {
                 #[prost(bool, tag = "5")]
                 InApp(bool),
             }
-            #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+            #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
             pub enum HasLineno {
                 #[prost(int64, tag = "6")]
                 Lineno(i64),
@@ -1013,14 +1013,14 @@ pub struct Inserteventmessage {
     #[prost(message, optional, tag = "4")]
     pub a3: ::core::option::Option<::prost_types::Value>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Replaycontext {
     #[prost(oneof = "replaycontext::HasReplayId", tags = "1")]
     pub has_replay_id: ::core::option::Option<replaycontext::HasReplayId>,
 }
 /// Nested message and enum types in `Replaycontext`.
 pub mod replaycontext {
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasReplayId {
         #[prost(string, tag = "1")]
         ReplayId(::prost::alloc::string::String),
@@ -1073,17 +1073,17 @@ pub struct Stackframe {
 }
 /// Nested message and enum types in `Stackframe`.
 pub mod stackframe {
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasColno {
         #[prost(int64, tag = "2")]
         Colno(i64),
     }
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasInApp {
         #[prost(bool, tag = "5")]
         InApp(bool),
     }
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasLineno {
         #[prost(int64, tag = "6")]
         Lineno(i64),
@@ -1117,17 +1117,17 @@ pub mod stacktrace {
     }
     /// Nested message and enum types in `StacktraceFrames`.
     pub mod stacktrace_frames {
-        #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasColno {
             #[prost(int64, tag = "2")]
             Colno(i64),
         }
-        #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasInApp {
             #[prost(bool, tag = "5")]
             InApp(bool),
         }
-        #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasLineno {
             #[prost(int64, tag = "6")]
             Lineno(i64),
@@ -1155,7 +1155,7 @@ pub mod thread {
             #[prost(message, tag = "1")]
             Id(::prost_types::Value),
         }
-        #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+        #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
         pub enum HasMain {
             #[prost(bool, tag = "2")]
             Main(bool),
@@ -1176,13 +1176,13 @@ pub mod threadvalue {
         #[prost(message, tag = "1")]
         Id(::prost_types::Value),
     }
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasMain {
         #[prost(bool, tag = "2")]
         Main(bool),
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Tracecontext {
     #[prost(oneof = "tracecontext::HasSampled", tags = "1")]
     pub has_sampled: ::core::option::Option<tracecontext::HasSampled>,
@@ -1193,17 +1193,17 @@ pub struct Tracecontext {
 }
 /// Nested message and enum types in `Tracecontext`.
 pub mod tracecontext {
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasSampled {
         #[prost(bool, tag = "1")]
         Sampled(bool),
     }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasSpanId {
         #[prost(string, tag = "2")]
         SpanId(::prost::alloc::string::String),
     }
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasTraceId {
         #[prost(string, tag = "3")]
         TraceId(::prost::alloc::string::String),
@@ -1227,7 +1227,7 @@ pub struct User {
 }
 /// Nested message and enum types in `User`.
 pub mod user {
-    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasIpAddress {
         #[prost(string, tag = "4")]
         IpAddress(::prost::alloc::string::String),

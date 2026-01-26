@@ -14,13 +14,13 @@ struct ModuleInfo {
     path: String,
 }
 
-fn check_unstable(proto_path: &PathBuf, build_unstable: bool) -> bool {
+fn check_unstable(proto_path: &Path, build_unstable: bool) -> bool {
     if build_unstable {
         return true;
     }
     let proto_path_str: &str = proto_path.to_str().unwrap();
 
-    return !(proto_path_str.contains("alpha/") || proto_path_str.contains("beta/") || proto_path_str.contains("dev/"));
+    !(proto_path_str.contains("alpha/") || proto_path_str.contains("beta/") || proto_path_str.contains("dev/"))
 }
 
 fn find_proto_files(proto_dir: &str, build_unstable: bool) -> impl Iterator<Item = PathBuf> {
@@ -62,10 +62,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Compile rust code for all proto files.
     println!("Generating proto bindings");
-    tonic_build::configure()
+    tonic_prost_build::configure()
         .emit_rerun_if_changed(false)
         .out_dir("./rust/src")
-        .compile_protos(&proto_files, &["./proto"])
+        .compile_protos(&proto_files, &["./proto".into()])
         .unwrap();
 
     let mut visited: Vec<&str> = vec![];
@@ -94,7 +94,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             writeln!(code, "   }}").unwrap();
         }
         writeln!(code, "}}").unwrap();
-        writeln!(code, "").unwrap();
+        writeln!(code).unwrap();
     }
 
     // Generate lib.rs with the proto modules.
