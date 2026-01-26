@@ -5,7 +5,11 @@ package sentry_protos.kafka.events.v1;
 import "google/protobuf/struct.proto";
 import "sentry_protos/options/v1/options.proto";
 
+option deprecated = true;
+
 message EventStreamMessage {
+  option deprecated = true;
+
   option (sentry_protos.options.v1.topic_config) = {topic: "errors"};
 
   oneof value {
@@ -27,7 +31,11 @@ message EventStreamMessage {
 }
 
 message Startmergemessage {
+  option deprecated = true;
+
   message Startmergemessage2 {
+    option deprecated = true;
+
     string transaction_id = 1;
     int64 project_id = 2;
     repeated int64 previous_group_ids = 3;
@@ -41,7 +49,11 @@ message Startmergemessage {
 }
 
 message Endmergemessage {
+  option deprecated = true;
+
   message Endmergemessage2 {
+    option deprecated = true;
+
     string transaction_id = 1;
     int64 project_id = 2;
     repeated int64 previous_group_ids = 3;
@@ -55,7 +67,11 @@ message Endmergemessage {
 }
 
 message Startdeletegroupsmessage {
+  option deprecated = true;
+
   message Startdeletegroupsmessage2 {
+    option deprecated = true;
+
     string transaction_id = 1;
     int64 project_id = 2;
     repeated int64 group_ids = 3;
@@ -68,7 +84,10 @@ message Startdeletegroupsmessage {
 }
 
 message Enddeletegroupsmessage {
+  option deprecated = true;
   message Enddeletegroupsmessage2 {
+    option deprecated = true;
+
     string transaction_id = 1;
     int64 project_id = 2;
     repeated int64 group_ids = 3;
@@ -81,7 +100,11 @@ message Enddeletegroupsmessage {
 }
 
 message Startunmergemessage {
+  option deprecated = true;
+
   message Startunmergemessage2 {
+    option deprecated = true;
+
     int64 project_id = 1;
   }
 
@@ -91,7 +114,10 @@ message Startunmergemessage {
 }
 
 message Startunmergehierarchicalmessage {
+  option deprecated = true;
+
   message Startunmergehierarchicalmessage2 {
+    option deprecated = true;
     int64 project_id = 1;
   }
 
@@ -101,7 +127,10 @@ message Startunmergehierarchicalmessage {
 }
 
 message Startdeletetagmessage {
+  option deprecated = true;
+
   message Startdeletetagmessage2 {
+    option deprecated = true;
     int64 project_id = 1;
   }
 
@@ -111,7 +140,11 @@ message Startdeletetagmessage {
 }
 
 message Endunmergemessage {
+  option deprecated = true;
+
   message Endunmergemessage2 {
+    option deprecated = true;
+
     string transaction_id = 1;
     int64 project_id = 2;
     int64 previous_group_id = 3;
@@ -126,7 +159,11 @@ message Endunmergemessage {
 }
 
 message Endunmergehierarchicalmessage {
+  option deprecated = true;
+
   message Endunmergehierarchicalmessage2 {
+    option deprecated = true;
+
     int64 project_id = 1;
     int64 previous_group_id = 2;
     int64 new_group_id = 3;
@@ -141,7 +178,11 @@ message Endunmergehierarchicalmessage {
 }
 
 message Enddeletetagmessage {
+  option deprecated = true;
+
   message Enddeletetagmessage2 {
+    option deprecated = true;
+
     string tag = 1;
     string datetime = 2;
     int64 project_id = 3;
@@ -153,7 +194,11 @@ message Enddeletetagmessage {
 }
 
 message Tombstoneeventsmessage {
+  option deprecated = true;
+
   message Tombstoneeventsmessage2 {
+    option deprecated = true;
+
     int64 project_id = 1;
     repeated string event_ids = 2;
     oneof has_old_primary_hash {
@@ -170,7 +215,11 @@ message Tombstoneeventsmessage {
 }
 
 message Replacegroupmessage {
+  option deprecated = true;
+
   message Replacegroupmessage2 {
+    option deprecated = true;
+
     repeated string event_ids = 1;
     int64 project_id = 2;
     string from_timestamp = 3;
@@ -186,7 +235,11 @@ message Replacegroupmessage {
 }
 
 message Excludegroupsmessage {
+  option deprecated = true;
+
   message Excludegroupsmessage2 {
+    option deprecated = true;
+
     int64 project_id = 1;
     repeated int64 group_ids = 2;
   }
@@ -197,13 +250,19 @@ message Excludegroupsmessage {
 }
 
 message Contexts {
+  option deprecated = true;
+
   message ContextsReplay {
+    option deprecated = true;
+
     oneof has_replay_id {
       string replay_id = 1;
     }
   }
 
   message ContextsTrace {
+    option deprecated = true;
+
     oneof has_sampled {
       bool sampled = 1;
     }
@@ -224,14 +283,22 @@ message Contexts {
 }
 
 message Errordata {
+  option deprecated = true;
+
   message ErrordataContexts {
+    option deprecated = true;
+
     message ErrordataContextsReplay {
+      option deprecated = true;
+
       oneof has_replay_id {
         string replay_id = 1;
       }
     }
 
     message ErrordataContextsTrace {
+      option deprecated = true;
+
       oneof has_sampled {
         bool sampled = 1;
       }
@@ -252,14 +319,24 @@ message Errordata {
   }
 
   message ErrordataException {
+    option deprecated = true;
+
     message ErrordataExceptionValues {
+      option deprecated = true;
+
       message ErrordataExceptionValuesMechanism {
+        option deprecated = true;
+
         google.protobuf.Value handled = 1;
         google.protobuf.Value type = 2;
       }
 
       message ErrordataExceptionValuesStacktrace {
+        option deprecated = true;
+
         message ErrordataExceptionValuesStacktraceFrames {
+          option deprecated = true;
+
           google.protobuf.Value abs_path = 1;
           oneof has_colno {
             int64 colno = 2;
@@ -296,7 +373,10 @@ message Errordata {
   }
 
   message ErrordataRequest {
+    option deprecated = true;
     message ErrordataRequestHeaders {
+      option deprecated = true;
+
       string a0 = 1;
       google.protobuf.Value a1 = 2;
     }
@@ -306,18 +386,26 @@ message Errordata {
   }
 
   message ErrordataSdk {
+    option deprecated = true;
+
     repeated google.protobuf.Value integrations = 1;
     google.protobuf.Value name = 2;
     google.protobuf.Value version = 3;
   }
 
   message ErrordataTags {
+    option deprecated = true;
+
     google.protobuf.Value a0 = 1;
     google.protobuf.Value a1 = 2;
   }
 
   message ErrordataThreads {
+    option deprecated = true;
+
     message ErrordataThreadsValues {
+      option deprecated = true;
+
       oneof has_id {
         google.protobuf.Value id = 1;
       }
@@ -330,6 +418,8 @@ message Errordata {
   }
 
   message ErrordataUser {
+    option deprecated = true;
+
     google.protobuf.Value email = 1;
     map<string, google.protobuf.Value> geo = 2;
     google.protobuf.Value id = 3;
@@ -374,6 +464,8 @@ message Errordata {
 }
 
 message Errormessage {
+  option deprecated = true;
+
   Errordata data = 1;
   string datetime = 2;
   string event_id = 3;
@@ -390,14 +482,21 @@ message Errormessage {
 }
 
 message Exception {
+  option deprecated = true;
+
   message ExceptionValues {
+    option deprecated = true;
     message ExceptionValuesMechanism {
       google.protobuf.Value handled = 1;
       google.protobuf.Value type = 2;
     }
 
     message ExceptionValuesStacktrace {
+      option deprecated = true;
+
       message ExceptionValuesStacktraceFrames {
+        option deprecated = true;
+
         google.protobuf.Value abs_path = 1;
         oneof has_colno {
           int64 colno = 2;
@@ -434,18 +533,25 @@ message Exception {
 }
 
 message Exceptionmechanism {
+  option deprecated = true;
   google.protobuf.Value handled = 1;
   google.protobuf.Value type = 2;
 }
 
 message Exceptionvalue {
+  option deprecated = true;
+
   message ExceptionvalueMechanism {
+    option deprecated = true;
     google.protobuf.Value handled = 1;
     google.protobuf.Value type = 2;
   }
 
   message ExceptionvalueStacktrace {
+    option deprecated = true;
+
     message ExceptionvalueStacktraceFrames {
+      option deprecated = true;
       google.protobuf.Value abs_path = 1;
       oneof has_colno {
         int64 colno = 2;
@@ -479,6 +585,8 @@ message Exceptionvalue {
 }
 
 message Inserteventmessage {
+  option deprecated = true;
+
   int64 a0 = 1;
   string a1 = 2;
   Errormessage a2 = 3;
@@ -486,13 +594,19 @@ message Inserteventmessage {
 }
 
 message Replaycontext {
+  option deprecated = true;
+
   oneof has_replay_id {
     string replay_id = 1;
   }
 }
 
 message Request {
+  option deprecated = true;
+
   message RequestHeaders {
+    option deprecated = true;
+
     string a0 = 1;
     google.protobuf.Value a1 = 2;
   }
@@ -502,12 +616,16 @@ message Request {
 }
 
 message Sdk {
+  option deprecated = true;
+
   repeated google.protobuf.Value integrations = 1;
   google.protobuf.Value name = 2;
   google.protobuf.Value version = 3;
 }
 
 message Stackframe {
+  option deprecated = true;
+
   google.protobuf.Value abs_path = 1;
   oneof has_colno {
     int64 colno = 2;
@@ -525,7 +643,11 @@ message Stackframe {
 }
 
 message Stacktrace {
+  option deprecated = true;
+
   message StacktraceFrames {
+    option deprecated = true;
+
     google.protobuf.Value abs_path = 1;
     oneof has_colno {
       int64 colno = 2;
@@ -546,7 +668,10 @@ message Stacktrace {
 }
 
 message Thread {
+  option deprecated = true;
+
   message ThreadValues {
+    option deprecated = true;
     oneof has_id {
       google.protobuf.Value id = 1;
     }
@@ -559,6 +684,8 @@ message Thread {
 }
 
 message Threadvalue {
+  option deprecated = true;
+
   oneof has_id {
     google.protobuf.Value id = 1;
   }
@@ -568,6 +695,8 @@ message Threadvalue {
 }
 
 message Tracecontext {
+  option deprecated = true;
+
   oneof has_sampled {
     bool sampled = 1;
   }
@@ -580,6 +709,8 @@ message Tracecontext {
 }
 
 message User {
+  option deprecated = true;
+
   google.protobuf.Value email = 1;
   map<string, google.protobuf.Value> geo = 2;
   google.protobuf.Value id = 3;

@@ -18,6 +18,8 @@ extend google.protobuf.MessageOptions {
 // make decisions.  They are a lightweight coordination paradigm with little more guarantee
 // than best-effort.
 message Const {
+  option deprecated = true;
+
   int64 int = 1;
   string string = 2;
 }
