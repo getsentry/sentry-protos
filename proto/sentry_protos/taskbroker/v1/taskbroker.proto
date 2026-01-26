@@ -81,6 +81,18 @@ message TaskActivation {
   optional string application = 12;
 }
 
+service WorkerService {
+  rpc PushTask(PushTaskRequest) returns (PushTaskResponse) {}
+}
+
+message PushTaskRequest {
+  TaskActivation task = 1;
+}
+
+message PushTaskResponse {
+  TaskActivationStatus status = 1;
+}
+
 ////////////////////////////
 // RPC messages and services
 ////////////////////////////
