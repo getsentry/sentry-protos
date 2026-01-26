@@ -4,15 +4,22 @@ package sentry_protos.relay.v1;
 
 import "google/protobuf/struct.proto";
 
+option deprecated = true;
+
 /*
    The sentry v7 event structure.
 */
 message Event {
+  option deprecated = true;
   /*
      List of breadcrumbs recorded before this event.
   */
   message EventBreadcrumbs {
+    option deprecated = true;
+
     message EventBreadcrumbsValues {
+      option deprecated = true;
+
       oneof has_category {
         string category = 1;
       }
@@ -43,10 +50,13 @@ message Event {
      Meta data for event processing and debugging.
   */
   message EventDebugMeta {
+    option deprecated = true;
     /*
        Information about the system SDK (e.g. iOS SDK).
     */
     message EventDebugMetaSdkInfo {
+      option deprecated = true;
+
       oneof has_sdk_name {
         string sdk_name = 1;
       }
@@ -72,6 +82,7 @@ message Event {
       annotation/metadata system.
   */
   message EventErrors {
+    option deprecated = true;
     oneof has_name {
       string name = 1;
     }
@@ -83,11 +94,14 @@ message Event {
      One or multiple chained (nested) exceptions.
   */
   message EventException {
+    option deprecated = true;
     message EventExceptionValues {
+      option deprecated = true;
       /*
          Mechanism by which this exception was generated and handled.
       */
       message EventExceptionValuesMechanism {
+        option deprecated = true;
         /*
            Operating system or runtime meta information.
         */
@@ -96,6 +110,8 @@ message Event {
              Optional ISO C standard error code.
           */
           message EventExceptionValuesMechanismMetaErrno {
+            option deprecated = true;
+
             oneof has_name {
               string name = 1;
             }
@@ -108,6 +124,8 @@ message Event {
              A Mach Exception on Apple systems comprising a code triple and optional descriptions.
           */
           message EventExceptionValuesMechanismMetaMachException {
+            option deprecated = true;
+
             oneof has_code {
               uint64 code = 1;
             }
@@ -126,6 +144,7 @@ message Event {
              An NSError on Apple systems comprising code and signal.
           */
           message EventExceptionValuesMechanismMetaNsError {
+            option deprecated = true;
             oneof has_code {
               int64 code = 1;
             }
@@ -138,6 +157,7 @@ message Event {
              Information on the POSIX signal.
           */
           message EventExceptionValuesMechanismMetaSignal {
+            option deprecated = true;
             oneof has_code {
               int64 code = 1;
             }
@@ -203,15 +223,18 @@ message Event {
          Stack trace containing frames of this exception.
       */
       message EventExceptionValuesStacktrace {
+        option deprecated = true;
         /*
            Required. A non-empty list of stack frames. The list is ordered from caller to callee, or
             oldest to youngest. The last frame is the one creating the exception.
         */
         message EventExceptionValuesStacktraceFrames {
+          option deprecated = true;
           /*
              A possible lock (java monitor object) held by this frame.
           */
           message EventExceptionValuesStacktraceFramesLock {
+            option deprecated = true;
             oneof has_address {
               string address = 1;
             }
@@ -331,6 +354,8 @@ message Event {
      Custom parameterized message for this event.
   */
   message EventLogentry {
+    option deprecated = true;
+
     oneof has_formatted {
       string formatted = 1;
     }
@@ -344,6 +369,8 @@ message Event {
      Information about a web request that occurred during the event.
   */
   message EventRequest {
+    option deprecated = true;
+
     oneof has_api_target {
       string api_target = 1;
     }
@@ -384,6 +411,7 @@ message Event {
      Information about the Sentry SDK that generated this event.
   */
   message EventSdk {
+    option deprecated = true;
     /*
        List of installed and loaded SDK packages. _Optional._
 
@@ -393,6 +421,8 @@ message Event {
         checkout link and the version should be a Git reference (branch, tag or SHA).
     */
     message EventSdkPackages {
+      option deprecated = true;
+
       oneof has_name {
         string name = 1;
       }
@@ -413,15 +443,19 @@ message Event {
       DEPRECATED: Prefer `threads` or `exception` depending on which is more appropriate.
   */
   message EventStacktrace {
+    option deprecated = true;
     /*
        Required. A non-empty list of stack frames. The list is ordered from caller to callee, or
         oldest to youngest. The last frame is the one creating the exception.
     */
     message EventStacktraceFrames {
+      option deprecated = true;
       /*
          A possible lock (java monitor object) held by this frame.
       */
       message EventStacktraceFramesLock {
+        option deprecated = true;
+
         oneof has_address {
           string address = 1;
         }
@@ -518,13 +552,18 @@ message Event {
      Threads that were active when the event occurred.
   */
   message EventThreads {
+    option deprecated = true;
+
     message EventThreadsValues {
+      option deprecated = true;
       /*
          Represents a collection of locks (java monitor objects) held by a thread.
 
           A map of lock object addresses and their respective lock reason/details.
       */
       message EventThreadsValuesHeldLocks {
+        option deprecated = true;
+
         oneof has_address {
           string address = 1;
         }
@@ -546,15 +585,19 @@ message Event {
           The thread that crashed with an exception should not have a stack trace, but instead, the `thread_id` attribute should be set on the exception and Sentry will connect the two.
       */
       message EventThreadsValuesStacktrace {
+        option deprecated = true;
         /*
            Required. A non-empty list of stack frames. The list is ordered from caller to callee, or
             oldest to youngest. The last frame is the one creating the exception.
         */
         message EventThreadsValuesStacktraceFrames {
+          option deprecated = true;
           /*
              A possible lock (java monitor object) held by this frame.
           */
           message EventThreadsValuesStacktraceFramesLock {
+            option deprecated = true;
+
             oneof has_address {
               string address = 1;
             }
@@ -678,6 +721,7 @@ message Event {
      Additional information about the name of the transaction.
   */
   message EventTransactionInfo {
+    option deprecated = true;
     /*
        A list of changes prior to the final transaction name.
 
@@ -685,6 +729,8 @@ message Event {
         and never changed. There is no placeholder entry for the initial transaction name.
     */
     message EventTransactionInfoChanges {
+      option deprecated = true;
+
       oneof has_propagations {
         uint64 propagations = 1;
       }
@@ -712,10 +758,13 @@ message Event {
      Information about the user who triggered this event.
   */
   message EventUser {
+    option deprecated = true;
     /*
        Approximate geographical location of the end user or device.
     */
     message EventUserGeo {
+      option deprecated = true;
+
       oneof has_city {
         string city = 1;
       }
@@ -853,6 +902,8 @@ message Event {
     application that was running and carries metadata about the current session.
 */
 message Appcontext {
+  option deprecated = true;
+
   oneof has_app_build {
     string app_build = 1;
   }
@@ -889,6 +940,8 @@ message Appcontext {
     This was also used for non-apple platforms with similar debug setups.
 */
 message Appledebugimage {
+  option deprecated = true;
+
   oneof has_arch {
     string arch = 1;
   }
@@ -949,6 +1002,8 @@ message Appledebugimage {
     ```
 */
 message Breadcrumb {
+  option deprecated = true;
+
   oneof has_category {
     string category = 1;
   }
@@ -976,6 +1031,8 @@ message Breadcrumb {
    Web browser information.
 */
 message Browsercontext {
+  option deprecated = true;
+
   oneof has_name {
     string name = 1;
   }
@@ -992,6 +1049,8 @@ message Browsercontext {
     [`errno(3)`](https://man7.org/linux/man-pages/man3/errno.3.html) for more information.
 */
 message Cerror {
+  option deprecated = true;
+
   oneof has_name {
     string name = 1;
   }
@@ -1004,6 +1063,7 @@ message Cerror {
    The SDK Interface describes the Sentry SDK and its configuration used to capture and transmit an event.
 */
 message Clientsdkinfo {
+  option deprecated = true;
   /*
      List of installed and loaded SDK packages. _Optional._
 
@@ -1013,6 +1073,8 @@ message Clientsdkinfo {
       checkout link and the version should be a Git reference (branch, tag or SHA).
   */
   message ClientsdkinfoPackages {
+    option deprecated = true;
+
     oneof has_name {
       string name = 1;
     }
@@ -1031,6 +1093,8 @@ message Clientsdkinfo {
    An installed and loaded package as part of the Sentry SDK.
 */
 message Clientsdkpackage {
+  option deprecated = true;
+
   oneof has_name {
     string name = 1;
   }
@@ -1043,12 +1107,15 @@ message Clientsdkpackage {
    The arbitrary data on the trace.
 */
 message Data {
+  option deprecated = true;
   /*
      The previous route in the application
 
       Set by React Native SDK.
   */
   message DataPreviousroute {
+    option deprecated = true;
+
     oneof has_name {
       string name = 1;
     }
@@ -1063,6 +1130,8 @@ message Data {
       Set by React Native SDK.
   */
   message DataRoute {
+    option deprecated = true;
+
     oneof has_name {
       string name = 1;
     }
@@ -1102,10 +1171,13 @@ message Data {
     ```
 */
 message Debugmeta {
+  option deprecated = true;
   /*
      Information about the system SDK (e.g. iOS SDK).
   */
   message DebugmetaSdkInfo {
+    option deprecated = true;
+
     oneof has_sdk_name {
       string sdk_name = 1;
     }
@@ -1133,6 +1205,8 @@ message Debugmeta {
     applications.
 */
 message Devicecontext {
+  option deprecated = true;
+
   oneof has_arch {
     string arch = 1;
   }
@@ -1259,6 +1333,8 @@ message Devicecontext {
    An event processing error.
 */
 message Eventprocessingerror {
+  option deprecated = true;
+
   oneof has_name {
     string name = 1;
   }
@@ -1292,18 +1368,23 @@ message Eventprocessingerror {
     ```
 */
 message Exception {
+  option deprecated = true;
   /*
      Mechanism by which this exception was generated and handled.
   */
   message ExceptionMechanism {
+    option deprecated = true;
     /*
        Operating system or runtime meta information.
     */
     message ExceptionMechanismMeta {
+      option deprecated = true;
       /*
          Optional ISO C standard error code.
       */
       message ExceptionMechanismMetaErrno {
+        option deprecated = true;
+
         oneof has_name {
           string name = 1;
         }
@@ -1316,6 +1397,8 @@ message Exception {
          A Mach Exception on Apple systems comprising a code triple and optional descriptions.
       */
       message ExceptionMechanismMetaMachException {
+        option deprecated = true;
+
         oneof has_code {
           uint64 code = 1;
         }
@@ -1334,6 +1417,8 @@ message Exception {
          An NSError on Apple systems comprising code and signal.
       */
       message ExceptionMechanismMetaNsError {
+        option deprecated = true;
+
         oneof has_code {
           int64 code = 1;
         }
@@ -1346,6 +1431,8 @@ message Exception {
          Information on the POSIX signal.
       */
       message ExceptionMechanismMetaSignal {
+        option deprecated = true;
+
         oneof has_code {
           int64 code = 1;
         }
@@ -1411,15 +1498,19 @@ message Exception {
      Stack trace containing frames of this exception.
   */
   message ExceptionStacktrace {
+    option deprecated = true;
     /*
        Required. A non-empty list of stack frames. The list is ordered from caller to callee, or
         oldest to youngest. The last frame is the one creating the exception.
     */
     message ExceptionStacktraceFrames {
+      option deprecated = true;
       /*
          A possible lock (java monitor object) held by this frame.
       */
       message ExceptionStacktraceFramesLock {
+        option deprecated = true;
+
         oneof has_address {
           string address = 1;
         }
@@ -1539,10 +1630,13 @@ message Exception {
     attribute. All values are optional, but recommended.
 */
 message Frame {
+  option deprecated = true;
   /*
      A possible lock (java monitor object) held by this frame.
   */
   message FrameLock {
+    option deprecated = true;
+
     oneof has_address {
       string address = 1;
     }
@@ -1626,6 +1720,8 @@ message Frame {
    Geographical location of the end user or device.
 */
 message Geo {
+  option deprecated = true;
+
   oneof has_city {
     string city = 1;
   }
@@ -1658,6 +1754,8 @@ message Geo {
     ```
 */
 message Gpucontext {
+  option deprecated = true;
+
   oneof has_api_type {
     string api_type = 1;
   }
@@ -1716,6 +1814,8 @@ message Gpucontext {
     ```
 */
 message Jvmdebugimage {
+  option deprecated = true;
+
   string debug_id = 1;
 }
 
@@ -1723,6 +1823,8 @@ message Jvmdebugimage {
    Represents an instance of a held lock (java monitor object) in a thread.
 */
 message Lockreason {
+  option deprecated = true;
+
   oneof has_address {
     string address = 1;
   }
@@ -1763,6 +1865,8 @@ message Lockreason {
     ```
 */
 message Logentry {
+  option deprecated = true;
+
   oneof has_formatted {
     string formatted = 1;
   }
@@ -1776,6 +1880,8 @@ message Logentry {
    Mach exception information.
 */
 message Machexception {
+  option deprecated = true;
+
   oneof has_code {
     uint64 code = 1;
   }
@@ -1799,14 +1905,17 @@ message Machexception {
     well as mechanism-specific values.
 */
 message Mechanism {
+  option deprecated = true;
   /*
      Operating system or runtime meta information.
   */
   message MechanismMeta {
+    option deprecated = true;
     /*
        Optional ISO C standard error code.
     */
     message MechanismMetaErrno {
+      option deprecated = true;
       oneof has_name {
         string name = 1;
       }
@@ -1819,6 +1928,7 @@ message Mechanism {
        A Mach Exception on Apple systems comprising a code triple and optional descriptions.
     */
     message MechanismMetaMachException {
+      option deprecated = true;
       oneof has_code {
         uint64 code = 1;
       }
@@ -1837,6 +1947,8 @@ message Mechanism {
        An NSError on Apple systems comprising code and signal.
     */
     message MechanismMetaNsError {
+      option deprecated = true;
+
       oneof has_code {
         int64 code = 1;
       }
@@ -1849,6 +1961,8 @@ message Mechanism {
        Information on the POSIX signal.
     */
     message MechanismMetaSignal {
+      option deprecated = true;
+
       oneof has_code {
         int64 code = 1;
       }
@@ -1920,10 +2034,13 @@ message Mechanism {
     information to the user.
 */
 message Mechanismmeta {
+  option deprecated = true;
   /*
      Optional ISO C standard error code.
   */
   message MechanismmetaErrno {
+    option deprecated = true;
+
     oneof has_name {
       string name = 1;
     }
@@ -1936,6 +2053,8 @@ message Mechanismmeta {
      A Mach Exception on Apple systems comprising a code triple and optional descriptions.
   */
   message MechanismmetaMachException {
+    option deprecated = true;
+
     oneof has_code {
       uint64 code = 1;
     }
@@ -1954,6 +2073,8 @@ message Mechanismmeta {
      An NSError on Apple systems comprising code and signal.
   */
   message MechanismmetaNsError {
+    option deprecated = true;
+
     oneof has_code {
       int64 code = 1;
     }
@@ -1966,6 +2087,8 @@ message Mechanismmeta {
      Information on the POSIX signal.
   */
   message MechanismmetaSignal {
+    option deprecated = true;
+
     oneof has_code {
       int64 code = 1;
     }
@@ -2046,6 +2169,8 @@ message Mechanismmeta {
     ```
 */
 message Nativedebugimage {
+  option deprecated = true;
+
   oneof has_arch {
     string arch = 1;
   }
@@ -2081,6 +2206,8 @@ message Nativedebugimage {
     - [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Network_Error_Logging)
 */
 message Nelcontext {
+  option deprecated = true;
+
   oneof has_elapsed_time {
     uint64 elapsed_time = 1;
   }
@@ -2102,6 +2229,8 @@ message Nelcontext {
    NSError informaiton.
 */
 message Nserror {
+  option deprecated = true;
+
   oneof has_code {
     int64 code = 1;
   }
@@ -2117,6 +2246,8 @@ message Nserror {
     is the operating system of the browser (generally pulled from the User-Agent string).
 */
 message Oscontext {
+  option deprecated = true;
+
   oneof has_build {
     string build = 1;
   }
@@ -2143,6 +2274,8 @@ message Oscontext {
     If an event has this context, it was generated from an OpenTelemetry signal (trace, metric, log).
 */
 message Otelcontext {
+  option deprecated = true;
+
   oneof has_attributes {
     google.protobuf.Value attributes = 1;
   }
@@ -2158,6 +2291,8 @@ message Otelcontext {
     signal in more detail. On Linux, this code does not exist.
 */
 message Posixsignal {
+  option deprecated = true;
+
   oneof has_code {
     int64 code = 1;
   }
@@ -2176,6 +2311,8 @@ message Posixsignal {
    Profile context
 */
 message Profilecontext {
+  option deprecated = true;
+
   string profile_id = 1;
 }
 
@@ -2185,6 +2322,8 @@ message Profilecontext {
     Proguard images refer to `mapping.txt` files generated when Proguard obfuscates function names. The Java SDK integrations assign this file a unique identifier, which has to be included in the list of images.
 */
 message Proguarddebugimage {
+  option deprecated = true;
+
   string uuid = 1;
 }
 
@@ -2259,15 +2398,19 @@ message Proguarddebugimage {
     ```
 */
 message Rawstacktrace {
+  option deprecated = true;
   /*
      Required. A non-empty list of stack frames. The list is ordered from caller to callee, or
       oldest to youngest. The last frame is the one creating the exception.
   */
   message RawstacktraceFrames {
+    option deprecated = true;
     /*
        A possible lock (java monitor object) held by this frame.
     */
     message RawstacktraceFramesLock {
+      option deprecated = true;
+
       oneof has_address {
         string address = 1;
       }
@@ -2370,6 +2513,8 @@ message Rawstacktrace {
     This context is never set on the client for events, only on relay.
 */
 message Replaycontext {
+  option deprecated = true;
+
   oneof has_replay_id {
     string replay_id = 1;
   }
@@ -2436,6 +2581,8 @@ message Replaycontext {
     ```
 */
 message Request {
+  option deprecated = true;
+
   oneof has_api_target {
     string api_target = 1;
   }
@@ -2479,6 +2626,8 @@ message Request {
     a dictionary (for standard HTTP responses) or a raw response body.
 */
 message Responsecontext {
+  option deprecated = true;
+
   oneof has_body_size {
     uint64 body_size = 1;
   }
@@ -2501,6 +2650,8 @@ message Responsecontext {
    The route in the application, set by React Native SDK.
 */
 message Route {
+  option deprecated = true;
+
   oneof has_name {
     string name = 1;
   }
@@ -2517,6 +2668,8 @@ message Route {
     JavaScript application running on top of JVM).
 */
 message Runtimecontext {
+  option deprecated = true;
+
   oneof has_build {
     string build = 1;
   }
@@ -2549,6 +2702,8 @@ message Runtimecontext {
     perfectly for source map processing.
 */
 message Sourcemapdebugimage {
+  option deprecated = true;
+
   string code_file = 1;
   oneof has_debug_file {
     string debug_file = 2;
@@ -2557,15 +2712,19 @@ message Sourcemapdebugimage {
 }
 
 message Stacktrace {
+  option deprecated = true;
   /*
      Required. A non-empty list of stack frames. The list is ordered from caller to callee, or
       oldest to youngest. The last frame is the one creating the exception.
   */
   message StacktraceFrames {
+    option deprecated = true;
     /*
        A possible lock (java monitor object) held by this frame.
     */
     message StacktraceFramesLock {
+      option deprecated = true;
+
       oneof has_address {
         string address = 1;
       }
@@ -2665,6 +2824,8 @@ message Stacktrace {
     SDK.  Not to be confused with the client SDK.
 */
 message Systemsdkinfo {
+  option deprecated = true;
+
   oneof has_sdk_name {
     string sdk_name = 1;
   }
@@ -2680,6 +2841,8 @@ message Systemsdkinfo {
 }
 
 message Tagentry {
+  option deprecated = true;
+
   oneof has_a0 {
     string a0 = 1;
   }
@@ -2712,13 +2875,17 @@ message Tagentry {
     }
     ```
 */
+
 message Thread {
+  option deprecated = true;
   /*
      Represents a collection of locks (java monitor objects) held by a thread.
 
       A map of lock object addresses and their respective lock reason/details.
   */
   message ThreadHeldLocks {
+    option deprecated = true;
+
     oneof has_address {
       string address = 1;
     }
@@ -2740,15 +2907,20 @@ message Thread {
       The thread that crashed with an exception should not have a stack trace, but instead, the `thread_id` attribute should be set on the exception and Sentry will connect the two.
   */
   message ThreadStacktrace {
+    option deprecated = true;
     /*
        Required. A non-empty list of stack frames. The list is ordered from caller to callee, or
         oldest to youngest. The last frame is the one creating the exception.
     */
     message ThreadStacktraceFrames {
+      option deprecated = true;
+
       /*
          A possible lock (java monitor object) held by this frame.
       */
       message ThreadStacktraceFramesLock {
+        option deprecated = true;
+
         oneof has_address {
           string address = 1;
         }
@@ -2869,16 +3041,20 @@ message Thread {
    Trace context
 */
 message Tracecontext {
+  option deprecated = true;
   /*
      Arbitrary additional data on a trace.
   */
   message TracecontextData {
+    option deprecated = true;
     /*
        The previous route in the application
 
         Set by React Native SDK.
     */
     message TracecontextDataPreviousroute {
+      option deprecated = true;
+
       oneof has_name {
         string name = 1;
       }
@@ -2893,6 +3069,8 @@ message Tracecontext {
         Set by React Native SDK.
     */
     message TracecontextDataRoute {
+      option deprecated = true;
+
       oneof has_name {
         string name = 1;
       }
@@ -2941,6 +3119,7 @@ message Tracecontext {
    Additional information about the name of the transaction.
 */
 message Transactioninfo {
+  option deprecated = true;
   /*
      A list of changes prior to the final transaction name.
 
@@ -2948,6 +3127,8 @@ message Transactioninfo {
       and never changed. There is no placeholder entry for the initial transaction name.
   */
   message TransactioninfoChanges {
+    option deprecated = true;
+
     oneof has_propagations {
       uint64 propagations = 1;
     }
@@ -2972,6 +3153,8 @@ message Transactioninfo {
 }
 
 message Transactionnamechange {
+  option deprecated = true;
+
   oneof has_propagations {
     uint64 propagations = 1;
   }
@@ -2999,10 +3182,13 @@ message Transactionnamechange {
     ```
 */
 message User {
+  option deprecated = true;
   /*
      Approximate geographical location of the end user or device.
   */
   message UserGeo {
+    option deprecated = true;
+
     oneof has_city {
       string city = 1;
     }
@@ -3054,6 +3240,8 @@ message User {
     TODO(jferg): rename to FeedbackContext once old UserReport logic is deprecated.
 */
 message Userreportv2Context {
+  option deprecated = true;
+
   oneof has_contact_email {
     string contact_email = 1;
   }

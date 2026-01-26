@@ -5856,29 +5856,6 @@ pub mod tagentry {
         A1(::prost::alloc::string::String),
     }
 }
-///
-/// A process thread of an event.
-///
-/// The Threads Interface specifies threads that were running at the time an event happened. These threads can also contain stack traces.
-///
-/// An event may contain one or more threads in an attribute named `threads`.
-///
-/// The following example illustrates the threads part of the event payload and omits other attributes for simplicity.
-///
-/// ```json
-/// {
-/// "threads": {
-/// "values": [
-/// {
-/// "id": "0",
-/// "name": "main",
-/// "crashed": true,
-/// "stacktrace": {}
-/// }
-/// ]
-/// }
-/// }
-/// ```
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Thread {
     #[prost(map = "string, message", tag = "3")]
