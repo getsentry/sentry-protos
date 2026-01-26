@@ -6,6 +6,8 @@ modules:
 breaking:
   use:
     - FILE
+  except:
+    - FILE_NO_DELETE
   ignore_unstable_packages: true
   ignore:
     - google/proto
