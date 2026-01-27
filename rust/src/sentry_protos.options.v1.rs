@@ -23,13 +23,13 @@ pub struct TopicConfig {
 }
 /// Nested message and enum types in `TopicConfig`.
 pub mod topic_config {
-    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum HasEnforcedPartitionCount {
         #[prost(uint64, tag = "6")]
         EnforcedPartitionCount(u64),
     }
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ServicesData {
     #[prost(string, repeated, tag = "1")]
     pub consumers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
@@ -40,7 +40,7 @@ pub struct ServicesData {
 /// At a protocol level, consts should not be enforced or validated, but they can be used to
 /// make decisions.  They are a lightweight coordination paradigm with little more guarantee
 /// than best-effort.
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Const {
     #[prost(int64, tag = "1")]
     pub int: i64,

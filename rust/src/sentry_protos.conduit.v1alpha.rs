@@ -40,11 +40,11 @@ impl Phase {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            Phase::Unspecified => "PHASE_UNSPECIFIED",
-            Phase::Start => "PHASE_START",
-            Phase::Delta => "PHASE_DELTA",
-            Phase::End => "PHASE_END",
-            Phase::Error => "PHASE_ERROR",
+            Self::Unspecified => "PHASE_UNSPECIFIED",
+            Self::Start => "PHASE_START",
+            Self::Delta => "PHASE_DELTA",
+            Self::End => "PHASE_END",
+            Self::Error => "PHASE_ERROR",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
