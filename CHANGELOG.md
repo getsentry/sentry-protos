@@ -1,3 +1,16 @@
+## 0.5.0
+
+### New Features ✨
+
+- (snuba) Add TRACE_ITEM_TYPE_USER_SESSION by @noahsmartin in [#167](https://github.com/getsentry/sentry-protos/pull/167)
+
+### Internal Changes 🔧
+
+- (rust) Update tonic/prost to 0.14 by @Dav1dde in [#165](https://github.com/getsentry/sentry-protos/pull/165)
+- Revert buf exceptions by @markstory in [#169](https://github.com/getsentry/sentry-protos/pull/169)
+- Remove unused protobufs from prototyping by @markstory in [#168](https://github.com/getsentry/sentry-protos/pull/168)
+- Deprecate unused protos by @markstory in [#166](https://github.com/getsentry/sentry-protos/pull/166)
+
 ## 0.4.14
 
 ### New Features ✨
