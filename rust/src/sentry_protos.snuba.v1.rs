@@ -947,6 +947,8 @@ pub mod expression {
     }
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Expression {
+        /// deprecated, please use conditional_aggregation with no filter
+        #[deprecated]
         #[prost(message, tag = "1")]
         Aggregation(super::AttributeAggregation),
         #[prost(message, tag = "2")]
