@@ -53,7 +53,7 @@ message TimeSeriesRequest {
 
 message Expression {
   oneof expression {
-    AttributeAggregation aggregation = 1;
+    AttributeAggregation aggregation = 1 [deprecated = true]; // deprecated, please use conditional_aggregation with no filter
     BinaryFormula formula = 2;
     AttributeConditionalAggregation conditional_aggregation = 4;
     Literal literal = 5;
