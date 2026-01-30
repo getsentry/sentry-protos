@@ -42,6 +42,29 @@ message ExistsFilter {
   AttributeKey key = 1;
 }
 
+// Filter that matches trace items where ANY attribute matches the given value.
+// Use this for searching across all attributes without specifying a key.
+message AnyAttributeFilter {
+  // Restricted set of operations that make sense for all-attribute search
+  enum Op {
+    OP_UNSPECIFIED = 0;
+    OP_EQUALS = 1;
+    OP_NOT_EQUALS = 2;
+    OP_LIKE = 3;
+    OP_NOT_LIKE = 4;
+    OP_IN = 5;
+    OP_NOT_IN = 6;
+  }
+
+  Op op = 1;
+  AttributeValue value = 2;
+  bool ignore_case = 3;
+
+  // Optional: Restrict search to specific attribute types.
+  // If empty, searches all string-type attributes by default.
+  repeated AttributeKey.Type attribute_types = 4;
+}
+
 // a condition used to filter for matching "trace items"
 //
 // ex: "exists span.duration" would mean
@@ -57,5 +80,6 @@ message TraceItemFilter {
     NotFilter not_filter = 3;
     ComparisonFilter comparison_filter = 4;
     ExistsFilter exists_filter = 5;
+    AnyAttributeFilter any_attribute_filter = 6;
   }
 }
