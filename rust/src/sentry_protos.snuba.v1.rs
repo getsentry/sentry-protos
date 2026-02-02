@@ -69,6 +69,84 @@ pub mod attribute_key {
         }
     }
 }
+/// this allow us to select single key such as span.attr1
+/// and also combine multiple keys such as (span.attr1 * span.attr2)
+/// Grammar: f = k | f op f (formula is either a key or formula operation formula)
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AttributeKeyExpression {
+    #[prost(oneof = "attribute_key_expression::Expression", tags = "1, 2")]
+    pub expression: ::core::option::Option<attribute_key_expression::Expression>,
+}
+/// Nested message and enum types in `AttributeKeyExpression`.
+pub mod attribute_key_expression {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct Formula {
+        #[prost(enumeration = "Op", tag = "1")]
+        pub op: i32,
+        #[prost(message, optional, boxed, tag = "2")]
+        pub left: ::core::option::Option<
+            ::prost::alloc::boxed::Box<super::AttributeKeyExpression>,
+        >,
+        #[prost(message, optional, boxed, tag = "3")]
+        pub right: ::core::option::Option<
+            ::prost::alloc::boxed::Box<super::AttributeKeyExpression>,
+        >,
+    }
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
+    #[repr(i32)]
+    pub enum Op {
+        Unspecified = 0,
+        Add = 1,
+        Sub = 2,
+        Mult = 3,
+        Div = 4,
+    }
+    impl Op {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Self::Unspecified => "OP_UNSPECIFIED",
+                Self::Add => "OP_ADD",
+                Self::Sub => "OP_SUB",
+                Self::Mult => "OP_MULT",
+                Self::Div => "OP_DIV",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "OP_UNSPECIFIED" => Some(Self::Unspecified),
+                "OP_ADD" => Some(Self::Add),
+                "OP_SUB" => Some(Self::Sub),
+                "OP_MULT" => Some(Self::Mult),
+                "OP_DIV" => Some(Self::Div),
+                _ => None,
+            }
+        }
+    }
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Expression {
+        /// f = k (single key)
+        #[prost(message, tag = "1")]
+        Key(super::AttributeKey),
+        /// f = f op f (binary operation between two formulas)
+        #[prost(message, tag = "2")]
+        Formula(::prost::alloc::boxed::Box<Formula>),
+    }
+}
 /// custom mappings of column values
 ///
 /// for example, `project_name` is changeable by the user and not stored in EAP,
@@ -444,8 +522,12 @@ pub mod trace_item_filter {
 pub struct AttributeConditionalAggregation {
     #[prost(enumeration = "Function", tag = "1")]
     pub aggregate: i32,
+    /// will be deprecated in favor of expression in the future
     #[prost(message, optional, tag = "2")]
     pub key: ::core::option::Option<AttributeKey>,
+    /// f = key | f op f (either a key or formula of keys)
+    #[prost(message, optional, tag = "6")]
+    pub expression: ::core::option::Option<AttributeKeyExpression>,
     #[prost(string, tag = "3")]
     pub label: ::prost::alloc::string::String,
     #[prost(enumeration = "ExtrapolationMode", tag = "4")]

@@ -7,7 +7,8 @@ import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 message AttributeConditionalAggregation {
   Function aggregate = 1;
-  AttributeKey key = 2;
+  AttributeKey key = 2; // will be deprecated in favor of expression in the future
+  AttributeKeyExpression expression = 6; // f = key | f op f (either a key or formula of keys)
   string label = 3;
   ExtrapolationMode extrapolation_mode = 4;
   TraceItemFilter filter = 5;
