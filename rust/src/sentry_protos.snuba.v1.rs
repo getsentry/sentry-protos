@@ -2145,6 +2145,16 @@ pub struct KeyValue {
     #[prost(message, optional, tag = "2")]
     pub value: ::core::option::Option<AnyValue>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ItemOutcomes {
+    /// DataCategory that defined in Relay
+    #[prost(uint32, tag = "1")]
+    pub data_category: u32,
+    #[prost(uint64, tag = "2")]
+    pub quantity: u64,
+    #[prost(uint64, tag = "3")]
+    pub key_id: u64,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TraceItem {
     #[prost(uint64, tag = "1")]
@@ -2176,6 +2186,8 @@ pub struct TraceItem {
     pub received: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(uint32, tag = "102")]
     pub downsampled_retention_days: u32,
+    #[prost(message, repeated, tag = "103")]
+    pub item_outcomes: ::prost::alloc::vec::Vec<ItemOutcomes>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExportTraceItemsRequest {
