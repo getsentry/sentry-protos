@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.snuba.v1;
 
+import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
@@ -60,6 +61,7 @@ message AttributeDistribution {
   message Bucket {
     string label = 1;
     float value = 2;
+    google.protobuf.Timestamp last_seen = 3;
   }
 
   string attribute_name = 1;

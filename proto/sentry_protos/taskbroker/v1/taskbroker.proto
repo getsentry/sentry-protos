@@ -41,7 +41,9 @@ message TaskActivation {
   // A GUID for the task. Used to update tasks
   string id = 1;
 
-  // The task namespace
+  // The task namespace. Applications can contain multiple namespaces.
+  // While namespaces within an application must be unique, different
+  // applications can have overlapping namespace values.
   string namespace = 2;
 
   // The name of the task. This name is resolved within the worker
@@ -71,6 +73,12 @@ message TaskActivation {
   // The duration in seconds that a task must wait to begin execution after it is emitted.
   // After received_at + delay has passed, the activation will become pending.
   optional uint64 delay = 11;
+
+  // The client application that an activation belongs to.
+  // Each activation *must* belong to an application. This requirement
+  // is enforced during taskbroker ingestion as adding required fields to a protobuf
+  // is a breaking change.
+  optional string application = 12;
 }
 
 ////////////////////////////
@@ -85,7 +93,10 @@ service ConsumerService {
 }
 
 message GetTaskRequest {
+  // The namespace to filter activations with.
   optional string namespace = 1;
+  // The client application to filter activations with.
+  optional string application = 2;
 }
 
 message GetTaskResponse {
@@ -94,7 +105,10 @@ message GetTaskResponse {
 }
 
 message FetchNextTask {
+  // The namespace to filter activations by.
   optional string namespace = 1;
+  // The client application to filter activations by.
+  optional string application = 2;
 }
 
 message SetTaskStatusRequest {

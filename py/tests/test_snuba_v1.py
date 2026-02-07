@@ -60,9 +60,13 @@ from sentry_protos.snuba.v1.trace_item_filter_pb2 import (
 from sentry_protos.snuba.v1.trace_item_attribute_pb2 import (
     AttributeAggregation,
     AttributeKey,
+    AttributeKeyExpression,
     AttributeValue,
     ExtrapolationMode,
     Function,
+)
+from sentry_protos.snuba.v1.attribute_conditional_aggregation_pb2 import (
+    AttributeConditionalAggregation,
 )
 from sentry_protos.snuba.v1.formula_pb2 import Literal
 from sentry_protos.snuba.v1.endpoint_trace_item_stats_pb2 import (
@@ -774,4 +778,20 @@ def test_example_time_series_cross_item_query() -> None:
                 ),
             ),
         ],
+    )
+
+def test_example_attribute_key_expression() -> None:
+    '''
+    multiplying two columns together in an aggregation.
+    example case: average game size in bytes when game_size is stored in different units across trace items (KB, MB, GB)
+    '''
+    AttributeConditionalAggregation(
+        aggregate=Function.FUNCTION_AVG,
+        expression=AttributeKeyExpression(
+            formula=AttributeKeyExpression.Formula(
+                op=AttributeKeyExpression.Op.OP_MULT,
+                left=AttributeKeyExpression(key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="game_size")),
+                right=AttributeKeyExpression(key=AttributeKey(type=AttributeKey.TYPE_INT, name="game_size_unit_mult")),
+            ),
+        ),
     )

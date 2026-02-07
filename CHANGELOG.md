@@ -1,3 +1,42 @@
+## 0.5.0
+
+### New Features ✨
+
+- (snuba) Add TRACE_ITEM_TYPE_USER_SESSION by @noahsmartin in [#167](https://github.com/getsentry/sentry-protos/pull/167)
+
+### Internal Changes 🔧
+
+- (rust) Update tonic/prost to 0.14 by @Dav1dde in [#165](https://github.com/getsentry/sentry-protos/pull/165)
+- Revert buf exceptions by @markstory in [#169](https://github.com/getsentry/sentry-protos/pull/169)
+- Remove unused protobufs from prototyping by @markstory in [#168](https://github.com/getsentry/sentry-protos/pull/168)
+- Deprecate unused protos by @markstory in [#166](https://github.com/getsentry/sentry-protos/pull/166)
+
+## 0.4.14
+
+### New Features ✨
+
+- (snuba) Add last_seen field to AttributeDistribution Bucket by @phacops in [#164](https://github.com/getsentry/sentry-protos/pull/164)
+
+## 0.4.13
+
+### New Features ✨
+
+- (snuba) Add FUNCTION_ANY aggregation function by @phacops in [#163](https://github.com/getsentry/sentry-protos/pull/163)
+
+## 0.4.12
+
+### New Features ✨
+
+- (eap) Add limit to export endpoint's request by @xurui-c in [#162](https://github.com/getsentry/sentry-protos/pull/162)
+
+### Build / dependencies / internal 🔧
+
+- (release) Switch from action-prepare-release to Craft by @BYK in [#161](https://github.com/getsentry/sentry-protos/pull/161)
+
+## 0.4.11
+
+- feat(tasks) Add usecase to TaskActivation & rpc methods. by @markstory in [#157](https://github.com/getsentry/sentry-protos/pull/157)
+
 ## 0.4.10
 
 ### New Features ✨

@@ -7,6 +7,7 @@ import "sentry_protos/snuba/v1/trace_item.proto";
 message ExportTraceItemsRequest {
   RequestMeta meta = 1;
   PageToken page_token = 2;
+  uint32 limit = 3;
 }
 
 message ExportTraceItemsResponse {

@@ -6,7 +6,7 @@ pub struct PushTaskRequest {
     #[prost(string, tag = "2")]
     pub callback_url: ::prost::alloc::string::String,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PushTaskResponse {}
 /// Generated client implementations.
 pub mod worker_service_client {
@@ -115,7 +115,7 @@ pub mod worker_service_client {
                         format!("Service was not ready: {}", e.into()),
                     )
                 })?;
-            let codec = tonic::codec::ProstCodec::default();
+            let codec = tonic_prost::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/sentry_protos.taskworker.v1.WorkerService/PushTask",
             );
@@ -259,7 +259,7 @@ pub mod worker_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = PushTaskSvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
+                        let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
                                 accept_compression_encodings,

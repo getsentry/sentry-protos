@@ -22,6 +22,32 @@ message AttributeKey {
   string name = 2;
 }
 
+// this allow us to select single key such as span.attr1
+// and also combine multiple keys such as (span.attr1 * span.attr2)
+// Grammar: f = k | f op f (formula is either a key or formula operation formula)
+message AttributeKeyExpression {
+  enum Op {
+    OP_UNSPECIFIED = 0;
+    OP_ADD = 1;
+    OP_SUB = 2;
+    OP_MULT = 3;
+    OP_DIV = 4;
+  }
+
+  oneof expression {
+    // f = k (single key)
+    AttributeKey key = 1;
+    // f = f op f (binary operation between two formulas)
+    Formula formula = 2;
+  }
+
+  message Formula {
+    Op op = 1;
+    AttributeKeyExpression left = 2;
+    AttributeKeyExpression right = 3;
+  }
+}
+
 // custom mappings of column values
 //
 // for example, `project_name` is changeable by the user and not stored in EAP,
@@ -104,6 +130,7 @@ enum Function {
   FUNCTION_MAX = 9;
   FUNCTION_MIN = 10;
   FUNCTION_UNIQ = 11;
+  FUNCTION_ANY = 13;
 }
 
 enum ExtrapolationMode {
