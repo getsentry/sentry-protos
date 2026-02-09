@@ -90,6 +90,7 @@ message Column {
     AttributeConditionalAggregation conditional_aggregation = 5;
     BinaryFormula formula = 4;
     Literal literal = 6;
+    ConditionalFormula conditional_formula = 7;
   }
   string label = 3;
 
@@ -110,6 +111,27 @@ message Column {
       double default_value_double = 4;
       int64 default_value_int64 = 5;
     }
+  }
+
+  message FormulaCondition {
+    enum Op {
+      OP_UNSPECIFIED = 0;
+      OP_LESS_THAN = 1;
+      OP_GREATER_THAN = 2;
+      OP_LESS_THAN_OR_EQUALS = 3;
+      OP_GREATER_THAN_OR_EQUALS = 4;
+      OP_EQUALS = 5;
+      OP_NOT_EQUALS = 6;
+    }
+    Column left = 1;
+    Op op = 2;
+    Column right = 3;
+  }
+
+  message ConditionalFormula {
+    FormulaCondition condition = 1;
+    Column match = 2;
+    Column default = 3;
   }
 }
 
