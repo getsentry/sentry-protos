@@ -1,3 +1,17 @@
+## 0.6.0
+
+### New Features ✨
+
+#### Snuba
+
+- Add ConditionalFormula to Column proto for EAP queries by @phacops in [#173](https://github.com/getsentry/sentry-protos/pull/173)
+- Add AnyAttributeFilter for searching across all attributes by @phacops in [#172](https://github.com/getsentry/sentry-protos/pull/172)
+
+#### Other
+
+- Add AttributeKeyExpression for multi-column aggregations by @kylemumma in [#171](https://github.com/getsentry/sentry-protos/pull/171)
+- Deprecate AttributeAggregation in favor of AttributeConditionalAggregation by @kylemumma in [#170](https://github.com/getsentry/sentry-protos/pull/170)
+
 ## 0.5.0
 
 ### New Features ✨
