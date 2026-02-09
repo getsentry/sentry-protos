@@ -489,6 +489,76 @@ pub struct ExistsFilter {
     #[prost(message, optional, tag = "1")]
     pub key: ::core::option::Option<AttributeKey>,
 }
+/// Filter that matches trace items where ANY attribute matches the given value.
+/// Use this for searching across all attributes without specifying a key.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AnyAttributeFilter {
+    #[prost(enumeration = "any_attribute_filter::Op", tag = "1")]
+    pub op: i32,
+    #[prost(message, optional, tag = "2")]
+    pub value: ::core::option::Option<AttributeValue>,
+    #[prost(bool, tag = "3")]
+    pub ignore_case: bool,
+    /// Optional: Restrict search to specific attribute types.
+    /// If empty, searches all string-type attributes by default.
+    #[prost(enumeration = "attribute_key::Type", repeated, tag = "4")]
+    pub attribute_types: ::prost::alloc::vec::Vec<i32>,
+}
+/// Nested message and enum types in `AnyAttributeFilter`.
+pub mod any_attribute_filter {
+    /// Restricted set of operations that make sense for all-attribute search
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
+    #[repr(i32)]
+    pub enum Op {
+        Unspecified = 0,
+        Equals = 1,
+        NotEquals = 2,
+        Like = 3,
+        NotLike = 4,
+        In = 5,
+        NotIn = 6,
+    }
+    impl Op {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Self::Unspecified => "OP_UNSPECIFIED",
+                Self::Equals => "OP_EQUALS",
+                Self::NotEquals => "OP_NOT_EQUALS",
+                Self::Like => "OP_LIKE",
+                Self::NotLike => "OP_NOT_LIKE",
+                Self::In => "OP_IN",
+                Self::NotIn => "OP_NOT_IN",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "OP_UNSPECIFIED" => Some(Self::Unspecified),
+                "OP_EQUALS" => Some(Self::Equals),
+                "OP_NOT_EQUALS" => Some(Self::NotEquals),
+                "OP_LIKE" => Some(Self::Like),
+                "OP_NOT_LIKE" => Some(Self::NotLike),
+                "OP_IN" => Some(Self::In),
+                "OP_NOT_IN" => Some(Self::NotIn),
+                _ => None,
+            }
+        }
+    }
+}
 /// a condition used to filter for matching "trace items"
 ///
 /// ex: "exists span.duration" would mean
@@ -499,7 +569,7 @@ pub struct ExistsFilter {
 /// trace items contain attributes like 'span.duration' )
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TraceItemFilter {
-    #[prost(oneof = "trace_item_filter::Value", tags = "1, 2, 3, 4, 5")]
+    #[prost(oneof = "trace_item_filter::Value", tags = "1, 2, 3, 4, 5, 6")]
     pub value: ::core::option::Option<trace_item_filter::Value>,
 }
 /// Nested message and enum types in `TraceItemFilter`.
@@ -516,6 +586,8 @@ pub mod trace_item_filter {
         ComparisonFilter(super::ComparisonFilter),
         #[prost(message, tag = "5")]
         ExistsFilter(super::ExistsFilter),
+        #[prost(message, tag = "6")]
+        AnyAttributeFilter(super::AnyAttributeFilter),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
