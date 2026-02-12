@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from sentry_protos.taskbroker.v1 import taskbroker_pb2 as sentry__protos_dot_taskbroker_dot_v1_dot_taskbroker__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n,sentry_protos/taskworker/v1/taskworker.proto\x12\x1bsentry_protos.taskworker.v1\x1a,sentry_protos/taskbroker/v1/taskbroker.proto\"Z\n\x0fPushTaskRequest\x12>\n\x04task\x18\x01 \x01(\x0b\x32+.sentry_protos.taskbroker.v1.TaskActivationH\x00\x88\x01\x01\x42\x07\n\x05_task\"}\n\x10PushTaskResponse\x12\x0f\n\x02id\x18\x01 \x01(\tH\x00\x88\x01\x01\x12\x46\n\x06status\x18\x02 \x01(\x0e\x32\x31.sentry_protos.taskbroker.v1.TaskActivationStatusH\x01\x88\x01\x01\x42\x05\n\x03_idB\t\n\x07_status2z\n\rWorkerService\x12i\n\x08PushTask\x12,.sentry_protos.taskworker.v1.PushTaskRequest\x1a-.sentry_protos.taskworker.v1.PushTaskResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n,sentry_protos/taskworker/v1/taskworker.proto\x12\x1bsentry_protos.taskworker.v1\x1a,sentry_protos/taskbroker/v1/taskbroker.proto\"z\n\x0fPushTaskRequest\x12>\n\x04task\x18\x01 \x01(\x0b\x32+.sentry_protos.taskbroker.v1.TaskActivationH\x00\x88\x01\x01\x12\x13\n\x06\x62roker\x18\x02 \x01(\tH\x01\x88\x01\x01\x42\x07\n\x05_taskB\t\n\x07_broker\"}\n\x10PushTaskResponse\x12\x0f\n\x02id\x18\x01 \x01(\tH\x00\x88\x01\x01\x12\x46\n\x06status\x18\x02 \x01(\x0e\x32\x31.sentry_protos.taskbroker.v1.TaskActivationStatusH\x01\x88\x01\x01\x42\x05\n\x03_idB\t\n\x07_status2z\n\rWorkerService\x12i\n\x08PushTask\x12,.sentry_protos.taskworker.v1.PushTaskRequest\x1a-.sentry_protos.taskworker.v1.PushTaskResponse\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -23,9 +23,9 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'sentry_protos.taskworker.v1
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_PUSHTASKREQUEST']._serialized_start=123
-  _globals['_PUSHTASKREQUEST']._serialized_end=213
-  _globals['_PUSHTASKRESPONSE']._serialized_start=215
-  _globals['_PUSHTASKRESPONSE']._serialized_end=340
-  _globals['_WORKERSERVICE']._serialized_start=342
-  _globals['_WORKERSERVICE']._serialized_end=464
+  _globals['_PUSHTASKREQUEST']._serialized_end=245
+  _globals['_PUSHTASKRESPONSE']._serialized_start=247
+  _globals['_PUSHTASKRESPONSE']._serialized_end=372
+  _globals['_WORKERSERVICE']._serialized_start=374
+  _globals['_WORKERSERVICE']._serialized_end=496
 # @@protoc_insertion_point(module_scope)

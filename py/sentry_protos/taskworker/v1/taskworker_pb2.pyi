@@ -16,6 +16,9 @@ class PushTaskRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     TASK_FIELD_NUMBER: builtins.int
+    BROKER_FIELD_NUMBER: builtins.int
+    broker: builtins.str
+    """A unique identifier for this particular broker."""
     @property
     def task(self) -> sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivation:
         """If there is a task to execute, this field will contain it."""
@@ -24,9 +27,13 @@ class PushTaskRequest(google.protobuf.message.Message):
         self,
         *,
         task: sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivation | None = ...,
+        broker: builtins.str | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["_task", b"_task", "task", b"task"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["_task", b"_task", "task", b"task"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["_broker", b"_broker", "_task", b"_task", "broker", b"broker", "task", b"task"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["_broker", b"_broker", "_task", b"_task", "broker", b"broker", "task", b"task"]) -> None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing.Literal["_broker", b"_broker"]) -> typing.Literal["broker"] | None: ...
+    @typing.overload
     def WhichOneof(self, oneof_group: typing.Literal["_task", b"_task"]) -> typing.Literal["task"] | None: ...
 
 global___PushTaskRequest = PushTaskRequest
