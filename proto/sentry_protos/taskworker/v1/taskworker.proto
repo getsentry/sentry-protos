@@ -14,7 +14,7 @@ message PushTaskRequest {
   optional sentry_protos.taskbroker.v1.TaskActivation task = 1;
 
   // A unique identifier for this particular broker.
-  optional string broker = 2;
+  string broker = 2;
 }
 
 message PushTaskResponse {

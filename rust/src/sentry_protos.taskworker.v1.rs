@@ -5,8 +5,8 @@ pub struct PushTaskRequest {
     #[prost(message, optional, tag = "1")]
     pub task: ::core::option::Option<super::super::taskbroker::v1::TaskActivation>,
     /// A unique identifier for this particular broker.
-    #[prost(string, optional, tag = "2")]
-    pub broker: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, tag = "2")]
+    pub broker: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PushTaskResponse {
