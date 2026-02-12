@@ -30,6 +30,17 @@ message KeyValue {
   AnyValue value = 2;
 }
 
+message CategoryCount {
+  // DataCategory that defined in Relay
+  uint32 data_category = 1;
+  uint64 quantity = 2;
+}
+
+message Outcomes {
+  repeated CategoryCount category_count = 1;
+  uint64 key_id = 2;
+}
+
 message TraceItem {
   uint64 organization_id = 1;
   uint64 project_id = 2;
@@ -47,4 +58,5 @@ message TraceItem {
   uint32 retention_days = 100;
   google.protobuf.Timestamp received = 101;
   uint32 downsampled_retention_days = 102;
+  Outcomes outcomes = 110;
 }
