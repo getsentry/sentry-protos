@@ -8,6 +8,7 @@ import collections.abc
 import google.protobuf.descriptor
 import google.protobuf.internal.containers
 import google.protobuf.message
+import google.protobuf.timestamp_pb2
 import sentry_protos.snuba.v1.request_common_pb2
 import sentry_protos.snuba.v1.trace_item_attribute_pb2
 import sentry_protos.snuba.v1.trace_item_filter_pb2
@@ -152,15 +153,20 @@ class AttributeDistribution(google.protobuf.message.Message):
 
         LABEL_FIELD_NUMBER: builtins.int
         VALUE_FIELD_NUMBER: builtins.int
+        LAST_SEEN_FIELD_NUMBER: builtins.int
         label: builtins.str
         value: builtins.float
+        @property
+        def last_seen(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
         def __init__(
             self,
             *,
             label: builtins.str = ...,
             value: builtins.float = ...,
+            last_seen: google.protobuf.timestamp_pb2.Timestamp | None = ...,
         ) -> None: ...
-        def ClearField(self, field_name: typing.Literal["label", b"label", "value", b"value"]) -> None: ...
+        def HasField(self, field_name: typing.Literal["last_seen", b"last_seen"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["label", b"label", "last_seen", b"last_seen", "value", b"value"]) -> None: ...
 
     ATTRIBUTE_NAME_FIELD_NUMBER: builtins.int
     BUCKETS_FIELD_NUMBER: builtins.int

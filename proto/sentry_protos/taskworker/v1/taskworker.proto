@@ -10,8 +10,14 @@ service WorkerService {
 }
 
 message PushTaskRequest {
-  sentry_protos.taskbroker.v1.TaskActivation task = 1;
-  string callback_url = 2;
+  // If there is a task to execute, this field will contain it.
+  optional sentry_protos.taskbroker.v1.TaskActivation task = 1;
 }
 
-message PushTaskResponse {}
+message PushTaskResponse {
+  // The ID of some other completed task.
+  optional string id = 1;
+
+  // The status of some other completed task identified by ID.
+  optional sentry_protos.taskbroker.v1.TaskActivationStatus status = 2;
+}

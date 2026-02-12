@@ -20,6 +20,8 @@ class ExportTraceItemsRequest(google.protobuf.message.Message):
 
     META_FIELD_NUMBER: builtins.int
     PAGE_TOKEN_FIELD_NUMBER: builtins.int
+    LIMIT_FIELD_NUMBER: builtins.int
+    limit: builtins.int
     @property
     def meta(self) -> sentry_protos.snuba.v1.request_common_pb2.RequestMeta: ...
     @property
@@ -29,9 +31,10 @@ class ExportTraceItemsRequest(google.protobuf.message.Message):
         *,
         meta: sentry_protos.snuba.v1.request_common_pb2.RequestMeta | None = ...,
         page_token: sentry_protos.snuba.v1.request_common_pb2.PageToken | None = ...,
+        limit: builtins.int = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["meta", b"meta", "page_token", b"page_token"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["meta", b"meta", "page_token", b"page_token"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["limit", b"limit", "meta", b"meta", "page_token", b"page_token"]) -> None: ...
 
 global___ExportTraceItemsRequest = ExportTraceItemsRequest
 

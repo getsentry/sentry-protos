@@ -129,10 +129,14 @@ class TaskActivation(google.protobuf.message.Message):
     PROCESSING_DEADLINE_DURATION_FIELD_NUMBER: builtins.int
     EXPIRES_FIELD_NUMBER: builtins.int
     DELAY_FIELD_NUMBER: builtins.int
+    APPLICATION_FIELD_NUMBER: builtins.int
     id: builtins.str
     """A GUID for the task. Used to update tasks"""
     namespace: builtins.str
-    """The task namespace"""
+    """The task namespace. Applications can contain multiple namespaces.
+    While namespaces within an application must be unique, different
+    applications can have overlapping namespace values.
+    """
     taskname: builtins.str
     """The name of the task. This name is resolved within the worker"""
     parameters: builtins.str
@@ -149,6 +153,12 @@ class TaskActivation(google.protobuf.message.Message):
     delay: builtins.int
     """The duration in seconds that a task must wait to begin execution after it is emitted.
     After received_at + delay has passed, the activation will become pending.
+    """
+    application: builtins.str
+    """The client application that an activation belongs to.
+    Each activation *must* belong to an application. This requirement
+    is enforced during taskbroker ingestion as adding required fields to a protobuf
+    is a breaking change.
     """
     @property
     def headers(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.str]:
@@ -175,9 +185,12 @@ class TaskActivation(google.protobuf.message.Message):
         processing_deadline_duration: builtins.int = ...,
         expires: builtins.int | None = ...,
         delay: builtins.int | None = ...,
+        application: builtins.str | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["_delay", b"_delay", "_expires", b"_expires", "delay", b"delay", "expires", b"expires", "received_at", b"received_at", "retry_state", b"retry_state"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["_delay", b"_delay", "_expires", b"_expires", "delay", b"delay", "expires", b"expires", "headers", b"headers", "id", b"id", "namespace", b"namespace", "parameters", b"parameters", "processing_deadline_duration", b"processing_deadline_duration", "received_at", b"received_at", "retry_state", b"retry_state", "taskname", b"taskname"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["_application", b"_application", "_delay", b"_delay", "_expires", b"_expires", "application", b"application", "delay", b"delay", "expires", b"expires", "received_at", b"received_at", "retry_state", b"retry_state"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["_application", b"_application", "_delay", b"_delay", "_expires", b"_expires", "application", b"application", "delay", b"delay", "expires", b"expires", "headers", b"headers", "id", b"id", "namespace", b"namespace", "parameters", b"parameters", "processing_deadline_duration", b"processing_deadline_duration", "received_at", b"received_at", "retry_state", b"retry_state", "taskname", b"taskname"]) -> None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing.Literal["_application", b"_application"]) -> typing.Literal["application"] | None: ...
     @typing.overload
     def WhichOneof(self, oneof_group: typing.Literal["_delay", b"_delay"]) -> typing.Literal["delay"] | None: ...
     @typing.overload
@@ -190,14 +203,22 @@ class GetTaskRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     NAMESPACE_FIELD_NUMBER: builtins.int
+    APPLICATION_FIELD_NUMBER: builtins.int
     namespace: builtins.str
+    """The namespace to filter activations with."""
+    application: builtins.str
+    """The client application to filter activations with."""
     def __init__(
         self,
         *,
         namespace: builtins.str | None = ...,
+        application: builtins.str | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["_namespace", b"_namespace", "namespace", b"namespace"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["_namespace", b"_namespace", "namespace", b"namespace"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["_application", b"_application", "_namespace", b"_namespace", "application", b"application", "namespace", b"namespace"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["_application", b"_application", "_namespace", b"_namespace", "application", b"application", "namespace", b"namespace"]) -> None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing.Literal["_application", b"_application"]) -> typing.Literal["application"] | None: ...
+    @typing.overload
     def WhichOneof(self, oneof_group: typing.Literal["_namespace", b"_namespace"]) -> typing.Literal["namespace"] | None: ...
 
 global___GetTaskRequest = GetTaskRequest
@@ -227,14 +248,22 @@ class FetchNextTask(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     NAMESPACE_FIELD_NUMBER: builtins.int
+    APPLICATION_FIELD_NUMBER: builtins.int
     namespace: builtins.str
+    """The namespace to filter activations by."""
+    application: builtins.str
+    """The client application to filter activations by."""
     def __init__(
         self,
         *,
         namespace: builtins.str | None = ...,
+        application: builtins.str | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["_namespace", b"_namespace", "namespace", b"namespace"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["_namespace", b"_namespace", "namespace", b"namespace"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["_application", b"_application", "_namespace", b"_namespace", "application", b"application", "namespace", b"namespace"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["_application", b"_application", "_namespace", b"_namespace", "application", b"application", "namespace", b"namespace"]) -> None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing.Literal["_application", b"_application"]) -> typing.Literal["application"] | None: ...
+    @typing.overload
     def WhichOneof(self, oneof_group: typing.Literal["_namespace", b"_namespace"]) -> typing.Literal["namespace"] | None: ...
 
 global___FetchNextTask = FetchNextTask

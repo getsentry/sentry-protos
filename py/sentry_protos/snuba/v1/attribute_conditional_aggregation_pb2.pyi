@@ -18,6 +18,7 @@ class AttributeConditionalAggregation(google.protobuf.message.Message):
 
     AGGREGATE_FIELD_NUMBER: builtins.int
     KEY_FIELD_NUMBER: builtins.int
+    EXPRESSION_FIELD_NUMBER: builtins.int
     LABEL_FIELD_NUMBER: builtins.int
     EXTRAPOLATION_MODE_FIELD_NUMBER: builtins.int
     FILTER_FIELD_NUMBER: builtins.int
@@ -25,7 +26,13 @@ class AttributeConditionalAggregation(google.protobuf.message.Message):
     label: builtins.str
     extrapolation_mode: sentry_protos.snuba.v1.trace_item_attribute_pb2.ExtrapolationMode.ValueType
     @property
-    def key(self) -> sentry_protos.snuba.v1.trace_item_attribute_pb2.AttributeKey: ...
+    def key(self) -> sentry_protos.snuba.v1.trace_item_attribute_pb2.AttributeKey:
+        """will be deprecated in favor of expression in the future"""
+
+    @property
+    def expression(self) -> sentry_protos.snuba.v1.trace_item_attribute_pb2.AttributeKeyExpression:
+        """f = key | f op f (either a key or formula of keys)"""
+
     @property
     def filter(self) -> sentry_protos.snuba.v1.trace_item_filter_pb2.TraceItemFilter: ...
     def __init__(
@@ -33,11 +40,12 @@ class AttributeConditionalAggregation(google.protobuf.message.Message):
         *,
         aggregate: sentry_protos.snuba.v1.trace_item_attribute_pb2.Function.ValueType = ...,
         key: sentry_protos.snuba.v1.trace_item_attribute_pb2.AttributeKey | None = ...,
+        expression: sentry_protos.snuba.v1.trace_item_attribute_pb2.AttributeKeyExpression | None = ...,
         label: builtins.str = ...,
         extrapolation_mode: sentry_protos.snuba.v1.trace_item_attribute_pb2.ExtrapolationMode.ValueType = ...,
         filter: sentry_protos.snuba.v1.trace_item_filter_pb2.TraceItemFilter | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["filter", b"filter", "key", b"key"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["aggregate", b"aggregate", "extrapolation_mode", b"extrapolation_mode", "filter", b"filter", "key", b"key", "label", b"label"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["expression", b"expression", "filter", b"filter", "key", b"key"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["aggregate", b"aggregate", "expression", b"expression", "extrapolation_mode", b"extrapolation_mode", "filter", b"filter", "key", b"key", "label", b"label"]) -> None: ...
 
 global___AttributeConditionalAggregation = AttributeConditionalAggregation

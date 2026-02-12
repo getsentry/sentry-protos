@@ -163,7 +163,9 @@ class Expression(google.protobuf.message.Message):
     LABEL_FIELD_NUMBER: builtins.int
     label: builtins.str
     @property
-    def aggregation(self) -> sentry_protos.snuba.v1.trace_item_attribute_pb2.AttributeAggregation: ...
+    def aggregation(self) -> sentry_protos.snuba.v1.trace_item_attribute_pb2.AttributeAggregation:
+        """deprecated, please use conditional_aggregation with no filter"""
+
     @property
     def formula(self) -> global___Expression.BinaryFormula: ...
     @property

@@ -39,6 +39,7 @@ class _FunctionEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumT
     FUNCTION_MAX: _Function.ValueType  # 9
     FUNCTION_MIN: _Function.ValueType  # 10
     FUNCTION_UNIQ: _Function.ValueType  # 11
+    FUNCTION_ANY: _Function.ValueType  # 13
 
 class Function(_Function, metaclass=_FunctionEnumTypeWrapper): ...
 
@@ -56,6 +57,7 @@ FUNCTION_AVG: Function.ValueType  # 8
 FUNCTION_MAX: Function.ValueType  # 9
 FUNCTION_MIN: Function.ValueType  # 10
 FUNCTION_UNIQ: Function.ValueType  # 11
+FUNCTION_ANY: Function.ValueType  # 13
 global___Function = Function
 
 class _ExtrapolationMode:
@@ -148,6 +150,78 @@ class AttributeKey(google.protobuf.message.Message):
     def ClearField(self, field_name: typing.Literal["name", b"name", "type", b"type"]) -> None: ...
 
 global___AttributeKey = AttributeKey
+
+@typing.final
+class AttributeKeyExpression(google.protobuf.message.Message):
+    """this allow us to select single key such as span.attr1
+    and also combine multiple keys such as (span.attr1 * span.attr2)
+    Grammar: f = k | f op f (formula is either a key or formula operation formula)
+    """
+
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    class _Op:
+        ValueType = typing.NewType("ValueType", builtins.int)
+        V: typing_extensions.TypeAlias = ValueType
+
+    class _OpEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[AttributeKeyExpression._Op.ValueType], builtins.type):
+        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+        OP_UNSPECIFIED: AttributeKeyExpression._Op.ValueType  # 0
+        OP_ADD: AttributeKeyExpression._Op.ValueType  # 1
+        OP_SUB: AttributeKeyExpression._Op.ValueType  # 2
+        OP_MULT: AttributeKeyExpression._Op.ValueType  # 3
+        OP_DIV: AttributeKeyExpression._Op.ValueType  # 4
+
+    class Op(_Op, metaclass=_OpEnumTypeWrapper): ...
+    OP_UNSPECIFIED: AttributeKeyExpression.Op.ValueType  # 0
+    OP_ADD: AttributeKeyExpression.Op.ValueType  # 1
+    OP_SUB: AttributeKeyExpression.Op.ValueType  # 2
+    OP_MULT: AttributeKeyExpression.Op.ValueType  # 3
+    OP_DIV: AttributeKeyExpression.Op.ValueType  # 4
+
+    @typing.final
+    class Formula(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        OP_FIELD_NUMBER: builtins.int
+        LEFT_FIELD_NUMBER: builtins.int
+        RIGHT_FIELD_NUMBER: builtins.int
+        op: global___AttributeKeyExpression.Op.ValueType
+        @property
+        def left(self) -> global___AttributeKeyExpression: ...
+        @property
+        def right(self) -> global___AttributeKeyExpression: ...
+        def __init__(
+            self,
+            *,
+            op: global___AttributeKeyExpression.Op.ValueType = ...,
+            left: global___AttributeKeyExpression | None = ...,
+            right: global___AttributeKeyExpression | None = ...,
+        ) -> None: ...
+        def HasField(self, field_name: typing.Literal["left", b"left", "right", b"right"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing.Literal["left", b"left", "op", b"op", "right", b"right"]) -> None: ...
+
+    KEY_FIELD_NUMBER: builtins.int
+    FORMULA_FIELD_NUMBER: builtins.int
+    @property
+    def key(self) -> global___AttributeKey:
+        """f = k (single key)"""
+
+    @property
+    def formula(self) -> global___AttributeKeyExpression.Formula:
+        """f = f op f (binary operation between two formulas)"""
+
+    def __init__(
+        self,
+        *,
+        key: global___AttributeKey | None = ...,
+        formula: global___AttributeKeyExpression.Formula | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["expression", b"expression", "formula", b"formula", "key", b"key"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["expression", b"expression", "formula", b"formula", "key", b"key"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing.Literal["expression", b"expression"]) -> typing.Literal["key", "formula"] | None: ...
+
+global___AttributeKeyExpression = AttributeKeyExpression
 
 @typing.final
 class VirtualColumnContext(google.protobuf.message.Message):

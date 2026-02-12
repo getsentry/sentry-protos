@@ -16,18 +16,18 @@ class PushTaskRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     TASK_FIELD_NUMBER: builtins.int
-    CALLBACK_URL_FIELD_NUMBER: builtins.int
-    callback_url: builtins.str
     @property
-    def task(self) -> sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivation: ...
+    def task(self) -> sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivation:
+        """If there is a task to execute, this field will contain it."""
+
     def __init__(
         self,
         *,
         task: sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivation | None = ...,
-        callback_url: builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["task", b"task"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["callback_url", b"callback_url", "task", b"task"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["_task", b"_task", "task", b"task"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["_task", b"_task", "task", b"task"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing.Literal["_task", b"_task"]) -> typing.Literal["task"] | None: ...
 
 global___PushTaskRequest = PushTaskRequest
 
@@ -35,8 +35,23 @@ global___PushTaskRequest = PushTaskRequest
 class PushTaskResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
+    ID_FIELD_NUMBER: builtins.int
+    STATUS_FIELD_NUMBER: builtins.int
+    id: builtins.str
+    """The ID of some other completed task."""
+    status: sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivationStatus.ValueType
+    """The status of some other completed task identified by ID."""
     def __init__(
         self,
+        *,
+        id: builtins.str | None = ...,
+        status: sentry_protos.taskbroker.v1.taskbroker_pb2.TaskActivationStatus.ValueType | None = ...,
     ) -> None: ...
+    def HasField(self, field_name: typing.Literal["_id", b"_id", "_status", b"_status", "id", b"id", "status", b"status"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["_id", b"_id", "_status", b"_status", "id", b"id", "status", b"status"]) -> None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing.Literal["_id", b"_id"]) -> typing.Literal["id"] | None: ...
+    @typing.overload
+    def WhichOneof(self, oneof_group: typing.Literal["_status", b"_status"]) -> typing.Literal["status"] | None: ...
 
 global___PushTaskResponse = PushTaskResponse
