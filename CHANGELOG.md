@@ -1,3 +1,9 @@
+## 0.7.0
+
+### New Features ✨
+
+- Add outcomes to TraceItem by @MeredithAnya in [#174](https://github.com/getsentry/sentry-protos/pull/174)
+
 ## 0.6.0
 
 ### New Features ✨
