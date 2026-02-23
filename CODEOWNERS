@@ -1,2 +1,3 @@
+/proto/sentry_protos/billing                     @getsentry/billing
 /proto/sentry_protos/snuba                       @getsentry/owners-snuba
 /proto/sentry_protos/taskbroker                  @getsentry/taskbroker

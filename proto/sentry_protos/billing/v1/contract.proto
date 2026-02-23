@@ -1,0 +1,205 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum StockKeepingUnit {
+  STOCK_KEEPING_UNIT_UNSPECIFIED = 0;
+  STOCK_KEEPING_UNIT_ERRORS = 1;
+  STOCK_KEEPING_UNIT_PERFORMANCE = 2;
+  STOCK_KEEPING_UNIT_SPANS = 3;
+  STOCK_KEEPING_UNIT_REPLAYS = 4;
+  STOCK_KEEPING_UNIT_CRON = 5;
+  STOCK_KEEPING_UNIT_UPTIME = 6;
+  STOCK_KEEPING_UNIT_ATTACHMENTS = 7;
+  STOCK_KEEPING_UNIT_PROFILING = 8;
+  STOCK_KEEPING_UNIT_PROFILING_UI = 9;
+  STOCK_KEEPING_UNIT_LOGS = 10;
+  STOCK_KEEPING_UNIT_SEER = 11;
+  STOCK_KEEPING_UNIT_SIZE_ANALYSIS = 12;
+  STOCK_KEEPING_UNIT_BUILD_DISTRIBUTION = 13;
+}
+
+enum BillingInterval {
+  BILLING_INTERVAL_UNSPECIFIED = 0;
+  BILLING_INTERVAL_MONTHLY = 1;
+  BILLING_INTERVAL_ANNUAL = 2;
+}
+
+enum CreditKind {
+  CREDIT_KIND_UNSPECIFIED = 0;
+  CREDIT_KIND_UNITS = 1;
+  CREDIT_KIND_DOLLARS = 2;
+  CREDIT_KIND_DISCOUNT = 3;
+}
+
+enum BillingType {
+  BILLING_TYPE_UNSPECIFIED = 0;
+  BILLING_TYPE_CREDIT_CARD = 1;
+  BILLING_TYPE_INVOICED = 2;
+  BILLING_TYPE_PARTNER = 3;
+}
+
+enum BillingChannel {
+  BILLING_CHANNEL_UNSPECIFIED = 0;
+  BILLING_CHANNEL_SELF_SERVE = 1;
+  BILLING_CHANNEL_SALES = 2;
+  BILLING_CHANNEL_PARTNER = 3;
+}
+
+enum ExternalBillingProvider {
+  EXTERNAL_BILLING_PROVIDER_UNSPECIFIED = 0;
+  EXTERNAL_BILLING_PROVIDER_STRIPE = 1;
+  EXTERNAL_BILLING_PROVIDER_VERCEL = 2;
+}
+
+// Follows google.type.Date pattern to avoid timezone ambiguity.
+message Date {
+  int32 year = 1;
+  int32 month = 2;
+  int32 day = 3;
+}
+
+message PricingTier {
+  // Inclusive start of the tier (unit count).
+  int64 start = 1;
+
+  // Exclusive end of the tier. -1 means unlimited.
+  int64 end = 2;
+
+  // Rate per unit in cents-per-event (CPE).
+  int64 rate_per_unit_cpe = 3;
+}
+
+message TieredPricingRate {
+  repeated PricingTier tiers = 1;
+}
+
+message Credit {
+  CreditKind kind = 1;
+
+  // Credit amount. Interpretation depends on kind:
+  //   UNITS — number of units
+  //   DOLLARS — amount in cents
+  //   DISCOUNT — percentage (0-100)
+  int64 amount = 2;
+
+  // If set, credit applies only to this SKU. Otherwise subscription-level.
+  optional StockKeepingUnit sku = 3;
+}
+
+message CategoryConfig {
+  // Multiplier applied to raw event counts to get billable units.
+  int64 unit_multiplier = 1;
+
+  // Reserved (committed) pricing rate.
+  optional TieredPricingRate reserved_rate = 2;
+
+  // Pay-as-you-go pricing rate.
+  optional TieredPricingRate payg_rate = 3;
+
+  // Reserved volume (committed units). Null means no reservation.
+  optional int64 reserved_volume = 4;
+
+  // Free units included before billing begins.
+  int64 free_units = 5;
+
+  // Reserved pool budget in cents. Null if not using pooled reservations.
+  optional int64 reserved_pool_cents = 6;
+
+  // Per-category PAYG budget in cents. Null if using shared max_spend.
+  optional int64 payg_budget_cents = 7;
+}
+
+message SKUConfig {
+  StockKeepingUnit sku = 1;
+
+  // Category configurations keyed by DataCategory uint32 value.
+  map<uint32, CategoryConfig> categories = 2;
+
+  // Base price for this SKU in cents.
+  int64 base_price_cents = 3;
+
+  // Per-SKU PAYG budget in cents.
+  int64 payg_budget_cents = 4;
+
+  // Credits specific to this SKU.
+  repeated Credit credits = 5;
+}
+
+message BillingConfig {
+  BillingType billing_type = 1;
+  BillingChannel channel = 2;
+  optional ExternalBillingProvider external_billing_provider = 3;
+}
+
+message SubscriptionOptionValue {
+  oneof value {
+    int64 int_value = 1;
+    double double_value = 2;
+    string string_value = 3;
+  }
+}
+
+// Encapsulates everything a customer has paid for.
+message Contract {
+  uint64 id = 1;
+  uint64 organization_id = 2;
+
+  // Format: {period_start}_{plan_id}_{price_hash}
+  string version = 3;
+
+  // Ruleset identifier. Null until rules engine exists.
+  optional string ruleset_id = 4;
+
+  google.protobuf.Timestamp created_at = 5;
+  BillingInterval billing_interval = 6;
+  Date contract_period_start = 7;
+  Date contract_period_end = 8;
+  BillingConfig billing_config = 9;
+
+  // Platform fee in cents.
+  int64 base_price_cents = 10;
+
+  // Shared PAYG budget in cents (0 if per-category budgets are used).
+  int64 max_spend_cents = 11;
+
+  // Flat category configs keyed by DataCategory uint32 value (pre-engine).
+  map<uint32, CategoryConfig> category_configs = 12;
+
+  repeated SKUConfig sku_configs = 13;
+
+  // Subscription-level credits.
+  repeated Credit credits = 14;
+
+  // Feature entitlements.
+  repeated string features = 15;
+
+  // Plan ID, tier, name, etc.
+  map<string, string> package_metadata = 16;
+
+  // Subscription options (e.g. max members, custom retention).
+  map<string, SubscriptionOptionValue> subscription_options = 17;
+}
+
+service ContractService {
+  rpc GetContract(GetContractRequest) returns (GetContractResponse) {}
+  rpc CreateContract(CreateContractRequest) returns (CreateContractResponse) {}
+}
+
+message GetContractRequest {
+  uint64 organization_id = 1;
+}
+
+message GetContractResponse {
+  optional Contract contract = 1;
+}
+
+message CreateContractRequest {
+  Contract contract = 1;
+}
+
+message CreateContractResponse {
+  Contract contract = 1;
+}
