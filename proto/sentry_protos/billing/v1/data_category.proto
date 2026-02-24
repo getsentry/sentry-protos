@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1;
+
+// Classifies the type of data being tracked.
+// Only types that we track usage of should be included here, not to be confused
+// with DataCategory in relay, or in sentry, which may include other types that
+// we don’t track for usage.
+enum DataCategory {
+  // Reserved and unused.
+  DATA_CATEGORY_UNSPECIFIED = 0;
+  // Error events and Events with an event_type not explicitly listed below.
+  DATA_CATEGORY_ERROR = 1;
+  // Transaction events.
+  DATA_CATEGORY_TRANSACTION = 2;
+  // An attachment. Quantity is the size of the attachment in bytes.
+  DATA_CATEGORY_ATTACHMENT = 3;
+  // Processed profiles (all profiles, whether or not we store them).
+  DATA_CATEGORY_PROFILE = 4;
+  // Session Replays.
+  DATA_CATEGORY_REPLAY = 5;
+  // Monitor check-ins.
+  DATA_CATEGORY_MONITOR = 6;
+  // Spans from which we extracted metrics.
+  DATA_CATEGORY_SPAN = 7;
+  // User Feedback (UserReportV2).
+  DATA_CATEGORY_USER_REPORT_V2 = 8;
+  // Milliseconds per indexed profile chunk, excluding UI profile chunks.
+  DATA_CATEGORY_PROFILE_DURATION = 9;
+  // Log event total bytes.
+  DATA_CATEGORY_LOG_BYTE = 10;
+  // Profile duration of a UI profile (milliseconds per indexed UI profile chunk).
+  DATA_CATEGORY_PROFILE_DURATION_UI = 11;
+  // Seer Autofix run events.
+  DATA_CATEGORY_SEER_AUTOFIX = 12;
+  // Seer Scanner run events.
+  DATA_CATEGORY_SEER_SCANNER = 13;
+  // Size analysis of preprod build artifacts.
+  DATA_CATEGORY_SIZE_ANALYSIS = 14;
+  // Installable build artifact uploads.
+  DATA_CATEGORY_INSTALLABLE_BUILD = 15;
+  // Trace metric items.
+  DATA_CATEGORY_TRACE_METRIC = 16;
+  // Any other data category not known by this version.
+  DATA_CATEGORY_UNKNOWN = -1;
+}
