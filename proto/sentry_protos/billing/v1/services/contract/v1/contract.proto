@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sentry_protos.billing.v1;
+package sentry_protos.billing.v1.services.contract.v1;
 
 message Date {
   uint32 year = 1;
@@ -12,20 +12,17 @@ enum BillingType {
   BILLING_TYPE_UNSPECIFIED = 0;
   BILLING_TYPE_INVOICED = 1;
   BILLING_TYPE_CREDIT_CARD = 2;
-  BILLING_TYPE_PARTNER = 3;
 }
 
 enum BillingChannel {
   BILLING_CHANNEL_UNSPECIFIED = 0;
   BILLING_CHANNEL_SELF_SERVE = 1;
   BILLING_CHANNEL_SALES = 2;
-  BILLING_CHANNEL_PARTNER = 3;
 }
 
 enum ExternalBillingProvider {
   EXTERNAL_BILLING_PROVIDER_UNSPECIFIED = 0;
   EXTERNAL_BILLING_PROVIDER_STRIPE = 1;
-  EXTERNAL_BILLING_PROVIDER_VERCEL = 2;
 }
 
 message Address {
@@ -62,25 +59,13 @@ enum SKU {
   SKU_BUILD_DISTRIBUTION = 13;
 }
 
-enum CreditType {
-  CREDIT_TYPE_UNSPECIFIED = 0;
-  CREDIT_TYPE_UNITS = 1;
-  CREDIT_TYPE_DOLLARS = 2;
-}
-
-message Credit {
-  CreditType type = 1;
-  // Volume in units (UNITS) or amount in cents (DOLLARS).
-  uint64 amount = 2;
-}
-
 message PricingTier {
   // Start of the tier range (inclusive).
   int64 start = 1;
   // End of the tier range (inclusive). -1 means unlimited.
   int64 end = 2;
   // Rate per unit in CPE units.
-  uint64 rate_per_unit_cpe = 3;
+  int64 rate_per_unit_cpe = 3;
 }
 
 message TieredPricingRate {
@@ -89,29 +74,19 @@ message TieredPricingRate {
 
 message SKUConfig {
   SKU sku = 1;
-  // Base price for the SKU (upgraded reserved volumes or add-on activation fees)
+  // Base price for the SKU (upgraded reserved volumes or add-on activation fees).
   uint64 base_price_cents = 2;
-  // Per-SKU PAYG spend cap. Absent if part of a shared budget
+  // Per-SKU PAYG spend cap. Absent if part of a shared budget.
   optional uint64 payg_budget_cents = 3;
   uint64 reserved_volume = 4;
   TieredPricingRate payg_rate = 5;
-  TieredPricingRate reserved_rate = 6; // for reserved budget SKUs
-  repeated Credit credits = 7;
+  TieredPricingRate reserved_rate = 6;
 }
 
 message SharedSKUBudget {
   repeated SKUConfig skus = 1;
   uint64 reserved_budget_cents = 2;
   uint64 payg_budget_cents = 3;
-  repeated Credit credits = 4;
-}
-
-message OptionValue {
-  oneof value {
-    string string_value = 1;
-    int64 int_value = 2;
-    bool bool_value = 3;
-  }
 }
 
 // Represents what a customer has paid for. Used for cost calculation,
@@ -130,12 +105,12 @@ message Contract {
   Date contract_start_date = 5;
   Date contract_end_date = 6;
 
-  // Determines when to reset quotas and create an invoice.
+  // Billing period — determines when to reset quotas and create an invoice.
   Date billing_period_start_date = 7;
   Date billing_period_end_date = 8;
 
   // Entitlements, used in frontend features.
-  map<string, bool> features = 9;
+  map<string, string> features = 9;
 
   // Used for quotas and cost calculations.
   repeated SKUConfig sku_configs = 10;
@@ -150,9 +125,6 @@ message Contract {
   // Used for invoicing.
   BillingConfig billing_config = 14;
 
-  // Org-level credits.
-  repeated Credit credits = 15;
-
   // Catch-all for overrides and information not covered above.
-  map<string, OptionValue> custom_options = 16;
+  map<string, string> custom_options = 16;
 }
