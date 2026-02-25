@@ -1,18 +1,19 @@
 pub mod billing {
     pub mod v1 {
        include!("sentry_protos.billing.v1.rs");
+       pub mod services {
+           pub mod contract {
+               pub mod v1 {
+                   include!("sentry_protos.billing.v1.services.contract.v1.rs");
+               }
+           }
+       }
    }
 }
 
 pub mod conduit {
     pub mod v1alpha {
        include!("sentry_protos.conduit.v1alpha.rs");
-   }
-}
-
-pub mod contract {
-    pub mod v1 {
-       include!("sentry_protos.billing.v1.services.contract.v1.rs");
    }
 }
 
