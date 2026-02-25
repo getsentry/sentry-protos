@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+message Date {
+  uint32 year = 1;
+  uint32 month = 2;
+  uint32 day = 3;
+}
+
+// Indicates how the account is billed.
+enum BillingType {
+  BILLING_TYPE_UNSPECIFIED = 0;
+  BILLING_TYPE_INVOICED = 1;
+  BILLING_TYPE_CREDIT_CARD = 2;
+  BILLING_TYPE_PARTNER = 3;
+}
+
+// The channel through which the contract is billed.
+enum BillingChannel {
+  BILLING_CHANNEL_UNSPECIFIED = 0;
+  BILLING_CHANNEL_SELF_SERVE = 1;
+  BILLING_CHANNEL_SALES = 2;
+  BILLING_CHANNEL_PARTNER = 3;
+}
+
+// The external billing provider used to process payments for the contract.
+enum ExternalBillingProvider {
+  EXTERNAL_BILLING_PROVIDER_UNSPECIFIED = 0;
+  EXTERNAL_BILLING_PROVIDER_STRIPE = 1;
+  EXTERNAL_BILLING_PROVIDER_VERCEL = 2;
+}
+
+message Address {
+  string city = 1;
+  string region = 2;
+  string country_code = 3;
+  string postal_code = 4;
+  string address_line_1 = 5;
+  string address_line_2 = 6;
+  string address_line_3 = 7;
+}
+
+message BillingConfig {
+  BillingType billing_type = 1;
+  BillingChannel channel = 2;
+  ExternalBillingProvider external_billing_provider = 3;
+  Address address = 4;
+
+  // Determines when to charge for base package price / subscription fee.
+  Date contract_start_date = 5;
+  Date contract_end_date = 6;
+}

@@ -10,6 +10,12 @@ pub mod conduit {
    }
 }
 
+pub mod contract {
+    pub mod v1 {
+       include!("sentry_protos.billing.v1.services.contract.v1.rs");
+   }
+}
+
 pub mod seer {
     pub mod v1 {
        include!("sentry_protos.seer.v1.rs");

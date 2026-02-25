@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+message OptionValue {
+  oneof value {
+    string string_value = 1;
+    int64 int_value = 2;
+    bool bool_value = 3;
+  }
+}
+
+message FeatureOption {
+  string key = 1;
+  bool enabled = 2;
+}
+
+message FeatureOptions {
+  repeated FeatureOption options = 1;
+}
+
+message MetadataOption {
+  string key = 1;
+  OptionValue value = 2;
+}
+
+message MetadataOptions {
+  repeated MetadataOption options = 1;
+}
+
+message ContractMetadata {
+  uint64 id = 1;
+  uint64 organization_id = 2;
+  // The set of BillingRules that the BillingRulesEngine has to execute for this contract.
+  string ruleset_version = 3;
+  // Includes information like plan ID, tier, etc.
+  MetadataOptions package_metadata = 4;
+  // Entitlements, used in frontend features or gating access to certain features.
+  FeatureOptions features = 5;
+  // Catch-all for overrides and information not covered above.
+  MetadataOptions custom_options = 6;
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
+import "sentry_protos/billing/v1/services/contract/v1/contract_metadata.proto";
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+
+message Contract {
+  ContractMetadata metadata = 1;
+  BillingConfig billing_config = 2;
+  PricingConfig pricing_config = 3;
+}
