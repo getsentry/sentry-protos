@@ -19,10 +19,10 @@ from sentry_protos.billing.v1.services.contract.v1.pricing_config_pb2 import (
     PricingConfig,
     PricingTier,
     SharedSKUBudget,
-    SKU,
     SKUConfig,
     TieredPricingRate,
 )
+from sentry_protos.billing.v1.services.contract.v1.sku_pb2 import SKU
 
 
 def test_contract_with_all_sub_messages():

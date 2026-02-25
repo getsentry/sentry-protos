@@ -3,25 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v1;
 
 import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
-
-enum SKU {
-  SKU_UNSPECIFIED = 0;
-  SKU_ERRORS = 1;
-  SKU_SPANS = 2;
-  SKU_REPLAYS = 3;
-  SKU_PERFORMANCE_UNITS = 4;
-  SKU_CRON = 5;
-  SKU_UPTIME = 6;
-  SKU_ATTACHMENTS = 7;
-  SKU_PROFILING = 8;
-  SKU_PROFILING_UI = 9;
-  SKU_LOGS = 10;
-  SKU_SEER = 11;
-  SKU_SIZE_ANALYSIS = 12;
-  SKU_BUILD_DISTRIBUTION = 13;
-  SKU_AUTOFIX = 14;
-  SKU_SCANNER = 15;
-}
+import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
 
 message PricingTier {
   int64 start = 1;
