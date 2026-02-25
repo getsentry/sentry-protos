@@ -1,3 +1,9 @@
+## 0.8.0
+
+### New Features ✨
+
+- (billing) Contract protobuf by @brendanhsentry in [#179](https://github.com/getsentry/sentry-protos/pull/179)
+
 ## 0.7.1
 
 ### New Features ✨
