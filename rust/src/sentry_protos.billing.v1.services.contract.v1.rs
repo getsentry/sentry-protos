@@ -35,11 +35,13 @@ pub struct BillingConfig {
     pub external_billing_provider: i32,
     #[prost(message, optional, tag = "4")]
     pub address: ::core::option::Option<Address>,
+    /// Determines when to charge for base package price / subscription fee.
     #[prost(message, optional, tag = "5")]
     pub contract_start_date: ::core::option::Option<Date>,
     #[prost(message, optional, tag = "6")]
     pub contract_end_date: ::core::option::Option<Date>,
 }
+/// Indicates how the account is billed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum BillingType {
@@ -72,6 +74,7 @@ impl BillingType {
         }
     }
 }
+/// The channel through which the contract is billed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum BillingChannel {
@@ -104,6 +107,7 @@ impl BillingChannel {
         }
     }
 }
+/// The external billing provider used to process payments for the contract.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ExternalBillingProvider {
@@ -180,12 +184,16 @@ pub struct ContractMetadata {
     pub id: u64,
     #[prost(uint64, tag = "2")]
     pub organization_id: u64,
+    /// The set of BillingRules that the BillingRulesEngine has to execute for this contract.
     #[prost(string, tag = "3")]
     pub ruleset_version: ::prost::alloc::string::String,
+    /// Includes information like plan ID, tier, etc.
     #[prost(message, optional, tag = "4")]
     pub package_metadata: ::core::option::Option<MetadataOptions>,
+    /// Entitlements, used in frontend features or gating access to certain features.
     #[prost(message, optional, tag = "5")]
     pub features: ::core::option::Option<FeatureOptions>,
+    /// Catch-all for overrides and information not covered above.
     #[prost(message, optional, tag = "6")]
     pub custom_options: ::core::option::Option<MetadataOptions>,
 }
@@ -207,6 +215,7 @@ pub struct TieredPricingRate {
 pub struct SkuConfig {
     #[prost(enumeration = "Sku", tag = "1")]
     pub sku: i32,
+    /// Base price for the SKU (upgraded reserved volumes or add-on activation fees)
     #[prost(uint64, tag = "2")]
     pub base_price_cents: u64,
     #[prost(uint64, optional, tag = "3")]
@@ -215,9 +224,12 @@ pub struct SkuConfig {
     pub reserved_volume: u64,
     #[prost(message, optional, tag = "5")]
     pub payg_rate: ::core::option::Option<TieredPricingRate>,
+    /// for reserved budget SKUs
     #[prost(message, optional, tag = "6")]
     pub reserved_rate: ::core::option::Option<TieredPricingRate>,
 }
+/// Represents a budget that is collectively used by one or more SKUs,
+/// allowing multiple SKUs to draw from the same reserved budget.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SharedSkuBudget {
     #[prost(enumeration = "Sku", repeated, tag = "1")]
@@ -233,12 +245,14 @@ pub struct PricingConfig {
     pub sku_configs: ::prost::alloc::vec::Vec<SkuConfig>,
     #[prost(message, repeated, tag = "2")]
     pub shared_sku_budgets: ::prost::alloc::vec::Vec<SharedSkuBudget>,
+    /// Determines when to reset quotas and create an invoice.
     #[prost(message, optional, tag = "3")]
     pub billing_period_start_date: ::core::option::Option<Date>,
     #[prost(message, optional, tag = "4")]
     pub billing_period_end_date: ::core::option::Option<Date>,
     #[prost(uint64, tag = "5")]
     pub max_spend_cents: u64,
+    /// Base price for the package.
     #[prost(uint64, tag = "6")]
     pub base_price_cents: u64,
 }
