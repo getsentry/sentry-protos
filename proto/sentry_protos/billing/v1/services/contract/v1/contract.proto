@@ -2,129 +2,62 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
-message Date {
-  uint32 year = 1;
-  uint32 month = 2;
-  uint32 day = 3;
-}
+import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
+import "sentry_protos/billing/v1/services/contract/v1/contract_metadata.proto";
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
 
-enum BillingType {
-  BILLING_TYPE_UNSPECIFIED = 0;
-  BILLING_TYPE_INVOICED = 1;
-  BILLING_TYPE_CREDIT_CARD = 2;
-}
-
-enum BillingChannel {
-  BILLING_CHANNEL_UNSPECIFIED = 0;
-  BILLING_CHANNEL_SELF_SERVE = 1;
-  BILLING_CHANNEL_SALES = 2;
-}
-
-enum ExternalBillingProvider {
-  EXTERNAL_BILLING_PROVIDER_UNSPECIFIED = 0;
-  EXTERNAL_BILLING_PROVIDER_STRIPE = 1;
-}
-
-message Address {
-  string city = 1;
-  string region = 2;
-  string country_code = 3;
-  string postal_code = 4;
-  string address_line_1 = 5;
-  string address_line_2 = 6;
-  string address_line_3 = 7;
-}
-
-message BillingConfig {
-  BillingType billing_type = 1;
-  BillingChannel channel = 2;
-  ExternalBillingProvider external_billing_provider = 3;
-  Address address = 4;
-}
-
-enum SKU {
-  SKU_UNSPECIFIED = 0;
-  SKU_ERRORS = 1;
-  SKU_SPANS = 2;
-  SKU_REPLAYS = 3;
-  SKU_TRANSACTIONS = 4;
-  SKU_CRON = 5;
-  SKU_UPTIME = 6;
-  SKU_ATTACHMENTS = 7;
-  SKU_PROFILING = 8;
-  SKU_PROFILING_UI = 9;
-  SKU_LOGS = 10;
-  SKU_SEER = 11;
-  SKU_SIZE_ANALYSIS = 12;
-  SKU_BUILD_DISTRIBUTION = 13;
-}
-
-message PricingTier {
-  // Start of the tier range (inclusive).
-  int64 start = 1;
-  // End of the tier range (inclusive). -1 means unlimited.
-  int64 end = 2;
-  // Rate per unit in CPE units.
-  int64 rate_per_unit_cpe = 3;
-}
-
-message TieredPricingRate {
-  repeated PricingTier tiers = 1;
-}
-
-message SKUConfig {
-  SKU sku = 1;
-  // Base price for the SKU (upgraded reserved volumes or add-on activation fees).
-  uint64 base_price_cents = 2;
-  // Per-SKU PAYG spend cap. Absent if part of a shared budget.
-  optional uint64 payg_budget_cents = 3;
-  uint64 reserved_volume = 4;
-  TieredPricingRate payg_rate = 5;
-  TieredPricingRate reserved_rate = 6;
-}
-
-message SharedSKUBudget {
-  repeated SKUConfig skus = 1;
-  uint64 reserved_budget_cents = 2;
-  uint64 payg_budget_cents = 3;
-}
-
-// Represents what a customer has paid for. Used for cost calculation,
-// enforcing quotas, creating invoices, and maybe others.
 message Contract {
-  uint64 id = 1;
-  uint64 organization_id = 2;
+  ContractMetadata metadata = 1;
+  BillingConfig billing_config = 2;
+  PricingConfig pricing_config = 3;
+}
 
-  // The set of BillingRules that the BillingRulesEngine has to execute for this contract.
-  string ruleset_version = 3;
+message GetContractRequest {
+  uint64 contract_id = 1;
+}
 
-  // includes information like plan ID, tier, etc.
-  map<string, string> package_metadata = 4;
+message GetContractResponse {
+  Contract contract = 1;
+}
 
-  // Contract interval — determines when to charge package base price / subscription fee.
-  Date contract_start_date = 5;
-  Date contract_end_date = 6;
+message CreateContractRequest {
+  Contract contract = 1;
+}
 
-  // Billing period — determines when to reset quotas and create an invoice.
-  Date billing_period_start_date = 7;
-  Date billing_period_end_date = 8;
+message CreateContractResponse {
+  Contract contract = 1;
+}
 
-  // Entitlements, used in frontend features.
-  map<string, string> features = 9;
+message GetContractMetadataRequest {
+  uint64 contract_id = 1;
+}
 
-  // Used for quotas and cost calculations.
-  repeated SKUConfig sku_configs = 10;
-  repeated SharedSKUBudget shared_sku_budgets = 11;
+message GetContractMetadataResponse {
+  ContractMetadata metadata = 1;
+}
 
-  // PAYG budget (max spend).
-  uint64 max_spend_cents = 12;
+message GetBillingConfigRequest {
+  uint64 contract_id = 1;
+}
 
-  // Package base price / subscription fee.
-  uint64 base_price_cents = 13;
+message GetBillingConfigResponse {
+  ContractMetadata metadata = 1;
+  BillingConfig billing_config = 2;
+}
 
-  // Used for invoicing.
-  BillingConfig billing_config = 14;
+message GetPricingConfigRequest {
+  uint64 contract_id = 1;
+}
 
-  // Catch-all for overrides and information not covered above.
-  map<string, string> custom_options = 16;
+message GetPricingConfigResponse {
+  ContractMetadata metadata = 1;
+  PricingConfig pricing_config = 2;
+}
+
+service ContractService {
+  rpc GetContract(GetContractRequest) returns (GetContractResponse);
+  rpc CreateContract(CreateContractRequest) returns (CreateContractResponse);
+  rpc GetContractMetadata(GetContractMetadataRequest) returns (GetContractMetadataResponse);
+  rpc GetBillingConfig(GetBillingConfigRequest) returns (GetBillingConfigResponse);
+  rpc GetPricingConfig(GetPricingConfigRequest) returns (GetPricingConfigResponse);
 }

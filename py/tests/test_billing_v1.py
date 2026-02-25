@@ -1,18 +1,26 @@
-from sentry_protos.billing.v1.contract_pb2 import (
+from sentry_protos.billing.v1.services.contract.v1.billing_config_pb2 import (
     Address,
-    BillingConfig,
     BillingChannel,
+    BillingConfig,
     BillingType,
-    Contract,
-    Credit,
-    CreditType,
     Date,
     ExternalBillingProvider,
+)
+from sentry_protos.billing.v1.services.contract.v1.contract_metadata_pb2 import (
+    ContractMetadata,
+    FeatureOption,
+    FeatureOptions,
+    MetadataOption,
+    MetadataOptions,
     OptionValue,
+)
+from sentry_protos.billing.v1.services.contract.v1.contract_pb2 import Contract
+from sentry_protos.billing.v1.services.contract.v1.pricing_config_pb2 import (
+    PricingConfig,
     PricingTier,
+    SharedSKUBudget,
     SKU,
     SKUConfig,
-    SharedSKUBudget,
     TieredPricingRate,
 )
 
@@ -37,7 +45,6 @@ def test_contract_with_all_sub_messages():
         reserved_volume=50_000,
         payg_rate=payg_rate,
         reserved_rate=reserved_rate,
-        credits=[Credit(type=CreditType.CREDIT_TYPE_UNITS, amount=1000)],
     )
     assert errors_config.HasField("payg_budget_cents")
 
@@ -51,30 +58,46 @@ def test_contract_with_all_sub_messages():
     assert not spans_config.HasField("payg_budget_cents")
 
     shared_budget = SharedSKUBudget(
-        skus=[spans_config],
+        skus=[SKU.SKU_SPANS],
         reserved_budget_cents=50000,
         payg_budget_cents=25000,
-        credits=[Credit(type=CreditType.CREDIT_TYPE_DOLLARS, amount=5000)],
     )
 
     contract = Contract(
-        id=12345,
-        organization_id=67890,
-        ruleset_version="2024.1",
-        package_metadata={"plan": "business", "tier": "enterprise"},
-        contract_start_date=Date(year=2024, month=1, day=1),
-        contract_end_date=Date(year=2025, month=1, day=1),
-        billing_period_start_date=Date(year=2024, month=6, day=1),
-        billing_period_end_date=Date(year=2024, month=7, day=1),
-        features={"sso": True, "custom_dashboards": True},
-        sku_configs=[errors_config],
-        shared_sku_budgets=[shared_budget],
-        max_spend_cents=100000,
-        base_price_cents=8900,
+        metadata=ContractMetadata(
+            id=12345,
+            organization_id=67890,
+            ruleset_version="2024.1",
+            package_metadata=MetadataOptions(
+                options=[
+                    MetadataOption(key="plan", value=OptionValue(string_value="business")),
+                    MetadataOption(
+                        key="tier", value=OptionValue(string_value="enterprise")
+                    ),
+                ],
+            ),
+            features=FeatureOptions(
+                options=[
+                    FeatureOption(key="sso", enabled=True),
+                    FeatureOption(key="custom_dashboards", enabled=True),
+                ],
+            ),
+            custom_options=MetadataOptions(
+                options=[
+                    MetadataOption(
+                        key="override_rate_limit", value=OptionValue(int_value=5000)
+                    ),
+                    MetadataOption(key="is_internal", value=OptionValue(bool_value=True)),
+                    MetadataOption(key="note", value=OptionValue(string_value="beta")),
+                ],
+            ),
+        ),
         billing_config=BillingConfig(
             billing_type=BillingType.BILLING_TYPE_CREDIT_CARD,
             channel=BillingChannel.BILLING_CHANNEL_SELF_SERVE,
             external_billing_provider=ExternalBillingProvider.EXTERNAL_BILLING_PROVIDER_STRIPE,
+            contract_start_date=Date(year=2024, month=1, day=1),
+            contract_end_date=Date(year=2025, month=1, day=1),
             address=Address(
                 city="San Francisco",
                 region="CA",
@@ -83,23 +106,37 @@ def test_contract_with_all_sub_messages():
                 address_line_1="45 Fremont St",
             ),
         ),
-        custom_options={
-            "override_rate_limit": OptionValue(int_value=5000),
-            "is_internal": OptionValue(bool_value=True),
-            "note": OptionValue(string_value="beta"),
-        },
-        credits=[Credit(type=CreditType.CREDIT_TYPE_DOLLARS, amount=10000)],
+        pricing_config=PricingConfig(
+            sku_configs=[errors_config],
+            shared_sku_budgets=[shared_budget],
+            billing_period_start_date=Date(year=2024, month=6, day=1),
+            billing_period_end_date=Date(year=2024, month=7, day=1),
+            max_spend_cents=100000,
+            base_price_cents=8900,
+        ),
     )
 
-    assert contract.id == 12345
-    assert contract.organization_id == 67890
-    assert contract.contract_start_date.year == 2024
-    assert len(contract.sku_configs) == 1
-    assert contract.sku_configs[0].sku == SKU.SKU_ERRORS
-    assert len(contract.shared_sku_budgets) == 1
+    assert contract.metadata.id == 12345
+    assert contract.metadata.organization_id == 67890
+    assert contract.billing_config.contract_start_date.year == 2024
+    assert len(contract.pricing_config.sku_configs) == 1
+    assert contract.pricing_config.sku_configs[0].sku == SKU.SKU_ERRORS
+    assert len(contract.pricing_config.shared_sku_budgets) == 1
     assert contract.billing_config.address.city == "San Francisco"
-    assert contract.features["sso"] is True
-    assert contract.custom_options["override_rate_limit"].int_value == 5000
-    assert contract.custom_options["is_internal"].bool_value is True
-    assert contract.custom_options["note"].string_value == "beta"
-    assert len(contract.credits) == 1
+
+    package_metadata = {
+        option.key: option.value.string_value
+        for option in contract.metadata.package_metadata.options
+    }
+    assert package_metadata["plan"] == "business"
+    assert package_metadata["tier"] == "enterprise"
+
+    features = {option.key: option.enabled for option in contract.metadata.features.options}
+    assert features["sso"] is True
+
+    custom_options = {
+        option.key: option.value for option in contract.metadata.custom_options.options
+    }
+    assert custom_options["override_rate_limit"].int_value == 5000
+    assert custom_options["is_internal"].bool_value is True
+    assert custom_options["note"].string_value == "beta"
