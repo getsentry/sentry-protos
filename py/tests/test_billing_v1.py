@@ -8,6 +8,7 @@ from sentry_protos.billing.v1.contract_pb2 import (
     CreditType,
     Date,
     ExternalBillingProvider,
+    OptionValue,
     PricingTier,
     SKU,
     SKUConfig,
@@ -65,7 +66,7 @@ def test_contract_with_all_sub_messages():
         contract_end_date=Date(year=2025, month=1, day=1),
         billing_period_start_date=Date(year=2024, month=6, day=1),
         billing_period_end_date=Date(year=2024, month=7, day=1),
-        features={"sso": "true", "custom_dashboards": "true"},
+        features={"sso": True, "custom_dashboards": True},
         sku_configs=[errors_config],
         shared_sku_budgets=[shared_budget],
         max_spend_cents=100000,
@@ -82,7 +83,11 @@ def test_contract_with_all_sub_messages():
                 address_line_1="45 Fremont St",
             ),
         ),
-        custom_options={"override_rate_limit": "5000"},
+        custom_options={
+            "override_rate_limit": OptionValue(int_value=5000),
+            "is_internal": OptionValue(bool_value=True),
+            "note": OptionValue(string_value="beta"),
+        },
         credits=[Credit(type=CreditType.CREDIT_TYPE_DOLLARS, amount=10000)],
     )
 
@@ -93,5 +98,8 @@ def test_contract_with_all_sub_messages():
     assert contract.sku_configs[0].sku == SKU.SKU_ERRORS
     assert len(contract.shared_sku_budgets) == 1
     assert contract.billing_config.address.city == "San Francisco"
-    assert contract.features["sso"] == "true"
+    assert contract.features["sso"] is True
+    assert contract.custom_options["override_rate_limit"].int_value == 5000
+    assert contract.custom_options["is_internal"].bool_value is True
+    assert contract.custom_options["note"].string_value == "beta"
     assert len(contract.credits) == 1

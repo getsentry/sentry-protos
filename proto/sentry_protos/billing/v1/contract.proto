@@ -80,7 +80,7 @@ message PricingTier {
   // End of the tier range (inclusive). -1 means unlimited.
   int64 end = 2;
   // Rate per unit in CPE units.
-  int64 rate_per_unit_cpe = 3;
+  uint64 rate_per_unit_cpe = 3;
 }
 
 message TieredPricingRate {
@@ -106,6 +106,14 @@ message SharedSKUBudget {
   repeated Credit credits = 4;
 }
 
+message OptionValue {
+  oneof value {
+    string string_value = 1;
+    int64 int_value = 2;
+    bool bool_value = 3;
+  }
+}
+
 // Represents what a customer has paid for. Used for cost calculation,
 // enforcing quotas, creating invoices, and maybe others.
 message Contract {
@@ -127,7 +135,7 @@ message Contract {
   Date billing_period_end_date = 8;
 
   // Entitlements, used in frontend features.
-  map<string, string> features = 9;
+  map<string, bool> features = 9;
 
   // Used for quotas and cost calculations.
   repeated SKUConfig sku_configs = 10;
@@ -146,5 +154,5 @@ message Contract {
   repeated Credit credits = 15;
 
   // Catch-all for overrides and information not covered above.
-  map<string, string> custom_options = 16;
+  map<string, OptionValue> custom_options = 16;
 }
