@@ -1,3 +1,10 @@
+## 0.7.1
+
+### New Features ✨
+
+- (config-issues) Add new `PROCESSING_ERROR` item type by @wedamija in [#178](https://github.com/getsentry/sentry-protos/pull/178)
+- Add DataCategory enum proto by @noahsmartin in [#176](https://github.com/getsentry/sentry-protos/pull/176)
+
 ## 0.7.0
 
 ### New Features ✨
