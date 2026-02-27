@@ -14,8 +14,8 @@ from sentry_protos.billing.v1.services.contract.v1.contract_metadata_pb2 import 
     MetadataOptions,
     OptionValue,
 )
-from sentry_protos.billing.v1.services.contract.v1.contract_pb2 import (
-    Contract,
+from sentry_protos.billing.v1.services.contract.v1.contract_pb2 import Contract
+from sentry_protos.billing.v1.services.contract.v1.endpoint_get_contract_pb2 import (
     GetContractRequest,
     GetContractResponse,
 )
