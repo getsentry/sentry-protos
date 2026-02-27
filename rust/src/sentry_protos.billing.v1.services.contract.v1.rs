@@ -333,3 +333,13 @@ pub struct Contract {
     #[prost(message, optional, tag = "3")]
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetContractResponse {
+    #[prost(message, optional, tag = "1")]
+    pub contract: ::core::option::Option<Contract>,
+}

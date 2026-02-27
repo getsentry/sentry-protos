@@ -15,6 +15,10 @@ from sentry_protos.billing.v1.services.contract.v1.contract_metadata_pb2 import 
     OptionValue,
 )
 from sentry_protos.billing.v1.services.contract.v1.contract_pb2 import Contract
+from sentry_protos.billing.v1.services.contract.v1.endpoint_get_contract_pb2 import (
+    GetContractRequest,
+    GetContractResponse,
+)
 from sentry_protos.billing.v1.services.contract.v1.pricing_config_pb2 import (
     PricingConfig,
     PricingTier,
@@ -140,3 +144,28 @@ def test_contract_with_all_sub_messages():
     assert custom_options["override_rate_limit"].int_value == 5000
     assert custom_options["is_internal"].bool_value is True
     assert custom_options["note"].string_value == "beta"
+
+
+def test_get_contract_request():
+    request = GetContractRequest(organization_id=67890)
+    assert request.organization_id == 67890
+
+
+def test_get_contract_response():
+    contract = Contract(
+        metadata=ContractMetadata(
+            id=12345,
+            organization_id=67890,
+        ),
+        billing_config=BillingConfig(
+            billing_type=BillingType.BILLING_TYPE_CREDIT_CARD,
+        ),
+        pricing_config=PricingConfig(
+            base_price_cents=8900,
+        ),
+    )
+    response = GetContractResponse(contract=contract)
+    assert response.contract.metadata.id == 12345
+    assert response.contract.metadata.organization_id == 67890
+    assert response.contract.billing_config.billing_type == BillingType.BILLING_TYPE_CREDIT_CARD
+    assert response.contract.pricing_config.base_price_cents == 8900

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/contract.proto";
+
+message GetContractRequest {
+  uint64 organization_id = 1;
+}
+
+message GetContractResponse {
+  Contract contract = 1;
+}
