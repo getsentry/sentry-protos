@@ -11,3 +11,11 @@ message Contract {
   BillingConfig billing_config = 2;
   PricingConfig pricing_config = 3;
 }
+
+message GetContractRequest {
+  uint64 organization_id = 1;
+}
+
+message GetContractResponse {
+  Contract contract = 1;
+}
