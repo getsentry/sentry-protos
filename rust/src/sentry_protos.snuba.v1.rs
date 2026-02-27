@@ -1608,6 +1608,30 @@ pub mod get_traces_response {
         pub attributes: ::prost::alloc::vec::Vec<super::TraceAttribute>,
     }
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SubscriptionDetailsRequest {
+    /// The subscription_id in format "partition/uuid"
+    #[prost(string, tag = "1")]
+    pub subscription_id: ::prost::alloc::string::String,
+    /// The entity key (e.g., "events", "eap_items")
+    #[prost(string, tag = "2")]
+    pub entity_key: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SubscriptionDetailsResponse {
+    #[prost(string, tag = "1")]
+    pub subscription_id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub entity_key: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub time_series_request: ::core::option::Option<TimeSeriesRequest>,
+    #[prost(uint32, tag = "4")]
+    pub time_window_secs: u32,
+    #[prost(uint32, tag = "5")]
+    pub resolution_secs: u32,
+    #[prost(int64, tag = "6")]
+    pub project_id: i64,
+}
 /// TraceItemAttributeNamesRequest is a request to the TraceItemAttributeNames endpoint,
 /// it returns the names of all queryable "TraceItemAttributes" that exist in the given projects,
 /// date range, and other filters.
