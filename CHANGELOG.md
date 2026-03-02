@@ -1,3 +1,9 @@
+## 0.8.1
+
+### New Features ✨
+
+- (billing) Add Contract request and response messages by @brendanhsentry in [#180](https://github.com/getsentry/sentry-protos/pull/180)
+
 ## 0.8.0
 
 ### New Features ✨
