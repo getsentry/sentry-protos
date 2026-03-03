@@ -288,6 +288,7 @@ pub struct SkuConfig {
     pub base_price_cents: u64,
     #[prost(uint64, optional, tag = "3")]
     pub payg_budget_cents: ::core::option::Option<u64>,
+    /// to be deprecated to signed reserved_units
     #[prost(uint64, tag = "4")]
     pub reserved_volume: u64,
     #[prost(message, optional, tag = "5")]
@@ -295,6 +296,8 @@ pub struct SkuConfig {
     /// for reserved budget SKUs
     #[prost(message, optional, tag = "6")]
     pub reserved_rate: ::core::option::Option<TieredPricingRate>,
+    #[prost(int64, tag = "7")]
+    pub reserved_units: i64,
 }
 /// Represents a budget that is collectively used by one or more SKUs,
 /// allowing multiple SKUs to draw from the same reserved budget.
