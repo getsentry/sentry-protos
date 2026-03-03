@@ -296,8 +296,19 @@ pub struct SkuConfig {
     /// for reserved budget SKUs
     #[prost(message, optional, tag = "6")]
     pub reserved_rate: ::core::option::Option<TieredPricingRate>,
-    #[prost(int64, tag = "7")]
-    pub reserved_units: i64,
+    #[prost(oneof = "sku_config::ReservedUnits", tags = "7, 8")]
+    pub reserved_units: ::core::option::Option<sku_config::ReservedUnits>,
+}
+/// Nested message and enum types in `SKUConfig`.
+pub mod sku_config {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum ReservedUnits {
+        #[prost(bool, tag = "7")]
+        IsUnlimited(bool),
+        /// the type communicates whether the SKU is unlimited or not, additionally reserved budget SKUs have a non-zero reserved_rate in addition to 0 reserved_units
+        #[prost(uint64, tag = "8")]
+        NumReservedUnits(u64),
+    }
 }
 /// Represents a budget that is collectively used by one or more SKUs,
 /// allowing multiple SKUs to draw from the same reserved budget.
