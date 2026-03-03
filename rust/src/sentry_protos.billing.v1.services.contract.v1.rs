@@ -326,6 +326,11 @@ pub struct PricingConfig {
     /// Base price for the package.
     #[prost(uint64, tag = "6")]
     pub base_price_cents: u64,
+    /// Determines when the on demand period for invoicing the organization starts and ends
+    #[prost(message, optional, tag = "7")]
+    pub ondemand_period_start_date: ::core::option::Option<Date>,
+    #[prost(message, optional, tag = "8")]
+    pub ondemand_period_end_date: ::core::option::Option<Date>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Contract {

@@ -44,4 +44,8 @@ message PricingConfig {
   uint64 max_spend_cents = 5;
   // Base price for the package.
   uint64 base_price_cents = 6;
+
+  //Determines when the on demand period for invoicing the organization starts and ends
+  Date ondemand_period_start_date = 7;
+  Date ondemand_period_end_date = 8;
 }
