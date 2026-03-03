@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1;
+
+enum SeatCategory {
+  SEAT_CATEGORY_UNSPECIFIED = 0;
+  SEAT_CATEGORY_MONITOR = 1;
+  SEAT_CATEGORY_UPTIME = 2;
+  SEAT_CATEGORY_SEER_USER = 3;
+}
