@@ -5,6 +5,7 @@ package sentry_protos.billing.v1.services.usage.v1;
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/data_category.proto";
 import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/seat_category.proto";
 
 // Aggregated usage counts for a single data category.
 message UsageData {
@@ -13,7 +14,7 @@ message UsageData {
   uint64 dropped = 3;
   uint64 filtered = 4;
   uint64 over_quota = 5;
-  uint64 smart_limit = 6;
+  uint64 spike_protection = 6;
   uint64 dynamic_sampling = 7;
 }
 
@@ -43,8 +44,4 @@ message GetUsageRequest {
   uint64 organization_id = 1;
   google.protobuf.Timestamp start = 2;
   google.protobuf.Timestamp end = 3;
-}
-
-service UsageService {
-  rpc GetUsage(GetUsageRequest) returns (GetUsageResponse);
 }

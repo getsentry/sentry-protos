@@ -1,7 +1,8 @@
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from sentry_protos.billing.v1.data_category_pb2 import DataCategory
-from sentry_protos.billing.v1.endpoint_usage_pb2 import (
+from sentry_protos.billing.v1.date_pb2 import Date
+from sentry_protos.billing.v1.services.usage.v1.endpoint_usage_pb2 import (
     CategoryUsage,
     DailyUsage,
     GetUsageRequest,
@@ -17,7 +18,7 @@ def test_usage_data():
         dropped=100,
         filtered=50,
         over_quota=30,
-        smart_limit=10,
+        spike_protection=10,
         dynamic_sampling=10,
     )
     assert data.total == 1000
@@ -25,7 +26,7 @@ def test_usage_data():
     assert data.dropped == 100
     assert data.filtered == 50
     assert data.over_quota == 30
-    assert data.smart_limit == 10
+    assert data.spike_protection == 10
     assert data.dynamic_sampling == 10
 
 
@@ -36,7 +37,7 @@ def test_usage_data_defaults():
     assert data.dropped == 0
     assert data.filtered == 0
     assert data.over_quota == 0
-    assert data.smart_limit == 0
+    assert data.spike_protection == 0
     assert data.dynamic_sampling == 0
 
 
@@ -53,7 +54,7 @@ def test_category_usage():
 
 
 def test_daily_usage():
-    day = Timestamp(seconds=1704067200)  # 2024-01-01T00:00:00Z
+    day = Date(year=2024, month=1, day=1)
     error_usage = CategoryUsage(
         category=DataCategory.DATA_CATEGORY_ERROR,
         data=UsageData(total=1000, accepted=900, dropped=100),
@@ -64,7 +65,9 @@ def test_daily_usage():
     )
     daily = DailyUsage(date=day, usage=[error_usage, span_usage])
 
-    assert daily.date.seconds == 1704067200
+    assert daily.date.year == 2024
+    assert daily.date.month == 1
+    assert daily.date.day == 1
     assert len(daily.usage) == 2
     assert daily.usage[0].category == DataCategory.DATA_CATEGORY_ERROR
     assert daily.usage[0].data.total == 1000
@@ -101,7 +104,7 @@ def test_get_usage_request_has_field():
 
 def test_get_usage_response():
     day1 = DailyUsage(
-        date=Timestamp(seconds=1704067200),
+        date=Date(year=2024, month=1, day=1),
         usage=[
             CategoryUsage(
                 category=DataCategory.DATA_CATEGORY_ERROR,
@@ -110,7 +113,7 @@ def test_get_usage_response():
         ],
     )
     day2 = DailyUsage(
-        date=Timestamp(seconds=1704153600),
+        date=Date(year=2024, month=1, day=2),
         usage=[
             CategoryUsage(
                 category=DataCategory.DATA_CATEGORY_ERROR,
@@ -141,7 +144,7 @@ def test_get_usage_response_serialization_roundtrip():
     response = GetUsageResponse(
         days=[
             DailyUsage(
-                date=Timestamp(seconds=1704067200),
+                date=Date(year=2024, month=1, day=1),
                 usage=[
                     CategoryUsage(
                         category=DataCategory.DATA_CATEGORY_SPAN,
@@ -156,7 +159,9 @@ def test_get_usage_response_serialization_roundtrip():
     deserialized.ParseFromString(serialized)
 
     assert len(deserialized.days) == 1
-    assert deserialized.days[0].date.seconds == 1704067200
+    assert deserialized.days[0].date.year == 2024
+    assert deserialized.days[0].date.month == 1
+    assert deserialized.days[0].date.day == 1
     assert deserialized.days[0].usage[0].category == DataCategory.DATA_CATEGORY_SPAN
     assert deserialized.days[0].usage[0].data.total == 10000
     assert deserialized.days[0].usage[0].data.dynamic_sampling == 500
