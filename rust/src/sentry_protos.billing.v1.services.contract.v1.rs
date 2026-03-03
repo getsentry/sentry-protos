@@ -288,7 +288,7 @@ pub struct SkuConfig {
     pub base_price_cents: u64,
     #[prost(uint64, optional, tag = "3")]
     pub payg_budget_cents: ::core::option::Option<u64>,
-    /// to be deprecated to signed reserved_units
+    /// DEPRECATED: use signed reserved_units instead for support for unlimited/reserved budget categories
     #[prost(uint64, tag = "4")]
     pub reserved_volume: u64,
     #[prost(message, optional, tag = "5")]
