@@ -288,6 +288,8 @@ pub struct SkuConfig {
     pub base_price_cents: u64,
     #[prost(uint64, optional, tag = "3")]
     pub payg_budget_cents: ::core::option::Option<u64>,
+    /// DEPRECATED: use signed reserved_units instead for support for unlimited/reserved budget categories
+    #[deprecated]
     #[prost(uint64, tag = "4")]
     pub reserved_volume: u64,
     #[prost(message, optional, tag = "5")]
@@ -295,6 +297,19 @@ pub struct SkuConfig {
     /// for reserved budget SKUs
     #[prost(message, optional, tag = "6")]
     pub reserved_rate: ::core::option::Option<TieredPricingRate>,
+    #[prost(oneof = "sku_config::ReservedUnits", tags = "7, 8")]
+    pub reserved_units: ::core::option::Option<sku_config::ReservedUnits>,
+}
+/// Nested message and enum types in `SKUConfig`.
+pub mod sku_config {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum ReservedUnits {
+        #[prost(bool, tag = "7")]
+        IsUnlimited(bool),
+        /// the type communicates whether the SKU is unlimited or not, additionally reserved budget SKUs have a non-zero reserved_rate in addition to 0 reserved_units
+        #[prost(uint64, tag = "8")]
+        NumReservedUnits(u64),
+    }
 }
 /// Represents a budget that is collectively used by one or more SKUs,
 /// allowing multiple SKUs to draw from the same reserved budget.
@@ -323,6 +338,11 @@ pub struct PricingConfig {
     /// Base price for the package.
     #[prost(uint64, tag = "6")]
     pub base_price_cents: u64,
+    /// Determines when the on demand period for invoicing the organization starts and ends, even for annual plans we bill ondemand monthly
+    #[prost(message, optional, tag = "7")]
+    pub ondemand_period_start_date: ::core::option::Option<Date>,
+    #[prost(message, optional, tag = "8")]
+    pub ondemand_period_end_date: ::core::option::Option<Date>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Contract {

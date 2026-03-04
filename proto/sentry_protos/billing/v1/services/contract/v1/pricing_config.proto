@@ -20,9 +20,14 @@ message SKUConfig {
   // Base price for the SKU (upgraded reserved volumes or add-on activation fees)
   uint64 base_price_cents = 2;
   optional uint64 payg_budget_cents = 3;
-  uint64 reserved_volume = 4;
+  uint64 reserved_volume = 4 [deprecated = true]; //DEPRECATED: use signed reserved_units instead for support for unlimited/reserved budget categories
   TieredPricingRate payg_rate = 5;
   TieredPricingRate reserved_rate = 6; // for reserved budget SKUs
+
+  oneof reserved_units {
+    bool is_unlimited = 7;
+    uint64 num_reserved_units = 8; // the type communicates whether the SKU is unlimited or not, additionally reserved budget SKUs have a non-zero reserved_rate in addition to 0 reserved_units
+  }
 }
 
 // Represents a budget that is collectively used by one or more SKUs,
@@ -43,4 +48,8 @@ message PricingConfig {
   uint64 max_spend_cents = 5;
   // Base price for the package.
   uint64 base_price_cents = 6;
+
+  //Determines when the on demand period for invoicing the organization starts and ends, even for annual plans we bill ondemand monthly
+  Date ondemand_period_start_date = 7;
+  Date ondemand_period_end_date = 8;
 }
