@@ -40,3 +40,9 @@ pub mod taskbroker {
    }
 }
 
+pub mod usage {
+    pub mod v1 {
+       include!("sentry_protos.billing.v1.services.usage.v1.rs");
+   }
+}
+

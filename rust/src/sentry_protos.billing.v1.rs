@@ -95,3 +95,62 @@ impl DataCategory {
         }
     }
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Date {
+    #[prost(uint32, tag = "1")]
+    pub year: u32,
+    #[prost(uint32, tag = "2")]
+    pub month: u32,
+    #[prost(uint32, tag = "3")]
+    pub day: u32,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SeatCategory {
+    Unspecified = 0,
+    Monitor = 1,
+    Uptime = 2,
+    SeerUser = 3,
+}
+impl SeatCategory {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SEAT_CATEGORY_UNSPECIFIED",
+            Self::Monitor => "SEAT_CATEGORY_MONITOR",
+            Self::Uptime => "SEAT_CATEGORY_UPTIME",
+            Self::SeerUser => "SEAT_CATEGORY_SEER_USER",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SEAT_CATEGORY_UNSPECIFIED" => Some(Self::Unspecified),
+            "SEAT_CATEGORY_MONITOR" => Some(Self::Monitor),
+            "SEAT_CATEGORY_UPTIME" => Some(Self::Uptime),
+            "SEAT_CATEGORY_SEER_USER" => Some(Self::SeerUser),
+            _ => None,
+        }
+    }
+}
+/// Aggregated usage counts for a single data category.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UsageData {
+    #[prost(uint64, tag = "1")]
+    pub total: u64,
+    #[prost(uint64, tag = "2")]
+    pub accepted: u64,
+    #[prost(uint64, tag = "3")]
+    pub dropped: u64,
+    #[prost(uint64, tag = "4")]
+    pub filtered: u64,
+    #[prost(uint64, tag = "5")]
+    pub over_quota: u64,
+    #[prost(uint64, tag = "6")]
+    pub spike_protection: u64,
+    #[prost(uint64, tag = "7")]
+    pub dynamic_sampling: u64,
+}
