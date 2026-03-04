@@ -136,3 +136,21 @@ impl SeatCategory {
         }
     }
 }
+/// Aggregated usage counts for a single data category.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UsageData {
+    #[prost(uint64, tag = "1")]
+    pub total: u64,
+    #[prost(uint64, tag = "2")]
+    pub accepted: u64,
+    #[prost(uint64, tag = "3")]
+    pub dropped: u64,
+    #[prost(uint64, tag = "4")]
+    pub filtered: u64,
+    #[prost(uint64, tag = "5")]
+    pub over_quota: u64,
+    #[prost(uint64, tag = "6")]
+    pub spike_protection: u64,
+    #[prost(uint64, tag = "7")]
+    pub dynamic_sampling: u64,
+}
