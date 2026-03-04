@@ -289,6 +289,7 @@ pub struct SkuConfig {
     #[prost(uint64, optional, tag = "3")]
     pub payg_budget_cents: ::core::option::Option<u64>,
     /// DEPRECATED: use signed reserved_units instead for support for unlimited/reserved budget categories
+    #[deprecated]
     #[prost(uint64, tag = "4")]
     pub reserved_volume: u64,
     #[prost(message, optional, tag = "5")]
@@ -337,7 +338,7 @@ pub struct PricingConfig {
     /// Base price for the package.
     #[prost(uint64, tag = "6")]
     pub base_price_cents: u64,
-    /// Determines when the on demand period for invoicing the organization starts and ends
+    /// Determines when the on demand period for invoicing the organization starts and ends, even for annual plans we bill ondemand monthly
     #[prost(message, optional, tag = "7")]
     pub ondemand_period_start_date: ::core::option::Option<Date>,
     #[prost(message, optional, tag = "8")]
