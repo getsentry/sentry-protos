@@ -2,12 +2,12 @@ from google.protobuf.timestamp_pb2 import Timestamp
 
 from sentry_protos.billing.v1.data_category_pb2 import DataCategory
 from sentry_protos.billing.v1.date_pb2 import Date
+from sentry_protos.billing.v1.usage_data_pb2 import UsageData
 from sentry_protos.billing.v1.services.usage.v1.endpoint_usage_pb2 import (
     CategoryUsage,
     DailyUsage,
     GetUsageRequest,
     GetUsageResponse,
-    UsageData,
 )
 
 

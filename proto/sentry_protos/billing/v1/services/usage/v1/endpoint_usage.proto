@@ -6,17 +6,7 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/data_category.proto";
 import "sentry_protos/billing/v1/date.proto";
 import "sentry_protos/billing/v1/seat_category.proto";
-
-// Aggregated usage counts for a single data category.
-message UsageData {
-  uint64 total = 1;
-  uint64 accepted = 2;
-  uint64 dropped = 3;
-  uint64 filtered = 4;
-  uint64 over_quota = 5;
-  uint64 spike_protection = 6;
-  uint64 dynamic_sampling = 7;
-}
+import "sentry_protos/billing/v1/usage_data.proto";
 
 message CategoryUsage {
   DataCategory category = 1;
