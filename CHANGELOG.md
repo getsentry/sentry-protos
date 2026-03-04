@@ -1,3 +1,9 @@
+## 0.8.2
+
+### Bug Fixes 🐛
+
+- (billing) Added unsigned int reserved_units and ondemand fields by @krithikravi in [#181](https://github.com/getsentry/sentry-protos/pull/181)
+
 ## 0.8.1
 
 ### New Features ✨
