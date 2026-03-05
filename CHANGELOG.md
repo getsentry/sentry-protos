@@ -1,3 +1,9 @@
+## 0.8.3
+
+### New Features ✨
+
+- Add billing platform usage service proto by @noahsmartin in [#175](https://github.com/getsentry/sentry-protos/pull/175)
+
 ## 0.8.2
 
 ### Bug Fixes 🐛
