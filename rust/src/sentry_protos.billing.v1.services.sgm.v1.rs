@@ -51,20 +51,17 @@ impl EnforcementType {
 pub struct PricedSkuUsage {
     #[prost(enumeration = "super::super::contract::v1::Sku", tag = "1")]
     pub sku: i32,
-    /// I need to know how much has the user spent on this SKU so far?
-    /// does that include credits? probably
-    ///
-    /// I also need to know how much is left, how does that interact with shared_sku_budgets?
-    ///
-    /// basically, does the SGM thing *need* contracts?
-    /// if so, what value does the PricedUsageTracker provide?
     #[prost(uint64, tag = "2")]
     pub current_used_cents: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PricedUsage {
+    /// the contract contains all the information about the
+    /// organization's budget(s)
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
+    /// The amount of money used up for a specific SKU in the current
+    /// billing period. Credits have already been applied to this calculation
     #[prost(message, repeated, tag = "2")]
     pub priced_sku_usage: ::prost::alloc::vec::Vec<PricedSkuUsage>,
 }
