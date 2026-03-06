@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.sgm.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/data_category.proto";
+
+enum EnforcementType {
+  ENFORCEMENT_TYPE_UNSPECIFIED = 0;
+  ENFORCEMENT_TYPE_RATE_LIMIT = 1;
+  ENFORCEMENT_TYPE_SAMPLE = 2;
+}
+
+message EnforcementDecision {
+  uint64 contract_id = 1;
+  uint64 organization_id = 2;
+  EnforcementType enforcement_type = 3;
+  string explanation = 4;
+  // Even though we bill for SKUs, relay ingests data categories, so enforcement
+  // decisions are on a per-datacategory basis
+  DataCategory data_category = 5;
+  google.protobuf.Timestamp decision_time = 6;
+  google.protobuf.Timestamp expiration_time = 7;
+}
