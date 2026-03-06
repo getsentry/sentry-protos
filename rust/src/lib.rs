@@ -28,6 +28,12 @@ pub mod sentry {
    }
 }
 
+pub mod sgm {
+    pub mod v1 {
+       include!("sentry_protos.billing.v1.services.sgm.v1.rs");
+   }
+}
+
 pub mod snuba {
     pub mod v1 {
        include!("sentry_protos.snuba.v1.rs");
