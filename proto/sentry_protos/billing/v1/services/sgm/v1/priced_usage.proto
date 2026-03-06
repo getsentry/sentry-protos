@@ -14,6 +14,6 @@ message PricedUsage {
   // organization's budget(s)
   uint64 contract_id = 1;
   // The amount of money used up for a specific SKU in the current
-  // billing period
+  // billing period. Credits have already been applied to this calculation
   repeated PricedSKUUsage priced_sku_usage = 2;
 }
