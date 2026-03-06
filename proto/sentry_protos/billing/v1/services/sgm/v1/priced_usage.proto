@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.sgm.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
+
+message PricedSKUUsage {
+  sentry_protos.billing.v1.services.contract.v1.SKU sku = 1;
+  /*
+   * I need to know how much has the user spent on this SKU so far?
+   * does that include credits? probably
+   *
+   * I also need to know how much is left, how does that interact with shared_sku_budgets?
+   *
+   * basically, does the SGM thing *need* contracts?
+   *  if so, what value does the PricedUsageTracker provide?
+   */
+  uint64 current_used_cents = 2;
+}
+
+message PricedUsage {
+  uint64 contract_id = 1;
+  repeated PricedSKUUsage priced_sku_usage = 2;
+}
