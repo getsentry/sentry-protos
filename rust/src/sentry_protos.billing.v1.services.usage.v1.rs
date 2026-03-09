@@ -29,7 +29,7 @@ pub struct GetUsageResponse {
     #[prost(message, repeated, tag = "2")]
     pub seats: ::prost::alloc::vec::Vec<CategorySeatUsage>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUsageRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
@@ -37,4 +37,8 @@ pub struct GetUsageRequest {
     pub start: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, optional, tag = "3")]
     pub end: ::core::option::Option<::prost_types::Timestamp>,
+    /// Optional filter for specific data categories.
+    /// When empty, usage for all categories is returned.
+    #[prost(enumeration = "super::super::super::DataCategory", repeated, tag = "4")]
+    pub categories: ::prost::alloc::vec::Vec<i32>,
 }
