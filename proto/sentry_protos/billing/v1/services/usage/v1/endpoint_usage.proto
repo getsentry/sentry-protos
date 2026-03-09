@@ -34,4 +34,8 @@ message GetUsageRequest {
   uint64 organization_id = 1;
   google.protobuf.Timestamp start = 2;
   google.protobuf.Timestamp end = 3;
+
+  // Optional filter for specific data categories.
+  // When empty, usage for all categories is returned.
+  repeated DataCategory categories = 4;
 }
