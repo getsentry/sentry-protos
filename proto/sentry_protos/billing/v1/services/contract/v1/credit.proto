@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
+import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
+
+// Whether the credit represents a dollar allowance or a unit quantity.
+enum CreditType {
+  CREDIT_TYPE_UNSPECIFIED = 0;
+  // A dollar allowance (amount is in cents).
+  CREDIT_TYPE_DOLLAR = 1;
+  // A quantity of units for a specific SKU.
+  CREDIT_TYPE_UNITS = 2;
+}
+
+// How this credit was originated.
+enum CreditSource {
+  CREDIT_SOURCE_UNSPECIFIED = 0;
+  // Credit granted by a trial.
+  CREDIT_SOURCE_TRIAL = 1;
+  //Credit manually granted by a Sentry employee.
+  CREDIT_SOURCE_ADMIN = 2;
+}
+
+// The current status of a credit.
+enum CreditStatus {
+  CREDIT_STATUS_UNSPECIFIED = 0;
+  CREDIT_STATUS_ACTIVE = 1;
+  CREDIT_STATUS_EXPIRED = 2;
+  CREDIT_STATUS_REVOKED = 3;
+}
+
+// A credit granted to an organization, representing either a dollar
+// allowance or a number of units for specific SKUs.
+message Credit {
+  uint64 id = 1;
+  uint64 organization_id = 2;
+  CreditType type = 3;
+  // The SKUs this credit applies to. Empty means all SKUs.
+  repeated SKU skus = 4;
+  // Amount in cents (for DOLLAR credits) or unit count (for UNITS credits).
+  int64 amount = 5;
+  Date start_date = 6;
+  Date end_date = 7;
+  CreditSource source = 8;
+  // The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
+  optional uint64 trial_id = 9;
+  CreditStatus status = 10;
+}

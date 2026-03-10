@@ -353,6 +353,131 @@ pub struct Contract {
     #[prost(message, optional, tag = "3")]
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
+/// A credit granted to an organization, representing either a dollar
+/// allowance or a number of units for specific SKUs.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Credit {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    #[prost(uint64, tag = "2")]
+    pub organization_id: u64,
+    #[prost(enumeration = "CreditType", tag = "3")]
+    pub r#type: i32,
+    /// The SKUs this credit applies to. Empty means all SKUs.
+    #[prost(enumeration = "Sku", repeated, tag = "4")]
+    pub skus: ::prost::alloc::vec::Vec<i32>,
+    /// Amount in cents (for DOLLAR credits) or unit count (for UNITS credits).
+    #[prost(int64, tag = "5")]
+    pub amount: i64,
+    #[prost(message, optional, tag = "6")]
+    pub start_date: ::core::option::Option<Date>,
+    #[prost(message, optional, tag = "7")]
+    pub end_date: ::core::option::Option<Date>,
+    #[prost(enumeration = "CreditSource", tag = "8")]
+    pub source: i32,
+    /// The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
+    #[prost(uint64, optional, tag = "9")]
+    pub trial_id: ::core::option::Option<u64>,
+    #[prost(enumeration = "CreditStatus", tag = "10")]
+    pub status: i32,
+}
+/// Whether the credit represents a dollar allowance or a unit quantity.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum CreditType {
+    Unspecified = 0,
+    /// A dollar allowance (amount is in cents).
+    Dollar = 1,
+    /// A quantity of units for a specific SKU.
+    Units = 2,
+}
+impl CreditType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "CREDIT_TYPE_UNSPECIFIED",
+            Self::Dollar => "CREDIT_TYPE_DOLLAR",
+            Self::Units => "CREDIT_TYPE_UNITS",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "CREDIT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "CREDIT_TYPE_DOLLAR" => Some(Self::Dollar),
+            "CREDIT_TYPE_UNITS" => Some(Self::Units),
+            _ => None,
+        }
+    }
+}
+/// How this credit was originated.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum CreditSource {
+    Unspecified = 0,
+    /// Credit granted by a trial.
+    Trial = 1,
+    /// Credit manually granted by a Sentry employee.
+    Admin = 2,
+}
+impl CreditSource {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "CREDIT_SOURCE_UNSPECIFIED",
+            Self::Trial => "CREDIT_SOURCE_TRIAL",
+            Self::Admin => "CREDIT_SOURCE_ADMIN",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "CREDIT_SOURCE_UNSPECIFIED" => Some(Self::Unspecified),
+            "CREDIT_SOURCE_TRIAL" => Some(Self::Trial),
+            "CREDIT_SOURCE_ADMIN" => Some(Self::Admin),
+            _ => None,
+        }
+    }
+}
+/// The current status of a credit.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum CreditStatus {
+    Unspecified = 0,
+    Active = 1,
+    Expired = 2,
+    Revoked = 3,
+}
+impl CreditStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "CREDIT_STATUS_UNSPECIFIED",
+            Self::Active => "CREDIT_STATUS_ACTIVE",
+            Self::Expired => "CREDIT_STATUS_EXPIRED",
+            Self::Revoked => "CREDIT_STATUS_REVOKED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "CREDIT_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "CREDIT_STATUS_ACTIVE" => Some(Self::Active),
+            "CREDIT_STATUS_EXPIRED" => Some(Self::Expired),
+            "CREDIT_STATUS_REVOKED" => Some(Self::Revoked),
+            _ => None,
+        }
+    }
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetContractRequest {
     #[prost(uint64, tag = "1")]
