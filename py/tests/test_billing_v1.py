@@ -32,6 +32,12 @@ from sentry_protos.billing.v1.services.contract.v1.trial_pb2 import (
     TrialStatus,
     TrialType,
 )
+from sentry_protos.billing.v1.services.contract.v1.credit_pb2 import (
+    Credit,
+    CreditSource,
+    CreditStatus,
+    CreditType,
+)
 
 
 def test_contract_with_all_sub_messages():
@@ -259,3 +265,84 @@ def test_trial_oneof_mutual_exclusivity():
     assert trial.WhichOneof("trial_target") == "sku"
     assert trial.sku == SKU.SKU_LOGS
     assert trial.plan == ""
+
+
+def test_dollar_credit():
+    credit = Credit(
+        id=1,
+        organization_id=12345,
+        type=CreditType.CREDIT_TYPE_DOLLAR,
+        skus=[SKU.SKU_ERRORS, SKU.SKU_SPANS],
+        amount=500000,
+        start_date=Date(year=2026, month=3, day=1),
+        end_date=Date(year=2026, month=6, day=1),
+        source=CreditSource.CREDIT_SOURCE_TRIAL,
+        trial_id=1,
+        status=CreditStatus.CREDIT_STATUS_ACTIVE,
+    )
+    assert credit.id == 1
+    assert credit.organization_id == 12345
+    assert credit.type == CreditType.CREDIT_TYPE_DOLLAR
+    assert list(credit.skus) == [SKU.SKU_ERRORS, SKU.SKU_SPANS]
+    assert credit.amount == 500000
+    assert credit.start_date.year == 2026
+    assert credit.end_date.month == 6
+    assert credit.source == CreditSource.CREDIT_SOURCE_TRIAL
+    assert credit.HasField("trial_id")
+    assert credit.trial_id == 1
+    assert credit.status == CreditStatus.CREDIT_STATUS_ACTIVE
+
+
+def test_units_credit():
+    credit = Credit(
+        id=2,
+        organization_id=67890,
+        type=CreditType.CREDIT_TYPE_UNITS,
+        skus=[SKU.SKU_REPLAYS],
+        amount=50000,
+        start_date=Date(year=2026, month=3, day=10),
+        end_date=Date(year=2026, month=4, day=10),
+        source=CreditSource.CREDIT_SOURCE_TRIAL,
+        trial_id=2,
+        status=CreditStatus.CREDIT_STATUS_ACTIVE,
+    )
+    assert credit.type == CreditType.CREDIT_TYPE_UNITS
+    assert list(credit.skus) == [SKU.SKU_REPLAYS]
+    assert credit.amount == 50000
+    assert credit.source == CreditSource.CREDIT_SOURCE_TRIAL
+    assert credit.trial_id == 2
+
+
+def test_admin_credit():
+    credit = Credit(
+        id=3,
+        organization_id=99999,
+        type=CreditType.CREDIT_TYPE_DOLLAR,
+        amount=20000,
+        start_date=Date(year=2026, month=1, day=1),
+        end_date=Date(year=2026, month=12, day=31),
+        source=CreditSource.CREDIT_SOURCE_ADMIN,
+        status=CreditStatus.CREDIT_STATUS_ACTIVE,
+    )
+    assert credit.source == CreditSource.CREDIT_SOURCE_ADMIN
+    assert not credit.HasField("trial_id")
+    assert len(credit.skus) == 0
+    assert credit.amount == 20000
+
+
+def test_revoked_credit():
+    credit = Credit(
+        id=4,
+        organization_id=11111,
+        type=CreditType.CREDIT_TYPE_DOLLAR,
+        skus=[SKU.SKU_ERRORS],
+        amount=100000,
+        start_date=Date(year=2026, month=2, day=1),
+        end_date=Date(year=2026, month=5, day=1),
+        source=CreditSource.CREDIT_SOURCE_TRIAL,
+        trial_id=4,
+        status=CreditStatus.CREDIT_STATUS_REVOKED,
+    )
+    assert credit.status == CreditStatus.CREDIT_STATUS_REVOKED
+    assert credit.source == CreditSource.CREDIT_SOURCE_TRIAL
+    assert credit.trial_id == 4
