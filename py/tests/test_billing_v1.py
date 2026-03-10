@@ -27,6 +27,11 @@ from sentry_protos.billing.v1.services.contract.v1.pricing_config_pb2 import (
     TieredPricingRate,
 )
 from sentry_protos.billing.v1.services.contract.v1.sku_pb2 import SKU
+from sentry_protos.billing.v1.services.contract.v1.trial_pb2 import (
+    Trial,
+    TrialStatus,
+    TrialType,
+)
 
 
 def test_contract_with_all_sub_messages():
@@ -169,3 +174,88 @@ def test_get_contract_response():
     assert response.contract.metadata.organization_id == 67890
     assert response.contract.billing_config.billing_type == BillingType.BILLING_TYPE_CREDIT_CARD
     assert response.contract.pricing_config.base_price_cents == 8900
+
+
+def test_product_trial():
+    trial = Trial(
+        id=1,
+        organization_id=12345,
+        type=TrialType.TRIAL_TYPE_PRODUCT,
+        sku=SKU.SKU_ERRORS,
+        start_date=Date(year=2026, month=3, day=1),
+        end_date=Date(year=2026, month=4, day=1),
+        status=TrialStatus.TRIAL_STATUS_ACTIVE,
+    )
+    assert trial.id == 1
+    assert trial.organization_id == 12345
+    assert trial.type == TrialType.TRIAL_TYPE_PRODUCT
+    assert trial.sku == SKU.SKU_ERRORS
+    assert trial.WhichOneof("trial_target") == "sku"
+    assert trial.start_date.year == 2026
+    assert trial.start_date.month == 3
+    assert trial.end_date.month == 4
+    assert trial.status == TrialStatus.TRIAL_STATUS_ACTIVE
+
+
+def test_subscription_trial():
+    trial = Trial(
+        id=2,
+        organization_id=67890,
+        type=TrialType.TRIAL_TYPE_SUBSCRIPTION,
+        plan="am2_business",
+        start_date=Date(year=2026, month=3, day=10),
+        end_date=Date(year=2026, month=4, day=10),
+        status=TrialStatus.TRIAL_STATUS_COMPLETED,
+    )
+    assert trial.plan == "am2_business"
+    assert trial.WhichOneof("trial_target") == "plan"
+    assert trial.type == TrialType.TRIAL_TYPE_SUBSCRIPTION
+    assert trial.status == TrialStatus.TRIAL_STATUS_COMPLETED
+
+
+def test_enterprise_trial():
+    trial = Trial(
+        id=3,
+        organization_id=99999,
+        type=TrialType.TRIAL_TYPE_ENTERPRISE,
+        plan="enterprise_trial",
+        start_date=Date(year=2026, month=1, day=15),
+        end_date=Date(year=2026, month=7, day=15),
+        status=TrialStatus.TRIAL_STATUS_ACTIVE,
+        status_changed_at=Date(year=2026, month=1, day=15),
+    )
+    assert trial.type == TrialType.TRIAL_TYPE_ENTERPRISE
+    assert trial.plan == "enterprise_trial"
+    assert trial.end_date.month == 7
+    assert trial.HasField("status_changed_at")
+    assert trial.status_changed_at.year == 2026
+    assert trial.status_changed_at.month == 1
+    assert trial.status_changed_at.day == 15
+
+
+def test_cancelled_trial():
+    trial = Trial(
+        id=4,
+        organization_id=11111,
+        type=TrialType.TRIAL_TYPE_PLAN,
+        plan="am2_team",
+        start_date=Date(year=2026, month=2, day=1),
+        end_date=Date(year=2026, month=3, day=1),
+        status=TrialStatus.TRIAL_STATUS_CANCELLED,
+        status_changed_at=Date(year=2026, month=2, day=15),
+    )
+    assert trial.status == TrialStatus.TRIAL_STATUS_CANCELLED
+    assert trial.type == TrialType.TRIAL_TYPE_PLAN
+    assert trial.status_changed_at.month == 2
+    assert trial.status_changed_at.day == 15
+
+
+def test_trial_oneof_mutual_exclusivity():
+    trial = Trial(plan="am2_business")
+    assert trial.WhichOneof("trial_target") == "plan"
+    assert trial.plan == "am2_business"
+
+    trial.sku = SKU.SKU_LOGS
+    assert trial.WhichOneof("trial_target") == "sku"
+    assert trial.sku == SKU.SKU_LOGS
+    assert trial.plan == ""
