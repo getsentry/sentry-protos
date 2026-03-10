@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.sgm.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
+
+message PricedSKUUsage {
+  sentry_protos.billing.v1.services.contract.v1.SKU sku = 1;
+  uint64 current_used_cents = 2;
+}
+
+message PricedUsage {
+  // the contract contains all the information about the
+  // organization's budget(s)
+  uint64 contract_id = 1;
+  // The amount of money used up for a specific SKU in the current
+  // billing period. Credits have already been applied to this calculation
+  repeated PricedSKUUsage priced_sku_usage = 2;
+}
