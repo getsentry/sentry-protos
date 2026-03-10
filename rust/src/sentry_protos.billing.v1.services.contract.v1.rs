@@ -363,3 +363,108 @@ pub struct GetContractResponse {
     #[prost(message, optional, tag = "1")]
     pub contract: ::core::option::Option<Contract>,
 }
+/// Represents a time-bounded trial for an organization.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Trial {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    #[prost(uint64, tag = "2")]
+    pub organization_id: u64,
+    #[prost(enumeration = "TrialType", tag = "3")]
+    pub r#type: i32,
+    #[prost(message, optional, tag = "6")]
+    pub start_date: ::core::option::Option<Date>,
+    #[prost(message, optional, tag = "7")]
+    pub end_date: ::core::option::Option<Date>,
+    #[prost(enumeration = "TrialStatus", tag = "8")]
+    pub status: i32,
+    /// Used to infer the time the trial was activated/completed/cancelled
+    #[prost(message, optional, tag = "9")]
+    pub status_changed_at: ::core::option::Option<Date>,
+    /// What this trial grants access to -- either a plan ID or a specific SKU.
+    #[prost(oneof = "trial::TrialTarget", tags = "4, 5")]
+    pub trial_target: ::core::option::Option<trial::TrialTarget>,
+}
+/// Nested message and enum types in `Trial`.
+pub mod trial {
+    /// What this trial grants access to -- either a plan ID or a specific SKU.
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum TrialTarget {
+        #[prost(string, tag = "4")]
+        Plan(::prost::alloc::string::String),
+        #[prost(enumeration = "super::Sku", tag = "5")]
+        Sku(i32),
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum TrialType {
+    Unspecified = 0,
+    /// Trying only a specific product
+    Product = 1,
+    /// Trying a new plan with quota and features, not charged for, org must be on a free plan before
+    Subscription = 2,
+    /// Trying a new plan with quota and features, charged for general usage, org must be on a paid plan before
+    Plan = 3,
+    /// Trying an enterprise plan with unlimited quotas and features, charged for previous plan, org must be on a paid plan before
+    Enterprise = 4,
+}
+impl TrialType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "TRIAL_TYPE_UNSPECIFIED",
+            Self::Product => "TRIAL_TYPE_PRODUCT",
+            Self::Subscription => "TRIAL_TYPE_SUBSCRIPTION",
+            Self::Plan => "TRIAL_TYPE_PLAN",
+            Self::Enterprise => "TRIAL_TYPE_ENTERPRISE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "TRIAL_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "TRIAL_TYPE_PRODUCT" => Some(Self::Product),
+            "TRIAL_TYPE_SUBSCRIPTION" => Some(Self::Subscription),
+            "TRIAL_TYPE_PLAN" => Some(Self::Plan),
+            "TRIAL_TYPE_ENTERPRISE" => Some(Self::Enterprise),
+            _ => None,
+        }
+    }
+}
+/// The current status of a trial.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum TrialStatus {
+    Unspecified = 0,
+    Active = 1,
+    Completed = 2,
+    Cancelled = 3,
+}
+impl TrialStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "TRIAL_STATUS_UNSPECIFIED",
+            Self::Active => "TRIAL_STATUS_ACTIVE",
+            Self::Completed => "TRIAL_STATUS_COMPLETED",
+            Self::Cancelled => "TRIAL_STATUS_CANCELLED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "TRIAL_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "TRIAL_STATUS_ACTIVE" => Some(Self::Active),
+            "TRIAL_STATUS_COMPLETED" => Some(Self::Completed),
+            "TRIAL_STATUS_CANCELLED" => Some(Self::Cancelled),
+            _ => None,
+        }
+    }
+}
