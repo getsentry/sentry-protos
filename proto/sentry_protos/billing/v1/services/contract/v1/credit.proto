@@ -5,11 +5,11 @@ package sentry_protos.billing.v1.services.contract.v1;
 import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
 import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
 
-// Whether the credit represents a dollar allowance or a unit quantity.
+// Whether the credit represents a cents allowance or a unit quantity.
 enum CreditType {
   CREDIT_TYPE_UNSPECIFIED = 0;
-  // A dollar allowance (amount is in cents).
-  CREDIT_TYPE_DOLLAR = 1;
+  // A monetary allowance measured in cents.
+  CREDIT_TYPE_CENTS = 1;
   // A quantity of units for a specific SKU.
   CREDIT_TYPE_UNITS = 2;
 }
@@ -31,15 +31,15 @@ enum CreditStatus {
   CREDIT_STATUS_REVOKED = 3;
 }
 
-// A credit granted to an organization, representing either a dollar
-// allowance or a number of units for specific SKUs.
+// A credit granted to an organization, representing either a monetary
+// allowance (in cents) or a number of units for specific SKUs.
 message Credit {
   uint64 id = 1;
   uint64 organization_id = 2;
   CreditType type = 3;
   // The SKUs this credit applies to. Empty means all SKUs.
   repeated SKU skus = 4;
-  // Amount in cents (for DOLLAR credits) or unit count (for UNITS credits).
+  // Amount in cents (for CENTS credits) or unit count (for UNITS credits).
   int64 amount = 5;
   Date start_date = 6;
   Date end_date = 7;

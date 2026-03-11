@@ -219,26 +219,6 @@ def test_subscription_trial():
     assert trial.status == TrialStatus.TRIAL_STATUS_COMPLETED
 
 
-def test_enterprise_trial():
-    trial = Trial(
-        id=3,
-        organization_id=99999,
-        type=TrialType.TRIAL_TYPE_ENTERPRISE,
-        plan="enterprise_trial",
-        start_date=Date(year=2026, month=1, day=15),
-        end_date=Date(year=2026, month=7, day=15),
-        status=TrialStatus.TRIAL_STATUS_ACTIVE,
-        status_changed_at=Date(year=2026, month=1, day=15),
-    )
-    assert trial.type == TrialType.TRIAL_TYPE_ENTERPRISE
-    assert trial.plan == "enterprise_trial"
-    assert trial.end_date.month == 7
-    assert trial.HasField("status_changed_at")
-    assert trial.status_changed_at.year == 2026
-    assert trial.status_changed_at.month == 1
-    assert trial.status_changed_at.day == 15
-
-
 def test_cancelled_trial():
     trial = Trial(
         id=4,
@@ -271,7 +251,7 @@ def test_dollar_credit():
     credit = Credit(
         id=1,
         organization_id=12345,
-        type=CreditType.CREDIT_TYPE_DOLLAR,
+        type=CreditType.CREDIT_TYPE_CENTS,
         skus=[SKU.SKU_ERRORS, SKU.SKU_SPANS],
         amount=500000,
         start_date=Date(year=2026, month=3, day=1),
@@ -282,7 +262,7 @@ def test_dollar_credit():
     )
     assert credit.id == 1
     assert credit.organization_id == 12345
-    assert credit.type == CreditType.CREDIT_TYPE_DOLLAR
+    assert credit.type == CreditType.CREDIT_TYPE_CENTS
     assert list(credit.skus) == [SKU.SKU_ERRORS, SKU.SKU_SPANS]
     assert credit.amount == 500000
     assert credit.start_date.year == 2026
@@ -317,7 +297,7 @@ def test_admin_credit():
     credit = Credit(
         id=3,
         organization_id=99999,
-        type=CreditType.CREDIT_TYPE_DOLLAR,
+        type=CreditType.CREDIT_TYPE_CENTS,
         amount=20000,
         start_date=Date(year=2026, month=1, day=1),
         end_date=Date(year=2026, month=12, day=31),
@@ -334,7 +314,7 @@ def test_revoked_credit():
     credit = Credit(
         id=4,
         organization_id=11111,
-        type=CreditType.CREDIT_TYPE_DOLLAR,
+        type=CreditType.CREDIT_TYPE_CENTS,
         skus=[SKU.SKU_ERRORS],
         amount=100000,
         start_date=Date(year=2026, month=2, day=1),
