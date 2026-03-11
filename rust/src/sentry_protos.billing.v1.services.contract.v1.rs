@@ -353,8 +353,8 @@ pub struct Contract {
     #[prost(message, optional, tag = "3")]
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
-/// A credit granted to an organization, representing either a dollar
-/// allowance or a number of units for specific SKUs.
+/// A credit granted to an organization, representing either a monetary
+/// allowance (in cents) or a number of units for specific SKUs.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Credit {
     #[prost(uint64, tag = "1")]
@@ -366,7 +366,7 @@ pub struct Credit {
     /// The SKUs this credit applies to. Empty means all SKUs.
     #[prost(enumeration = "Sku", repeated, tag = "4")]
     pub skus: ::prost::alloc::vec::Vec<i32>,
-    /// Amount in cents (for DOLLAR credits) or unit count (for UNITS credits).
+    /// Amount in cents (for CENTS credits) or unit count (for UNITS credits).
     #[prost(int64, tag = "5")]
     pub amount: i64,
     #[prost(message, optional, tag = "6")]
@@ -381,13 +381,13 @@ pub struct Credit {
     #[prost(enumeration = "CreditStatus", tag = "10")]
     pub status: i32,
 }
-/// Whether the credit represents a dollar allowance or a unit quantity.
+/// Whether the credit represents a cents allowance or a unit quantity.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum CreditType {
     Unspecified = 0,
-    /// A dollar allowance (amount is in cents).
-    Dollar = 1,
+    /// A monetary allowance measured in cents.
+    Cents = 1,
     /// A quantity of units for a specific SKU.
     Units = 2,
 }
@@ -399,7 +399,7 @@ impl CreditType {
     pub fn as_str_name(&self) -> &'static str {
         match self {
             Self::Unspecified => "CREDIT_TYPE_UNSPECIFIED",
-            Self::Dollar => "CREDIT_TYPE_DOLLAR",
+            Self::Cents => "CREDIT_TYPE_CENTS",
             Self::Units => "CREDIT_TYPE_UNITS",
         }
     }
@@ -407,7 +407,7 @@ impl CreditType {
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
             "CREDIT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "CREDIT_TYPE_DOLLAR" => Some(Self::Dollar),
+            "CREDIT_TYPE_CENTS" => Some(Self::Cents),
             "CREDIT_TYPE_UNITS" => Some(Self::Units),
             _ => None,
         }
@@ -491,6 +491,7 @@ pub struct GetContractResponse {
 /// Represents a time-bounded trial for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Trial {
+    /// References the trial plan's ID for a plan trial, and the BillingHistory ID for a subscription trial. Will eventually become the key to index the Trial table.
     #[prost(uint64, tag = "1")]
     pub id: u64,
     #[prost(uint64, tag = "2")]
@@ -531,8 +532,6 @@ pub enum TrialType {
     Subscription = 2,
     /// Trying a new plan with quota and features, charged for general usage, org must be on a paid plan before
     Plan = 3,
-    /// Trying an enterprise plan with unlimited quotas and features, charged for previous plan, org must be on a paid plan before
-    Enterprise = 4,
 }
 impl TrialType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -545,7 +544,6 @@ impl TrialType {
             Self::Product => "TRIAL_TYPE_PRODUCT",
             Self::Subscription => "TRIAL_TYPE_SUBSCRIPTION",
             Self::Plan => "TRIAL_TYPE_PLAN",
-            Self::Enterprise => "TRIAL_TYPE_ENTERPRISE",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -555,7 +553,6 @@ impl TrialType {
             "TRIAL_TYPE_PRODUCT" => Some(Self::Product),
             "TRIAL_TYPE_SUBSCRIPTION" => Some(Self::Subscription),
             "TRIAL_TYPE_PLAN" => Some(Self::Plan),
-            "TRIAL_TYPE_ENTERPRISE" => Some(Self::Enterprise),
             _ => None,
         }
     }

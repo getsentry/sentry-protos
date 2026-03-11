@@ -13,8 +13,6 @@ enum TrialType {
   TRIAL_TYPE_SUBSCRIPTION = 2;
   //Trying a new plan with quota and features, charged for general usage, org must be on a paid plan before
   TRIAL_TYPE_PLAN = 3;
-  //Trying an enterprise plan with unlimited quotas and features, charged for previous plan, org must be on a paid plan before
-  TRIAL_TYPE_ENTERPRISE = 4;
 }
 
 // The current status of a trial.
@@ -27,6 +25,7 @@ enum TrialStatus {
 
 // Represents a time-bounded trial for an organization.
 message Trial {
+  //References the trial plan's ID for a plan trial, and the BillingHistory ID for a subscription trial. Will eventually become the key to index the Trial table.
   uint64 id = 1;
   uint64 organization_id = 2;
   TrialType type = 3;
