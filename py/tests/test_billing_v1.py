@@ -27,16 +27,17 @@ from sentry_protos.billing.v1.services.contract.v1.pricing_config_pb2 import (
     TieredPricingRate,
 )
 from sentry_protos.billing.v1.services.contract.v1.sku_pb2 import SKU
-from sentry_protos.billing.v1.services.contract.v1.trial_pb2 import (
-    Trial,
-    TrialStatus,
-    TrialType,
-)
-from sentry_protos.billing.v1.services.contract.v1.credit_pb2 import (
+from sentry_protos.billing.v1.credit_pb2 import (
     Credit,
     CreditSource,
     CreditStatus,
     CreditType,
+)
+from sentry_protos.billing.v1.date_pb2 import Date as BillingDate
+from sentry_protos.billing.v1.services.trial.v1.trial_pb2 import (
+    Trial,
+    TrialStatus,
+    TrialType,
 )
 
 
@@ -188,8 +189,8 @@ def test_product_trial():
         organization_id=12345,
         type=TrialType.TRIAL_TYPE_PRODUCT,
         sku=SKU.SKU_ERRORS,
-        start_date=Date(year=2026, month=3, day=1),
-        end_date=Date(year=2026, month=4, day=1),
+        start_date=BillingDate(year=2026, month=3, day=1),
+        end_date=BillingDate(year=2026, month=4, day=1),
         status=TrialStatus.TRIAL_STATUS_ACTIVE,
     )
     assert trial.id == 1
@@ -209,8 +210,8 @@ def test_subscription_trial():
         organization_id=67890,
         type=TrialType.TRIAL_TYPE_SUBSCRIPTION,
         plan="am2_business",
-        start_date=Date(year=2026, month=3, day=10),
-        end_date=Date(year=2026, month=4, day=10),
+        start_date=BillingDate(year=2026, month=3, day=10),
+        end_date=BillingDate(year=2026, month=4, day=10),
         status=TrialStatus.TRIAL_STATUS_COMPLETED,
     )
     assert trial.plan == "am2_business"
@@ -225,10 +226,10 @@ def test_cancelled_trial():
         organization_id=11111,
         type=TrialType.TRIAL_TYPE_PLAN,
         plan="am2_team",
-        start_date=Date(year=2026, month=2, day=1),
-        end_date=Date(year=2026, month=3, day=1),
+        start_date=BillingDate(year=2026, month=2, day=1),
+        end_date=BillingDate(year=2026, month=3, day=1),
         status=TrialStatus.TRIAL_STATUS_CANCELLED,
-        status_changed_at=Date(year=2026, month=2, day=15),
+        status_changed_at=BillingDate(year=2026, month=2, day=15),
     )
     assert trial.status == TrialStatus.TRIAL_STATUS_CANCELLED
     assert trial.type == TrialType.TRIAL_TYPE_PLAN
@@ -254,8 +255,8 @@ def test_dollar_credit():
         type=CreditType.CREDIT_TYPE_CENTS,
         skus=[SKU.SKU_ERRORS, SKU.SKU_SPANS],
         amount=500000,
-        start_date=Date(year=2026, month=3, day=1),
-        end_date=Date(year=2026, month=6, day=1),
+        start_date=BillingDate(year=2026, month=3, day=1),
+        end_date=BillingDate(year=2026, month=6, day=1),
         source=CreditSource.CREDIT_SOURCE_TRIAL,
         trial_id=1,
         status=CreditStatus.CREDIT_STATUS_ACTIVE,
@@ -280,8 +281,8 @@ def test_units_credit():
         type=CreditType.CREDIT_TYPE_UNITS,
         skus=[SKU.SKU_REPLAYS],
         amount=50000,
-        start_date=Date(year=2026, month=3, day=10),
-        end_date=Date(year=2026, month=4, day=10),
+        start_date=BillingDate(year=2026, month=3, day=10),
+        end_date=BillingDate(year=2026, month=4, day=10),
         source=CreditSource.CREDIT_SOURCE_TRIAL,
         trial_id=2,
         status=CreditStatus.CREDIT_STATUS_ACTIVE,
@@ -299,8 +300,8 @@ def test_admin_credit():
         organization_id=99999,
         type=CreditType.CREDIT_TYPE_CENTS,
         amount=20000,
-        start_date=Date(year=2026, month=1, day=1),
-        end_date=Date(year=2026, month=12, day=31),
+        start_date=BillingDate(year=2026, month=1, day=1),
+        end_date=BillingDate(year=2026, month=12, day=31),
         source=CreditSource.CREDIT_SOURCE_ADMIN,
         status=CreditStatus.CREDIT_STATUS_ACTIVE,
     )
@@ -317,8 +318,8 @@ def test_revoked_credit():
         type=CreditType.CREDIT_TYPE_CENTS,
         skus=[SKU.SKU_ERRORS],
         amount=100000,
-        start_date=Date(year=2026, month=2, day=1),
-        end_date=Date(year=2026, month=5, day=1),
+        start_date=BillingDate(year=2026, month=2, day=1),
+        end_date=BillingDate(year=2026, month=5, day=1),
         source=CreditSource.CREDIT_SOURCE_TRIAL,
         trial_id=4,
         status=CreditStatus.CREDIT_STATUS_REVOKED,

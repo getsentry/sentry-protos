@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package sentry_protos.billing.v1.services.contract.v1;
+package sentry_protos.billing.v1.services.trial.v1;
 
-import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
+import "sentry_protos/billing/v1/date.proto";
 import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
 
 enum TrialType {
@@ -33,7 +33,7 @@ message Trial {
   // What this trial grants access to -- either a plan ID or a specific SKU.
   oneof trial_target {
     string plan = 4;
-    SKU sku = 5;
+    sentry_protos.billing.v1.services.contract.v1.SKU sku = 5;
   }
 
   Date start_date = 6;
