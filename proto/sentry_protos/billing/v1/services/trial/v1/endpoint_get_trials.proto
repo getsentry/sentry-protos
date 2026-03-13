@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.trial.v1;
+
+import "sentry_protos/billing/v1/services/trial/v1/trial.proto";
+
+message GetTrialsRequest {
+  uint64 organization_id = 1;
+}
+
+message GetTrialsResponse {
+  repeated Trial trials = 1;
+}
