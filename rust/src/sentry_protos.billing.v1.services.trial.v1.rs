@@ -101,3 +101,13 @@ impl TrialStatus {
         }
     }
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetTrialsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetTrialsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub trials: ::prost::alloc::vec::Vec<Trial>,
+}

@@ -34,6 +34,10 @@ from sentry_protos.billing.v1.credit_pb2 import (
     CreditType,
 )
 from sentry_protos.billing.v1.date_pb2 import Date as BillingDate
+from sentry_protos.billing.v1.services.trial.v1.endpoint_get_trials_pb2 import (
+    GetTrialsRequest,
+    GetTrialsResponse,
+)
 from sentry_protos.billing.v1.services.trial.v1.trial_pb2 import (
     Trial,
     TrialStatus,
@@ -181,6 +185,45 @@ def test_get_contract_response():
     assert response.contract.metadata.organization_id == 67890
     assert response.contract.billing_config.billing_type == BillingType.BILLING_TYPE_CREDIT_CARD
     assert response.contract.pricing_config.base_price_cents == 8900
+
+
+def test_get_trials_request():
+    request = GetTrialsRequest(organization_id=12345)
+    assert request.organization_id == 12345
+
+
+def test_get_trials_response():
+    trials = [
+        Trial(
+            id=1,
+            organization_id=12345,
+            type=TrialType.TRIAL_TYPE_PRODUCT,
+            sku=SKU.SKU_ERRORS,
+            start_date=BillingDate(year=2026, month=3, day=1),
+            end_date=BillingDate(year=2026, month=4, day=1),
+            status=TrialStatus.TRIAL_STATUS_ACTIVE,
+        ),
+        Trial(
+            id=2,
+            organization_id=12345,
+            type=TrialType.TRIAL_TYPE_SUBSCRIPTION,
+            plan="am2_business",
+            start_date=BillingDate(year=2026, month=1, day=1),
+            end_date=BillingDate(year=2026, month=2, day=1),
+            status=TrialStatus.TRIAL_STATUS_COMPLETED,
+        ),
+    ]
+    response = GetTrialsResponse(trials=trials)
+    assert len(response.trials) == 2
+    assert response.trials[0].id == 1
+    assert response.trials[0].type == TrialType.TRIAL_TYPE_PRODUCT
+    assert response.trials[1].plan == "am2_business"
+    assert response.trials[1].status == TrialStatus.TRIAL_STATUS_COMPLETED
+
+
+def test_get_trials_response_empty():
+    response = GetTrialsResponse()
+    assert len(response.trials) == 0
 
 
 def test_product_trial():
