@@ -39,6 +39,10 @@ jobs:
         run: |
           make build-rust
 
+      - name: Verify generated Rust code compiles
+        run: |
+          cd rust && cargo check && cargo clippy -- -D warnings
+
       - uses: dorny/paths-filter@v3
         id: changes
         with:
