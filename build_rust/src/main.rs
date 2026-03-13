@@ -1,18 +1,7 @@
 use std::path::{Path, PathBuf};
 
 use std::env;
-use std::fs;
-use std::str;
 use glob::glob;
-use regex::Regex;
-use std::collections::BTreeMap;
-
-#[derive(Clone, Debug)]
-struct ModuleInfo {
-    name: String,
-    version: String,
-    path: String,
-}
 
 fn check_unstable(proto_path: &Path, build_unstable: bool) -> bool {
     if build_unstable {
@@ -52,79 +41,31 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     println!("Building {build_mode} protos");
 
-    // collect module names to generate lib.rs
-    let mut module_metadata = Vec::new();
-    let mut proto_files: Vec<PathBuf> = Vec::new();
-    for file in find_proto_files(proto_dir, build_unstable) {
-        module_metadata.push(get_module_info(&file));
-        proto_files.push(file);
-    }
+    let proto_files: Vec<PathBuf> = find_proto_files(proto_dir, build_unstable).collect();
 
-    // Compile rust code for all proto files.
+    // Compile proto files and generate a module include file.
+    // prost-build's include_file generates properly nested `pub mod`
+    // declarations that mirror the proto package hierarchy, ensuring
+    // prost's `super::` references resolve correctly.
     println!("Generating proto bindings");
     tonic_prost_build::configure()
         .emit_rerun_if_changed(false)
         .out_dir("./rust/src")
+        .include_file("_include.rs")
         .compile_protos(&proto_files, &["./proto".into()])
         .unwrap();
 
-    let mut visited: Vec<&str> = vec![];
-
-    let mut code = String::new();
-    use std::fmt::Write;
-    let mut module_map = BTreeMap::<&str, Vec<&ModuleInfo>>::new();
-
-
-    for module in module_metadata.iter() {
-        module_map.entry(&module.name).and_modify(|e| {e.push(module)}).or_insert(vec![module]);
-    }
-
-
-    for (module_name, modules) in module_map.iter() {
-        writeln!(code, "pub mod {module_name} {{").unwrap();
-        for module in modules.iter() {
-            if visited.iter().any(|i| i.contains(&module.path)) {
-                continue;
-            }
-            visited.push(module.path.as_str());
-            let module_version = &module.version;
-            let module_path = &module.path;
-            writeln!(code, "    pub mod {module_version} {{").unwrap();
-            writeln!(code, "       include!(\"{module_path}.rs\");").unwrap();
-            writeln!(code, "   }}").unwrap();
-        }
-        writeln!(code, "}}").unwrap();
-        writeln!(code).unwrap();
-    }
-
-    // Generate lib.rs with the proto modules.
+    // Generate lib.rs that re-exports the generated modules,
+    // stripping the `sentry_protos` wrapper module so that
+    // crate paths are e.g. `sentry_protos::billing::v1::*`
+    // rather than `sentry_protos::sentry_protos::billing::v1::*`.
     println!("Generating src/lib.rs");
     std::fs::write(
         Path::new("./rust/src/lib.rs"),
-        code
+        "include!(\"_include.rs\");\npub use crate::sentry_protos::*;\n"
     )
     .expect("Failed to write lib.rs");
 
     // Once protos are built, layer in client adapters.
     Ok(())
 }
-
-fn get_module_info(path: &PathBuf) -> ModuleInfo {
-    let file = fs::read(path);
-    let Ok(contents) = file else {
-        panic!("Could not read {:?}", path);
-    };
-    let contents_str = str::from_utf8(&contents).unwrap();
-    let pattern = Regex::new(r"(?m)^package\s+(?<name>[^;]+);").unwrap();
-    let Some(captures) = pattern.captures(contents_str) else {
-        panic!("Could not find package name in {:?}", path);
-    };
-    let package_name = captures["name"].to_string();
-    let mut parts = package_name.split('.');
-
-    let version = parts.nth_back(0).unwrap().to_string();
-    let name = parts.nth_back(0).unwrap().to_string();
-
-    ModuleInfo {name, version, path: package_name}
-}
-
