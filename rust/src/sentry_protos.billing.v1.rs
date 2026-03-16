@@ -33,6 +33,9 @@ pub struct Credit {
     /// The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
     #[prost(uint64, optional, tag = "9")]
     pub trial_id: ::core::option::Option<u64>,
+    /// Legacy trial identifier for migrated trials (e.g. "product_123").
+    #[prost(string, optional, tag = "11")]
+    pub trial_string_id: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(enumeration = "CreditStatus", tag = "10")]
     pub status: i32,
 }

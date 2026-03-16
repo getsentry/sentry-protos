@@ -348,6 +348,23 @@ def test_dollar_credit():
     assert credit.status == CreditStatus.CREDIT_STATUS_ACTIVE
 
 
+def test_credit_with_legacy_trial_string_id():
+    credit = Credit(
+        id=5,
+        organization_id=12345,
+        type=CreditType.CREDIT_TYPE_CENTS,
+        amount=500000,
+        start_date=BillingDate(year=2026, month=3, day=1),
+        end_date=BillingDate(year=2026, month=6, day=1),
+        source=CreditSource.CREDIT_SOURCE_TRIAL,
+        trial_string_id="product_123",
+        status=CreditStatus.CREDIT_STATUS_ACTIVE,
+    )
+    assert credit.HasField("trial_string_id")
+    assert credit.trial_string_id == "product_123"
+    assert not credit.HasField("trial_id")
+
+
 def test_units_credit():
     credit = Credit(
         id=2,

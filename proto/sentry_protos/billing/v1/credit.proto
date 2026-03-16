@@ -46,5 +46,7 @@ message Credit {
   CreditSource source = 8;
   // The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
   optional uint64 trial_id = 9;
+  // Legacy trial identifier for migrated trials (e.g. "product_123").
+  optional string trial_string_id = 11;
   CreditStatus status = 10;
 }
