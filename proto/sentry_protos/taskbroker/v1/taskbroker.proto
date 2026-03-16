@@ -124,3 +124,14 @@ message SetTaskStatusResponse {
   // The next task the worker should execute. Requires fetch_next to be set on the request.
   optional TaskActivation task = 1;
 }
+
+service WorkerService {
+  // Provide the worker with a task to execute.
+  rpc PushTask(PushTaskRequest) returns (PushTaskResponse) {}
+}
+
+message PushTaskRequest {
+  TaskActivation task = 1;
+}
+
+message PushTaskResponse {}
