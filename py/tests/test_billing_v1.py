@@ -282,7 +282,7 @@ def test_trial_with_credits_and_features():
             start_date=BillingDate(year=2026, month=3, day=1),
             end_date=BillingDate(year=2026, month=6, day=1),
             source=CreditSource.CREDIT_SOURCE_TRIAL,
-            trial_id=1,
+            trial_int_id=1,
             status=CreditStatus.CREDIT_STATUS_ACTIVE,
         ),
         Credit(
@@ -294,7 +294,7 @@ def test_trial_with_credits_and_features():
             start_date=BillingDate(year=2026, month=3, day=1),
             end_date=BillingDate(year=2026, month=6, day=1),
             source=CreditSource.CREDIT_SOURCE_TRIAL,
-            trial_id=1,
+            trial_int_id=1,
             status=CreditStatus.CREDIT_STATUS_ACTIVE,
         ),
     ]
@@ -334,7 +334,7 @@ def test_dollar_credit():
         start_date=BillingDate(year=2026, month=3, day=1),
         end_date=BillingDate(year=2026, month=6, day=1),
         source=CreditSource.CREDIT_SOURCE_TRIAL,
-        trial_id=1,
+        trial_int_id=1,
         status=CreditStatus.CREDIT_STATUS_ACTIVE,
     )
     assert credit.id == 1
@@ -345,8 +345,8 @@ def test_dollar_credit():
     assert credit.start_date.year == 2026
     assert credit.end_date.month == 6
     assert credit.source == CreditSource.CREDIT_SOURCE_TRIAL
-    assert credit.HasField("trial_id")
-    assert credit.trial_id == 1
+    assert credit.WhichOneof("trial_id") == "trial_int_id"
+    assert credit.trial_int_id == 1
     assert credit.status == CreditStatus.CREDIT_STATUS_ACTIVE
 
 
@@ -360,14 +360,15 @@ def test_units_credit():
         start_date=BillingDate(year=2026, month=3, day=10),
         end_date=BillingDate(year=2026, month=4, day=10),
         source=CreditSource.CREDIT_SOURCE_TRIAL,
-        trial_id=2,
+        trial_int_id=2,
         status=CreditStatus.CREDIT_STATUS_ACTIVE,
     )
     assert credit.type == CreditType.CREDIT_TYPE_UNITS
     assert list(credit.skus) == [SKU.SKU_REPLAYS]
     assert credit.amount == 50000
     assert credit.source == CreditSource.CREDIT_SOURCE_TRIAL
-    assert credit.trial_id == 2
+    assert credit.WhichOneof("trial_id") == "trial_int_id"
+    assert credit.trial_int_id == 2
 
 
 def test_admin_credit():
@@ -382,7 +383,7 @@ def test_admin_credit():
         status=CreditStatus.CREDIT_STATUS_ACTIVE,
     )
     assert credit.source == CreditSource.CREDIT_SOURCE_ADMIN
-    assert not credit.HasField("trial_id")
+    assert credit.WhichOneof("trial_id") is None
     assert len(credit.skus) == 0
     assert credit.amount == 20000
 
@@ -397,9 +398,10 @@ def test_revoked_credit():
         start_date=BillingDate(year=2026, month=2, day=1),
         end_date=BillingDate(year=2026, month=5, day=1),
         source=CreditSource.CREDIT_SOURCE_TRIAL,
-        trial_id=4,
-        status=CreditStatus.CREDIT_STATUS_REVOKED,
+        trial_int_id=4,
+        status=CreditStatus.CREDIT_STATUS_INACTIVE,
     )
-    assert credit.status == CreditStatus.CREDIT_STATUS_REVOKED
+    assert credit.status == CreditStatus.CREDIT_STATUS_INACTIVE
     assert credit.source == CreditSource.CREDIT_SOURCE_TRIAL
-    assert credit.trial_id == 4
+    assert credit.WhichOneof("trial_id") == "trial_int_id"
+    assert credit.trial_int_id == 4

@@ -27,8 +27,7 @@ enum CreditSource {
 enum CreditStatus {
   CREDIT_STATUS_UNSPECIFIED = 0;
   CREDIT_STATUS_ACTIVE = 1;
-  CREDIT_STATUS_EXPIRED = 2;
-  CREDIT_STATUS_REVOKED = 3;
+  CREDIT_STATUS_INACTIVE = 2;
 }
 
 // A credit granted to an organization, representing either a monetary
@@ -45,6 +44,11 @@ message Credit {
   Date end_date = 7;
   CreditSource source = 8;
   // The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
-  optional uint64 trial_id = 9;
-  CreditStatus status = 10;
+  // Matches the trial_id oneof in Trial: string for legacy trials (e.g. "product_123"),
+  // integer for new trials.
+  oneof trial_id {
+    string trial_string_id = 9;
+    uint64 trial_int_id = 10;
+  }
+  CreditStatus status = 11;
 }

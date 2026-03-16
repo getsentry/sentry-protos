@@ -98,11 +98,26 @@ pub struct Credit {
     pub end_date: ::core::option::Option<Date>,
     #[prost(enumeration = "CreditSource", tag = "8")]
     pub source: i32,
-    /// The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
-    #[prost(uint64, optional, tag = "9")]
-    pub trial_id: ::core::option::Option<u64>,
-    #[prost(enumeration = "CreditStatus", tag = "10")]
+    #[prost(enumeration = "CreditStatus", tag = "11")]
     pub status: i32,
+    /// The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
+    /// Matches the trial_id oneof in Trial: string for legacy trials (e.g. "product_123"),
+    /// integer for new trials.
+    #[prost(oneof = "credit::TrialId", tags = "9, 10")]
+    pub trial_id: ::core::option::Option<credit::TrialId>,
+}
+/// Nested message and enum types in `Credit`.
+pub mod credit {
+    /// The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
+    /// Matches the trial_id oneof in Trial: string for legacy trials (e.g. "product_123"),
+    /// integer for new trials.
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum TrialId {
+        #[prost(string, tag = "9")]
+        TrialStringId(::prost::alloc::string::String),
+        #[prost(uint64, tag = "10")]
+        TrialIntId(u64),
+    }
 }
 /// Whether the credit represents a cents allowance or a unit quantity.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -174,8 +189,7 @@ impl CreditSource {
 pub enum CreditStatus {
     Unspecified = 0,
     Active = 1,
-    Expired = 2,
-    Revoked = 3,
+    Inactive = 2,
 }
 impl CreditStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -186,8 +200,7 @@ impl CreditStatus {
         match self {
             Self::Unspecified => "CREDIT_STATUS_UNSPECIFIED",
             Self::Active => "CREDIT_STATUS_ACTIVE",
-            Self::Expired => "CREDIT_STATUS_EXPIRED",
-            Self::Revoked => "CREDIT_STATUS_REVOKED",
+            Self::Inactive => "CREDIT_STATUS_INACTIVE",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -195,8 +208,7 @@ impl CreditStatus {
         match value {
             "CREDIT_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
             "CREDIT_STATUS_ACTIVE" => Some(Self::Active),
-            "CREDIT_STATUS_EXPIRED" => Some(Self::Expired),
-            "CREDIT_STATUS_REVOKED" => Some(Self::Revoked),
+            "CREDIT_STATUS_INACTIVE" => Some(Self::Inactive),
             _ => None,
         }
     }
