@@ -3,7 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1;
 
 import "sentry_protos/billing/v1/date.proto";
-import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
+import "sentry_protos/billing/v1/sku.proto";
 
 // Whether the credit represents a cents allowance or a unit quantity.
 enum CreditType {
@@ -38,7 +38,7 @@ message Credit {
   uint64 organization_id = 2;
   CreditType type = 3;
   // The SKUs this credit applies to. Empty means all SKUs.
-  repeated sentry_protos.billing.v1.services.contract.v1.SKU skus = 4;
+  repeated sentry_protos.billing.v1.SKU skus = 4;
   // Amount in cents (for CENTS credits) or unit count (for UNITS credits).
   int64 amount = 5;
   Date start_date = 6;

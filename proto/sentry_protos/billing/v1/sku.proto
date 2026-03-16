@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sentry_protos.billing.v1.services.contract.v1;
+package sentry_protos.billing.v1;
 
 enum SKU {
   SKU_UNSPECIFIED = 0;

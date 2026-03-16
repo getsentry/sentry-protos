@@ -2,21 +2,14 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
+import "sentry_protos/billing/v1/feature.proto";
+
 message OptionValue {
   oneof value {
     string string_value = 1;
     int64 int_value = 2;
     bool bool_value = 3;
   }
-}
-
-message FeatureOption {
-  string key = 1;
-  bool enabled = 2;
-}
-
-message FeatureOptions {
-  repeated FeatureOption options = 1;
 }
 
 message MetadataOption {
@@ -36,7 +29,7 @@ message ContractMetadata {
   // Includes information like plan ID, tier, etc.
   MetadataOptions package_metadata = 4;
   // Entitlements, used in frontend features or gating access to certain features.
-  FeatureOptions features = 5;
+  sentry_protos.billing.v1.FeatureOptions features = 5;
   // Catch-all for overrides and information not covered above.
   MetadataOptions custom_options = 6;
 }

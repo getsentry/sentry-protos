@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1;
+
+message FeatureOption {
+  string key = 1;
+  bool enabled = 2;
+}
+
+message FeatureOptions {
+  repeated FeatureOption options = 1;
+}

@@ -8,12 +8,11 @@ from sentry_protos.billing.v1.services.contract.v1.billing_config_pb2 import (
 )
 from sentry_protos.billing.v1.services.contract.v1.contract_metadata_pb2 import (
     ContractMetadata,
-    FeatureOption,
-    FeatureOptions,
     MetadataOption,
     MetadataOptions,
     OptionValue,
 )
+from sentry_protos.billing.v1.feature_pb2 import FeatureOption, FeatureOptions
 from sentry_protos.billing.v1.services.contract.v1.contract_pb2 import Contract
 from sentry_protos.billing.v1.services.contract.v1.endpoint_get_contract_pb2 import (
     GetContractRequest,
@@ -26,7 +25,7 @@ from sentry_protos.billing.v1.services.contract.v1.pricing_config_pb2 import (
     SKUConfig,
     TieredPricingRate,
 )
-from sentry_protos.billing.v1.services.contract.v1.sku_pb2 import SKU
+from sentry_protos.billing.v1.sku_pb2 import SKU
 from sentry_protos.billing.v1.credit_pb2 import (
     Credit,
     CreditSource,
@@ -41,7 +40,6 @@ from sentry_protos.billing.v1.services.trial.v1.endpoint_get_trials_pb2 import (
 from sentry_protos.billing.v1.services.trial.v1.trial_pb2 import (
     Trial,
     TrialStatus,
-    TrialType,
 )
 
 
@@ -197,8 +195,7 @@ def test_get_trials_response():
         Trial(
             int_id=1,
             organization_id=12345,
-            type=TrialType.TRIAL_TYPE_PRODUCT,
-            sku=SKU.SKU_ERRORS,
+            subscription_id=99,
             start_date=BillingDate(year=2026, month=3, day=1),
             end_date=BillingDate(year=2026, month=4, day=1),
             status=TrialStatus.TRIAL_STATUS_ACTIVE,
@@ -206,22 +203,20 @@ def test_get_trials_response():
         Trial(
             string_id="subscription_42",
             organization_id=12345,
-            type=TrialType.TRIAL_TYPE_SUBSCRIPTION,
-            plan="am2_business",
+            subscription_id=42,
             start_date=BillingDate(year=2026, month=1, day=1),
             end_date=BillingDate(year=2026, month=2, day=1),
-            status=TrialStatus.TRIAL_STATUS_COMPLETED,
-            subscription_id=99,
+            status=TrialStatus.TRIAL_STATUS_INACTIVE,
         ),
     ]
     response = GetTrialsResponse(trials=trials)
     assert len(response.trials) == 2
     assert response.trials[0].int_id == 1
-    assert response.trials[0].type == TrialType.TRIAL_TYPE_PRODUCT
+    assert response.trials[0].organization_id == 12345
+    assert response.trials[0].status == TrialStatus.TRIAL_STATUS_ACTIVE
     assert response.trials[1].string_id == "subscription_42"
-    assert response.trials[1].plan == "am2_business"
-    assert response.trials[1].status == TrialStatus.TRIAL_STATUS_COMPLETED
-    assert response.trials[1].subscription_id == 99
+    assert response.trials[1].subscription_id == 42
+    assert response.trials[1].status == TrialStatus.TRIAL_STATUS_INACTIVE
 
 
 def test_get_trials_response_empty():
@@ -229,12 +224,11 @@ def test_get_trials_response_empty():
     assert len(response.trials) == 0
 
 
-def test_product_trial():
+def test_trial_with_int_id():
     trial = Trial(
         int_id=1,
         organization_id=12345,
-        type=TrialType.TRIAL_TYPE_PRODUCT,
-        sku=SKU.SKU_ERRORS,
+        subscription_id=99,
         start_date=BillingDate(year=2026, month=3, day=1),
         end_date=BillingDate(year=2026, month=4, day=1),
         status=TrialStatus.TRIAL_STATUS_ACTIVE,
@@ -242,62 +236,25 @@ def test_product_trial():
     assert trial.int_id == 1
     assert trial.WhichOneof("trial_id") == "int_id"
     assert trial.organization_id == 12345
-    assert trial.type == TrialType.TRIAL_TYPE_PRODUCT
-    assert trial.sku == SKU.SKU_ERRORS
-    assert trial.WhichOneof("trial_target") == "sku"
+    assert trial.subscription_id == 99
     assert trial.start_date.year == 2026
     assert trial.start_date.month == 3
     assert trial.end_date.month == 4
     assert trial.status == TrialStatus.TRIAL_STATUS_ACTIVE
 
 
-def test_subscription_trial():
-    trial = Trial(
-        int_id=2,
-        organization_id=67890,
-        type=TrialType.TRIAL_TYPE_SUBSCRIPTION,
-        plan="am2_business",
-        start_date=BillingDate(year=2026, month=3, day=10),
-        end_date=BillingDate(year=2026, month=4, day=10),
-        status=TrialStatus.TRIAL_STATUS_COMPLETED,
-        subscription_id=500,
-    )
-    assert trial.plan == "am2_business"
-    assert trial.WhichOneof("trial_target") == "plan"
-    assert trial.type == TrialType.TRIAL_TYPE_SUBSCRIPTION
-    assert trial.status == TrialStatus.TRIAL_STATUS_COMPLETED
-    assert trial.subscription_id == 500
-
-
-def test_cancelled_trial():
-    trial = Trial(
-        int_id=4,
-        organization_id=11111,
-        type=TrialType.TRIAL_TYPE_PLAN,
-        plan="am2_team",
-        start_date=BillingDate(year=2026, month=2, day=1),
-        end_date=BillingDate(year=2026, month=3, day=1),
-        status=TrialStatus.TRIAL_STATUS_CANCELLED,
-        status_changed_at=BillingDate(year=2026, month=2, day=15),
-    )
-    assert trial.status == TrialStatus.TRIAL_STATUS_CANCELLED
-    assert trial.type == TrialType.TRIAL_TYPE_PLAN
-    assert trial.status_changed_at.month == 2
-    assert trial.status_changed_at.day == 15
-
-
 def test_legacy_trial_string_id():
     trial = Trial(
         string_id="product_123",
         organization_id=12345,
-        type=TrialType.TRIAL_TYPE_PRODUCT,
-        sku=SKU.SKU_ERRORS,
         start_date=BillingDate(year=2026, month=3, day=1),
         end_date=BillingDate(year=2026, month=4, day=1),
-        status=TrialStatus.TRIAL_STATUS_COMPLETED,
+        status=TrialStatus.TRIAL_STATUS_INACTIVE,
     )
     assert trial.string_id == "product_123"
     assert trial.WhichOneof("trial_id") == "string_id"
+    assert trial.organization_id == 12345
+    assert trial.status == TrialStatus.TRIAL_STATUS_INACTIVE
 
 
 def test_trial_id_oneof_mutual_exclusivity():
@@ -311,15 +268,57 @@ def test_trial_id_oneof_mutual_exclusivity():
     assert trial.int_id == 0
 
 
-def test_trial_target_oneof_mutual_exclusivity():
-    trial = Trial(plan="am2_business")
-    assert trial.WhichOneof("trial_target") == "plan"
-    assert trial.plan == "am2_business"
-
-    trial.sku = SKU.SKU_LOGS
-    assert trial.WhichOneof("trial_target") == "sku"
-    assert trial.sku == SKU.SKU_LOGS
-    assert trial.plan == ""
+def test_trial_with_credits_and_features():
+    credits = [
+        Credit(
+            id=1,
+            organization_id=12345,
+            type=CreditType.CREDIT_TYPE_CENTS,
+            skus=[SKU.SKU_ERRORS, SKU.SKU_SPANS],
+            amount=500000,
+            start_date=BillingDate(year=2026, month=3, day=1),
+            end_date=BillingDate(year=2026, month=6, day=1),
+            source=CreditSource.CREDIT_SOURCE_TRIAL,
+            trial_id=1,
+            status=CreditStatus.CREDIT_STATUS_ACTIVE,
+        ),
+        Credit(
+            id=2,
+            organization_id=12345,
+            type=CreditType.CREDIT_TYPE_UNITS,
+            skus=[SKU.SKU_REPLAYS],
+            amount=10000,
+            start_date=BillingDate(year=2026, month=3, day=1),
+            end_date=BillingDate(year=2026, month=6, day=1),
+            source=CreditSource.CREDIT_SOURCE_TRIAL,
+            trial_id=1,
+            status=CreditStatus.CREDIT_STATUS_ACTIVE,
+        ),
+    ]
+    features = [
+        FeatureOption(key="sso", enabled=True),
+        FeatureOption(key="custom_dashboards", enabled=True),
+        FeatureOption(key="advanced_analytics", enabled=False),
+    ]
+    trial = Trial(
+        int_id=1,
+        organization_id=12345,
+        subscription_id=99,
+        start_date=BillingDate(year=2026, month=3, day=1),
+        end_date=BillingDate(year=2026, month=6, day=1),
+        status=TrialStatus.TRIAL_STATUS_ACTIVE,
+        credits=credits,
+        features=features,
+    )
+    assert len(trial.credits) == 2
+    assert trial.credits[0].type == CreditType.CREDIT_TYPE_CENTS
+    assert trial.credits[0].amount == 500000
+    assert trial.credits[1].type == CreditType.CREDIT_TYPE_UNITS
+    assert list(trial.credits[1].skus) == [SKU.SKU_REPLAYS]
+    assert len(trial.features) == 3
+    feature_map = {f.key: f.enabled for f in trial.features}
+    assert feature_map["sso"] is True
+    assert feature_map["advanced_analytics"] is False
 
 
 def test_dollar_credit():
