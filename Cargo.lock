@@ -132,11 +132,6 @@ name = "build_sentry_protos"
 version = "1.0.0"
 dependencies = [
  "glob",
- "prost",
- "prost-types",
- "regex",
- "tokio",
- "tonic",
  "tonic-prost-build",
 ]
 
