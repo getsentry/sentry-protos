@@ -2,9 +2,6 @@
 /// Represents a time-bounded trial for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Trial {
-    /// References the trial plan's ID for a plan trial, and the BillingHistory ID for a subscription trial. Will eventually become the key to index the Trial table.
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
     #[prost(uint64, tag = "2")]
     pub organization_id: u64,
     #[prost(enumeration = "TrialType", tag = "3")]
@@ -18,12 +15,33 @@ pub struct Trial {
     /// Used to infer the time the trial was activated/completed/cancelled
     #[prost(message, optional, tag = "9")]
     pub status_changed_at: ::core::option::Option<super::super::super::Date>,
+    #[prost(uint64, tag = "11")]
+    pub subscription_id: u64,
+    /// For legacy trials migrated into this schema, the ID is a string composed of
+    /// the trial type ("product", "plan", or "subscription") concatenated with an
+    /// underscore and the row ID from the original table (e.g. "product_123",
+    /// "plan_456", "subscription_789"). New trial records use an integer that
+    /// uniquely identifies the row in the unified trials table.
+    #[prost(oneof = "trial::TrialId", tags = "1, 10")]
+    pub trial_id: ::core::option::Option<trial::TrialId>,
     /// What this trial grants access to -- either a plan ID or a specific SKU.
     #[prost(oneof = "trial::TrialTarget", tags = "4, 5")]
     pub trial_target: ::core::option::Option<trial::TrialTarget>,
 }
 /// Nested message and enum types in `Trial`.
 pub mod trial {
+    /// For legacy trials migrated into this schema, the ID is a string composed of
+    /// the trial type ("product", "plan", or "subscription") concatenated with an
+    /// underscore and the row ID from the original table (e.g. "product_123",
+    /// "plan_456", "subscription_789"). New trial records use an integer that
+    /// uniquely identifies the row in the unified trials table.
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum TrialId {
+        #[prost(string, tag = "1")]
+        StringId(::prost::alloc::string::String),
+        #[prost(uint64, tag = "10")]
+        IntId(u64),
+    }
     /// What this trial grants access to -- either a plan ID or a specific SKU.
     #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum TrialTarget {

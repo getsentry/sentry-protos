@@ -25,8 +25,16 @@ enum TrialStatus {
 
 // Represents a time-bounded trial for an organization.
 message Trial {
-  //References the trial plan's ID for a plan trial, and the BillingHistory ID for a subscription trial. Will eventually become the key to index the Trial table.
-  uint64 id = 1;
+  // For legacy trials migrated into this schema, the ID is a string composed of
+  // the trial type ("product", "plan", or "subscription") concatenated with an
+  // underscore and the row ID from the original table (e.g. "product_123",
+  // "plan_456", "subscription_789"). New trial records use an integer that
+  // uniquely identifies the row in the unified trials table.
+  oneof trial_id {
+    string string_id = 1;
+    uint64 int_id = 10;
+  }
+
   uint64 organization_id = 2;
   TrialType type = 3;
 
@@ -41,4 +49,5 @@ message Trial {
   TrialStatus status = 8;
   //Used to infer the time the trial was activated/completed/cancelled
   Date status_changed_at = 9;
+  uint64 subscription_id = 11;
 }

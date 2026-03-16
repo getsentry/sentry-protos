@@ -195,7 +195,7 @@ def test_get_trials_request():
 def test_get_trials_response():
     trials = [
         Trial(
-            id=1,
+            int_id=1,
             organization_id=12345,
             type=TrialType.TRIAL_TYPE_PRODUCT,
             sku=SKU.SKU_ERRORS,
@@ -204,21 +204,24 @@ def test_get_trials_response():
             status=TrialStatus.TRIAL_STATUS_ACTIVE,
         ),
         Trial(
-            id=2,
+            string_id="subscription_42",
             organization_id=12345,
             type=TrialType.TRIAL_TYPE_SUBSCRIPTION,
             plan="am2_business",
             start_date=BillingDate(year=2026, month=1, day=1),
             end_date=BillingDate(year=2026, month=2, day=1),
             status=TrialStatus.TRIAL_STATUS_COMPLETED,
+            subscription_id=99,
         ),
     ]
     response = GetTrialsResponse(trials=trials)
     assert len(response.trials) == 2
-    assert response.trials[0].id == 1
+    assert response.trials[0].int_id == 1
     assert response.trials[0].type == TrialType.TRIAL_TYPE_PRODUCT
+    assert response.trials[1].string_id == "subscription_42"
     assert response.trials[1].plan == "am2_business"
     assert response.trials[1].status == TrialStatus.TRIAL_STATUS_COMPLETED
+    assert response.trials[1].subscription_id == 99
 
 
 def test_get_trials_response_empty():
@@ -228,7 +231,7 @@ def test_get_trials_response_empty():
 
 def test_product_trial():
     trial = Trial(
-        id=1,
+        int_id=1,
         organization_id=12345,
         type=TrialType.TRIAL_TYPE_PRODUCT,
         sku=SKU.SKU_ERRORS,
@@ -236,7 +239,8 @@ def test_product_trial():
         end_date=BillingDate(year=2026, month=4, day=1),
         status=TrialStatus.TRIAL_STATUS_ACTIVE,
     )
-    assert trial.id == 1
+    assert trial.int_id == 1
+    assert trial.WhichOneof("trial_id") == "int_id"
     assert trial.organization_id == 12345
     assert trial.type == TrialType.TRIAL_TYPE_PRODUCT
     assert trial.sku == SKU.SKU_ERRORS
@@ -249,23 +253,25 @@ def test_product_trial():
 
 def test_subscription_trial():
     trial = Trial(
-        id=2,
+        int_id=2,
         organization_id=67890,
         type=TrialType.TRIAL_TYPE_SUBSCRIPTION,
         plan="am2_business",
         start_date=BillingDate(year=2026, month=3, day=10),
         end_date=BillingDate(year=2026, month=4, day=10),
         status=TrialStatus.TRIAL_STATUS_COMPLETED,
+        subscription_id=500,
     )
     assert trial.plan == "am2_business"
     assert trial.WhichOneof("trial_target") == "plan"
     assert trial.type == TrialType.TRIAL_TYPE_SUBSCRIPTION
     assert trial.status == TrialStatus.TRIAL_STATUS_COMPLETED
+    assert trial.subscription_id == 500
 
 
 def test_cancelled_trial():
     trial = Trial(
-        id=4,
+        int_id=4,
         organization_id=11111,
         type=TrialType.TRIAL_TYPE_PLAN,
         plan="am2_team",
@@ -280,7 +286,32 @@ def test_cancelled_trial():
     assert trial.status_changed_at.day == 15
 
 
-def test_trial_oneof_mutual_exclusivity():
+def test_legacy_trial_string_id():
+    trial = Trial(
+        string_id="product_123",
+        organization_id=12345,
+        type=TrialType.TRIAL_TYPE_PRODUCT,
+        sku=SKU.SKU_ERRORS,
+        start_date=BillingDate(year=2026, month=3, day=1),
+        end_date=BillingDate(year=2026, month=4, day=1),
+        status=TrialStatus.TRIAL_STATUS_COMPLETED,
+    )
+    assert trial.string_id == "product_123"
+    assert trial.WhichOneof("trial_id") == "string_id"
+
+
+def test_trial_id_oneof_mutual_exclusivity():
+    trial = Trial(int_id=42)
+    assert trial.WhichOneof("trial_id") == "int_id"
+    assert trial.int_id == 42
+
+    trial.string_id = "plan_99"
+    assert trial.WhichOneof("trial_id") == "string_id"
+    assert trial.string_id == "plan_99"
+    assert trial.int_id == 0
+
+
+def test_trial_target_oneof_mutual_exclusivity():
     trial = Trial(plan="am2_business")
     assert trial.WhichOneof("trial_target") == "plan"
     assert trial.plan == "am2_business"
