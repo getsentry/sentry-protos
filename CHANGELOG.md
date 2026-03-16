@@ -1,3 +1,13 @@
+## 0.8.4
+
+### New Features ✨
+
+- (billing) Add category filtering to GetUsageRequest by @dashed in [#183](https://github.com/getsentry/sentry-protos/pull/183)
+
+### Bug Fixes 🐛
+
+- (rust) Fix broken module tree for nested proto packages by @dashed in [#185](https://github.com/getsentry/sentry-protos/pull/185)
+
 ## 0.8.3
 
 ### New Features ✨
