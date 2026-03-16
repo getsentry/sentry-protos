@@ -3,7 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v1;
 
 import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
-import "sentry_protos/billing/v1/sku.proto";
+import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
 
 message PricingTier {
   int64 start = 1;
@@ -16,7 +16,7 @@ message TieredPricingRate {
 }
 
 message SKUConfig {
-  sentry_protos.billing.v1.SKU sku = 1;
+  SKU sku = 1;
   // Base price for the SKU (upgraded reserved volumes or add-on activation fees)
   uint64 base_price_cents = 2;
   optional uint64 payg_budget_cents = 3;
@@ -33,7 +33,7 @@ message SKUConfig {
 // Represents a budget that is collectively used by one or more SKUs,
 // allowing multiple SKUs to draw from the same reserved budget.
 message SharedSKUBudget {
-  repeated sentry_protos.billing.v1.SKU skus = 1;
+  repeated SKU skus = 1;
   uint64 reserved_budget_cents = 2;
   uint64 payg_budget_cents = 3;
 }

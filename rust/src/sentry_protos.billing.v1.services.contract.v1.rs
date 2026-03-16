@@ -166,6 +166,18 @@ pub struct MetadataOptions {
     #[prost(message, repeated, tag = "1")]
     pub options: ::prost::alloc::vec::Vec<MetadataOption>,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FeatureOption {
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(bool, tag = "2")]
+    pub enabled: bool,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FeatureOptions {
+    #[prost(message, repeated, tag = "1")]
+    pub options: ::prost::alloc::vec::Vec<FeatureOption>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ContractMetadata {
     #[prost(uint64, tag = "1")]
@@ -180,10 +192,78 @@ pub struct ContractMetadata {
     pub package_metadata: ::core::option::Option<MetadataOptions>,
     /// Entitlements, used in frontend features or gating access to certain features.
     #[prost(message, optional, tag = "5")]
-    pub features: ::core::option::Option<super::super::super::FeatureOptions>,
+    pub features: ::core::option::Option<FeatureOptions>,
     /// Catch-all for overrides and information not covered above.
     #[prost(message, optional, tag = "6")]
     pub custom_options: ::core::option::Option<MetadataOptions>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum Sku {
+    Unspecified = 0,
+    Errors = 1,
+    Spans = 2,
+    Replays = 3,
+    PerformanceUnits = 4,
+    Cron = 5,
+    Uptime = 6,
+    Attachments = 7,
+    Profiling = 8,
+    ProfilingUi = 9,
+    Logs = 10,
+    Seer = 11,
+    SizeAnalysis = 12,
+    BuildDistribution = 13,
+    Autofix = 14,
+    Scanner = 15,
+}
+impl Sku {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SKU_UNSPECIFIED",
+            Self::Errors => "SKU_ERRORS",
+            Self::Spans => "SKU_SPANS",
+            Self::Replays => "SKU_REPLAYS",
+            Self::PerformanceUnits => "SKU_PERFORMANCE_UNITS",
+            Self::Cron => "SKU_CRON",
+            Self::Uptime => "SKU_UPTIME",
+            Self::Attachments => "SKU_ATTACHMENTS",
+            Self::Profiling => "SKU_PROFILING",
+            Self::ProfilingUi => "SKU_PROFILING_UI",
+            Self::Logs => "SKU_LOGS",
+            Self::Seer => "SKU_SEER",
+            Self::SizeAnalysis => "SKU_SIZE_ANALYSIS",
+            Self::BuildDistribution => "SKU_BUILD_DISTRIBUTION",
+            Self::Autofix => "SKU_AUTOFIX",
+            Self::Scanner => "SKU_SCANNER",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SKU_UNSPECIFIED" => Some(Self::Unspecified),
+            "SKU_ERRORS" => Some(Self::Errors),
+            "SKU_SPANS" => Some(Self::Spans),
+            "SKU_REPLAYS" => Some(Self::Replays),
+            "SKU_PERFORMANCE_UNITS" => Some(Self::PerformanceUnits),
+            "SKU_CRON" => Some(Self::Cron),
+            "SKU_UPTIME" => Some(Self::Uptime),
+            "SKU_ATTACHMENTS" => Some(Self::Attachments),
+            "SKU_PROFILING" => Some(Self::Profiling),
+            "SKU_PROFILING_UI" => Some(Self::ProfilingUi),
+            "SKU_LOGS" => Some(Self::Logs),
+            "SKU_SEER" => Some(Self::Seer),
+            "SKU_SIZE_ANALYSIS" => Some(Self::SizeAnalysis),
+            "SKU_BUILD_DISTRIBUTION" => Some(Self::BuildDistribution),
+            "SKU_AUTOFIX" => Some(Self::Autofix),
+            "SKU_SCANNER" => Some(Self::Scanner),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PricingTier {
@@ -201,7 +281,7 @@ pub struct TieredPricingRate {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SkuConfig {
-    #[prost(enumeration = "super::super::super::Sku", tag = "1")]
+    #[prost(enumeration = "Sku", tag = "1")]
     pub sku: i32,
     /// Base price for the SKU (upgraded reserved volumes or add-on activation fees)
     #[prost(uint64, tag = "2")]
@@ -235,7 +315,7 @@ pub mod sku_config {
 /// allowing multiple SKUs to draw from the same reserved budget.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SharedSkuBudget {
-    #[prost(enumeration = "super::super::super::Sku", repeated, tag = "1")]
+    #[prost(enumeration = "Sku", repeated, tag = "1")]
     pub skus: ::prost::alloc::vec::Vec<i32>,
     #[prost(uint64, tag = "2")]
     pub reserved_budget_cents: u64,
