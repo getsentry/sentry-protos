@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1;
 
+import "sentry_protos/billing/v1/date.proto";
+
 message FeatureOption {
   string key = 1;
   bool enabled = 2;
@@ -9,4 +11,6 @@ message FeatureOption {
 
 message FeatureOptions {
   repeated FeatureOption options = 1;
+  Date start_date = 2;
+  Date end_date = 3;
 }

@@ -39,10 +39,6 @@ from sentry_protos.billing.v1.services.trial.v1.endpoint_get_trials_pb2 import (
     GetTrialsRequest,
     GetTrialsResponse,
 )
-from sentry_protos.billing.v1.services.trial.v1.trial_pb2 import (
-    Trial,
-    TrialStatus,
-)
 
 
 def test_contract_with_all_sub_messages():
@@ -188,66 +184,18 @@ def test_get_contract_response():
 
 
 def test_get_trials_request():
-    request = GetTrialsRequest(organization_id=12345)
+    request = GetTrialsRequest(
+        organization_id=12345,
+        start_date=BillingDate(year=2026, month=3, day=1),
+        end_date=BillingDate(year=2026, month=6, day=1),
+    )
     assert request.organization_id == 12345
+    assert request.start_date.year == 2026
+    assert request.start_date.month == 3
+    assert request.end_date.month == 6
 
 
 def test_get_trials_response():
-    trials = [
-        Trial(
-            credit_start_date=BillingDate(year=2026, month=3, day=1),
-            credit_end_date=BillingDate(year=2026, month=4, day=1),
-            feature_start_date=BillingDate(year=2026, month=3, day=1),
-            feature_end_date=BillingDate(year=2026, month=4, day=1),
-            status=TrialStatus.TRIAL_STATUS_ACTIVE,
-        ),
-        Trial(
-            credit_start_date=BillingDate(year=2026, month=1, day=1),
-            credit_end_date=BillingDate(year=2026, month=2, day=1),
-            feature_start_date=BillingDate(year=2026, month=1, day=1),
-            feature_end_date=BillingDate(year=2026, month=2, day=1),
-            status=TrialStatus.TRIAL_STATUS_INACTIVE,
-        ),
-    ]
-    response = GetTrialsResponse(trials=trials)
-    assert len(response.trials) == 2
-    assert response.trials[0].status == TrialStatus.TRIAL_STATUS_ACTIVE
-    assert response.trials[1].status == TrialStatus.TRIAL_STATUS_INACTIVE
-
-
-def test_get_trials_response_empty():
-    response = GetTrialsResponse()
-    assert len(response.trials) == 0
-
-
-def test_trial_with_dates_and_status():
-    trial = Trial(
-        credit_start_date=BillingDate(year=2026, month=3, day=1),
-        credit_end_date=BillingDate(year=2026, month=6, day=1),
-        feature_start_date=BillingDate(year=2026, month=3, day=1),
-        feature_end_date=BillingDate(year=2026, month=6, day=1),
-        status=TrialStatus.TRIAL_STATUS_ACTIVE,
-    )
-    assert trial.credit_start_date.year == 2026
-    assert trial.credit_start_date.month == 3
-    assert trial.credit_end_date.month == 6
-    assert trial.feature_start_date.month == 3
-    assert trial.feature_end_date.month == 6
-    assert trial.status == TrialStatus.TRIAL_STATUS_ACTIVE
-
-
-def test_inactive_trial():
-    trial = Trial(
-        credit_start_date=BillingDate(year=2026, month=2, day=1),
-        credit_end_date=BillingDate(year=2026, month=3, day=1),
-        feature_start_date=BillingDate(year=2026, month=2, day=1),
-        feature_end_date=BillingDate(year=2026, month=3, day=1),
-        status=TrialStatus.TRIAL_STATUS_INACTIVE,
-    )
-    assert trial.status == TrialStatus.TRIAL_STATUS_INACTIVE
-
-
-def test_trial_with_credits_and_features():
     credits = [
         Credit(
             type=CreditType.CREDIT_TYPE_CENTS,
@@ -266,30 +214,60 @@ def test_trial_with_credits_and_features():
             status=CreditStatus.CREDIT_STATUS_ACTIVE,
         ),
     ]
+    features = [
+        FeatureOptions(
+            options=[
+                FeatureOption(key="sso", enabled=True),
+                FeatureOption(key="custom_dashboards", enabled=True),
+            ],
+            start_date=BillingDate(year=2026, month=3, day=1),
+            end_date=BillingDate(year=2026, month=6, day=1),
+        ),
+        FeatureOptions(
+            options=[
+                FeatureOption(key="advanced_analytics", enabled=False),
+            ],
+            start_date=BillingDate(year=2026, month=4, day=1),
+            end_date=BillingDate(year=2026, month=5, day=1),
+        ),
+    ]
+    response = GetTrialsResponse(credits=credits, features=features)
+    assert len(response.credits) == 2
+    assert response.credits[0].type == CreditType.CREDIT_TYPE_CENTS
+    assert response.credits[0].sku == SKU.SKU_ERRORS
+    assert response.credits[0].amount == 500000
+    assert response.credits[1].type == CreditType.CREDIT_TYPE_UNITS
+    assert response.credits[1].sku == SKU.SKU_REPLAYS
+    assert len(response.features) == 2
+    assert len(response.features[0].options) == 2
+    assert response.features[0].start_date.month == 3
+    assert response.features[0].end_date.month == 6
+    feature_map = {f.key: f.enabled for f in response.features[0].options}
+    assert feature_map["sso"] is True
+    assert feature_map["custom_dashboards"] is True
+
+
+def test_get_trials_response_empty():
+    response = GetTrialsResponse()
+    assert len(response.credits) == 0
+    assert len(response.features) == 0
+
+
+def test_feature_options_with_dates():
     features = FeatureOptions(
         options=[
             FeatureOption(key="sso", enabled=True),
             FeatureOption(key="custom_dashboards", enabled=True),
             FeatureOption(key="advanced_analytics", enabled=False),
-        ]
+        ],
+        start_date=BillingDate(year=2026, month=3, day=1),
+        end_date=BillingDate(year=2026, month=6, day=1),
     )
-    trial = Trial(
-        credit_start_date=BillingDate(year=2026, month=3, day=1),
-        credit_end_date=BillingDate(year=2026, month=6, day=1),
-        feature_start_date=BillingDate(year=2026, month=3, day=1),
-        feature_end_date=BillingDate(year=2026, month=6, day=1),
-        status=TrialStatus.TRIAL_STATUS_ACTIVE,
-        credits=credits,
-        features=features,
-    )
-    assert len(trial.credits) == 2
-    assert trial.credits[0].type == CreditType.CREDIT_TYPE_CENTS
-    assert trial.credits[0].sku == SKU.SKU_ERRORS
-    assert trial.credits[0].amount == 500000
-    assert trial.credits[1].type == CreditType.CREDIT_TYPE_UNITS
-    assert trial.credits[1].sku == SKU.SKU_REPLAYS
-    assert len(trial.features.options) == 3
-    feature_map = {f.key: f.enabled for f in trial.features.options}
+    assert len(features.options) == 3
+    assert features.start_date.year == 2026
+    assert features.start_date.month == 3
+    assert features.end_date.month == 6
+    feature_map = {f.key: f.enabled for f in features.options}
     assert feature_map["sso"] is True
     assert feature_map["advanced_analytics"] is False
 

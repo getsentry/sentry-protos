@@ -2,12 +2,17 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.trial.v1;
 
-import "sentry_protos/billing/v1/services/trial/v1/trial.proto";
+import "sentry_protos/billing/v1/credit.proto";
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/feature.proto";
 
 message GetTrialsRequest {
   uint64 organization_id = 1;
+  sentry_protos.billing.v1.Date start_date = 2;
+  sentry_protos.billing.v1.Date end_date = 3;
 }
 
 message GetTrialsResponse {
-  repeated Trial trials = 1;
+  repeated sentry_protos.billing.v1.Credit credits = 1;
+  repeated sentry_protos.billing.v1.FeatureOptions features = 2;
 }

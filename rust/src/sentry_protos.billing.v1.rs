@@ -264,6 +264,10 @@ pub struct FeatureOption {
 pub struct FeatureOptions {
     #[prost(message, repeated, tag = "1")]
     pub options: ::prost::alloc::vec::Vec<FeatureOption>,
+    #[prost(message, optional, tag = "2")]
+    pub start_date: ::core::option::Option<Date>,
+    #[prost(message, optional, tag = "3")]
+    pub end_date: ::core::option::Option<Date>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
