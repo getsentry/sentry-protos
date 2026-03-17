@@ -1,3 +1,12 @@
+## 0.8.5
+
+### New Features ✨
+
+#### Taskbroker
+
+- Add Callback URL to `PushTaskRequest` by @james-mcnulty in [#187](https://github.com/getsentry/sentry-protos/pull/187)
+- Create Worker Service by @james-mcnulty in [#186](https://github.com/getsentry/sentry-protos/pull/186)
+
 ## 0.8.4
 
 ### New Features ✨
