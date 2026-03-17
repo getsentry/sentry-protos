@@ -132,6 +132,8 @@ service WorkerService {
 
 message PushTaskRequest {
   TaskActivation task = 1;
+
+  string callback_url = 2;
 }
 
 message PushTaskResponse {}
