@@ -16,8 +16,8 @@ pub struct Trial {
     #[prost(message, repeated, tag = "6")]
     pub credits: ::prost::alloc::vec::Vec<super::super::super::Credit>,
     /// This represesnts the features allowed by the trial, represented in the form of feature options
-    #[prost(message, repeated, tag = "7")]
-    pub features: ::prost::alloc::vec::Vec<super::super::super::FeatureOption>,
+    #[prost(message, optional, tag = "7")]
+    pub features: ::core::option::Option<super::super::super::FeatureOptions>,
 }
 /// The current status of a trial.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

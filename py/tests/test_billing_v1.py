@@ -14,7 +14,7 @@ from sentry_protos.billing.v1.services.contract.v1.contract_metadata_pb2 import 
     MetadataOptions,
     OptionValue,
 )
-from sentry_protos.billing.v1.feature_pb2 import FeatureOption
+from sentry_protos.billing.v1.feature_pb2 import FeatureOption, FeatureOptions
 from sentry_protos.billing.v1.services.contract.v1.contract_pb2 import Contract
 from sentry_protos.billing.v1.services.contract.v1.endpoint_get_contract_pb2 import (
     GetContractRequest,
@@ -266,11 +266,13 @@ def test_trial_with_credits_and_features():
             status=CreditStatus.CREDIT_STATUS_ACTIVE,
         ),
     ]
-    features = [
-        FeatureOption(key="sso", enabled=True),
-        FeatureOption(key="custom_dashboards", enabled=True),
-        FeatureOption(key="advanced_analytics", enabled=False),
-    ]
+    features = FeatureOptions(
+        options=[
+            FeatureOption(key="sso", enabled=True),
+            FeatureOption(key="custom_dashboards", enabled=True),
+            FeatureOption(key="advanced_analytics", enabled=False),
+        ]
+    )
     trial = Trial(
         credit_start_date=BillingDate(year=2026, month=3, day=1),
         credit_end_date=BillingDate(year=2026, month=6, day=1),
@@ -286,8 +288,8 @@ def test_trial_with_credits_and_features():
     assert trial.credits[0].amount == 500000
     assert trial.credits[1].type == CreditType.CREDIT_TYPE_UNITS
     assert trial.credits[1].sku == SKU.SKU_REPLAYS
-    assert len(trial.features) == 3
-    feature_map = {f.key: f.enabled for f in trial.features}
+    assert len(trial.features.options) == 3
+    feature_map = {f.key: f.enabled for f in trial.features.options}
     assert feature_map["sso"] is True
     assert feature_map["advanced_analytics"] is False
 
