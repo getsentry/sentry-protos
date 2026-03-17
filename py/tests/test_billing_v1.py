@@ -14,7 +14,7 @@ from sentry_protos.billing.v1.services.contract.v1.contract_metadata_pb2 import 
     MetadataOptions,
     OptionValue,
 )
-from sentry_protos.billing.v1.feature_pb2 import FeatureOption, FeatureOptions
+from sentry_protos.billing.v1.feature_pb2 import FeatureOption
 from sentry_protos.billing.v1.services.contract.v1.contract_pb2 import Contract
 from sentry_protos.billing.v1.services.contract.v1.endpoint_get_contract_pb2 import (
     GetContractRequest,
@@ -31,7 +31,6 @@ from sentry_protos.billing.v1.services.contract.v1.sku_pb2 import SKU as Contrac
 from sentry_protos.billing.v1.sku_pb2 import SKU
 from sentry_protos.billing.v1.credit_pb2 import (
     Credit,
-    CreditSource,
     CreditStatus,
     CreditType,
 )
@@ -196,29 +195,23 @@ def test_get_trials_request():
 def test_get_trials_response():
     trials = [
         Trial(
-            int_id=1,
-            organization_id=12345,
-            subscription_id=99,
-            start_date=BillingDate(year=2026, month=3, day=1),
-            end_date=BillingDate(year=2026, month=4, day=1),
+            credit_start_date=BillingDate(year=2026, month=3, day=1),
+            credit_end_date=BillingDate(year=2026, month=4, day=1),
+            feature_start_date=BillingDate(year=2026, month=3, day=1),
+            feature_end_date=BillingDate(year=2026, month=4, day=1),
             status=TrialStatus.TRIAL_STATUS_ACTIVE,
         ),
         Trial(
-            string_id="subscription_42",
-            organization_id=12345,
-            subscription_id=42,
-            start_date=BillingDate(year=2026, month=1, day=1),
-            end_date=BillingDate(year=2026, month=2, day=1),
+            credit_start_date=BillingDate(year=2026, month=1, day=1),
+            credit_end_date=BillingDate(year=2026, month=2, day=1),
+            feature_start_date=BillingDate(year=2026, month=1, day=1),
+            feature_end_date=BillingDate(year=2026, month=2, day=1),
             status=TrialStatus.TRIAL_STATUS_INACTIVE,
         ),
     ]
     response = GetTrialsResponse(trials=trials)
     assert len(response.trials) == 2
-    assert response.trials[0].int_id == 1
-    assert response.trials[0].organization_id == 12345
     assert response.trials[0].status == TrialStatus.TRIAL_STATUS_ACTIVE
-    assert response.trials[1].string_id == "subscription_42"
-    assert response.trials[1].subscription_id == 42
     assert response.trials[1].status == TrialStatus.TRIAL_STATUS_INACTIVE
 
 
@@ -227,74 +220,49 @@ def test_get_trials_response_empty():
     assert len(response.trials) == 0
 
 
-def test_trial_with_int_id():
+def test_trial_with_dates_and_status():
     trial = Trial(
-        int_id=1,
-        organization_id=12345,
-        subscription_id=99,
-        start_date=BillingDate(year=2026, month=3, day=1),
-        end_date=BillingDate(year=2026, month=4, day=1),
+        credit_start_date=BillingDate(year=2026, month=3, day=1),
+        credit_end_date=BillingDate(year=2026, month=6, day=1),
+        feature_start_date=BillingDate(year=2026, month=3, day=1),
+        feature_end_date=BillingDate(year=2026, month=6, day=1),
         status=TrialStatus.TRIAL_STATUS_ACTIVE,
     )
-    assert trial.int_id == 1
-    assert trial.WhichOneof("trial_id") == "int_id"
-    assert trial.organization_id == 12345
-    assert trial.subscription_id == 99
-    assert trial.start_date.year == 2026
-    assert trial.start_date.month == 3
-    assert trial.end_date.month == 4
+    assert trial.credit_start_date.year == 2026
+    assert trial.credit_start_date.month == 3
+    assert trial.credit_end_date.month == 6
+    assert trial.feature_start_date.month == 3
+    assert trial.feature_end_date.month == 6
     assert trial.status == TrialStatus.TRIAL_STATUS_ACTIVE
 
 
-def test_legacy_trial_string_id():
+def test_inactive_trial():
     trial = Trial(
-        string_id="product_123",
-        organization_id=12345,
-        start_date=BillingDate(year=2026, month=3, day=1),
-        end_date=BillingDate(year=2026, month=4, day=1),
+        credit_start_date=BillingDate(year=2026, month=2, day=1),
+        credit_end_date=BillingDate(year=2026, month=3, day=1),
+        feature_start_date=BillingDate(year=2026, month=2, day=1),
+        feature_end_date=BillingDate(year=2026, month=3, day=1),
         status=TrialStatus.TRIAL_STATUS_INACTIVE,
     )
-    assert trial.string_id == "product_123"
-    assert trial.WhichOneof("trial_id") == "string_id"
-    assert trial.organization_id == 12345
     assert trial.status == TrialStatus.TRIAL_STATUS_INACTIVE
-
-
-def test_trial_id_oneof_mutual_exclusivity():
-    trial = Trial(int_id=42)
-    assert trial.WhichOneof("trial_id") == "int_id"
-    assert trial.int_id == 42
-
-    trial.string_id = "plan_99"
-    assert trial.WhichOneof("trial_id") == "string_id"
-    assert trial.string_id == "plan_99"
-    assert trial.int_id == 0
 
 
 def test_trial_with_credits_and_features():
     credits = [
         Credit(
-            id=1,
-            organization_id=12345,
             type=CreditType.CREDIT_TYPE_CENTS,
-            skus=[SKU.SKU_ERRORS, SKU.SKU_SPANS],
+            sku=SKU.SKU_ERRORS,
             amount=500000,
             start_date=BillingDate(year=2026, month=3, day=1),
             end_date=BillingDate(year=2026, month=6, day=1),
-            source=CreditSource.CREDIT_SOURCE_TRIAL,
-            trial_int_id=1,
             status=CreditStatus.CREDIT_STATUS_ACTIVE,
         ),
         Credit(
-            id=2,
-            organization_id=12345,
             type=CreditType.CREDIT_TYPE_UNITS,
-            skus=[SKU.SKU_REPLAYS],
+            sku=SKU.SKU_REPLAYS,
             amount=10000,
             start_date=BillingDate(year=2026, month=3, day=1),
             end_date=BillingDate(year=2026, month=6, day=1),
-            source=CreditSource.CREDIT_SOURCE_TRIAL,
-            trial_int_id=1,
             status=CreditStatus.CREDIT_STATUS_ACTIVE,
         ),
     ]
@@ -304,104 +272,65 @@ def test_trial_with_credits_and_features():
         FeatureOption(key="advanced_analytics", enabled=False),
     ]
     trial = Trial(
-        int_id=1,
-        organization_id=12345,
-        subscription_id=99,
-        start_date=BillingDate(year=2026, month=3, day=1),
-        end_date=BillingDate(year=2026, month=6, day=1),
+        credit_start_date=BillingDate(year=2026, month=3, day=1),
+        credit_end_date=BillingDate(year=2026, month=6, day=1),
+        feature_start_date=BillingDate(year=2026, month=3, day=1),
+        feature_end_date=BillingDate(year=2026, month=6, day=1),
         status=TrialStatus.TRIAL_STATUS_ACTIVE,
         credits=credits,
         features=features,
     )
     assert len(trial.credits) == 2
     assert trial.credits[0].type == CreditType.CREDIT_TYPE_CENTS
+    assert trial.credits[0].sku == SKU.SKU_ERRORS
     assert trial.credits[0].amount == 500000
     assert trial.credits[1].type == CreditType.CREDIT_TYPE_UNITS
-    assert list(trial.credits[1].skus) == [SKU.SKU_REPLAYS]
+    assert trial.credits[1].sku == SKU.SKU_REPLAYS
     assert len(trial.features) == 3
     feature_map = {f.key: f.enabled for f in trial.features}
     assert feature_map["sso"] is True
     assert feature_map["advanced_analytics"] is False
 
 
-def test_dollar_credit():
+def test_cents_credit():
     credit = Credit(
-        id=1,
-        organization_id=12345,
         type=CreditType.CREDIT_TYPE_CENTS,
-        skus=[SKU.SKU_ERRORS, SKU.SKU_SPANS],
+        sku=SKU.SKU_ERRORS,
         amount=500000,
         start_date=BillingDate(year=2026, month=3, day=1),
         end_date=BillingDate(year=2026, month=6, day=1),
-        source=CreditSource.CREDIT_SOURCE_TRIAL,
-        trial_int_id=1,
         status=CreditStatus.CREDIT_STATUS_ACTIVE,
     )
-    assert credit.id == 1
-    assert credit.organization_id == 12345
     assert credit.type == CreditType.CREDIT_TYPE_CENTS
-    assert list(credit.skus) == [SKU.SKU_ERRORS, SKU.SKU_SPANS]
+    assert credit.sku == SKU.SKU_ERRORS
     assert credit.amount == 500000
     assert credit.start_date.year == 2026
     assert credit.end_date.month == 6
-    assert credit.source == CreditSource.CREDIT_SOURCE_TRIAL
-    assert credit.WhichOneof("trial_id") == "trial_int_id"
-    assert credit.trial_int_id == 1
     assert credit.status == CreditStatus.CREDIT_STATUS_ACTIVE
 
 
 def test_units_credit():
     credit = Credit(
-        id=2,
-        organization_id=67890,
         type=CreditType.CREDIT_TYPE_UNITS,
-        skus=[SKU.SKU_REPLAYS],
+        sku=SKU.SKU_REPLAYS,
         amount=50000,
         start_date=BillingDate(year=2026, month=3, day=10),
         end_date=BillingDate(year=2026, month=4, day=10),
-        source=CreditSource.CREDIT_SOURCE_TRIAL,
-        trial_int_id=2,
         status=CreditStatus.CREDIT_STATUS_ACTIVE,
     )
     assert credit.type == CreditType.CREDIT_TYPE_UNITS
-    assert list(credit.skus) == [SKU.SKU_REPLAYS]
+    assert credit.sku == SKU.SKU_REPLAYS
     assert credit.amount == 50000
-    assert credit.source == CreditSource.CREDIT_SOURCE_TRIAL
-    assert credit.WhichOneof("trial_id") == "trial_int_id"
-    assert credit.trial_int_id == 2
 
 
-def test_admin_credit():
+def test_inactive_credit():
     credit = Credit(
-        id=3,
-        organization_id=99999,
         type=CreditType.CREDIT_TYPE_CENTS,
-        amount=20000,
-        start_date=BillingDate(year=2026, month=1, day=1),
-        end_date=BillingDate(year=2026, month=12, day=31),
-        source=CreditSource.CREDIT_SOURCE_ADMIN,
-        status=CreditStatus.CREDIT_STATUS_ACTIVE,
-    )
-    assert credit.source == CreditSource.CREDIT_SOURCE_ADMIN
-    assert credit.WhichOneof("trial_id") is None
-    assert len(credit.skus) == 0
-    assert credit.amount == 20000
-
-
-def test_revoked_credit():
-    credit = Credit(
-        id=4,
-        organization_id=11111,
-        type=CreditType.CREDIT_TYPE_CENTS,
-        skus=[SKU.SKU_ERRORS],
+        sku=SKU.SKU_ERRORS,
         amount=100000,
         start_date=BillingDate(year=2026, month=2, day=1),
         end_date=BillingDate(year=2026, month=5, day=1),
-        source=CreditSource.CREDIT_SOURCE_TRIAL,
-        trial_int_id=4,
         status=CreditStatus.CREDIT_STATUS_INACTIVE,
     )
     assert credit.status == CreditStatus.CREDIT_STATUS_INACTIVE
-    assert credit.source == CreditSource.CREDIT_SOURCE_TRIAL
-    assert credit.WhichOneof("trial_id") == "trial_int_id"
-    assert credit.trial_int_id == 4
+    assert credit.amount == 100000

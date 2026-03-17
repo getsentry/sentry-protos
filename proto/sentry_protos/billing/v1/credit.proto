@@ -14,15 +14,6 @@ enum CreditType {
   CREDIT_TYPE_UNITS = 2;
 }
 
-// How this credit was originated.
-enum CreditSource {
-  CREDIT_SOURCE_UNSPECIFIED = 0;
-  // Credit granted by a trial.
-  CREDIT_SOURCE_TRIAL = 1;
-  //Credit manually granted by a Sentry employee.
-  CREDIT_SOURCE_ADMIN = 2;
-}
-
 // The current status of a credit.
 enum CreditStatus {
   CREDIT_STATUS_UNSPECIFIED = 0;
@@ -33,22 +24,12 @@ enum CreditStatus {
 // A credit granted to an organization, representing either a monetary
 // allowance (in cents) or a number of units for specific SKUs.
 message Credit {
-  uint64 id = 1;
-  uint64 organization_id = 2;
-  CreditType type = 3;
-  // The SKUs this credit applies to. Empty means all SKUs.
-  repeated sentry_protos.billing.v1.SKU skus = 4;
+  CreditType type = 1;
+  // The SKU this credit applies to.
+  sentry_protos.billing.v1.SKU sku = 2;
   // Amount in cents (for CENTS credits) or unit count (for UNITS credits).
-  int64 amount = 5;
-  Date start_date = 6;
-  Date end_date = 7;
-  CreditSource source = 8;
-  // The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
-  // Matches the trial_id oneof in Trial: string for legacy trials (e.g. "product_123"),
-  // integer for new trials.
-  oneof trial_id {
-    string trial_string_id = 9;
-    uint64 trial_int_id = 10;
-  }
-  CreditStatus status = 11;
+  int64 amount = 3;
+  Date start_date = 4;
+  Date end_date = 5;
+  CreditStatus status = 6;
 }

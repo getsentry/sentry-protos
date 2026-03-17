@@ -78,46 +78,22 @@ impl Sku {
 }
 /// A credit granted to an organization, representing either a monetary
 /// allowance (in cents) or a number of units for specific SKUs.
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Credit {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-    #[prost(uint64, tag = "2")]
-    pub organization_id: u64,
-    #[prost(enumeration = "CreditType", tag = "3")]
+    #[prost(enumeration = "CreditType", tag = "1")]
     pub r#type: i32,
-    /// The SKUs this credit applies to. Empty means all SKUs.
-    #[prost(enumeration = "Sku", repeated, tag = "4")]
-    pub skus: ::prost::alloc::vec::Vec<i32>,
+    /// The SKU this credit applies to.
+    #[prost(enumeration = "Sku", tag = "2")]
+    pub sku: i32,
     /// Amount in cents (for CENTS credits) or unit count (for UNITS credits).
-    #[prost(int64, tag = "5")]
+    #[prost(int64, tag = "3")]
     pub amount: i64,
-    #[prost(message, optional, tag = "6")]
+    #[prost(message, optional, tag = "4")]
     pub start_date: ::core::option::Option<Date>,
-    #[prost(message, optional, tag = "7")]
+    #[prost(message, optional, tag = "5")]
     pub end_date: ::core::option::Option<Date>,
-    #[prost(enumeration = "CreditSource", tag = "8")]
-    pub source: i32,
-    #[prost(enumeration = "CreditStatus", tag = "11")]
+    #[prost(enumeration = "CreditStatus", tag = "6")]
     pub status: i32,
-    /// The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
-    /// Matches the trial_id oneof in Trial: string for legacy trials (e.g. "product_123"),
-    /// integer for new trials.
-    #[prost(oneof = "credit::TrialId", tags = "9, 10")]
-    pub trial_id: ::core::option::Option<credit::TrialId>,
-}
-/// Nested message and enum types in `Credit`.
-pub mod credit {
-    /// The trial that originated this credit, when source == CREDIT_SOURCE_TRIAL.
-    /// Matches the trial_id oneof in Trial: string for legacy trials (e.g. "product_123"),
-    /// integer for new trials.
-    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum TrialId {
-        #[prost(string, tag = "9")]
-        TrialStringId(::prost::alloc::string::String),
-        #[prost(uint64, tag = "10")]
-        TrialIntId(u64),
-    }
 }
 /// Whether the credit represents a cents allowance or a unit quantity.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -147,38 +123,6 @@ impl CreditType {
             "CREDIT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
             "CREDIT_TYPE_CENTS" => Some(Self::Cents),
             "CREDIT_TYPE_UNITS" => Some(Self::Units),
-            _ => None,
-        }
-    }
-}
-/// How this credit was originated.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum CreditSource {
-    Unspecified = 0,
-    /// Credit granted by a trial.
-    Trial = 1,
-    /// Credit manually granted by a Sentry employee.
-    Admin = 2,
-}
-impl CreditSource {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "CREDIT_SOURCE_UNSPECIFIED",
-            Self::Trial => "CREDIT_SOURCE_TRIAL",
-            Self::Admin => "CREDIT_SOURCE_ADMIN",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "CREDIT_SOURCE_UNSPECIFIED" => Some(Self::Unspecified),
-            "CREDIT_SOURCE_TRIAL" => Some(Self::Trial),
-            "CREDIT_SOURCE_ADMIN" => Some(Self::Admin),
             _ => None,
         }
     }

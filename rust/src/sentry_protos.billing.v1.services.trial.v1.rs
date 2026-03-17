@@ -2,44 +2,22 @@
 /// Represents a time-bounded trial for an organization.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Trial {
-    #[prost(uint64, tag = "3")]
-    pub organization_id: u64,
-    #[prost(uint64, optional, tag = "4")]
-    pub subscription_id: ::core::option::Option<u64>,
-    #[prost(message, optional, tag = "5")]
-    pub start_date: ::core::option::Option<super::super::super::Date>,
-    #[prost(message, optional, tag = "6")]
-    pub end_date: ::core::option::Option<super::super::super::Date>,
-    #[prost(enumeration = "TrialStatus", tag = "7")]
+    #[prost(message, optional, tag = "1")]
+    pub credit_start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "2")]
+    pub credit_end_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "3")]
+    pub feature_start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "4")]
+    pub feature_end_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(enumeration = "TrialStatus", tag = "5")]
     pub status: i32,
     /// This represents the SKU allowances granted by the trial, represented in the form of credits
-    #[prost(message, repeated, tag = "8")]
+    #[prost(message, repeated, tag = "6")]
     pub credits: ::prost::alloc::vec::Vec<super::super::super::Credit>,
     /// This represesnts the features allowed by the trial, represented in the form of feature options
-    #[prost(message, repeated, tag = "9")]
+    #[prost(message, repeated, tag = "7")]
     pub features: ::prost::alloc::vec::Vec<super::super::super::FeatureOption>,
-    /// For legacy trials migrated into this schema, the ID is a string composed of
-    /// the trial type ("product", "plan", or "subscription") concatenated with an
-    /// underscore and the row ID from the original table (e.g. "product_123",
-    /// "plan_456", "subscription_789"). New trial records use an integer that
-    /// uniquely identifies the row in the unified trials table.
-    #[prost(oneof = "trial::TrialId", tags = "1, 2")]
-    pub trial_id: ::core::option::Option<trial::TrialId>,
-}
-/// Nested message and enum types in `Trial`.
-pub mod trial {
-    /// For legacy trials migrated into this schema, the ID is a string composed of
-    /// the trial type ("product", "plan", or "subscription") concatenated with an
-    /// underscore and the row ID from the original table (e.g. "product_123",
-    /// "plan_456", "subscription_789"). New trial records use an integer that
-    /// uniquely identifies the row in the unified trials table.
-    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum TrialId {
-        #[prost(string, tag = "1")]
-        StringId(::prost::alloc::string::String),
-        #[prost(uint64, tag = "2")]
-        IntId(u64),
-    }
 }
 /// The current status of a trial.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

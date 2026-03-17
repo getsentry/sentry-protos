@@ -15,23 +15,13 @@ enum TrialStatus {
 
 // Represents a time-bounded trial for an organization.
 message Trial {
-  // For legacy trials migrated into this schema, the ID is a string composed of
-  // the trial type ("product", "plan", or "subscription") concatenated with an
-  // underscore and the row ID from the original table (e.g. "product_123",
-  // "plan_456", "subscription_789"). New trial records use an integer that
-  // uniquely identifies the row in the unified trials table.
-  oneof trial_id {
-    string string_id = 1;
-    uint64 int_id = 2;
-  }
-
-  uint64 organization_id = 3;
-  optional uint64 subscription_id = 4;
-  Date start_date = 5;
-  Date end_date = 6;
-  TrialStatus status = 7;
+  Date credit_start_date = 1;
+  Date credit_end_date = 2;
+  Date feature_start_date = 3;
+  Date feature_end_date = 4;
+  TrialStatus status = 5;
   // This represents the SKU allowances granted by the trial, represented in the form of credits
-  repeated sentry_protos.billing.v1.Credit credits = 8;
+  repeated sentry_protos.billing.v1.Credit credits = 6;
   // This represesnts the features allowed by the trial, represented in the form of feature options
-  repeated sentry_protos.billing.v1.FeatureOption features = 9;
+  repeated sentry_protos.billing.v1.FeatureOption features = 7;
 }
