@@ -8,8 +8,6 @@ from sentry_protos.billing.v1.services.contract.v1.billing_config_pb2 import (
 )
 from sentry_protos.billing.v1.services.contract.v1.contract_metadata_pb2 import (
     ContractMetadata,
-    FeatureOption as ContractFeatureOption,
-    FeatureOptions as ContractFeatureOptions,
     MetadataOption,
     MetadataOptions,
     OptionValue,
@@ -27,7 +25,6 @@ from sentry_protos.billing.v1.services.contract.v1.pricing_config_pb2 import (
     SKUConfig,
     TieredPricingRate,
 )
-from sentry_protos.billing.v1.services.contract.v1.sku_pb2 import SKU as ContractSKU
 from sentry_protos.billing.v1.sku_pb2 import SKU
 from sentry_protos.billing.v1.credit_pb2 import (
     Credit,
@@ -55,26 +52,25 @@ def test_contract_with_all_sub_messages():
     )
 
     errors_config = SKUConfig(
-        sku=ContractSKU.SKU_ERRORS,
+        billing_sku=SKU.SKU_ERRORS,
         base_price_cents=2900,
         payg_budget_cents=10000,
-        reserved_volume=50_000,
         payg_rate=payg_rate,
         reserved_rate=reserved_rate,
     )
     assert errors_config.HasField("payg_budget_cents")
+    assert errors_config.billing_sku == SKU.SKU_ERRORS
 
     spans_config = SKUConfig(
-        sku=ContractSKU.SKU_SPANS,
+        billing_sku=SKU.SKU_SPANS,
         base_price_cents=0,
-        reserved_volume=100_000,
         payg_rate=payg_rate,
         reserved_rate=reserved_rate,
     )
     assert not spans_config.HasField("payg_budget_cents")
 
     shared_budget = SharedSKUBudget(
-        skus=[ContractSKU.SKU_SPANS],
+        billing_skus=[SKU.SKU_SPANS],
         reserved_budget_cents=50000,
         payg_budget_cents=25000,
     )
@@ -92,10 +88,10 @@ def test_contract_with_all_sub_messages():
                     ),
                 ],
             ),
-            features=ContractFeatureOptions(
+            billing_features=FeatureOptions(
                 options=[
-                    ContractFeatureOption(key="sso", enabled=True),
-                    ContractFeatureOption(key="custom_dashboards", enabled=True),
+                    FeatureOption(key="sso", enabled=True),
+                    FeatureOption(key="custom_dashboards", enabled=True),
                 ],
             ),
             custom_options=MetadataOptions(
@@ -136,8 +132,9 @@ def test_contract_with_all_sub_messages():
     assert contract.metadata.organization_id == 67890
     assert contract.billing_config.contract_start_date.year == 2024
     assert len(contract.pricing_config.sku_configs) == 1
-    assert contract.pricing_config.sku_configs[0].sku == ContractSKU.SKU_ERRORS
+    assert contract.pricing_config.sku_configs[0].billing_sku == SKU.SKU_ERRORS
     assert len(contract.pricing_config.shared_sku_budgets) == 1
+    assert list(contract.pricing_config.shared_sku_budgets[0].billing_skus) == [SKU.SKU_SPANS]
     assert contract.billing_config.address.city == "San Francisco"
 
     package_metadata = {
@@ -147,8 +144,11 @@ def test_contract_with_all_sub_messages():
     assert package_metadata["plan"] == "business"
     assert package_metadata["tier"] == "enterprise"
 
-    features = {option.key: option.enabled for option in contract.metadata.features.options}
-    assert features["sso"] is True
+    billing_features = {
+        option.key: option.enabled for option in contract.metadata.billing_features.options
+    }
+    assert billing_features["sso"] is True
+    assert billing_features["custom_dashboards"] is True
 
     custom_options = {
         option.key: option.value for option in contract.metadata.custom_options.options

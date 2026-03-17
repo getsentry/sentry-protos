@@ -191,11 +191,16 @@ pub struct ContractMetadata {
     #[prost(message, optional, tag = "4")]
     pub package_metadata: ::core::option::Option<MetadataOptions>,
     /// Entitlements, used in frontend features or gating access to certain features.
+    ///
+    /// DEPRECATED: use billing_features instead
+    #[deprecated]
     #[prost(message, optional, tag = "5")]
     pub features: ::core::option::Option<FeatureOptions>,
     /// Catch-all for overrides and information not covered above.
     #[prost(message, optional, tag = "6")]
     pub custom_options: ::core::option::Option<MetadataOptions>,
+    #[prost(message, optional, tag = "7")]
+    pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -281,6 +286,8 @@ pub struct TieredPricingRate {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SkuConfig {
+    /// DEPRECATED: use billing_sku instead
+    #[deprecated]
     #[prost(enumeration = "Sku", tag = "1")]
     pub sku: i32,
     /// Base price for the SKU (upgraded reserved volumes or add-on activation fees)
@@ -297,6 +304,8 @@ pub struct SkuConfig {
     /// for reserved budget SKUs
     #[prost(message, optional, tag = "6")]
     pub reserved_rate: ::core::option::Option<TieredPricingRate>,
+    #[prost(enumeration = "super::super::super::Sku", tag = "9")]
+    pub billing_sku: i32,
     #[prost(oneof = "sku_config::ReservedUnits", tags = "7, 8")]
     pub reserved_units: ::core::option::Option<sku_config::ReservedUnits>,
 }
@@ -315,12 +324,16 @@ pub mod sku_config {
 /// allowing multiple SKUs to draw from the same reserved budget.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SharedSkuBudget {
-    #[prost(enumeration = "Sku", repeated, tag = "1")]
+    /// DEPRECATED: use billing_skus instead
+    #[deprecated]
+    #[prost(enumeration = "Sku", repeated, packed = "false", tag = "1")]
     pub skus: ::prost::alloc::vec::Vec<i32>,
     #[prost(uint64, tag = "2")]
     pub reserved_budget_cents: u64,
     #[prost(uint64, tag = "3")]
     pub payg_budget_cents: u64,
+    #[prost(enumeration = "super::super::super::Sku", repeated, tag = "4")]
+    pub billing_skus: ::prost::alloc::vec::Vec<i32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PricingConfig {
