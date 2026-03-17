@@ -10,15 +10,6 @@ message OptionValue {
   }
 }
 
-message MetadataOption {
-  string key = 1;
-  OptionValue value = 2;
-}
-
-message MetadataOptions {
-  repeated MetadataOption options = 1;
-}
-
 message FeatureOption {
   string key = 1;
   bool enabled = 2;
@@ -26,6 +17,15 @@ message FeatureOption {
 
 message FeatureOptions {
   repeated FeatureOption options = 1;
+}
+
+message MetadataOption {
+  string key = 1;
+  OptionValue value = 2;
+}
+
+message MetadataOptions {
+  repeated MetadataOption options = 1;
 }
 
 message ContractMetadata {

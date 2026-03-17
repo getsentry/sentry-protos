@@ -155,18 +155,6 @@ pub mod option_value {
     }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct MetadataOption {
-    #[prost(string, tag = "1")]
-    pub key: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub value: ::core::option::Option<OptionValue>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MetadataOptions {
-    #[prost(message, repeated, tag = "1")]
-    pub options: ::prost::alloc::vec::Vec<MetadataOption>,
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct FeatureOption {
     #[prost(string, tag = "1")]
     pub key: ::prost::alloc::string::String,
@@ -177,6 +165,18 @@ pub struct FeatureOption {
 pub struct FeatureOptions {
     #[prost(message, repeated, tag = "1")]
     pub options: ::prost::alloc::vec::Vec<FeatureOption>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MetadataOption {
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub value: ::core::option::Option<OptionValue>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MetadataOptions {
+    #[prost(message, repeated, tag = "1")]
+    pub options: ::prost::alloc::vec::Vec<MetadataOption>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ContractMetadata {
