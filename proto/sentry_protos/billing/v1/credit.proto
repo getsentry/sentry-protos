@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/sku.proto";
+
+// Whether the credit represents a cents allowance or a unit quantity.
+enum CreditType {
+  CREDIT_TYPE_UNSPECIFIED = 0;
+  // A monetary allowance measured in cents.
+  CREDIT_TYPE_CENTS = 1;
+  // A quantity of units for a specific SKU.
+  CREDIT_TYPE_UNITS = 2;
+}
+
+// The current status of a credit.
+enum CreditStatus {
+  CREDIT_STATUS_UNSPECIFIED = 0;
+  CREDIT_STATUS_ACTIVE = 1;
+  CREDIT_STATUS_INACTIVE = 2;
+}
+
+// A credit granted to an organization, representing either a monetary
+// allowance (in cents) or a number of units for specific SKUs.
+message Credit {
+  CreditType type = 1;
+  // The SKU this credit applies to.
+  sentry_protos.billing.v1.SKU sku = 2;
+  // Amount in cents (for CENTS credits) or unit count (for UNITS credits).
+  int64 amount = 3;
+  Date start_date = 4;
+  Date end_date = 5;
+  CreditStatus status = 6;
+}

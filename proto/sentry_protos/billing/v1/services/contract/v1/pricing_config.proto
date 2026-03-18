@@ -4,6 +4,7 @@ package sentry_protos.billing.v1.services.contract.v1;
 
 import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
 import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
+import "sentry_protos/billing/v1/sku.proto";
 
 message PricingTier {
   int64 start = 1;
@@ -16,7 +17,7 @@ message TieredPricingRate {
 }
 
 message SKUConfig {
-  SKU sku = 1;
+  SKU sku = 1 [deprecated = true]; //DEPRECATED: use billing_sku instead
   // Base price for the SKU (upgraded reserved volumes or add-on activation fees)
   uint64 base_price_cents = 2;
   optional uint64 payg_budget_cents = 3;
@@ -28,14 +29,17 @@ message SKUConfig {
     bool is_unlimited = 7;
     uint64 num_reserved_units = 8; // the type communicates whether the SKU is unlimited or not, additionally reserved budget SKUs have a non-zero reserved_rate in addition to 0 reserved_units
   }
+
+  sentry_protos.billing.v1.SKU billing_sku = 9;
 }
 
 // Represents a budget that is collectively used by one or more SKUs,
 // allowing multiple SKUs to draw from the same reserved budget.
 message SharedSKUBudget {
-  repeated SKU skus = 1;
+  repeated SKU skus = 1 [deprecated = true]; //DEPRECATED: use billing_skus instead
   uint64 reserved_budget_cents = 2;
   uint64 payg_budget_cents = 3;
+  repeated sentry_protos.billing.v1.SKU billing_skus = 4;
 }
 
 message PricingConfig {

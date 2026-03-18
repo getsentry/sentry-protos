@@ -8,12 +8,11 @@ from sentry_protos.billing.v1.services.contract.v1.billing_config_pb2 import (
 )
 from sentry_protos.billing.v1.services.contract.v1.contract_metadata_pb2 import (
     ContractMetadata,
-    FeatureOption,
-    FeatureOptions,
     MetadataOption,
     MetadataOptions,
     OptionValue,
 )
+from sentry_protos.billing.v1.feature_pb2 import FeatureOption, FeatureOptions
 from sentry_protos.billing.v1.services.contract.v1.contract_pb2 import Contract
 from sentry_protos.billing.v1.services.contract.v1.endpoint_get_contract_pb2 import (
     GetContractRequest,
@@ -26,7 +25,17 @@ from sentry_protos.billing.v1.services.contract.v1.pricing_config_pb2 import (
     SKUConfig,
     TieredPricingRate,
 )
-from sentry_protos.billing.v1.services.contract.v1.sku_pb2 import SKU
+from sentry_protos.billing.v1.sku_pb2 import SKU
+from sentry_protos.billing.v1.credit_pb2 import (
+    Credit,
+    CreditStatus,
+    CreditType,
+)
+from sentry_protos.billing.v1.date_pb2 import Date as BillingDate
+from sentry_protos.billing.v1.services.trial.v1.endpoint_get_trials_pb2 import (
+    GetTrialsRequest,
+    GetTrialsResponse,
+)
 
 
 def test_contract_with_all_sub_messages():
@@ -43,26 +52,25 @@ def test_contract_with_all_sub_messages():
     )
 
     errors_config = SKUConfig(
-        sku=SKU.SKU_ERRORS,
+        billing_sku=SKU.SKU_ERRORS,
         base_price_cents=2900,
         payg_budget_cents=10000,
-        reserved_volume=50_000,
         payg_rate=payg_rate,
         reserved_rate=reserved_rate,
     )
     assert errors_config.HasField("payg_budget_cents")
+    assert errors_config.billing_sku == SKU.SKU_ERRORS
 
     spans_config = SKUConfig(
-        sku=SKU.SKU_SPANS,
+        billing_sku=SKU.SKU_SPANS,
         base_price_cents=0,
-        reserved_volume=100_000,
         payg_rate=payg_rate,
         reserved_rate=reserved_rate,
     )
     assert not spans_config.HasField("payg_budget_cents")
 
     shared_budget = SharedSKUBudget(
-        skus=[SKU.SKU_SPANS],
+        billing_skus=[SKU.SKU_SPANS],
         reserved_budget_cents=50000,
         payg_budget_cents=25000,
     )
@@ -80,7 +88,7 @@ def test_contract_with_all_sub_messages():
                     ),
                 ],
             ),
-            features=FeatureOptions(
+            billing_features=FeatureOptions(
                 options=[
                     FeatureOption(key="sso", enabled=True),
                     FeatureOption(key="custom_dashboards", enabled=True),
@@ -124,8 +132,9 @@ def test_contract_with_all_sub_messages():
     assert contract.metadata.organization_id == 67890
     assert contract.billing_config.contract_start_date.year == 2024
     assert len(contract.pricing_config.sku_configs) == 1
-    assert contract.pricing_config.sku_configs[0].sku == SKU.SKU_ERRORS
+    assert contract.pricing_config.sku_configs[0].billing_sku == SKU.SKU_ERRORS
     assert len(contract.pricing_config.shared_sku_budgets) == 1
+    assert list(contract.pricing_config.shared_sku_budgets[0].billing_skus) == [SKU.SKU_SPANS]
     assert contract.billing_config.address.city == "San Francisco"
 
     package_metadata = {
@@ -135,8 +144,11 @@ def test_contract_with_all_sub_messages():
     assert package_metadata["plan"] == "business"
     assert package_metadata["tier"] == "enterprise"
 
-    features = {option.key: option.enabled for option in contract.metadata.features.options}
-    assert features["sso"] is True
+    billing_features = {
+        option.key: option.enabled for option in contract.metadata.billing_features.options
+    }
+    assert billing_features["sso"] is True
+    assert billing_features["custom_dashboards"] is True
 
     custom_options = {
         option.key: option.value for option in contract.metadata.custom_options.options
@@ -169,3 +181,136 @@ def test_get_contract_response():
     assert response.contract.metadata.organization_id == 67890
     assert response.contract.billing_config.billing_type == BillingType.BILLING_TYPE_CREDIT_CARD
     assert response.contract.pricing_config.base_price_cents == 8900
+
+
+def test_get_trials_request():
+    request = GetTrialsRequest(
+        organization_id=12345,
+        start_date=BillingDate(year=2026, month=3, day=1),
+        end_date=BillingDate(year=2026, month=6, day=1),
+    )
+    assert request.organization_id == 12345
+    assert request.start_date.year == 2026
+    assert request.start_date.month == 3
+    assert request.end_date.month == 6
+
+
+def test_get_trials_response():
+    credits = [
+        Credit(
+            type=CreditType.CREDIT_TYPE_CENTS,
+            sku=SKU.SKU_ERRORS,
+            amount=500000,
+            start_date=BillingDate(year=2026, month=3, day=1),
+            end_date=BillingDate(year=2026, month=6, day=1),
+            status=CreditStatus.CREDIT_STATUS_ACTIVE,
+        ),
+        Credit(
+            type=CreditType.CREDIT_TYPE_UNITS,
+            sku=SKU.SKU_REPLAYS,
+            amount=10000,
+            start_date=BillingDate(year=2026, month=3, day=1),
+            end_date=BillingDate(year=2026, month=6, day=1),
+            status=CreditStatus.CREDIT_STATUS_ACTIVE,
+        ),
+    ]
+    features = [
+        FeatureOptions(
+            options=[
+                FeatureOption(key="sso", enabled=True),
+                FeatureOption(key="custom_dashboards", enabled=True),
+            ],
+            start_date=BillingDate(year=2026, month=3, day=1),
+            end_date=BillingDate(year=2026, month=6, day=1),
+        ),
+        FeatureOptions(
+            options=[
+                FeatureOption(key="advanced_analytics", enabled=False),
+            ],
+            start_date=BillingDate(year=2026, month=4, day=1),
+            end_date=BillingDate(year=2026, month=5, day=1),
+        ),
+    ]
+    response = GetTrialsResponse(credits=credits, features=features)
+    assert len(response.credits) == 2
+    assert response.credits[0].type == CreditType.CREDIT_TYPE_CENTS
+    assert response.credits[0].sku == SKU.SKU_ERRORS
+    assert response.credits[0].amount == 500000
+    assert response.credits[1].type == CreditType.CREDIT_TYPE_UNITS
+    assert response.credits[1].sku == SKU.SKU_REPLAYS
+    assert len(response.features) == 2
+    assert len(response.features[0].options) == 2
+    assert response.features[0].start_date.month == 3
+    assert response.features[0].end_date.month == 6
+    feature_map = {f.key: f.enabled for f in response.features[0].options}
+    assert feature_map["sso"] is True
+    assert feature_map["custom_dashboards"] is True
+
+
+def test_get_trials_response_empty():
+    response = GetTrialsResponse()
+    assert len(response.credits) == 0
+    assert len(response.features) == 0
+
+
+def test_feature_options_with_dates():
+    features = FeatureOptions(
+        options=[
+            FeatureOption(key="sso", enabled=True),
+            FeatureOption(key="custom_dashboards", enabled=True),
+            FeatureOption(key="advanced_analytics", enabled=False),
+        ],
+        start_date=BillingDate(year=2026, month=3, day=1),
+        end_date=BillingDate(year=2026, month=6, day=1),
+    )
+    assert len(features.options) == 3
+    assert features.start_date.year == 2026
+    assert features.start_date.month == 3
+    assert features.end_date.month == 6
+    feature_map = {f.key: f.enabled for f in features.options}
+    assert feature_map["sso"] is True
+    assert feature_map["advanced_analytics"] is False
+
+
+def test_cents_credit():
+    credit = Credit(
+        type=CreditType.CREDIT_TYPE_CENTS,
+        sku=SKU.SKU_ERRORS,
+        amount=500000,
+        start_date=BillingDate(year=2026, month=3, day=1),
+        end_date=BillingDate(year=2026, month=6, day=1),
+        status=CreditStatus.CREDIT_STATUS_ACTIVE,
+    )
+    assert credit.type == CreditType.CREDIT_TYPE_CENTS
+    assert credit.sku == SKU.SKU_ERRORS
+    assert credit.amount == 500000
+    assert credit.start_date.year == 2026
+    assert credit.end_date.month == 6
+    assert credit.status == CreditStatus.CREDIT_STATUS_ACTIVE
+
+
+def test_units_credit():
+    credit = Credit(
+        type=CreditType.CREDIT_TYPE_UNITS,
+        sku=SKU.SKU_REPLAYS,
+        amount=50000,
+        start_date=BillingDate(year=2026, month=3, day=10),
+        end_date=BillingDate(year=2026, month=4, day=10),
+        status=CreditStatus.CREDIT_STATUS_ACTIVE,
+    )
+    assert credit.type == CreditType.CREDIT_TYPE_UNITS
+    assert credit.sku == SKU.SKU_REPLAYS
+    assert credit.amount == 50000
+
+
+def test_inactive_credit():
+    credit = Credit(
+        type=CreditType.CREDIT_TYPE_CENTS,
+        sku=SKU.SKU_ERRORS,
+        amount=100000,
+        start_date=BillingDate(year=2026, month=2, day=1),
+        end_date=BillingDate(year=2026, month=5, day=1),
+        status=CreditStatus.CREDIT_STATUS_INACTIVE,
+    )
+    assert credit.status == CreditStatus.CREDIT_STATUS_INACTIVE
+    assert credit.amount == 100000
