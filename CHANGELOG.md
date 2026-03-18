@@ -1,3 +1,9 @@
+## 0.8.6
+
+### New Features ✨
+
+- (billing) Added trial, credit and constituent protos by @krithikravi in [#184](https://github.com/getsentry/sentry-protos/pull/184)
+
 ## 0.8.5
 
 ### New Features ✨
