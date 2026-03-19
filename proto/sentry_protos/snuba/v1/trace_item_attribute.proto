@@ -68,6 +68,8 @@ message VirtualColumnContext {
   string to_column_name = 2;
   map<string, string> value_map = 3;
   string default_value = 4;
+  // Alternatively, I could just use AttributeKey and deprecate from_column_name, but it might be confusing for the caller
+  AttributeKey.Type from_column_type = 5;
 }
 
 message StrArray {
