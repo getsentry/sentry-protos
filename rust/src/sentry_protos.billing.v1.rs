@@ -198,6 +198,14 @@ pub enum DataCategory {
     InstallableBuild = 15,
     /// Trace metric items.
     TraceMetric = 16,
+    /// Default events.
+    Default = 17,
+    /// Security events.
+    Security = 18,
+    /// Profile chunks.
+    ProfileChunk = 19,
+    /// UI profile chunks.
+    ProfileChunkUi = 20,
     /// Any other data category not known by this version.
     Unknown = -1,
 }
@@ -225,6 +233,10 @@ impl DataCategory {
             Self::SizeAnalysis => "DATA_CATEGORY_SIZE_ANALYSIS",
             Self::InstallableBuild => "DATA_CATEGORY_INSTALLABLE_BUILD",
             Self::TraceMetric => "DATA_CATEGORY_TRACE_METRIC",
+            Self::Default => "DATA_CATEGORY_DEFAULT",
+            Self::Security => "DATA_CATEGORY_SECURITY",
+            Self::ProfileChunk => "DATA_CATEGORY_PROFILE_CHUNK",
+            Self::ProfileChunkUi => "DATA_CATEGORY_PROFILE_CHUNK_UI",
             Self::Unknown => "DATA_CATEGORY_UNKNOWN",
         }
     }
@@ -248,6 +260,10 @@ impl DataCategory {
             "DATA_CATEGORY_SIZE_ANALYSIS" => Some(Self::SizeAnalysis),
             "DATA_CATEGORY_INSTALLABLE_BUILD" => Some(Self::InstallableBuild),
             "DATA_CATEGORY_TRACE_METRIC" => Some(Self::TraceMetric),
+            "DATA_CATEGORY_DEFAULT" => Some(Self::Default),
+            "DATA_CATEGORY_SECURITY" => Some(Self::Security),
+            "DATA_CATEGORY_PROFILE_CHUNK" => Some(Self::ProfileChunk),
+            "DATA_CATEGORY_PROFILE_CHUNK_UI" => Some(Self::ProfileChunkUi),
             "DATA_CATEGORY_UNKNOWN" => Some(Self::Unknown),
             _ => None,
         }
