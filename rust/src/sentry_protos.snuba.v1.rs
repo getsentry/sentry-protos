@@ -175,6 +175,9 @@ pub struct VirtualColumnContext {
     >,
     #[prost(string, tag = "4")]
     pub default_value: ::prost::alloc::string::String,
+    /// Alternatively, I could just use AttributeKey and deprecate from_column_name, but it might be confusing for the caller
+    #[prost(enumeration = "attribute_key::Type", tag = "5")]
+    pub from_column_type: i32,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct StrArray {
