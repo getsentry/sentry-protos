@@ -78,13 +78,18 @@ impl Sku {
 }
 /// A credit granted to an organization, representing either a monetary
 /// allowance (in cents) or a number of units for specific SKUs.
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Credit {
     #[prost(enumeration = "CreditType", tag = "1")]
     pub r#type: i32,
-    /// The SKU this credit applies to.
+    /// Deprecated: Use `skus` instead. This field only supports a single SKU.
+    #[deprecated]
     #[prost(enumeration = "Sku", tag = "2")]
     pub sku: i32,
+    /// The SKUs this credit applies to. For shared budgets, the credit amount
+    /// is shared across all listed SKUs.
+    #[prost(enumeration = "Sku", repeated, tag = "7")]
+    pub skus: ::prost::alloc::vec::Vec<i32>,
     /// Amount in cents (for CENTS credits) or unit count (for UNITS credits).
     #[prost(int64, tag = "3")]
     pub amount: i64,

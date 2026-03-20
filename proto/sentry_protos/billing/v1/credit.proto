@@ -25,8 +25,11 @@ enum CreditStatus {
 // allowance (in cents) or a number of units for specific SKUs.
 message Credit {
   CreditType type = 1;
-  // The SKU this credit applies to.
-  sentry_protos.billing.v1.SKU sku = 2;
+  // Deprecated: Use `skus` instead. This field only supports a single SKU.
+  sentry_protos.billing.v1.SKU sku = 2 [deprecated = true];
+  // The SKUs this credit applies to. For shared budgets, the credit amount
+  // is shared across all listed SKUs.
+  repeated sentry_protos.billing.v1.SKU skus = 7;
   // Amount in cents (for CENTS credits) or unit count (for UNITS credits).
   int64 amount = 3;
   Date start_date = 4;
