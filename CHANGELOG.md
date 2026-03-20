@@ -1,3 +1,9 @@
+## 0.8.7
+
+### Internal Changes 🔧
+
+- Add data categories for usage service by @noahsmartin in [#188](https://github.com/getsentry/sentry-protos/pull/188)
+
 ## 0.8.6
 
 ### New Features ✨
