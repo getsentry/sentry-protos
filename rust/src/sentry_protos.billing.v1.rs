@@ -86,10 +86,6 @@ pub struct Credit {
     #[deprecated]
     #[prost(enumeration = "Sku", tag = "2")]
     pub sku: i32,
-    /// The SKUs this credit applies to. For shared budgets, the credit amount
-    /// is shared across all listed SKUs.
-    #[prost(enumeration = "Sku", repeated, tag = "7")]
-    pub skus: ::prost::alloc::vec::Vec<i32>,
     /// Amount in cents (for CENTS credits) or unit count (for UNITS credits).
     #[prost(int64, tag = "3")]
     pub amount: i64,
@@ -99,6 +95,10 @@ pub struct Credit {
     pub end_date: ::core::option::Option<Date>,
     #[prost(enumeration = "CreditStatus", tag = "6")]
     pub status: i32,
+    /// The SKUs this credit applies to. For shared budgets, the credit amount
+    /// is shared across all listed SKUs.
+    #[prost(enumeration = "Sku", repeated, tag = "7")]
+    pub skus: ::prost::alloc::vec::Vec<i32>,
 }
 /// Whether the credit represents a cents allowance or a unit quantity.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
