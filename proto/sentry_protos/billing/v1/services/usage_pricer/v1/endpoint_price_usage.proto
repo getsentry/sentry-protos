@@ -40,6 +40,4 @@ message PriceUsageResponse {
   repeated SharedBudgetUsageSummary shared_budget_summaries = 2;
   // Grand total net spend in cents across all SKUs (after credits/trials applied).
   uint64 total_payg_spend_cents = 3;
-  // Grand total usage volume across all SKUs.
-  uint64 total_usage_volume = 4;
 }

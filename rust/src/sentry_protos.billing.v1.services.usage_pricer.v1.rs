@@ -47,7 +47,4 @@ pub struct PriceUsageResponse {
     /// Grand total net spend in cents across all SKUs (after credits/trials applied).
     #[prost(uint64, tag = "3")]
     pub total_payg_spend_cents: u64,
-    /// Grand total usage volume across all SKUs.
-    #[prost(uint64, tag = "4")]
-    pub total_usage_volume: u64,
 }
