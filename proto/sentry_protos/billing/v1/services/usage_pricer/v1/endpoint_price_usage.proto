@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.usage_pricer.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/endpoint_get_contract.proto";
+import "sentry_protos/billing/v1/services/trial/v1/endpoint_get_trials.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+import "sentry_protos/billing/v1/sku.proto";
+
+message PriceUsageRequest {
+  // The organization's contract (contains PricingConfig with SKUConfigs, shared budgets, tiers)
+  sentry_protos.billing.v1.services.contract.v1.GetContractResponse contract = 1;
+  // Active credits/trials for the organization
+  sentry_protos.billing.v1.services.trial.v1.GetTrialsResponse credits = 2;
+  // Usage data for the billing period
+  sentry_protos.billing.v1.services.usage.v1.GetUsageResponse usage = 3;
+}
+
+message SKUUsageSummary {
+  sentry_protos.billing.v1.SKU sku = 1;
+  // Net cents consumed by this SKU in the billing period (after credits/trials applied).
+  uint64 payg_spend_cents = 2;
+  // Total units consumed by this SKU in the billing period.
+  uint64 usage_volume = 3;
+}
+
+// Pricing breakdown for a shared budget spanning multiple SKUs.
+message SharedBudgetUsageSummary {
+  repeated sentry_protos.billing.v1.SKU skus = 1;
+  // Net cents consumed across all SKUs in this shared budget (after credits/trials applied).
+  uint64 payg_spend_cents = 2;
+  // Per-SKU breakdown within the shared budget.
+  repeated SKUUsageSummary sku_summaries = 3;
+}
+
+message PriceUsageResponse {
+  // Per-SKU pricing breakdown (for SKUs with individual budgets).
+  repeated SKUUsageSummary sku_summaries = 1;
+  // Per-shared-budget pricing breakdown (for SKUs sharing a budget).
+  repeated SharedBudgetUsageSummary shared_budget_summaries = 2;
+  // Grand total net spend in cents across all SKUs (after credits/trials applied).
+  uint64 total_payg_spend_cents = 3;
+  // Grand total usage volume across all SKUs.
+  uint64 total_usage_volume = 4;
+}

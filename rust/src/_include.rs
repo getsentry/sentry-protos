@@ -19,6 +19,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.usage.v1.rs");
                     }
                 }
+                pub mod usage_pricer {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.usage_pricer.v1.rs");
+                    }
+                }
             }
         }
     }
