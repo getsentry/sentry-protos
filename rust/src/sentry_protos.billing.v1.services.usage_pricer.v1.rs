@@ -13,8 +13,6 @@ pub struct PriceUsageRequest {
     #[prost(message, optional, tag = "3")]
     pub usage: ::core::option::Option<super::super::usage::v1::GetUsageResponse>,
 }
-/// Pricing breakdown for a single SKU.
-/// Spend values are net amounts after credits/trials have been applied.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SkuUsageSummary {
     #[prost(enumeration = "super::super::super::Sku", tag = "1")]
@@ -27,7 +25,6 @@ pub struct SkuUsageSummary {
     pub usage_volume: u64,
 }
 /// Pricing breakdown for a shared budget spanning multiple SKUs.
-/// Spend values are net amounts after credits/trials have been applied.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedBudgetUsageSummary {
     #[prost(enumeration = "super::super::super::Sku", repeated, tag = "1")]
