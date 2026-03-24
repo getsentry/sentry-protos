@@ -33,7 +33,7 @@ pub struct SharedBudgetUsageSummary {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsagePricerResponse {
-    /// Per-SKU pricing breakdown (for SKUs with individual budgets).
+    /// Per-SKU pricing breakdown.
     #[prost(message, repeated, tag = "1")]
     pub sku_summaries: ::prost::alloc::vec::Vec<SkuUsageSummary>,
     /// Per-shared-budget pricing breakdown (for SKUs sharing a budget).
