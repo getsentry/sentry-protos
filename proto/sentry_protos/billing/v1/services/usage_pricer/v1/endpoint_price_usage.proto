@@ -2,18 +2,13 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.usage_pricer.v1;
 
-import "sentry_protos/billing/v1/services/contract/v1/endpoint_get_contract.proto";
-import "sentry_protos/billing/v1/services/trial/v1/endpoint_get_trials.proto";
-import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/sku.proto";
 
 message PriceUsageRequest {
-  // The organization's contract (contains PricingConfig with SKUConfigs, shared budgets, tiers)
-  sentry_protos.billing.v1.services.contract.v1.GetContractResponse contract = 1;
-  // Active credits/trials for the organization
-  sentry_protos.billing.v1.services.trial.v1.GetTrialsResponse credits = 2;
-  // Usage data for the billing period
-  sentry_protos.billing.v1.services.usage.v1.GetUsageResponse usage = 3;
+  uint64 organization_id = 1;
+  google.protobuf.Timestamp start = 2;
+  google.protobuf.Timestamp end = 3;
 }
 
 message SKUUsageSummary {
