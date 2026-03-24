@@ -5,7 +5,7 @@ package sentry_protos.billing.v1.services.usage_pricer.v1;
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/sku.proto";
 
-message PriceUsageRequest {
+message UsagePricerRequest {
   uint64 organization_id = 1;
   google.protobuf.Timestamp start = 2;
   google.protobuf.Timestamp end = 3;
@@ -28,7 +28,7 @@ message SharedBudgetUsageSummary {
   repeated SKUUsageSummary sku_summaries = 3;
 }
 
-message PriceUsageResponse {
+message UsagePricerResponse {
   // Per-SKU pricing breakdown (for SKUs with individual budgets).
   repeated SKUUsageSummary sku_summaries = 1;
   // Per-shared-budget pricing breakdown (for SKUs sharing a budget).
