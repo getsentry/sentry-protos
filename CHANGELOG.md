@@ -1,3 +1,13 @@
+## 0.8.8
+
+### New Features ✨
+
+- (billing) Add UsagePricer endpoint by @brendanhsentry in [#191](https://github.com/getsentry/sentry-protos/pull/191)
+
+### Internal Changes 🔧
+
+- Pin GitHub Actions to full-length commit SHAs by @joshuarli in [#192](https://github.com/getsentry/sentry-protos/pull/192)
+
 ## 0.8.7
 
 ### Internal Changes 🔧
