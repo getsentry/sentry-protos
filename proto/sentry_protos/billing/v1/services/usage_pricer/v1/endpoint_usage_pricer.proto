@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.usage_pricer.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/sku.proto";
+
+message UsagePricerRequest {
+  uint64 organization_id = 1;
+  google.protobuf.Timestamp start = 2;
+  google.protobuf.Timestamp end = 3;
+}
+
+message SKUUsageSummary {
+  sentry_protos.billing.v1.SKU sku = 1;
+  // Net cents consumed by this SKU in the billing period (after credits/trials applied).
+  uint64 payg_spend_cents = 2;
+  // Total units consumed by this SKU in the billing period.
+  uint64 usage_volume = 3;
+}
+
+// Pricing breakdown for a shared budget spanning multiple SKUs.
+message SharedBudgetUsageSummary {
+  repeated sentry_protos.billing.v1.SKU skus = 1;
+  // Net cents consumed across all SKUs in this shared budget (after credits/trials applied).
+  uint64 payg_spend_cents = 2;
+  // Per-SKU breakdown within the shared budget.
+  repeated SKUUsageSummary sku_summaries = 3;
+}
+
+message UsagePricerResponse {
+  // Per-SKU pricing breakdown.
+  repeated SKUUsageSummary sku_summaries = 1;
+  // Per-shared-budget pricing breakdown (for SKUs sharing a budget).
+  repeated SharedBudgetUsageSummary shared_budget_summaries = 2;
+}
