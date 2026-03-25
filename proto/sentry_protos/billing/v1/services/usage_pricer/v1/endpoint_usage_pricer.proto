@@ -33,6 +33,4 @@ message UsagePricerResponse {
   repeated SKUUsageSummary sku_summaries = 1;
   // Per-shared-budget pricing breakdown (for SKUs sharing a budget).
   repeated SharedBudgetUsageSummary shared_budget_summaries = 2;
-  // Grand total net spend in cents across all SKUs (after credits/trials applied).
-  uint64 total_payg_spend_cents = 3;
 }

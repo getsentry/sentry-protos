@@ -39,7 +39,4 @@ pub struct UsagePricerResponse {
     /// Per-shared-budget pricing breakdown (for SKUs sharing a budget).
     #[prost(message, repeated, tag = "2")]
     pub shared_budget_summaries: ::prost::alloc::vec::Vec<SharedBudgetUsageSummary>,
-    /// Grand total net spend in cents across all SKUs (after credits/trials applied).
-    #[prost(uint64, tag = "3")]
-    pub total_payg_spend_cents: u64,
 }
