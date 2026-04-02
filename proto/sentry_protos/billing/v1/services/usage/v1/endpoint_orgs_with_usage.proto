@@ -10,7 +10,7 @@ message GetOrgsWithUsageRequest {
   google.protobuf.Timestamp end = 3;
 
   // Optional filter for specific data categories.
-  // When empty, usage for all categories is returned.
+  // When empty, usage for all categories is queried.
   repeated DataCategory categories = 4;
 }
 
