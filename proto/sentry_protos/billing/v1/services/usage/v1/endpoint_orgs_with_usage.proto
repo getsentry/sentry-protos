@@ -6,7 +6,9 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/data_category.proto";
 
 message PageToken {
-  uint64 offset = 1;
+  oneof value {
+    uint64 offset = 1;
+  }
 }
 
 message GetOrgsWithUsageRequest {
