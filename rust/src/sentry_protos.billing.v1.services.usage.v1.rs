@@ -6,7 +6,7 @@ pub struct GetOrgsWithUsageRequest {
     #[prost(message, optional, tag = "3")]
     pub end: ::core::option::Option<::prost_types::Timestamp>,
     /// Optional filter for specific data categories.
-    /// When empty, usage for all categories is returned.
+    /// When empty, usage for all categories is queried.
     #[prost(enumeration = "super::super::super::DataCategory", repeated, tag = "4")]
     pub categories: ::prost::alloc::vec::Vec<i32>,
 }
