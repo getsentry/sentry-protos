@@ -5,6 +5,10 @@ package sentry_protos.billing.v1.services.usage.v1;
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/data_category.proto";
 
+message PageToken {
+  uint64 offset = 1;
+}
+
 message GetOrgsWithUsageRequest {
   google.protobuf.Timestamp start = 1;
   google.protobuf.Timestamp end = 2;
@@ -12,8 +16,17 @@ message GetOrgsWithUsageRequest {
   // Optional filter for specific data categories.
   // When empty, usage for all categories is queried.
   repeated DataCategory categories = 3;
+
+  // Optional max number of items to return.
+  uint32 limit = 4;
+
+  // Optional page token for pagination. If provided, returns the next page of results.
+  PageToken page_token = 5;
 }
 
 message GetOrgsWithUsageResponse {
   repeated uint64 organization_ids = 1;
+
+  // Page token for the next page of results
+  PageToken page_token = 2;
 }
