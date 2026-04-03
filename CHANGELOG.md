@@ -1,3 +1,9 @@
+## 0.8.9
+
+### Bug Fixes 🐛
+
+- (eap) Allow flexible vcc types by @xurui-c in [#189](https://github.com/getsentry/sentry-protos/pull/189)
+
 ## 0.8.8
 
 ### New Features ✨

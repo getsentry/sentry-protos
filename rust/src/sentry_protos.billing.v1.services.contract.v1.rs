@@ -370,6 +370,9 @@ pub struct Contract {
 pub struct GetContractRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
+    /// If provided, returns the Contract active on this date. Otherwise, returns the current Contract.
+    #[prost(message, optional, tag = "2")]
+    pub date: ::core::option::Option<super::super::super::Date>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetContractResponse {
