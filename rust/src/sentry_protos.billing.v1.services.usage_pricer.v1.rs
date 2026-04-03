@@ -16,27 +16,66 @@ pub struct SkuUsageSummary {
     #[prost(uint64, tag = "2")]
     pub payg_spend_cents: u64,
     /// Total units consumed by this SKU in the billing period.
+    ///
+    /// DEPRECATED: use UsageData
+    #[deprecated]
     #[prost(uint64, tag = "3")]
     pub usage_volume: u64,
+    #[prost(message, optional, tag = "4")]
+    pub data: ::core::option::Option<super::super::super::UsageData>,
 }
 /// Pricing breakdown for a shared budget spanning multiple SKUs.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedBudgetUsageSummary {
-    #[prost(enumeration = "super::super::super::Sku", repeated, tag = "1")]
+    /// DEPRECATED: use sku_summaries.sku
+    #[deprecated]
+    #[prost(
+        enumeration = "super::super::super::Sku",
+        repeated,
+        packed = "false",
+        tag = "1"
+    )]
     pub skus: ::prost::alloc::vec::Vec<i32>,
-    /// Net cents consumed across all SKUs in this shared budget (after credits/trials applied).
+    /// DEPRECATED: use sku_summaries.payg_spend_cents
+    #[deprecated]
     #[prost(uint64, tag = "2")]
     pub payg_spend_cents: u64,
     /// Per-SKU breakdown within the shared budget.
     #[prost(message, repeated, tag = "3")]
     pub sku_summaries: ::prost::alloc::vec::Vec<SkuUsageSummary>,
 }
+/// Weighted outcome breakdown for a single SKU on a single day.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SkuUsageData {
+    #[prost(enumeration = "super::super::super::Sku", tag = "1")]
+    pub sku: i32,
+    #[prost(message, repeated, tag = "2")]
+    pub summary: ::prost::alloc::vec::Vec<SharedBudgetUsageSummary>,
+}
+/// All usage for a single day, with cumulative pricing up to that day.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DailyPricedUsage {
+    #[prost(message, optional, tag = "1")]
+    pub date: ::core::option::Option<super::super::super::Date>,
+    /// Per-SKU weighted outcome breakdown for this day (non-cumulative).
+    #[prost(message, repeated, tag = "2")]
+    pub sku_usage: ::prost::alloc::vec::Vec<SkuUsageData>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsagePricerResponse {
     /// Per-SKU pricing breakdown.
+    ///
+    /// DEPRECATED: use daily
+    #[deprecated]
     #[prost(message, repeated, tag = "1")]
     pub sku_summaries: ::prost::alloc::vec::Vec<SkuUsageSummary>,
     /// Per-shared-budget pricing breakdown (for SKUs sharing a budget).
+    ///
+    /// DEPRECATED: use daily
+    #[deprecated]
     #[prost(message, repeated, tag = "2")]
     pub shared_budget_summaries: ::prost::alloc::vec::Vec<SharedBudgetUsageSummary>,
+    /// Daily breakdown with per-day usage and cumulative pricing.
+    #[prost(message, repeated, tag = "3")]
+    pub daily: ::prost::alloc::vec::Vec<DailyPricedUsage>,
 }
