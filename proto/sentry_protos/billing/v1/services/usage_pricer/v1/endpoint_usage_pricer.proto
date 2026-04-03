@@ -3,7 +3,10 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.usage_pricer.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/date.proto";
 import "sentry_protos/billing/v1/sku.proto";
+import "sentry_protos/billing/v1/usage_data.proto";
+import "sentry_protos/billing/v1/data_category.proto";
 
 message UsagePricerRequest {
   uint64 organization_id = 1;
@@ -16,21 +19,36 @@ message SKUUsageSummary {
   // Net cents consumed by this SKU in the billing period (after credits/trials applied).
   uint64 payg_spend_cents = 2;
   // Total units consumed by this SKU in the billing period.
-  uint64 usage_volume = 3;
+  uint64 usage_volume = 3 [deprecated = true]; //DEPRECATED: use UsageData
+  sentry_protos.billing.v1.UsageData data = 4;
 }
 
 // Pricing breakdown for a shared budget spanning multiple SKUs.
 message SharedBudgetUsageSummary {
-  repeated sentry_protos.billing.v1.SKU skus = 1;
-  // Net cents consumed across all SKUs in this shared budget (after credits/trials applied).
-  uint64 payg_spend_cents = 2;
+  repeated sentry_protos.billing.v1.SKU skus = 1 [deprecated = true]; //DEPRECATED: use sku_summaries.sku
+  uint64 payg_spend_cents = 2 [deprecated = true]; //DEPRECATED: use sku_summaries.payg_spend_cents
   // Per-SKU breakdown within the shared budget.
   repeated SKUUsageSummary sku_summaries = 3;
 }
 
+// Weighted outcome breakdown for a single SKU on a single day.
+message SKUUsageData {
+  sentry_protos.billing.v1.SKU sku = 1;
+  repeated SharedBudgetUsageSummary summary = 2;
+}
+
+// All usage for a single day, with cumulative pricing up to that day.
+message DailyPricedUsage {
+  sentry_protos.billing.v1.Date date = 1;
+  // Per-SKU weighted outcome breakdown for this day (non-cumulative).
+  repeated SKUUsageData sku_usage = 2;
+}
+
 message UsagePricerResponse {
   // Per-SKU pricing breakdown.
-  repeated SKUUsageSummary sku_summaries = 1;
+  repeated SKUUsageSummary sku_summaries = 1 [deprecated = true]; //DEPRECATED: use daily
   // Per-shared-budget pricing breakdown (for SKUs sharing a budget).
-  repeated SharedBudgetUsageSummary shared_budget_summaries = 2;
+  repeated SharedBudgetUsageSummary shared_budget_summaries = 2 [deprecated = true]; //DEPRECATED: use daily
+  // Daily breakdown with per-day usage and cumulative pricing.
+  repeated DailyPricedUsage daily = 3;
 }
