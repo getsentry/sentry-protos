@@ -1,3 +1,12 @@
+## 0.8.10
+
+### New Features ✨
+
+#### Billing
+
+- Add endpoint for fetching orgs with usage by @brendanhsentry in [#194](https://github.com/getsentry/sentry-protos/pull/194)
+- Add date to GetContractRequest by @brendanhsentry in [#193](https://github.com/getsentry/sentry-protos/pull/193)
+
 ## 0.8.9
 
 ### Bug Fixes 🐛
