@@ -206,6 +206,8 @@ pub enum DataCategory {
     ProfileChunk = 19,
     /// UI profile chunks.
     ProfileChunkUi = 20,
+    /// Spans stored in full (indexed).
+    SpanIndexed = 21,
     /// Any other data category not known by this version.
     Unknown = -1,
 }
@@ -237,6 +239,7 @@ impl DataCategory {
             Self::Security => "DATA_CATEGORY_SECURITY",
             Self::ProfileChunk => "DATA_CATEGORY_PROFILE_CHUNK",
             Self::ProfileChunkUi => "DATA_CATEGORY_PROFILE_CHUNK_UI",
+            Self::SpanIndexed => "DATA_CATEGORY_SPAN_INDEXED",
             Self::Unknown => "DATA_CATEGORY_UNKNOWN",
         }
     }
@@ -264,6 +267,7 @@ impl DataCategory {
             "DATA_CATEGORY_SECURITY" => Some(Self::Security),
             "DATA_CATEGORY_PROFILE_CHUNK" => Some(Self::ProfileChunk),
             "DATA_CATEGORY_PROFILE_CHUNK_UI" => Some(Self::ProfileChunkUi),
+            "DATA_CATEGORY_SPAN_INDEXED" => Some(Self::SpanIndexed),
             "DATA_CATEGORY_UNKNOWN" => Some(Self::Unknown),
             _ => None,
         }
