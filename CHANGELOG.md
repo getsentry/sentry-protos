@@ -1,3 +1,9 @@
+## 0.8.11
+
+### Internal Changes 🔧
+
+- Add new spans_indexed usage proto by @noahsmartin in [#196](https://github.com/getsentry/sentry-protos/pull/196)
+
 ## 0.8.10
 
 ### New Features ✨
