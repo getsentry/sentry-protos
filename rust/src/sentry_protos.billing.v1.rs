@@ -208,6 +208,24 @@ pub enum DataCategory {
     ProfileChunkUi = 20,
     /// Spans stored in full (indexed).
     SpanIndexed = 21,
+    /// Processed transaction events.
+    TransactionProcessed = 22,
+    /// Indexed transaction events.
+    TransactionIndexed = 23,
+    /// Indexed profiles.
+    ProfileIndexed = 24,
+    /// Metric buckets.
+    MetricBucket = 25,
+    /// Individual attachment items.
+    AttachmentItem = 26,
+    /// Individual log items.
+    LogItem = 27,
+    /// Backend profile events.
+    ProfileBackend = 30,
+    /// UI profile events.
+    ProfileUi = 31,
+    /// Trace metric bytes.
+    TraceMetricByte = 32,
     /// Any other data category not known by this version.
     Unknown = -1,
 }
@@ -240,6 +258,15 @@ impl DataCategory {
             Self::ProfileChunk => "DATA_CATEGORY_PROFILE_CHUNK",
             Self::ProfileChunkUi => "DATA_CATEGORY_PROFILE_CHUNK_UI",
             Self::SpanIndexed => "DATA_CATEGORY_SPAN_INDEXED",
+            Self::TransactionProcessed => "DATA_CATEGORY_TRANSACTION_PROCESSED",
+            Self::TransactionIndexed => "DATA_CATEGORY_TRANSACTION_INDEXED",
+            Self::ProfileIndexed => "DATA_CATEGORY_PROFILE_INDEXED",
+            Self::MetricBucket => "DATA_CATEGORY_METRIC_BUCKET",
+            Self::AttachmentItem => "DATA_CATEGORY_ATTACHMENT_ITEM",
+            Self::LogItem => "DATA_CATEGORY_LOG_ITEM",
+            Self::ProfileBackend => "DATA_CATEGORY_PROFILE_BACKEND",
+            Self::ProfileUi => "DATA_CATEGORY_PROFILE_UI",
+            Self::TraceMetricByte => "DATA_CATEGORY_TRACE_METRIC_BYTE",
             Self::Unknown => "DATA_CATEGORY_UNKNOWN",
         }
     }
@@ -268,6 +295,15 @@ impl DataCategory {
             "DATA_CATEGORY_PROFILE_CHUNK" => Some(Self::ProfileChunk),
             "DATA_CATEGORY_PROFILE_CHUNK_UI" => Some(Self::ProfileChunkUi),
             "DATA_CATEGORY_SPAN_INDEXED" => Some(Self::SpanIndexed),
+            "DATA_CATEGORY_TRANSACTION_PROCESSED" => Some(Self::TransactionProcessed),
+            "DATA_CATEGORY_TRANSACTION_INDEXED" => Some(Self::TransactionIndexed),
+            "DATA_CATEGORY_PROFILE_INDEXED" => Some(Self::ProfileIndexed),
+            "DATA_CATEGORY_METRIC_BUCKET" => Some(Self::MetricBucket),
+            "DATA_CATEGORY_ATTACHMENT_ITEM" => Some(Self::AttachmentItem),
+            "DATA_CATEGORY_LOG_ITEM" => Some(Self::LogItem),
+            "DATA_CATEGORY_PROFILE_BACKEND" => Some(Self::ProfileBackend),
+            "DATA_CATEGORY_PROFILE_UI" => Some(Self::ProfileUi),
+            "DATA_CATEGORY_TRACE_METRIC_BYTE" => Some(Self::TraceMetricByte),
             "DATA_CATEGORY_UNKNOWN" => Some(Self::Unknown),
             _ => None,
         }

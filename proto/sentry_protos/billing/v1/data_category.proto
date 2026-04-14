@@ -51,6 +51,24 @@ enum DataCategory {
   DATA_CATEGORY_PROFILE_CHUNK_UI = 20;
   // Spans stored in full (indexed).
   DATA_CATEGORY_SPAN_INDEXED = 21;
+  // Processed transaction events.
+  DATA_CATEGORY_TRANSACTION_PROCESSED = 22;
+  // Indexed transaction events.
+  DATA_CATEGORY_TRANSACTION_INDEXED = 23;
+  // Indexed profiles.
+  DATA_CATEGORY_PROFILE_INDEXED = 24;
+  // Metric buckets.
+  DATA_CATEGORY_METRIC_BUCKET = 25;
+  // Individual attachment items.
+  DATA_CATEGORY_ATTACHMENT_ITEM = 26;
+  // Individual log items.
+  DATA_CATEGORY_LOG_ITEM = 27;
+  // Backend profile events.
+  DATA_CATEGORY_PROFILE_BACKEND = 30;
+  // UI profile events.
+  DATA_CATEGORY_PROFILE_UI = 31;
+  // Trace metric bytes.
+  DATA_CATEGORY_TRACE_METRIC_BYTE = 32;
   // Any other data category not known by this version.
   DATA_CATEGORY_UNKNOWN = -1;
 }
