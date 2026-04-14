@@ -1,3 +1,7 @@
+## 0.8.12
+
+- Add new billing data categories by @noahsmartin in [#197](https://github.com/getsentry/sentry-protos/pull/197)
+
 ## 0.8.11
 
 ### Internal Changes 🔧
