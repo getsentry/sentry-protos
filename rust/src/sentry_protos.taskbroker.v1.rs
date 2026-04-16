@@ -31,9 +31,16 @@ pub struct TaskActivation {
     /// The name of the task. This name is resolved within the worker
     #[prost(string, tag = "3")]
     pub taskname: ::prost::alloc::string::String,
-    /// An opaque parameter collection. Could be JSON or protobuf encoded
+    /// DEPRECATED: Use parameters_bytes instead.
+    /// An opaque JSON-encoded parameter string.
+    #[deprecated]
     #[prost(string, tag = "4")]
     pub parameters: ::prost::alloc::string::String,
+    /// Msgpack-encoded parameter bytes containing {"args": \[...\], "kwargs": {...}}.
+    /// May be zstd-compressed; check headers\["compression-type"\].
+    /// Mutually exclusive with `parameters`.
+    #[prost(bytes = "vec", tag = "13")]
+    pub parameters_bytes: ::prost::alloc::vec::Vec<u8>,
     /// A map of headers for the task.
     #[prost(map = "string, string", tag = "5")]
     pub headers: ::std::collections::HashMap<
