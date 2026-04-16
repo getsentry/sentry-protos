@@ -49,8 +49,14 @@ message TaskActivation {
   // The name of the task. This name is resolved within the worker
   string taskname = 3;
 
-  // An opaque parameter collection. Could be JSON or protobuf encoded
-  string parameters = 4;
+  // DEPRECATED: Use parameters_bytes instead.
+  // An opaque JSON-encoded parameter string.
+  string parameters = 4 [deprecated = true];
+
+  // Msgpack-encoded parameter bytes containing {"args": [...], "kwargs": {...}}.
+  // May be zstd-compressed; check headers["compression-type"].
+  // Mutually exclusive with `parameters`.
+  bytes parameters_bytes = 13;
 
   // A map of headers for the task.
   map<string, string> headers = 5;
