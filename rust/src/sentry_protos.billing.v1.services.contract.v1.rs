@@ -379,3 +379,24 @@ pub struct GetContractResponse {
     #[prost(message, optional, tag = "1")]
     pub contract: ::core::option::Option<Contract>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetUninvoicedContractsRequest {
+    /// Returns Contracts whose current billing period ends before this time and
+    /// have not yet been invoiced for the current period.
+    #[prost(message, optional, tag = "1")]
+    pub current_ts: ::core::option::Option<::prost_types::Timestamp>,
+    /// Maximum number of contracts to return in the response. If more contracts
+    /// match the request than this limit, the response will have truncated set
+    /// to true.
+    #[prost(uint32, tag = "2")]
+    pub max_items: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetUninvoicedContractsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub contracts: ::prost::alloc::vec::Vec<Contract>,
+    /// True if additional matching contracts existed beyond max_items and were
+    /// not included in this response.
+    #[prost(bool, tag = "2")]
+    pub truncated: bool,
+}
