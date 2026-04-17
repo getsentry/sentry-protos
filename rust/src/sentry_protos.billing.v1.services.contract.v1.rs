@@ -379,3 +379,15 @@ pub struct GetContractResponse {
     #[prost(message, optional, tag = "1")]
     pub contract: ::core::option::Option<Contract>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetUninvoicedContractsRequest {
+    /// Returns Contracts whose current billing period ends before this time and
+    /// have not yet been invoiced for the current period.
+    #[prost(message, optional, tag = "1")]
+    pub current_ts: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetUninvoicedContractsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub contracts: ::prost::alloc::vec::Vec<Contract>,
+}
