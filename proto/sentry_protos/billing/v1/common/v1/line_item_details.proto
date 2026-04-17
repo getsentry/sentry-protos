@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package sentry_protos.billing.v2.common.v1;
+package sentry_protos.billing.v1.common.v1;
 
-import "sentry_protos/billing/v2/common/v1/unit_info.proto";
+import "sentry_protos/billing/v1/common/v1/unit_info.proto";
 
 // Details of a SKU line item in the billing system.
 message LineItemDetails {
