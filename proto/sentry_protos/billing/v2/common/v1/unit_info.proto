@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v2.common.v1;
+
+// Unit information for measurement and conversion.
+message UnitInfo {
+  // Short name for the unit (e.g., "GB", "cm", "count").
+  string name = 1;
+
+  // Full descriptive name (e.g., "gigabytes", "centimeters", "count").
+  string full_name = 2;
+
+  // Base unit for conversion (e.g., "byte", "meter", "count").
+  string base_unit = 3;
+
+  // Multiplier to convert to base unit (e.g., 1e9 for GB to bytes).
+  double multiplier = 4;
+}
