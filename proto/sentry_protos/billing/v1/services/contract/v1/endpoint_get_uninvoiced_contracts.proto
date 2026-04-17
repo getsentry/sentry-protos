@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/contract/v1/contract.proto";
+
+message GetUninvoicedContractsRequest {
+  // Returns Contracts whose current billing period ends before this time and
+  // have not yet been invoiced for the current period.
+  google.protobuf.Timestamp current_ts = 1;
+}
+
+message GetUninvoicedContractsResponse {
+  repeated Contract contracts = 1;
+}
