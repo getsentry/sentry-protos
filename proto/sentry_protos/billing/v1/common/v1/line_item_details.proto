@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.common.v1;
 
+import "sentry_protos/billing/v1/common/v1/billable_metric.proto";
 import "sentry_protos/billing/v1/common/v1/unit_info.proto";
 
 // Details of a SKU line item in the billing system.
@@ -20,4 +21,7 @@ message LineItemDetails {
 
   // Unit information for measurement.
   UnitInfo units = 5;
+
+  // Defines how usage data is transformed into this line item.
+  BillableMetric billable_metric = 6;
 }

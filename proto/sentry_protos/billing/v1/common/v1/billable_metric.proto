@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+import "sentry_protos/billing/v1/data_category.proto";
+
+// Defines how usage data is transformed into a billable line item through arithmetic operations.
+message BillableMetric {
+  // Unique identifier for the billable metric.
+  string id = 1;
+
+  // Name of the billable metric (e.g., "performance_units").
+  string name = 2;
+
+  // Expression defining how to calculate this metric from usage data.
+  Expression expression = 3;
+}
+
+// Represents an arithmetic expression that can reference usage data categories or constants.
+message Expression {
+  oneof expression_type {
+    // Reference to a data category's usage count.
+    CategoryReference category_ref = 1;
+
+    // A constant numeric value.
+    double constant = 2;
+
+    // A binary arithmetic operation.
+    BinaryOperation binary_op = 3;
+  }
+}
+
+// Reference to a usage data category.
+message CategoryReference {
+  sentry_protos.billing.v1.DataCategory category = 1;
+}
+
+// A binary arithmetic operation between two expressions.
+message BinaryOperation {
+  // The operator to apply.
+  Operator operator = 1;
+
+  // Left operand.
+  Expression left = 2;
+
+  // Right operand.
+  Expression right = 3;
+}
+
+// Supported arithmetic operators.
+enum Operator {
+  OPERATOR_UNSPECIFIED = 0;
+  OPERATOR_ADD = 1; // +
+  OPERATOR_SUBTRACT = 2; // -
+  OPERATOR_MULTIPLY = 3; // *
+  OPERATOR_DIVIDE = 4; // /
+}
