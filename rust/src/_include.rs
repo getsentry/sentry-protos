@@ -4,6 +4,11 @@ pub mod sentry_protos {
         pub mod v1 {
             include!("sentry_protos.billing.v1.rs");
             pub mod services {
+                pub mod charge {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.charge.v1.rs");
+                    }
+                }
                 pub mod contract {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.contract.v1.rs");
