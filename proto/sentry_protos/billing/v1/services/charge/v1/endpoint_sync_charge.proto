@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+message SyncChargeRequest {
+  uint64 organization_id = 1;
+  string invoice_guid = 2;
+  int64 amount = 3;
+  bool paid = 4;
+  string description = 5;
+  int64 created = 6;
+
+  oneof provider {
+    StripeChargeFields stripe = 10;
+    VercelChargeFields vercel = 11;
+  }
+}
+
+message StripeChargeFields {
+  string customer_id = 1;
+  string charge_id = 2;
+  string failure_code = 3;
+  string card_last4 = 4;
+  int64 amount_refunded = 5;
+  bool refunded = 6;
+  string invoice_id = 7;
+}
+
+message VercelChargeFields {
+  string installation_id = 1;
+  string vercel_invoice_id = 2;
+}
+
+message SyncChargeResponse {
+  uint64 organization_id = 1;
+  string invoice_guid = 2;
+}
