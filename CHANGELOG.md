@@ -1,3 +1,10 @@
+## 0.8.13
+
+### New Features ✨
+
+- (billing) Add invoicer service and uninvoiced contracts endpoint by @noahsmartin in [#200](https://github.com/getsentry/sentry-protos/pull/200)
+- (taskbroker) Introduce parameters_bytes. by @untitaker in [#199](https://github.com/getsentry/sentry-protos/pull/199)
+
 ## 0.8.12
 
 - Add new billing data categories by @noahsmartin in [#197](https://github.com/getsentry/sentry-protos/pull/197)
