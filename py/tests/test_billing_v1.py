@@ -36,6 +36,14 @@ from sentry_protos.billing.v1.services.trial.v1.endpoint_get_trials_pb2 import (
     GetTrialsRequest,
     GetTrialsResponse,
 )
+from sentry_protos.billing.v1.common.v1.billable_metric_pb2 import (
+    BillableMetric,
+    BinaryOperation,
+    CategoryReference,
+    Expression,
+    Operator,
+)
+from sentry_protos.billing.v1.data_category_pb2 import DataCategory
 
 
 def test_contract_with_all_sub_messages():
@@ -314,3 +322,69 @@ def test_inactive_credit():
     )
     assert credit.status == CreditStatus.CREDIT_STATUS_INACTIVE
     assert credit.amount == 100000
+
+
+def test_billable_metric_with_combined_expression():
+    """Test creating a billable metric that combines two data categories.
+
+    This demonstrates the expression:
+    performance_unit = DATA_CATEGORY_PROFILE_INDEXED * 0.3 + DATA_CATEGORY_TRANSACTION_INDEXED
+    """
+    # Create the expression: DATA_CATEGORY_PROFILE_INDEXED * 0.3 + DATA_CATEGORY_TRANSACTION_INDEXED
+    metric = BillableMetric(
+        id="perf_unit_1",
+        name="performance_units",
+        expression=Expression(
+            binary_op=BinaryOperation(
+                operator=Operator.OPERATOR_ADD,
+                left=Expression(
+                    binary_op=BinaryOperation(
+                        operator=Operator.OPERATOR_MULTIPLY,
+                        left=Expression(
+                            category_ref=CategoryReference(
+                                category=DataCategory.DATA_CATEGORY_PROFILE_INDEXED
+                            )
+                        ),
+                        right=Expression(constant=0.3),
+                    )
+                ),
+                right=Expression(
+                    category_ref=CategoryReference(
+                        category=DataCategory.DATA_CATEGORY_TRANSACTION_INDEXED
+                    )
+                ),
+            )
+        ),
+    )
+
+    # Verify the metric properties
+    assert metric.id == "perf_unit_1"
+    assert metric.name == "performance_units"
+    assert metric.expression.HasField("binary_op")
+
+    # Verify the top-level operation is ADD
+    add_op = metric.expression.binary_op
+    assert add_op.operator == Operator.OPERATOR_ADD
+
+    # Verify the left side is a MULTIPLY operation
+    assert add_op.left.HasField("binary_op")
+    multiply_op = add_op.left.binary_op
+    assert multiply_op.operator == Operator.OPERATOR_MULTIPLY
+
+    # Verify the left side of multiply is DATA_CATEGORY_PROFILE_INDEXED
+    assert multiply_op.left.HasField("category_ref")
+    assert (
+        multiply_op.left.category_ref.category
+        == DataCategory.DATA_CATEGORY_PROFILE_INDEXED
+    )
+
+    # Verify the right side of multiply is the constant 0.3
+    assert multiply_op.right.HasField("constant")
+    assert multiply_op.right.constant == 0.3
+
+    # Verify the right side of add is DATA_CATEGORY_TRANSACTION_INDEXED
+    assert add_op.right.HasField("category_ref")
+    assert (
+        add_op.right.category_ref.category
+        == DataCategory.DATA_CATEGORY_TRANSACTION_INDEXED
+    )
