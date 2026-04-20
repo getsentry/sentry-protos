@@ -4,8 +4,6 @@ pub struct LineItemConfig {
     /// Base price for the line item (upgraded reserved volumes or add-on activation fees)
     #[prost(uint64, tag = "1")]
     pub base_price_cents: u64,
-    #[prost(uint64, optional, tag = "2")]
-    pub payg_budget_cents: ::core::option::Option<u64>,
     #[prost(message, optional, tag = "3")]
     pub payg_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
@@ -37,14 +35,15 @@ pub mod line_item_config {
         NumReservedUnits(u64),
     }
 }
-/// Represents a budget that is collectively used by one or more line items,
+/// Represents a budget included in a package that is collectively used by one or more line items,
 /// allowing multiple line items to draw from the same reserved budget.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SharedLineItemBudget {
+pub struct SharedLineItemPool {
+    /// how much money this shared pool has. For example, if logs costs $1.00 per GB and metrics
+    /// costs $1.00 per GB and we wanted to give metrics and logs a shared 5GB pool, the reserved_pool_cents
+    /// would be 500 ($5)
     #[prost(uint64, tag = "1")]
-    pub reserved_budget_cents: u64,
-    #[prost(uint64, tag = "2")]
-    pub payg_budget_cents: u64,
+    pub reserved_pool_cents: u64,
     #[prost(message, repeated, tag = "3")]
     pub line_items: ::prost::alloc::vec::Vec<
         super::super::super::common::v1::LineItemDetails,
@@ -57,7 +56,7 @@ pub struct PackageConfig {
     #[prost(message, repeated, tag = "2")]
     pub line_item_configs: ::prost::alloc::vec::Vec<LineItemConfig>,
     #[prost(message, repeated, tag = "3")]
-    pub shared_line_item_budgets: ::prost::alloc::vec::Vec<SharedLineItemBudget>,
+    pub shared_line_item_pools: ::prost::alloc::vec::Vec<SharedLineItemPool>,
     /// Base price for the package.
     #[prost(uint64, tag = "4")]
     pub base_price_cents: u64,
