@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.common.v1;
 
 import "sentry_protos/billing/v1/data_category.proto";
+import "sentry_protos/billing/v1/seat_category.proto";
 
 // Defines how usage data is transformed into a billable line item through arithmetic operations.
 message BillableMetric {
@@ -32,7 +33,10 @@ message Expression {
 
 // Reference to a usage data category.
 message CategoryReference {
-  sentry_protos.billing.v1.DataCategory category = 1;
+  oneof category_type {
+    sentry_protos.billing.v1.DataCategory data_category = 1;
+    sentry_protos.billing.v1.SeatCategory seat_category = 2;
+  }
 }
 
 // A binary arithmetic operation between two expressions.

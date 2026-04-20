@@ -19,13 +19,17 @@ pub struct LineItemConfig {
     pub line_item: ::core::option::Option<
         super::super::super::common::v1::LineItemDetails,
     >,
-    #[prost(oneof = "line_item_config::ReservedUnits", tags = "5, 6")]
-    pub reserved_units: ::core::option::Option<line_item_config::ReservedUnits>,
+    /// how many of this lineitem are included in the package, the customer can reserve more on their contract
+    #[prost(oneof = "line_item_config::IncludedReservedUnits", tags = "5, 6")]
+    pub included_reserved_units: ::core::option::Option<
+        line_item_config::IncludedReservedUnits,
+    >,
 }
 /// Nested message and enum types in `LineItemConfig`.
 pub mod line_item_config {
+    /// how many of this lineitem are included in the package, the customer can reserve more on their contract
     #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum ReservedUnits {
+    pub enum IncludedReservedUnits {
         #[prost(bool, tag = "5")]
         IsUnlimited(bool),
         /// the type communicates whether the line item is unlimited or not, additionally reserved budget line items have a non-zero reserved_rate in addition to 0 reserved_units

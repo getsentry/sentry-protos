@@ -36,8 +36,18 @@ pub mod expression {
 /// Reference to a usage data category.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CategoryReference {
-    #[prost(enumeration = "super::super::DataCategory", tag = "1")]
-    pub category: i32,
+    #[prost(oneof = "category_reference::CategoryType", tags = "1, 2")]
+    pub category_type: ::core::option::Option<category_reference::CategoryType>,
+}
+/// Nested message and enum types in `CategoryReference`.
+pub mod category_reference {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum CategoryType {
+        #[prost(enumeration = "super::super::super::DataCategory", tag = "1")]
+        DataCategory(i32),
+        #[prost(enumeration = "super::super::super::SeatCategory", tag = "2")]
+        SeatCategory(i32),
+    }
 }
 /// A binary arithmetic operation between two expressions.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -101,12 +111,45 @@ pub struct UnitInfo {
     /// Full descriptive name (e.g., "gigabytes", "centimeters", "count").
     #[prost(string, tag = "2")]
     pub full_name: ::prost::alloc::string::String,
-    /// Base unit for conversion (e.g., "byte", "meter", "count").
-    #[prost(string, tag = "3")]
-    pub base_unit: ::prost::alloc::string::String,
+    /// Base unit for conversion.
+    #[prost(enumeration = "BaseUnit", tag = "3")]
+    pub base_unit: i32,
     /// Multiplier to convert to base unit (e.g., 1e9 for GB to bytes).
     #[prost(double, tag = "4")]
     pub multiplier: f64,
+}
+/// Base unit types for measurement and conversion.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum BaseUnit {
+    Unspecified = 0,
+    Byte = 1,
+    Count = 2,
+    Second = 3,
+}
+impl BaseUnit {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "BASE_UNIT_UNSPECIFIED",
+            Self::Byte => "BASE_UNIT_BYTE",
+            Self::Count => "BASE_UNIT_COUNT",
+            Self::Second => "BASE_UNIT_SECOND",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "BASE_UNIT_UNSPECIFIED" => Some(Self::Unspecified),
+            "BASE_UNIT_BYTE" => Some(Self::Byte),
+            "BASE_UNIT_COUNT" => Some(Self::Count),
+            "BASE_UNIT_SECOND" => Some(Self::Second),
+            _ => None,
+        }
+    }
 }
 /// Details of a SKU line item in the billing system.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -114,10 +157,7 @@ pub struct LineItemDetails {
     /// Unique identifier for the line item.
     #[prost(string, tag = "1")]
     pub uid: ::prost::alloc::string::String,
-    /// Internal unique name for the SKU.
-    #[prost(string, tag = "2")]
-    pub unique_name: ::prost::alloc::string::String,
-    /// Customer-facing display name for the SKU.
+    /// Customer-facing display name for the line item.
     #[prost(string, tag = "3")]
     pub customer_facing_name: ::prost::alloc::string::String,
     /// Plural form of the customer-facing name.

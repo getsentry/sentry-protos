@@ -341,7 +341,7 @@ def test_billable_metric_with_combined_expression():
                         operator=Operator.OPERATOR_MULTIPLY,
                         left=Expression(
                             category_ref=CategoryReference(
-                                category=DataCategory.DATA_CATEGORY_PROFILE_INDEXED
+                                data_category=DataCategory.DATA_CATEGORY_PROFILE_INDEXED
                             )
                         ),
                         right=Expression(constant=0.3),
@@ -349,7 +349,7 @@ def test_billable_metric_with_combined_expression():
                 ),
                 right=Expression(
                     category_ref=CategoryReference(
-                        category=DataCategory.DATA_CATEGORY_TRANSACTION_INDEXED
+                        data_category=DataCategory.DATA_CATEGORY_TRANSACTION_INDEXED
                     )
                 ),
             )
