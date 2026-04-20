@@ -3,6 +3,11 @@ pub mod sentry_protos {
     pub mod billing {
         pub mod v1 {
             include!("sentry_protos.billing.v1.rs");
+            pub mod common {
+                pub mod v1 {
+                    include!("sentry_protos.billing.v1.common.v1.rs");
+                }
+            }
             pub mod services {
                 pub mod contract {
                     pub mod v1 {
@@ -12,6 +17,11 @@ pub mod sentry_protos {
                 pub mod invoicer {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.invoicer.v1.rs");
+                    }
+                }
+                pub mod package {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.package.v1.rs");
                     }
                 }
                 pub mod trial {

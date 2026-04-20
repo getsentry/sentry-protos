@@ -75,6 +75,7 @@ fn roundtrip_get_usage_response() {
 fn roundtrip_get_contract_request() {
     assert_roundtrip(&GetContractRequest {
         organization_id: 42,
+        date: None,
     });
 }
 

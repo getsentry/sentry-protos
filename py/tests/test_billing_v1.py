@@ -36,6 +36,16 @@ from sentry_protos.billing.v1.services.trial.v1.endpoint_get_trials_pb2 import (
     GetTrialsRequest,
     GetTrialsResponse,
 )
+from sentry_protos.billing.v1.common.v1.billable_metric_pb2 import (
+    BillableMetric,
+    BinaryOperation,
+    CategoryReference,
+    Expression,
+    Operator,
+)
+from sentry_protos.billing.v1.common.v1.billing_interval_pb2 import BillingInterval
+from sentry_protos.billing.v1.services.package.v1.package_pb2 import PackageConfig
+from sentry_protos.billing.v1.data_category_pb2 import DataCategory
 
 
 def test_contract_with_all_sub_messages():
@@ -314,3 +324,57 @@ def test_inactive_credit():
     )
     assert credit.status == CreditStatus.CREDIT_STATUS_INACTIVE
     assert credit.amount == 100000
+
+
+def test_billable_metric_with_combined_expression():
+    """Illustrates creating a billable metric that combines two data categories.
+
+    This demonstrates the expression:
+    performance_unit = DATA_CATEGORY_PROFILE_INDEXED * 0.3 + DATA_CATEGORY_TRANSACTION_INDEXED
+    """
+    BillableMetric(
+        id="perf_unit_1",
+        name="performance_units",
+        expression=Expression(
+            binary_op=BinaryOperation(
+                operator=Operator.OPERATOR_ADD,
+                left=Expression(
+                    binary_op=BinaryOperation(
+                        operator=Operator.OPERATOR_MULTIPLY,
+                        left=Expression(
+                            category_ref=CategoryReference(
+                                data_category=DataCategory.DATA_CATEGORY_PROFILE_INDEXED
+                            )
+                        ),
+                        right=Expression(constant=0.3),
+                    )
+                ),
+                right=Expression(
+                    category_ref=CategoryReference(
+                        data_category=DataCategory.DATA_CATEGORY_TRANSACTION_INDEXED
+                    )
+                ),
+            )
+        ),
+    )
+
+
+def test_package_config_with_billing_interval():
+    """Test that PackageConfig can be created with a billing interval."""
+    # Test monthly billing
+    monthly_package = PackageConfig(
+        uid="pkg_monthly_123",
+        base_price_cents=10000,
+        billing_interval=BillingInterval.BILLING_INTERVAL_MONTHLY,
+    )
+    assert monthly_package.uid == "pkg_monthly_123"
+    assert monthly_package.base_price_cents == 10000
+    assert monthly_package.billing_interval == BillingInterval.BILLING_INTERVAL_MONTHLY
+
+    # Test annual base with monthly PAYG
+    annual_package = PackageConfig(
+        uid="pkg_annual_456",
+        base_price_cents=100000,
+        billing_interval=BillingInterval.BILLING_INTERVAL_ANNUAL_BASE_MONTHLY_PAYG,
+    )
+    assert annual_package.billing_interval == BillingInterval.BILLING_INTERVAL_ANNUAL_BASE_MONTHLY_PAYG

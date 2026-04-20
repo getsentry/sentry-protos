@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.package.v1;
+
+import "sentry_protos/billing/v1/common/v1/billing_interval.proto";
+import "sentry_protos/billing/v1/common/v1/line_item_details.proto";
+import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
+
+message LineItemConfig {
+  // Base price for the line item (upgraded reserved volumes or add-on activation fees)
+  uint64 base_price_cents = 1;
+  sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 3;
+  sentry_protos.billing.v1.common.v1.TieredPricingRate reserved_rate = 4; // for reserved budget line items
+
+  // how many of this lineitem are included in the package, the customer can reserve more on their contract
+  oneof included_reserved_units {
+    bool is_unlimited = 5;
+    uint64 num_reserved_units = 6; // the type communicates whether the line item is unlimited or not, additionally reserved budget line items have a non-zero reserved_rate in addition to 0 reserved_units
+  }
+
+  sentry_protos.billing.v1.common.v1.LineItemDetails line_item = 7;
+}
+
+// Represents a budget included in a package that is collectively used by one or more line items,
+// allowing multiple line items to draw from the same reserved budget.
+message SharedLineItemPool {
+  // how much money this shared pool has. For example, if logs costs $1.00 per GB and metrics
+  // costs $1.00 per GB and we wanted to give metrics and logs a shared 5GB pool, the reserved_pool_cents
+  // would be 500 ($5)
+  uint64 reserved_pool_cents = 1;
+  repeated sentry_protos.billing.v1.common.v1.LineItemDetails line_items = 3;
+}
+
+message PackageConfig {
+  string uid = 1;
+  repeated LineItemConfig line_item_configs = 2;
+  repeated SharedLineItemPool shared_line_item_pools = 3;
+  // Base price for the package.
+  uint64 base_price_cents = 4;
+  // Billing interval for this package.
+  sentry_protos.billing.v1.common.v1.BillingInterval billing_interval = 5;
+}

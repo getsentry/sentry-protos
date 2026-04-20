@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+// Billing interval for packages and contracts.
+enum BillingInterval {
+  BILLING_INTERVAL_UNSPECIFIED = 0;
+  BILLING_INTERVAL_MONTHLY = 1;
+  BILLING_INTERVAL_ANNUAL_BASE_MONTHLY_PAYG = 2;
+}

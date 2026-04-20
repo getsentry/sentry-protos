@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+message PricingTier {
+  int64 start = 1;
+  int64 end = 2;
+  int64 rate_per_unit_cpe = 3;
+}
+
+message TieredPricingRate {
+  repeated PricingTier tiers = 1;
+}
