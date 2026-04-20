@@ -102,6 +102,38 @@ impl Operator {
         }
     }
 }
+/// Billing interval for packages and contracts.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum BillingInterval {
+    Unspecified = 0,
+    Monthly = 1,
+    AnnualBaseMonthlyPayg = 2,
+}
+impl BillingInterval {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "BILLING_INTERVAL_UNSPECIFIED",
+            Self::Monthly => "BILLING_INTERVAL_MONTHLY",
+            Self::AnnualBaseMonthlyPayg => "BILLING_INTERVAL_ANNUAL_BASE_MONTHLY_PAYG",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "BILLING_INTERVAL_UNSPECIFIED" => Some(Self::Unspecified),
+            "BILLING_INTERVAL_MONTHLY" => Some(Self::Monthly),
+            "BILLING_INTERVAL_ANNUAL_BASE_MONTHLY_PAYG" => {
+                Some(Self::AnnualBaseMonthlyPayg)
+            }
+            _ => None,
+        }
+    }
+}
 /// Unit information for measurement and conversion.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UnitInfo {

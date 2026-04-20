@@ -43,6 +43,8 @@ from sentry_protos.billing.v1.common.v1.billable_metric_pb2 import (
     Expression,
     Operator,
 )
+from sentry_protos.billing.v1.common.v1.billing_interval_pb2 import BillingInterval
+from sentry_protos.billing.v1.services.package.v1.package_pb2 import PackageConfig
 from sentry_protos.billing.v1.data_category_pb2 import DataCategory
 
 
@@ -355,3 +357,24 @@ def test_billable_metric_with_combined_expression():
             )
         ),
     )
+
+
+def test_package_config_with_billing_interval():
+    """Test that PackageConfig can be created with a billing interval."""
+    # Test monthly billing
+    monthly_package = PackageConfig(
+        uid="pkg_monthly_123",
+        base_price_cents=10000,
+        billing_interval=BillingInterval.BILLING_INTERVAL_MONTHLY,
+    )
+    assert monthly_package.uid == "pkg_monthly_123"
+    assert monthly_package.base_price_cents == 10000
+    assert monthly_package.billing_interval == BillingInterval.BILLING_INTERVAL_MONTHLY
+
+    # Test annual base with monthly PAYG
+    annual_package = PackageConfig(
+        uid="pkg_annual_456",
+        base_price_cents=100000,
+        billing_interval=BillingInterval.BILLING_INTERVAL_ANNUAL_BASE_MONTHLY_PAYG,
+    )
+    assert annual_package.billing_interval == BillingInterval.BILLING_INTERVAL_ANNUAL_BASE_MONTHLY_PAYG
