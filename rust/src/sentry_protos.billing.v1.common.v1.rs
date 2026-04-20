@@ -5,9 +5,6 @@ pub struct BillableMetric {
     /// Unique identifier for the billable metric.
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
-    /// Name of the billable metric (e.g., "performance_units").
-    #[prost(string, tag = "2")]
-    pub name: ::prost::alloc::string::String,
     /// Expression defining how to calculate this metric from usage data.
     #[prost(message, optional, tag = "3")]
     pub expression: ::core::option::Option<Expression>,
