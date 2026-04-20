@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message CreateInvoicesRequest {
+  // The current time used to select contracts whose billing period has ended
+  // and require an invoice to be generated.
+  google.protobuf.Timestamp current_ts = 1;
+}
+
+message CreateInvoicesResponse {}
