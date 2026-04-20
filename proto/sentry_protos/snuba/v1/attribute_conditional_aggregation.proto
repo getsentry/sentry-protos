@@ -12,4 +12,8 @@ message AttributeConditionalAggregation {
   string label = 3;
   ExtrapolationMode extrapolation_mode = 4;
   TraceItemFilter filter = 5;
+  oneof default_value {
+    double default_value_double = 7;
+    int64 default_value_int64 = 8;
+  }
 }
