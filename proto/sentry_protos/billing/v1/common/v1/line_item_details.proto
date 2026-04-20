@@ -10,10 +10,7 @@ message LineItemDetails {
   // Unique identifier for the line item.
   string uid = 1;
 
-  // Internal unique name for the SKU.
-  string unique_name = 2;
-
-  // Customer-facing display name for the SKU.
+  // Customer-facing display name for the line item.
   string customer_facing_name = 3;
 
   // Plural form of the customer-facing name.

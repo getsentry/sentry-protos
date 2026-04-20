@@ -12,7 +12,8 @@ message LineItemConfig {
   sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 3;
   sentry_protos.billing.v1.common.v1.TieredPricingRate reserved_rate = 4; // for reserved budget line items
 
-  oneof reserved_units {
+  // how many of this lineitem are included in the package, the customer can reserve more on their contract
+  oneof included_reserved_units {
     bool is_unlimited = 5;
     uint64 num_reserved_units = 6; // the type communicates whether the line item is unlimited or not, additionally reserved budget line items have a non-zero reserved_rate in addition to 0 reserved_units
   }
