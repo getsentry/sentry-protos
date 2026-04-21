@@ -6,17 +6,21 @@ import "google/protobuf/timestamp.proto";
 
 // How the charge should be executed against the payment provider.
 enum ChargeMethod {
+  // Default zero value. Requests with this value must be rejected so
+  // that an unset charge_method is never silently treated as an active
+  // billing choice.
+  CHARGE_METHOD_UNSPECIFIED = 0;
   // Record the charge against our DB models without contacting any
   // external payment provider. Payment is expected to be collected
   // externally.
-  CHARGE_METHOD_NONE = 0;
+  CHARGE_METHOD_NONE = 1;
   // Call the Stripe API to bill the customer for this charge.
-  CHARGE_METHOD_STRIPE = 1;
+  CHARGE_METHOD_STRIPE = 2;
 }
 
 message CaptureChargeRequest {
   ChargeMethod charge_method = 1;
-  int64 amount_cents = 2;
+  uint64 amount_cents = 2;
   optional string description = 3;
   uint64 organization_id = 4;
   google.protobuf.Timestamp current_ts = 5;
