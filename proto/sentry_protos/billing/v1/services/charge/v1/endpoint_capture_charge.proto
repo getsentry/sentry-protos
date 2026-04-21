@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message CaptureChargeRequest {
+  bool perform = 1;
+  int64 amount = 2;
+  string description = 3;
+  string payment_intent = 4;
+  string organization_id = 5;
+  google.protobuf.Timestamp current_ts = 6;
+  optional string invoice_id = 7;
+}
+
+message CaptureChargeResponse {
+  bool paid = 1;
+  optional string failure_code = 2;
+}
