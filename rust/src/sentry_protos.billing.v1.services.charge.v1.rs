@@ -3,8 +3,8 @@
 pub struct CaptureChargeRequest {
     #[prost(enumeration = "ChargeMethod", tag = "1")]
     pub charge_method: i32,
-    #[prost(int64, tag = "2")]
-    pub amount_cents: i64,
+    #[prost(uint64, tag = "2")]
+    pub amount_cents: u64,
     #[prost(string, optional, tag = "3")]
     pub description: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(uint64, tag = "4")]
@@ -25,12 +25,16 @@ pub struct CaptureChargeResponse {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum ChargeMethod {
+    /// Default zero value. Requests with this value must be rejected so
+    /// that an unset charge_method is never silently treated as an active
+    /// billing choice.
+    Unspecified = 0,
     /// Record the charge against our DB models without contacting any
     /// external payment provider. Payment is expected to be collected
     /// externally.
-    None = 0,
+    None = 1,
     /// Call the Stripe API to bill the customer for this charge.
-    Stripe = 1,
+    Stripe = 2,
 }
 impl ChargeMethod {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -39,6 +43,7 @@ impl ChargeMethod {
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
+            Self::Unspecified => "CHARGE_METHOD_UNSPECIFIED",
             Self::None => "CHARGE_METHOD_NONE",
             Self::Stripe => "CHARGE_METHOD_STRIPE",
         }
@@ -46,6 +51,7 @@ impl ChargeMethod {
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
+            "CHARGE_METHOD_UNSPECIFIED" => Some(Self::Unspecified),
             "CHARGE_METHOD_NONE" => Some(Self::None),
             "CHARGE_METHOD_STRIPE" => Some(Self::Stripe),
             _ => None,
