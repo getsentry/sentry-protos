@@ -1,0 +1,7 @@
+message GetRateCardRequest {
+    uint64 organization_id = 1;
+}
+
+message GetRateCardResponse {
+    RateCard rate_card = 1;
+}
