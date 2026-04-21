@@ -1,3 +1,9 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.rate_card.v1;
+
+import "sentry_protos/billing/v1/services/rate_card/v1/rate_card.proto";
+
 message GetRateCardRequest {
     uint64 organization_id = 1;
 }

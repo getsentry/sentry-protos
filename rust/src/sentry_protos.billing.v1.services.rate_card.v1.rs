@@ -57,3 +57,13 @@ pub struct RateCard {
     #[prost(message, repeated, tag = "2")]
     pub shared_line_items: ::prost::alloc::vec::Vec<SharedRateCardLineItem>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetRateCardRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetRateCardResponse {
+    #[prost(message, optional, tag = "1")]
+    pub rate_card: ::core::option::Option<RateCard>,
+}
