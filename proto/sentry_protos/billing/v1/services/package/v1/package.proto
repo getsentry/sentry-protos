@@ -22,8 +22,10 @@ message LineItemConfig {
   sentry_protos.billing.v1.common.v1.LineItemDetails line_item = 7;
 
   oneof reserved_pricing {
+    // Used to calculate spend against reserved_pool_cents for shared line items
     sentry_protos.billing.v1.common.v1.TieredPricingRate reserved_pricing_rate = 8;
-    sentry_protos.billing.v1.common.v1.FixedTierList reserved_tiers = 8;
+    // Used to determine prices for distinct reserved tiers (ie 100K errors is $X / month)
+    sentry_protos.billing.v1.common.v1.FixedTierList reserved_tiers = 9;
   }
 }
 
