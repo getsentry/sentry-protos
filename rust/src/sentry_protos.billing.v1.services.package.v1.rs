@@ -67,7 +67,7 @@ pub struct PackageConfig {
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
     #[prost(string, tag = "1")]
-    pub uid: ::prost::alloc::string::String,
+    pub package_uid: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetPackageResponse {

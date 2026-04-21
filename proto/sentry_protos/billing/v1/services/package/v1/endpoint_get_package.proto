@@ -5,7 +5,7 @@ package sentry_protos.billing.v1.services.package.v1;
 import "sentry_protos/billing/v1/services/package/v1/package.proto";
 
 message GetPackageRequest {
-  string uid = 1;
+  string package_uid = 1;
 }
 
 message GetPackageResponse {
