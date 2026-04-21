@@ -5,7 +5,6 @@ pub struct RateCardLineItem {
     pub line_item: ::core::option::Option<
         super::super::super::common::v1::LineItemDetails,
     >,
-    /// Effective payg_rate after package defaults and contract overrides have been resolved.
     #[prost(message, optional, tag = "4")]
     pub payg_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
@@ -14,13 +13,15 @@ pub struct RateCardLineItem {
     pub reserved_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
     >,
-    /// Effective reserved_units after package defaults and contract overrides have been resolved.
+    /// The following values are the effective values *after* contract overrides have been resolved. If there are no
+    /// contract overrides, the default package values are used.
     #[prost(oneof = "rate_card_line_item::ReservedUnits", tags = "2, 3")]
     pub reserved_units: ::core::option::Option<rate_card_line_item::ReservedUnits>,
 }
 /// Nested message and enum types in `RateCardLineItem`.
 pub mod rate_card_line_item {
-    /// Effective reserved_units after package defaults and contract overrides have been resolved.
+    /// The following values are the effective values *after* contract overrides have been resolved. If there are no
+    /// contract overrides, the default package values are used.
     #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum ReservedUnits {
         #[prost(bool, tag = "2")]
@@ -33,7 +34,8 @@ pub mod rate_card_line_item {
 pub struct SharedRateCardLineItem {
     #[prost(message, repeated, tag = "1")]
     pub rate_card_line_items: ::prost::alloc::vec::Vec<RateCardLineItem>,
-    /// Effective reserved_pool_cents after package defaults and contract overrides have been resolved.
+    /// Effective reserved_pool_cents after contract overrides have been resolved. If there are no
+    /// contract overrides, the default package values are used.
     #[prost(oneof = "shared_rate_card_line_item::ReservedPoolCents", tags = "2, 3")]
     pub reserved_pool_cents: ::core::option::Option<
         shared_rate_card_line_item::ReservedPoolCents,
@@ -41,7 +43,8 @@ pub struct SharedRateCardLineItem {
 }
 /// Nested message and enum types in `SharedRateCardLineItem`.
 pub mod shared_rate_card_line_item {
-    /// Effective reserved_pool_cents after package defaults and contract overrides have been resolved.
+    /// Effective reserved_pool_cents after contract overrides have been resolved. If there are no
+    /// contract overrides, the default package values are used.
     #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum ReservedPoolCents {
         #[prost(bool, tag = "2")]
