@@ -385,8 +385,8 @@ def test_package_config_with_billing_interval():
 
 
 def test_get_package_request():
-    request = GetPackageRequest(package_id=42)
-    assert request.package_id == 42
+    request = GetPackageRequest(uid="pkg_monthly_123")
+    assert request.uid == "pkg_monthly_123"
 
 
 def test_get_package_response():
