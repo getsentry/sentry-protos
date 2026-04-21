@@ -4,12 +4,21 @@ package sentry_protos.billing.v1.services.charge.v1;
 
 import "google/protobuf/timestamp.proto";
 
+// How the charge should be executed against the payment provider.
+enum ChargeMethod {
+  // Record the charge against our DB models without contacting any
+  // external payment provider. Payment is expected to be collected
+  // externally.
+  CHARGE_METHOD_NONE = 0;
+  // Call the Stripe API to bill the customer for this charge.
+  CHARGE_METHOD_STRIPE = 1;
+}
+
 message CaptureChargeRequest {
-  bool perform = 1;
-  int64 amount = 2;
+  ChargeMethod charge_method = 1;
+  int64 amount_cents = 2;
   string description = 3;
-  string payment_intent = 4;
-  string organization_id = 5;
+  uint64 organization_id = 5;
   google.protobuf.Timestamp current_ts = 6;
   optional string invoice_id = 7;
 }
