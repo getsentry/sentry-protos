@@ -7,11 +7,11 @@ pub struct CaptureChargeRequest {
     pub amount_cents: i64,
     #[prost(string, optional, tag = "3")]
     pub description: ::core::option::Option<::prost::alloc::string::String>,
-    #[prost(uint64, tag = "5")]
+    #[prost(uint64, tag = "4")]
     pub organization_id: u64,
-    #[prost(message, optional, tag = "6")]
+    #[prost(message, optional, tag = "5")]
     pub current_ts: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(string, optional, tag = "7")]
+    #[prost(string, optional, tag = "6")]
     pub invoice_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
