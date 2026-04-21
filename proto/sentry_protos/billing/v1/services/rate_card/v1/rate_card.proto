@@ -10,13 +10,13 @@ import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
 message RateCardLineItem {
     sentry_protos.billing.v1.common.v1.LineItemDetails line_item = 1;
     
-    // Effective value package defaults and contract overrides have been resolved.
+    // Effective reserved_units after package defaults and contract overrides have been resolved.
     oneof reserved_units {
         bool is_unlimited = 2;
         uint64 num_reserved_units = 3;
     }
     
-    // Effective payg_rate for this line item after package defaults and contract overrides have been resolved.
+    // Effective payg_rate after package defaults and contract overrides have been resolved.
     sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 4;
 
 
@@ -26,7 +26,7 @@ message RateCardLineItem {
 message SharedRateCardLineItem {
     repeated RateCardLineItem rate_card_line_items = 1;
     
-    // Effective reserved_pool_cents for this line item after package defaults and contract overrides have been resolved.
+    // Effective reserved_pool_cents after package defaults and contract overrides have been resolved.
     oneof reserved_pool_cents {
         bool is_unlimited = 2;
         uint64 num_reserved_cents = 3;
