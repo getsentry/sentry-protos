@@ -18,9 +18,9 @@ message CaptureChargeRequest {
   ChargeMethod charge_method = 1;
   int64 amount_cents = 2;
   optional string description = 3;
-  uint64 organization_id = 5;
-  google.protobuf.Timestamp current_ts = 6;
-  optional string invoice_id = 7;
+  uint64 organization_id = 4;
+  google.protobuf.Timestamp current_ts = 5;
+  optional string invoice_id = 6;
 }
 
 message CaptureChargeResponse {
