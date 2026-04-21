@@ -250,7 +250,7 @@ pub mod attribute_value {
         ValNull(bool),
     }
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AttributeAggregation {
     #[prost(enumeration = "Function", tag = "1")]
     pub aggregate: i32,
@@ -260,6 +260,18 @@ pub struct AttributeAggregation {
     pub label: ::prost::alloc::string::String,
     #[prost(enumeration = "ExtrapolationMode", tag = "4")]
     pub extrapolation_mode: i32,
+    #[prost(oneof = "attribute_aggregation::DefaultValue", tags = "5, 6")]
+    pub default_value: ::core::option::Option<attribute_aggregation::DefaultValue>,
+}
+/// Nested message and enum types in `AttributeAggregation`.
+pub mod attribute_aggregation {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum DefaultValue {
+        #[prost(double, tag = "5")]
+        DefaultValueDouble(f64),
+        #[prost(int64, tag = "6")]
+        DefaultValueInt64(i64),
+    }
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -609,6 +621,20 @@ pub struct AttributeConditionalAggregation {
     pub extrapolation_mode: i32,
     #[prost(message, optional, tag = "5")]
     pub filter: ::core::option::Option<TraceItemFilter>,
+    #[prost(oneof = "attribute_conditional_aggregation::DefaultValue", tags = "7, 8")]
+    pub default_value: ::core::option::Option<
+        attribute_conditional_aggregation::DefaultValue,
+    >,
+}
+/// Nested message and enum types in `AttributeConditionalAggregation`.
+pub mod attribute_conditional_aggregation {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum DefaultValue {
+        #[prost(double, tag = "7")]
+        DefaultValueDouble(f64),
+        #[prost(int64, tag = "8")]
+        DefaultValueInt64(i64),
+    }
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct DownsampledStorageConfig {
