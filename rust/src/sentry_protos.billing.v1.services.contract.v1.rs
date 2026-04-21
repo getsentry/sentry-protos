@@ -374,6 +374,11 @@ pub struct GetContractRequest {
     #[prost(message, optional, tag = "2")]
     pub date: ::core::option::Option<super::super::super::Date>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSpecificContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetContractResponse {
     #[prost(message, optional, tag = "1")]

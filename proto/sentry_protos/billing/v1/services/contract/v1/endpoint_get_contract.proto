@@ -12,6 +12,10 @@ message GetContractRequest {
   sentry_protos.billing.v1.Date date = 2;
 }
 
+message GetSpecificContractRequest {
+  uint64 contract_id = 1;
+}
+
 message GetContractResponse {
   Contract contract = 1;
 }
