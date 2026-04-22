@@ -148,6 +148,10 @@ message AttributeAggregation {
   AttributeKey key = 2;
   string label = 3;
   ExtrapolationMode extrapolation_mode = 4;
+  oneof default_value {
+    double default_value_double = 5;
+    int64 default_value_int64 = 6;
+  }
 }
 
 enum Reliability {

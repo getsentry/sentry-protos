@@ -1,3 +1,20 @@
+## 0.8.15
+
+### New Features ✨
+
+- (billing) Define request and response messages for package service by @krithikravi in [#208](https://github.com/getsentry/sentry-protos/pull/208)
+
+### Internal Changes 🔧
+
+- Add contract request by id by @noahsmartin in [#209](https://github.com/getsentry/sentry-protos/pull/209)
+
+## 0.8.14
+
+### New Features ✨
+
+- (billing-platform) Package service protos by @volokluev in [#201](https://github.com/getsentry/sentry-protos/pull/201)
+- Add default value to attribute aggregations by @wmak in [#203](https://github.com/getsentry/sentry-protos/pull/203)
+
 ## 0.8.13
 
 ### New Features ✨

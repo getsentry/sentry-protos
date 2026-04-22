@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.package.v1;
+
+import "sentry_protos/billing/v1/services/package/v1/package.proto";
+
+message GetPackageRequest {
+  string package_uid = 1;
+}
+
+message GetPackageResponse {
+  PackageConfig package_config = 1;
+}

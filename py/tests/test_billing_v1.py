@@ -45,6 +45,10 @@ from sentry_protos.billing.v1.common.v1.billable_metric_pb2 import (
 )
 from sentry_protos.billing.v1.common.v1.billing_interval_pb2 import BillingInterval
 from sentry_protos.billing.v1.services.package.v1.package_pb2 import PackageConfig
+from sentry_protos.billing.v1.services.package.v1.endpoint_get_package_pb2 import (
+    GetPackageRequest,
+    GetPackageResponse,
+)
 from sentry_protos.billing.v1.data_category_pb2 import DataCategory
 
 
@@ -378,3 +382,20 @@ def test_package_config_with_billing_interval():
         billing_interval=BillingInterval.BILLING_INTERVAL_ANNUAL_BASE_MONTHLY_PAYG,
     )
     assert annual_package.billing_interval == BillingInterval.BILLING_INTERVAL_ANNUAL_BASE_MONTHLY_PAYG
+
+
+def test_get_package_request():
+    request = GetPackageRequest(package_uid="pkg_monthly_123")
+    assert request.package_uid == "pkg_monthly_123"
+
+
+def test_get_package_response():
+    package = PackageConfig(
+        uid="pkg_monthly_123",
+        base_price_cents=10000,
+        billing_interval=BillingInterval.BILLING_INTERVAL_MONTHLY,
+    )
+    response = GetPackageResponse(package_config=package)
+    assert response.package_config.uid == "pkg_monthly_123"
+    assert response.package_config.base_price_cents == 10000
+    assert response.package_config.billing_interval == BillingInterval.BILLING_INTERVAL_MONTHLY

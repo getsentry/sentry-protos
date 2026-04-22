@@ -11,6 +11,10 @@ message UsagePricerRequest {
   google.protobuf.Timestamp end = 3;
 }
 
+message GetPriceForContractRequest {
+  uint64 contract_id = 1;
+}
+
 message SKUUsageSummary {
   sentry_protos.billing.v1.SKU sku = 1;
   // Net cents consumed by this SKU in the billing period (after credits/trials applied).

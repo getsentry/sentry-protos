@@ -64,3 +64,13 @@ pub struct PackageConfig {
     #[prost(enumeration = "super::super::super::common::v1::BillingInterval", tag = "5")]
     pub billing_interval: i32,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetPackageRequest {
+    #[prost(string, tag = "1")]
+    pub package_uid: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPackageResponse {
+    #[prost(message, optional, tag = "1")]
+    pub package_config: ::core::option::Option<PackageConfig>,
+}
