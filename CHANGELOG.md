@@ -1,3 +1,14 @@
+## 0.8.16
+
+### New Features ✨
+
+- (billing) Add charge service and capture charge endpoint by @noahsmartin in [#206](https://github.com/getsentry/sentry-protos/pull/206)
+- (billing-platform) Add RateCard protos by @brendanhsentry in [#205](https://github.com/getsentry/sentry-protos/pull/205)
+
+### Internal Changes 🔧
+
+- Add endpoint for usage price given contract by @noahsmartin in [#210](https://github.com/getsentry/sentry-protos/pull/210)
+
 ## 0.8.15
 
 ### New Features ✨
