@@ -58,3 +58,24 @@ impl ChargeMethod {
         }
     }
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Charge {
+    #[prost(uint64, tag = "1")]
+    pub amount_cents: u64,
+    #[prost(bool, tag = "2")]
+    pub paid: bool,
+    #[prost(string, optional, tag = "3")]
+    pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
+}
+/// No pagination on this request because there are expected to be only a handful
+/// of attempted charges per invoice.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListChargesForInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListChargesForInvoiceResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub charges: ::prost::alloc::vec::Vec<Charge>,
+}
