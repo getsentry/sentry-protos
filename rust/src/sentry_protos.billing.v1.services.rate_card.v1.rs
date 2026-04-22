@@ -2,7 +2,7 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RateCardLineItem {
     #[prost(message, optional, tag = "1")]
-    pub line_item: ::core::option::Option<
+    pub line_item_detail: ::core::option::Option<
         super::super::super::common::v1::LineItemDetails,
     >,
     #[prost(message, optional, tag = "4")]
@@ -63,7 +63,7 @@ pub struct RateCard {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetRateCardRequest {
     #[prost(uint64, tag = "1")]
-    pub organization_id: u64,
+    pub contract_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetRateCardResponse {
