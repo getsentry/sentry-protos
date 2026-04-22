@@ -9,6 +9,11 @@ pub struct UsagePricerRequest {
     pub end: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetPriceForContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SkuUsageSummary {
     #[prost(enumeration = "super::super::super::Sku", tag = "1")]
     pub sku: i32,
