@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+message Charge {
+    uint64 amount_cents = 1;
+    bool paid = 2;
+    optional string failure_code = 3;
+}
+
+// No pagination on this request because there are expected to be only a handful
+// of attempted charges per invoice.
+message ListChargesForInvoiceRequest {
+    uint64 invoice_id = 1;
+}
+
+message ListChargesForInvoiceResponse {
+    repeated Charge charges = 1;
+}
