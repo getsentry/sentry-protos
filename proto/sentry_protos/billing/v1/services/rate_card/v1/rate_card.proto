@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.rate_card.v1;
+
+import "sentry_protos/billing/v1/common/v1/line_item_details.proto";
+import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
+
+message RateCardLineItem {
+  sentry_protos.billing.v1.common.v1.LineItemDetails line_item_detail = 1;
+
+  // The following values are the effective values _after_ contract overrides have been resolved. If there are no
+  // contract overrides, the default package values are used.
+  oneof reserved_units {
+    bool is_unlimited = 2;
+    uint64 num_reserved_units = 3;
+  }
+  sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 4;
+  sentry_protos.billing.v1.common.v1.TieredPricingRate reserved_rate = 5;
+}
+
+message SharedRateCardLineItem {
+  repeated RateCardLineItem rate_card_line_items = 1;
+
+  // Effective reserved_pool_cents after contract overrides have been resolved. If there are no
+  // contract overrides, the default package values are used.
+  oneof reserved_pool_cents {
+    bool is_unlimited = 2;
+    uint64 num_reserved_cents = 3;
+  }
+}
+
+message RateCard {
+  repeated RateCardLineItem line_items = 1;
+  repeated SharedRateCardLineItem shared_line_items = 2;
+}
