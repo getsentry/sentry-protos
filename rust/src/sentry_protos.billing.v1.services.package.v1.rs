@@ -8,6 +8,8 @@ pub struct LineItemConfig {
     pub payg_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
     >,
+    /// DEPRECATED: use reserved_pricing instead
+    ///
     /// for reserved budget line items
     #[prost(message, optional, tag = "4")]
     pub reserved_rate: ::core::option::Option<
@@ -22,6 +24,8 @@ pub struct LineItemConfig {
     pub included_reserved_units: ::core::option::Option<
         line_item_config::IncludedReservedUnits,
     >,
+    #[prost(oneof = "line_item_config::ReservedPricing", tags = "8, 9")]
+    pub reserved_pricing: ::core::option::Option<line_item_config::ReservedPricing>,
 }
 /// Nested message and enum types in `LineItemConfig`.
 pub mod line_item_config {
@@ -33,6 +37,15 @@ pub mod line_item_config {
         /// the type communicates whether the line item is unlimited or not, additionally reserved budget line items have a non-zero reserved_rate in addition to 0 reserved_units
         #[prost(uint64, tag = "6")]
         NumReservedUnits(u64),
+    }
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum ReservedPricing {
+        /// Used to calculate spend against reserved_pool_cents for shared line items
+        #[prost(message, tag = "8")]
+        ReservedPricingRate(super::super::super::super::common::v1::TieredPricingRate),
+        /// Used to determine prices for distinct reserved tiers (ie 100K errors is $X / month)
+        #[prost(message, tag = "9")]
+        ReservedTiers(super::super::super::super::common::v1::FixedTierList),
     }
 }
 /// Represents a budget included in a package that is collectively used by one or more line items,

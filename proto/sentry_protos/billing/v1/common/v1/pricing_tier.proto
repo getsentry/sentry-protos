@@ -11,3 +11,12 @@ message PricingTier {
 message TieredPricingRate {
   repeated PricingTier tiers = 1;
 }
+
+message FixedPricingTier {
+  int64 value = 1;
+  uint64 base_price_cents = 2;
+}
+
+message FixedTierList {
+  repeated FixedPricingTier tiers = 1;
+}

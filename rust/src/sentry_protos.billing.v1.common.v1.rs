@@ -216,3 +216,15 @@ pub struct TieredPricingRate {
     #[prost(message, repeated, tag = "1")]
     pub tiers: ::prost::alloc::vec::Vec<PricingTier>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FixedPricingTier {
+    #[prost(int64, tag = "1")]
+    pub value: i64,
+    #[prost(uint64, tag = "2")]
+    pub base_price_cents: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FixedTierList {
+    #[prost(message, repeated, tag = "1")]
+    pub tiers: ::prost::alloc::vec::Vec<FixedPricingTier>,
+}
