@@ -453,12 +453,16 @@ pub struct GetUninvoicedContractsRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUninvoicedContractsResponse {
+    /// DEPRECATED: use contract_ids instead
+    #[deprecated]
     #[prost(message, repeated, tag = "1")]
     pub contracts: ::prost::alloc::vec::Vec<Contract>,
     /// True if additional matching contracts existed beyond max_items and were
     /// not included in this response.
     #[prost(bool, tag = "2")]
     pub truncated: bool,
+    #[prost(uint64, repeated, tag = "3")]
+    pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
 /// Creates a new contract for a new billing period. Closes out the current contract by
 /// creating an invoice and setting the last usage date
