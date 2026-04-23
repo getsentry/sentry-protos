@@ -1,3 +1,9 @@
+## 0.8.17
+
+### New Features ✨
+
+- (billing) Add invoice, list charges, and rollover endpoints by @noahsmartin in [#211](https://github.com/getsentry/sentry-protos/pull/211)
+
 ## 0.8.16
 
 ### New Features ✨
