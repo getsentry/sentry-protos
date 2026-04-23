@@ -384,6 +384,59 @@ pub struct GetContractResponse {
     #[prost(message, optional, tag = "1")]
     pub contract: ::core::option::Option<Contract>,
 }
+/// This is not the same as LineItemDetails, it includes
+/// items not related to the package such as tax.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct InvoiceLineItem {
+    /// Intentionally not a uint (some line items could be discounts)
+    #[prost(int64, tag = "1")]
+    pub amount_cents: i64,
+    #[prost(string, optional, tag = "2")]
+    pub description: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Invoice {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(message, repeated, tag = "2")]
+    pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+    /// Not just a sum of line items since there may be credit applied
+    #[prost(uint64, tag = "3")]
+    pub amount_billed: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetInvoiceResponse {
+    #[prost(message, optional, tag = "1")]
+    pub invoice: ::core::option::Option<Invoice>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetUnchargedInvoicesRequest {
+    /// Returns Invoices whose current billing period ends before this time and
+    /// have not yet been charged for the current period.
+    #[prost(message, optional, tag = "1")]
+    pub current_ts: ::core::option::Option<::prost_types::Timestamp>,
+    /// Maximum number of invoices to return in the response. If more invoices
+    /// match the request than this limit, the response will have truncated set
+    /// to true.
+    #[prost(uint32, tag = "2")]
+    pub max_items: u32,
+    #[prost(uint32, optional, tag = "3")]
+    pub offset: ::core::option::Option<u32>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetUnchargedInvoicesResponse {
+    #[prost(uint64, repeated, tag = "1")]
+    pub invoice_ids: ::prost::alloc::vec::Vec<u64>,
+    /// True if additional matching invoices existed beyond max_items and were
+    /// not included in this response.
+    #[prost(bool, tag = "2")]
+    pub truncated: bool,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUninvoicedContractsRequest {
     /// Returns Contracts whose current billing period ends before this time and
@@ -395,6 +448,8 @@ pub struct GetUninvoicedContractsRequest {
     /// to true.
     #[prost(uint32, tag = "2")]
     pub max_items: u32,
+    #[prost(uint32, optional, tag = "3")]
+    pub offset: ::core::option::Option<u32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUninvoicedContractsResponse {
@@ -404,4 +459,24 @@ pub struct GetUninvoicedContractsResponse {
     /// not included in this response.
     #[prost(bool, tag = "2")]
     pub truncated: bool,
+}
+/// Creates a new contract for a new billing period. Closes out the current contract by
+/// creating an invoice and setting the last usage date
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RolloverContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, repeated, tag = "3")]
+    pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RolloverContractResponse {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(bool, tag = "2")]
+    pub needs_charge: bool,
+    #[prost(uint64, tag = "3")]
+    pub amount_billed: u64,
 }

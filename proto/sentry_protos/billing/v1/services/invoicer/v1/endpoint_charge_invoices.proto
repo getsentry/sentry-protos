@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message ChargeInvoicesRequest {
+  // The current time used to select invoices that are due and require a
+  // charge to be processed.
+  google.protobuf.Timestamp current_ts = 1;
+}
+
+message ChargeInvoicesResponse {}

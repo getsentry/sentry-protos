@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message GetUnchargedInvoicesRequest {
+  // Returns Invoices whose current billing period ends before this time and
+  // have not yet been charged for the current period.
+  google.protobuf.Timestamp current_ts = 1;
+
+  // Maximum number of invoices to return in the response. If more invoices
+  // match the request than this limit, the response will have truncated set
+  // to true.
+  uint32 max_items = 2;
+
+  optional uint32 offset = 3;
+}
+
+message GetUnchargedInvoicesResponse {
+  repeated uint64 invoice_ids = 1;
+
+  // True if additional matching invoices existed beyond max_items and were
+  // not included in this response.
+  bool truncated = 2;
+}
