@@ -13,7 +13,6 @@ pub struct GetPriceForContractRequest {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
 }
-/// DEPRECATED: use LineItemUsageSummary instead
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SkuUsageSummary {
     #[prost(enumeration = "super::super::super::Sku", tag = "1")]
@@ -25,7 +24,6 @@ pub struct SkuUsageSummary {
     #[prost(uint64, tag = "3")]
     pub usage_volume: u64,
 }
-/// DEPRECATED: use SharedLineItemUsageSummary instead
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedBudgetUsageSummary {
     #[prost(enumeration = "super::super::super::Sku", repeated, tag = "1")]
@@ -56,10 +54,12 @@ pub struct SharedLineItemUsageSummary {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsagePricerResponse {
-    /// DEPRECATED: use line_item_summaries
+    /// use line_item_summaries
+    #[deprecated]
     #[prost(message, repeated, tag = "1")]
     pub sku_summaries: ::prost::alloc::vec::Vec<SkuUsageSummary>,
-    /// DEPRECATED: use shared_line_item_summaries
+    /// use shared_line_item_summaries
+    #[deprecated]
     #[prost(message, repeated, tag = "2")]
     pub shared_budget_summaries: ::prost::alloc::vec::Vec<SharedBudgetUsageSummary>,
     #[prost(message, repeated, tag = "3")]
