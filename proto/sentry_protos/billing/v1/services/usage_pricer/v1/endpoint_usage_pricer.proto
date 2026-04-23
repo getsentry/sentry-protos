@@ -52,10 +52,10 @@ message SharedLineItemUsageSummary {
 }
 
 message UsagePricerResponse {
-  // DEPRECATED: use line_item_summaries
+  // use line_item_summaries
   repeated SKUUsageSummary sku_summaries = 1 [deprecated = true];
 
-  // DEPRECATED: use shared_line_item_summaries
+  // use shared_line_item_summaries
   repeated SharedBudgetUsageSummary shared_budget_summaries = 2 [deprecated = true];
 
   repeated LineItemUsageSummary line_item_summaries = 3;
