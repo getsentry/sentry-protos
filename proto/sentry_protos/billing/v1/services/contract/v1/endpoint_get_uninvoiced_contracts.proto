@@ -19,9 +19,9 @@ message GetUninvoicedContractsRequest {
 }
 
 message GetUninvoicedContractsResponse {
-  repeated Contract contracts = 1;
-
+  repeated Contract contracts = 1 [deprecated = true]; //DEPRECATED: use contract_ids instead
   // True if additional matching contracts existed beyond max_items and were
   // not included in this response.
   bool truncated = 2;
+  repeated uint64 contract_ids = 3;
 }
