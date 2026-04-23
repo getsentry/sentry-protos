@@ -15,6 +15,7 @@ message GetPriceForContractRequest {
   uint64 contract_id = 1;
 }
 
+// DEPRECATED: use LineItemUsageSummary instead
 message SKUUsageSummary {
   sentry_protos.billing.v1.SKU sku = 1;
   // Net cents consumed by this SKU in the billing period (after credits/trials applied).
@@ -23,7 +24,7 @@ message SKUUsageSummary {
   uint64 usage_volume = 3;
 }
 
-// Pricing breakdown for a shared budget spanning multiple SKUs.
+// DEPRECATED: use SharedLineItemUsageSummary instead
 message SharedBudgetUsageSummary {
   repeated sentry_protos.billing.v1.SKU skus = 1;
   // Net cents consumed across all SKUs in this shared budget (after credits/trials applied).
@@ -32,9 +33,28 @@ message SharedBudgetUsageSummary {
   repeated SKUUsageSummary sku_summaries = 3;
 }
 
+message LineItemUsageSummary {
+  string line_item_uid = 1;
+  // Net cents consumed by this line item in the billing period (after credits/trials applied).
+  uint64 payg_spend_cents = 2;
+}
+
+message SharedLineItemUsageSummary {
+  // Net cents consumed across all SKUs in this shared budget (after credits/trials applied).
+  uint64 payg_spend_cents = 1;
+
+  // Line item breakdown within shared budget
+  repeated LineItemUsageSummary line_item_summaries = 2;
+}
+
 message UsagePricerResponse {
-  // Per-SKU pricing breakdown.
+  // DEPRECATED: use line_item_summaries
   repeated SKUUsageSummary sku_summaries = 1;
-  // Per-shared-budget pricing breakdown (for SKUs sharing a budget).
+
+  // DEPRECATED: use shared_line_item_summaries
   repeated SharedBudgetUsageSummary shared_budget_summaries = 2;
+
+  repeated LineItemUsageSummary line_item_summaries = 3;
+
+  repeated SharedLineItemUsageSummary shared_line_item_summaries = 4;
 }
