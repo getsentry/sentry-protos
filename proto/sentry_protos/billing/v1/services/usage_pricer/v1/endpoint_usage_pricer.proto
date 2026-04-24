@@ -38,7 +38,9 @@ message SharedBudgetUsageSummary {
 }
 
 message LineItemUsageSummary {
+  // Refers to uid in sentry_protos.billing.v1.common.v1.LineItemDetails
   string line_item_uid = 1;
+
   // Net cents consumed by this line item in the billing period (after credits/trials applied).
   uint64 payg_spend_cents = 2;
 }
