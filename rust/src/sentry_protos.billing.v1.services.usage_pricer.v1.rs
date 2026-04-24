@@ -37,6 +37,7 @@ pub struct SharedBudgetUsageSummary {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct LineItemUsageSummary {
+    /// Refers to uid in sentry_protos.billing.v1.common.v1.LineItemDetails
     #[prost(string, tag = "1")]
     pub line_item_uid: ::prost::alloc::string::String,
     /// Net cents consumed by this line item in the billing period (after credits/trials applied).
