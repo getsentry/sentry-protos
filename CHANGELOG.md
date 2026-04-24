@@ -1,3 +1,13 @@
+## 0.8.18
+
+### New Features ✨
+
+- (billing-platform) Update UsagePricer protos by @brendanhsentry in [#212](https://github.com/getsentry/sentry-protos/pull/212)
+
+### Internal Changes 🔧
+
+- Convert GetUninvoicedContractsResponse to return contract_ids by @noahsmartin in [#213](https://github.com/getsentry/sentry-protos/pull/213)
+
 ## 0.8.17
 
 ### New Features ✨
