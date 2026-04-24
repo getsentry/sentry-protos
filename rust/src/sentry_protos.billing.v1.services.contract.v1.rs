@@ -33,6 +33,7 @@ pub struct BillingConfig {
     pub channel: i32,
     #[prost(enumeration = "ExternalBillingProvider", tag = "3")]
     pub external_billing_provider: i32,
+    #[deprecated]
     #[prost(message, optional, tag = "4")]
     pub address: ::core::option::Option<Address>,
     /// Determines when to charge for base package price / subscription fee.
