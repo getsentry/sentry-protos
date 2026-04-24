@@ -1,3 +1,9 @@
+## 0.8.19
+
+### New Features ✨
+
+- Add billing details service interface by @noahsmartin in [#214](https://github.com/getsentry/sentry-protos/pull/214)
+
 ## 0.8.18
 
 ### New Features ✨
