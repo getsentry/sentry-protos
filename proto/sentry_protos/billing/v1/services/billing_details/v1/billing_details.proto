@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_details.v1;
+
+message Address {
+  string city = 1;
+  string region = 2;
+  string country_code = 3;
+  string postal_code = 4;
+  string address_line_1 = 5;
+  string address_line_2 = 6;
+  string address_line_3 = 7;
+}
+
+message BillingDetails {
+  Address address = 1;
+}

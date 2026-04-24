@@ -32,6 +32,8 @@ enum ExternalBillingProvider {
 }
 
 message Address {
+  option deprecated = true;
+
   string city = 1;
   string region = 2;
   string country_code = 3;
@@ -45,7 +47,7 @@ message BillingConfig {
   BillingType billing_type = 1;
   BillingChannel channel = 2;
   ExternalBillingProvider external_billing_provider = 3;
-  Address address = 4;
+  Address address = 4 [deprecated=true];
 
   // Determines when to charge for base package price / subscription fee.
   Date contract_start_date = 5;
