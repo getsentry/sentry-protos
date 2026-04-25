@@ -98,6 +98,19 @@ pub struct FetchNextTask {
     pub application: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct TaskError {
+    /// Fully qualified exception class, e.g. "django.db.utils.OperationalError".
+    #[prost(string, tag = "1")]
+    pub exception_type: ::prost::alloc::string::String,
+    /// str(exc), worker-truncated to a bounded character count (~2000 chars).
+    #[prost(string, tag = "2")]
+    pub exception_message: ::prost::alloc::string::String,
+    /// Formatted traceback (tail), worker-truncated to a bounded character count
+    /// (~8000 chars).
+    #[prost(string, optional, tag = "3")]
+    pub traceback: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetTaskStatusRequest {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
@@ -106,6 +119,13 @@ pub struct SetTaskStatusRequest {
     /// If fetch_next is provided, receive a new task in the response
     #[prost(message, optional, tag = "3")]
     pub fetch_next_task: ::core::option::Option<FetchNextTask>,
+    /// Populated when the worker caught an exception while executing the task.
+    /// Typically set with status == TASK_ACTIVATION_STATUS_FAILURE, and may be set
+    /// with TASK_ACTIVATION_STATUS_RETRY when the retry was triggered by a caught
+    /// exception (rather than by an explicit retry_task() call with no context).
+    /// Used by the broker only for structured logging; not persisted.
+    #[prost(message, optional, tag = "4")]
+    pub error: ::core::option::Option<TaskError>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SetTaskStatusResponse {

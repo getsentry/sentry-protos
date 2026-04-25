@@ -117,6 +117,16 @@ message FetchNextTask {
   optional string application = 2;
 }
 
+message TaskError {
+  // Fully qualified exception class, e.g. "django.db.utils.OperationalError".
+  string exception_type = 1;
+  // str(exc), worker-truncated to a bounded character count (~2000 chars).
+  string exception_message = 2;
+  // Formatted traceback (tail), worker-truncated to a bounded character count
+  // (~8000 chars).
+  optional string traceback = 3;
+}
+
 message SetTaskStatusRequest {
   string id = 1;
 
@@ -124,6 +134,13 @@ message SetTaskStatusRequest {
 
   // If fetch_next is provided, receive a new task in the response
   optional FetchNextTask fetch_next_task = 3;
+
+  // Populated when the worker caught an exception while executing the task.
+  // Typically set with status == TASK_ACTIVATION_STATUS_FAILURE, and may be set
+  // with TASK_ACTIVATION_STATUS_RETRY when the retry was triggered by a caught
+  // exception (rather than by an explicit retry_task() call with no context).
+  // Used by the broker only for structured logging; not persisted.
+  optional TaskError error = 4;
 }
 
 message SetTaskStatusResponse {
