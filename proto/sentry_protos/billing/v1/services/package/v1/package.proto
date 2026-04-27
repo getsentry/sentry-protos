@@ -31,6 +31,14 @@ message SharedLineItemPool {
   repeated sentry_protos.billing.v1.common.v1.LineItemDetails line_items = 3;
 }
 
+enum PlanFamily {
+  PLAN_FAMILY_UNSPECIFIED = 0;
+  PLAN_FAMILY_DEVELOPER = 1;
+  PLAN_FAMILY_TEAM = 2;
+  PLAN_FAMILY_BUSINESS = 3;
+  PLAN_FAMILY_ENTERPRISE = 4;
+}
+
 message PackageConfig {
   string uid = 1;
   repeated LineItemConfig line_item_configs = 2;
@@ -39,4 +47,5 @@ message PackageConfig {
   uint64 base_price_cents = 4;
   // Billing interval for this package.
   sentry_protos.billing.v1.common.v1.BillingInterval billing_interval = 5;
+  PlanFamily plan_family = 6;
 }
