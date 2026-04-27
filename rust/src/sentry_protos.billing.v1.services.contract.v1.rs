@@ -198,6 +198,9 @@ pub struct ContractMetadata {
     pub custom_options: ::core::option::Option<MetadataOptions>,
     #[prost(message, optional, tag = "7")]
     pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
+    #[prost(string, tag = "9")]
+    pub package_uid: ::prost::alloc::string::String,
+    #[deprecated]
     #[prost(uint64, tag = "8")]
     pub package_id: u64,
     /// Includes information like plan ID, tier, etc.

@@ -42,8 +42,9 @@ message ContractMetadata {
   // Catch-all for overrides and information not covered above.
   MetadataOptions custom_options = 6;
   sentry_protos.billing.v1.FeatureOptions billing_features = 7;
-  uint64 package_id = 8;
+  string package_uid = 9;
 
+  uint64 package_id = 8 [deprecated = true];
   // Includes information like plan ID, tier, etc.
   MetadataOptions package_metadata = 4 [deprecated = true];
   // Entitlements, used in frontend features or gating access to certain features.
