@@ -29,16 +29,21 @@ pub struct Address {
 pub struct BillingConfig {
     #[prost(enumeration = "BillingType", tag = "1")]
     pub billing_type: i32,
+    /// Remaining fields are deprecated
+    #[deprecated]
     #[prost(enumeration = "BillingChannel", tag = "2")]
     pub channel: i32,
+    #[deprecated]
     #[prost(enumeration = "ExternalBillingProvider", tag = "3")]
     pub external_billing_provider: i32,
     #[deprecated]
     #[prost(message, optional, tag = "4")]
     pub address: ::core::option::Option<Address>,
-    /// Determines when to charge for base package price / subscription fee.
+    /// Use PricingConfig.billing_period_start_date and PricingConfig.billing_period_end_date
+    #[deprecated]
     #[prost(message, optional, tag = "5")]
     pub contract_start_date: ::core::option::Option<Date>,
+    #[deprecated]
     #[prost(message, optional, tag = "6")]
     pub contract_end_date: ::core::option::Option<Date>,
 }
@@ -188,7 +193,15 @@ pub struct ContractMetadata {
     /// The set of BillingRules that the BillingRulesEngine has to execute for this contract.
     #[prost(string, tag = "3")]
     pub ruleset_version: ::prost::alloc::string::String,
+    /// Catch-all for overrides and information not covered above.
+    #[prost(message, optional, tag = "6")]
+    pub custom_options: ::core::option::Option<MetadataOptions>,
+    #[prost(message, optional, tag = "7")]
+    pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
+    #[prost(uint64, tag = "8")]
+    pub package_id: u64,
     /// Includes information like plan ID, tier, etc.
+    #[deprecated]
     #[prost(message, optional, tag = "4")]
     pub package_metadata: ::core::option::Option<MetadataOptions>,
     /// Entitlements, used in frontend features or gating access to certain features.
@@ -197,11 +210,6 @@ pub struct ContractMetadata {
     #[deprecated]
     #[prost(message, optional, tag = "5")]
     pub features: ::core::option::Option<FeatureOptions>,
-    /// Catch-all for overrides and information not covered above.
-    #[prost(message, optional, tag = "6")]
-    pub custom_options: ::core::option::Option<MetadataOptions>,
-    #[prost(message, optional, tag = "7")]
-    pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -336,27 +344,84 @@ pub struct SharedSkuBudget {
     #[prost(enumeration = "super::super::super::Sku", repeated, tag = "4")]
     pub billing_skus: ::prost::alloc::vec::Vec<i32>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PaygBudget {
+    #[prost(uint64, tag = "1")]
+    pub budget_cents: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Reservation {
+    #[prost(uint64, tag = "1")]
+    pub reserved_price_cents: u64,
+    #[prost(oneof = "reservation::ReservedUnits", tags = "2, 3")]
+    pub reserved_units: ::core::option::Option<reservation::ReservedUnits>,
+}
+/// Nested message and enum types in `Reservation`.
+pub mod reservation {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum ReservedUnits {
+        #[prost(bool, tag = "2")]
+        IsUnlimited(bool),
+        #[prost(uint64, tag = "3")]
+        NumReservedUnits(u64),
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct LineItemUids {
+    #[prost(string, repeated, tag = "1")]
+    pub uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UserConfig {
+    #[prost(message, optional, tag = "1")]
+    pub payg_budget: ::core::option::Option<PaygBudget>,
+    #[prost(message, optional, tag = "2")]
+    pub reservation: ::core::option::Option<Reservation>,
+    #[prost(oneof = "user_config::LineItems", tags = "3, 4")]
+    pub line_items: ::core::option::Option<user_config::LineItems>,
+}
+/// Nested message and enum types in `UserConfig`.
+pub mod user_config {
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum LineItems {
+        #[prost(message, tag = "3")]
+        SpecificItems(super::LineItemUids),
+        #[prost(message, tag = "4")]
+        AllItems(()),
+    }
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PricingConfig {
-    #[prost(message, repeated, tag = "1")]
-    pub sku_configs: ::prost::alloc::vec::Vec<SkuConfig>,
-    #[prost(message, repeated, tag = "2")]
-    pub shared_sku_budgets: ::prost::alloc::vec::Vec<SharedSkuBudget>,
-    /// Determines when to reset quotas and create an invoice.
+    /// Determines when to reset quotas and charge the subscription price.
     #[prost(message, optional, tag = "3")]
     pub billing_period_start_date: ::core::option::Option<Date>,
     #[prost(message, optional, tag = "4")]
     pub billing_period_end_date: ::core::option::Option<Date>,
-    #[prost(uint64, tag = "5")]
-    pub max_spend_cents: u64,
-    /// Base price for the package.
-    #[prost(uint64, tag = "6")]
-    pub base_price_cents: u64,
     /// Determines when the on demand period for invoicing the organization starts and ends, even for annual plans we bill ondemand monthly
     #[prost(message, optional, tag = "7")]
     pub ondemand_period_start_date: ::core::option::Option<Date>,
     #[prost(message, optional, tag = "8")]
     pub ondemand_period_end_date: ::core::option::Option<Date>,
+    #[prost(message, optional, tag = "9")]
+    pub usage_watermark_ts: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, repeated, tag = "10")]
+    pub user_config: ::prost::alloc::vec::Vec<UserConfig>,
+    /// DEPRECATED: use package instead.
+    #[deprecated]
+    #[prost(uint64, tag = "6")]
+    pub base_price_cents: u64,
+    /// DEPRECATED: use package/user_parameters instead.
+    #[deprecated]
+    #[prost(message, repeated, tag = "1")]
+    pub sku_configs: ::prost::alloc::vec::Vec<SkuConfig>,
+    /// DEPRECATED: use package/user_parameters instead.
+    #[deprecated]
+    #[prost(message, repeated, tag = "2")]
+    pub shared_sku_budgets: ::prost::alloc::vec::Vec<SharedSkuBudget>,
+    /// DEPRECATED: use user_parameters instead
+    #[deprecated]
+    #[prost(uint64, tag = "5")]
+    pub max_spend_cents: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Contract {
