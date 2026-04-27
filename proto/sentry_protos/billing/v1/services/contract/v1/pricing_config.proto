@@ -2,21 +2,29 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
 import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
 import "sentry_protos/billing/v1/sku.proto";
 
 message PricingTier {
+  option deprecated = true;
+
   int64 start = 1;
   int64 end = 2;
   int64 rate_per_unit_cpe = 3;
 }
 
 message TieredPricingRate {
+  option deprecated = true;
+
   repeated PricingTier tiers = 1;
 }
 
 message SKUConfig {
+  option deprecated = true;
+
   SKU sku = 1 [deprecated = true]; //DEPRECATED: use billing_sku instead
   // Base price for the SKU (upgraded reserved volumes or add-on activation fees)
   uint64 base_price_cents = 2;
@@ -36,24 +44,53 @@ message SKUConfig {
 // Represents a budget that is collectively used by one or more SKUs,
 // allowing multiple SKUs to draw from the same reserved budget.
 message SharedSKUBudget {
+  option deprecated = true;
+
   repeated SKU skus = 1 [deprecated = true]; //DEPRECATED: use billing_skus instead
   uint64 reserved_budget_cents = 2;
   uint64 payg_budget_cents = 3;
   repeated sentry_protos.billing.v1.SKU billing_skus = 4;
 }
 
+message PAYGBudget {
+  uint64 budget_cents = 1;
+}
+
+message Reservation {
+  uint64 reserved_price_cents = 1;
+  oneof reserved_units {
+    bool is_unlimited = 2;
+    uint64 num_reserved_units = 3;
+  }
+}
+
+message LineItemUids {
+  repeated string uids = 1;
+}
+
+message UserConfig {
+  PAYGBudget payg_budget = 1;
+  Reservation reservation = 2;
+  oneof line_items {
+    LineItemUids specific_items = 3;
+    google.protobuf.Empty all_items = 4;
+  }
+}
+
 message PricingConfig {
-  repeated SKUConfig sku_configs = 1;
-  repeated SharedSKUBudget shared_sku_budgets = 2;
-  // Determines when to reset quotas and create an invoice.
+  // Determines when to reset quotas and charge the subscription price.
   Date billing_period_start_date = 3;
   Date billing_period_end_date = 4;
-
-  uint64 max_spend_cents = 5;
-  // Base price for the package.
-  uint64 base_price_cents = 6;
 
   //Determines when the on demand period for invoicing the organization starts and ends, even for annual plans we bill ondemand monthly
   Date ondemand_period_start_date = 7;
   Date ondemand_period_end_date = 8;
+  optional google.protobuf.Timestamp usage_watermark_ts = 9;
+
+  repeated UserConfig user_config = 10;
+
+  uint64 base_price_cents = 6 [deprecated = true]; // DEPRECATED: use package instead.
+  repeated SKUConfig sku_configs = 1 [deprecated = true]; // DEPRECATED: use package/user_parameters instead.
+  repeated SharedSKUBudget shared_sku_budgets = 2 [deprecated = true]; // DEPRECATED: use package/user_parameters instead.
+  uint64 max_spend_cents = 5 [deprecated = true]; // DEPRECATED: use user_parameters instead
 }

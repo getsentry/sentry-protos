@@ -18,6 +18,8 @@ enum BillingType {
 
 // The channel through which the contract is billed.
 enum BillingChannel {
+  option deprecated = true;
+
   BILLING_CHANNEL_UNSPECIFIED = 0;
   BILLING_CHANNEL_SELF_SERVE = 1;
   BILLING_CHANNEL_SALES = 2;
@@ -26,6 +28,8 @@ enum BillingChannel {
 
 // The external billing provider used to process payments for the contract.
 enum ExternalBillingProvider {
+  option deprecated = true;
+
   EXTERNAL_BILLING_PROVIDER_UNSPECIFIED = 0;
   EXTERNAL_BILLING_PROVIDER_STRIPE = 1;
   EXTERNAL_BILLING_PROVIDER_VERCEL = 2;
@@ -45,11 +49,12 @@ message Address {
 
 message BillingConfig {
   BillingType billing_type = 1;
-  BillingChannel channel = 2;
-  ExternalBillingProvider external_billing_provider = 3;
-  Address address = 4 [deprecated=true];
 
-  // Determines when to charge for base package price / subscription fee.
-  Date contract_start_date = 5;
-  Date contract_end_date = 6;
+  // Remaining fields are deprecated
+  BillingChannel channel = 2 [deprecated=true];
+  ExternalBillingProvider external_billing_provider = 3 [deprecated=true];
+  Address address = 4 [deprecated=true];
+  // Use PricingConfig.billing_period_start_date and PricingConfig.billing_period_end_date
+  Date contract_start_date = 5 [deprecated = true];
+  Date contract_end_date = 6 [deprecated = true];
 }
