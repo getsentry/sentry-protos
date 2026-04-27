@@ -67,4 +67,6 @@ pub struct UsagePricerResponse {
     pub line_item_summaries: ::prost::alloc::vec::Vec<LineItemUsageSummary>,
     #[prost(message, repeated, tag = "4")]
     pub shared_line_item_summaries: ::prost::alloc::vec::Vec<SharedLineItemUsageSummary>,
+    #[prost(message, optional, tag = "5")]
+    pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
