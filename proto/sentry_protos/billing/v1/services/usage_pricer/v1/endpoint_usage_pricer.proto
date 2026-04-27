@@ -63,4 +63,6 @@ message UsagePricerResponse {
   repeated LineItemUsageSummary line_item_summaries = 3;
 
   repeated SharedLineItemUsageSummary shared_line_item_summaries = 4;
+
+  google.protobuf.Timestamp last_usage_ts = 5;
 }
