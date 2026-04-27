@@ -19,12 +19,19 @@ from sentry_protos.billing.v1.services.contract.v1.endpoint_get_contract_pb2 imp
     GetContractResponse,
 )
 from sentry_protos.billing.v1.services.contract.v1.pricing_config_pb2 import (
+    LineItemUids,
+    PAYGBudget,
     PricingConfig,
     PricingTier,
+    Reservation,
     SharedSKUBudget,
     SKUConfig,
     TieredPricingRate,
+    UserConfig,
 )
+from sentry_protos.billing.v1 import feature_pb2 as billing_feature_pb2
+from google.protobuf.empty_pb2 import Empty
+from google.protobuf.timestamp_pb2 import Timestamp
 from sentry_protos.billing.v1.sku_pb2 import SKU
 from sentry_protos.billing.v1.credit_pb2 import (
     Credit,
@@ -399,3 +406,104 @@ def test_get_package_response():
     assert response.package_config.uid == "pkg_monthly_123"
     assert response.package_config.base_price_cents == 10000
     assert response.package_config.billing_interval == BillingInterval.BILLING_INTERVAL_MONTHLY
+
+
+def test_create_contract():
+    user_configs = [
+        UserConfig(
+            specific_items=LineItemUids(uids=["errors", "spans"]),
+            payg_budget=PAYGBudget(budget_cents=10_000),
+            reservation=Reservation(
+                reserved_price_cents=2900,
+                num_reserved_units=100_000,
+            ),
+        ),
+        UserConfig(
+            specific_items=LineItemUids(uids=["replays"]),
+            payg_budget=PAYGBudget(budget_cents=5_000),
+            reservation=Reservation(
+                reserved_price_cents=0,
+                is_unlimited=True,
+            ),
+        ),
+        UserConfig(
+            all_items=Empty(),
+            payg_budget=PAYGBudget(budget_cents=2_500),
+        ),
+    ]
+
+    contract = Contract(
+        metadata=ContractMetadata(
+            id=12345,
+            organization_id=67890,
+            ruleset_version="1",
+            package_id=42,
+            billing_features=billing_feature_pb2.FeatureOptions(
+                options=[
+                    billing_feature_pb2.FeatureOption(key="sso", enabled=True),
+                    billing_feature_pb2.FeatureOption(
+                        key="custom_dashboards", enabled=True
+                    ),
+                ],
+                start_date=BillingDate(year=2026, month=1, day=1),
+                end_date=BillingDate(year=2027, month=1, day=1),
+            ),
+            custom_options=MetadataOptions(
+                options=[
+                    MetadataOption(
+                        key="override_rate_limit",
+                        value=OptionValue(int_value=5000),
+                    ),
+                    MetadataOption(
+                        key="is_internal", value=OptionValue(bool_value=True)
+                    ),
+                ],
+            ),
+        ),
+        billing_config=BillingConfig(
+            billing_type=BillingType.BILLING_TYPE_INVOICED,
+        ),
+        pricing_config=PricingConfig(
+            billing_period_start_date=Date(year=2026, month=1, day=1),
+            billing_period_end_date=Date(year=2027, month=1, day=1),
+            ondemand_period_start_date=Date(year=2026, month=4, day=1),
+            ondemand_period_end_date=Date(year=2026, month=5, day=1),
+            usage_watermark_ts=Timestamp(seconds=1_714_000_000),
+            user_config=user_configs,
+        ),
+    )
+
+    assert contract.metadata.package_id == 42
+    assert contract.metadata.id == 12345
+    assert contract.metadata.organization_id == 67890
+
+    feature_map = {
+        f.key: f.enabled for f in contract.metadata.billing_features.options
+    }
+    assert feature_map == {"sso": True, "custom_dashboards": True}
+    assert contract.metadata.billing_features.start_date.year == 2026
+
+    custom_options = {
+        opt.key: opt.value for opt in contract.metadata.custom_options.options
+    }
+    assert custom_options["override_rate_limit"].int_value == 5000
+    assert custom_options["is_internal"].bool_value is True
+
+    assert contract.billing_config.billing_type == BillingType.BILLING_TYPE_INVOICED
+
+    pricing = contract.pricing_config
+    assert pricing.billing_period_start_date.year == 2026
+    assert pricing.billing_period_end_date.year == 2027
+    assert pricing.ondemand_period_start_date.month == 4
+    assert pricing.ondemand_period_end_date.month == 5
+    assert pricing.HasField("usage_watermark_ts")
+    assert pricing.usage_watermark_ts.seconds == 1_714_000_000
+
+    assert len(pricing.user_config) == 3
+    assert pricing.user_config[0].WhichOneof("line_items") == "specific_items"
+    assert list(pricing.user_config[0].specific_items.uids) == ["errors", "spans"]
+    assert pricing.user_config[0].payg_budget.budget_cents == 10_000
+    assert pricing.user_config[0].reservation.num_reserved_units == 100_000
+    assert pricing.user_config[1].reservation.is_unlimited is True
+    assert pricing.user_config[2].WhichOneof("line_items") == "all_items"
+    assert pricing.user_config[2].HasField("all_items")
