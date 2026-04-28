@@ -20,6 +20,12 @@ pub struct Address {
 pub struct BillingDetails {
     #[prost(message, optional, tag = "1")]
     pub address: ::core::option::Option<Address>,
+    #[prost(string, tag = "2")]
+    pub display_address: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "3")]
+    pub company_name: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "4")]
+    pub billing_email: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetBillingDetailsRequest {
