@@ -13,6 +13,7 @@ message UsagePricerRequest {
 
 message GetPriceForContractRequest {
   uint64 contract_id = 1;
+  google.protobuf.Timestamp usage_start_watermark_ts = 2;
 }
 
 message SKUUsageSummary {
