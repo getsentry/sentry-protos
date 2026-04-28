@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+
+message CreateContractRequest {
+    uint64 organization_id = 1;
+    string package_uid = 2;
+    repeated UserConfig user_configs = 3;
+}
+
+message CreateContractResponse {
+    uint64 id = 1;
+}
