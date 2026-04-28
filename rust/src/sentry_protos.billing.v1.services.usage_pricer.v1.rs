@@ -12,6 +12,8 @@ pub struct UsagePricerRequest {
 pub struct GetPriceForContractRequest {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub usage_start_watermark_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SkuUsageSummary {
