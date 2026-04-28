@@ -63,6 +63,8 @@ pub struct PackageConfig {
     /// Billing interval for this package.
     #[prost(enumeration = "super::super::super::common::v1::BillingInterval", tag = "5")]
     pub billing_interval: i32,
+    #[prost(string, tag = "6")]
+    pub title: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
