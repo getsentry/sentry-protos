@@ -1,3 +1,19 @@
+## 0.8.20
+
+### New Features ✨
+
+- Add endpoint for generating invoice PDF by @noahsmartin in [#225](https://github.com/getsentry/sentry-protos/pull/225)
+- Add create contract endpoint by @noahsmartin in [#221](https://github.com/getsentry/sentry-protos/pull/221)
+
+### Internal Changes 🔧
+
+- Add fields to billing details by @noahsmartin in [#223](https://github.com/getsentry/sentry-protos/pull/223)
+- Add fields to invoice proto that are used by the invoice PDF by @noahsmartin in [#224](https://github.com/getsentry/sentry-protos/pull/224)
+- Add watermark for usage pricer start by @noahsmartin in [#222](https://github.com/getsentry/sentry-protos/pull/222)
+- Make package id a uid by @noahsmartin in [#218](https://github.com/getsentry/sentry-protos/pull/218)
+- Add last_usage_ts for usage pricer watermark by @noahsmartin in [#217](https://github.com/getsentry/sentry-protos/pull/217)
+- Update contract protos by @noahsmartin in [#216](https://github.com/getsentry/sentry-protos/pull/216)
+
 ## 0.8.19
 
 ### New Features ✨
