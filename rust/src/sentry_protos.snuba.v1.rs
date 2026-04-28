@@ -817,6 +817,10 @@ pub struct RequestMeta {
     /// how to query the downsampled storages
     #[prost(message, optional, tag = "12")]
     pub downsampled_storage_config: ::core::option::Option<DownsampledStorageConfig>,
+    /// full fidelity retention setting. allows for querying data that
+    /// differs from the standard retention_days
+    #[prost(uint32, optional, tag = "13")]
+    pub retention_days: ::core::option::Option<u32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ResponseMeta {
