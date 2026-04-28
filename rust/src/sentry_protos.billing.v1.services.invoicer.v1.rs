@@ -17,3 +17,55 @@ pub struct CreateInvoicesRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateInvoicesResponse {}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GeneratePdfRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub invoice_guid: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PdfData {
+    /// Right-aligned lines drawn at the top of the page (e.g. company address
+    /// and tax IDs).
+    #[prost(string, repeated, tag = "1")]
+    pub header: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// Left column of pre-formatted text lines drawn below the header.
+    #[prost(string, repeated, tag = "2")]
+    pub billing_lines: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, repeated, tag = "3")]
+    pub invoice_lines: ::prost::alloc::vec::Vec<pdf_data::LabeledLine>,
+    #[prost(message, repeated, tag = "4")]
+    pub table_data: ::prost::alloc::vec::Vec<pdf_data::TableRow>,
+    /// Optional FTC disclaimer paragraph drawn below the table.
+    #[prost(string, optional, tag = "5")]
+    pub disclaimer: ::core::option::Option<::prost::alloc::string::String>,
+}
+/// Nested message and enum types in `PdfData`.
+pub mod pdf_data {
+    /// Right column below the header. Each entry renders as the `label` drawn
+    /// in one text column and the corresponding `value` drawn in the next.
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+    pub struct LabeledLine {
+        #[prost(string, tag = "1")]
+        pub label: ::prost::alloc::string::String,
+        #[prost(string, tag = "2")]
+        pub value: ::prost::alloc::string::String,
+    }
+    /// Rows of the invoice line-item table. The first row is the header row
+    /// ("Description" / "Amount"); every subsequent row has the same number of
+    /// cells. Cells may contain reportlab markup (e.g. <b>, <br/>, <small>) for
+    /// multi-line/styled descriptions.
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+    pub struct TableRow {
+        #[prost(string, repeated, tag = "1")]
+        pub cells: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GeneratePdfResponse {
+    #[prost(message, optional, tag = "1")]
+    pub pdf_data: ::core::option::Option<PdfData>,
+    #[prost(string, tag = "2")]
+    pub filename: ::prost::alloc::string::String,
+}
