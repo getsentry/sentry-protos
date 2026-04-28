@@ -43,7 +43,7 @@ message RequestMeta {
 
   // full fidelity retention setting. allows for querying data that
   // differs from the standard retention_days
-  uint32 retention_days = 13;
+  optional uint32 retention_days = 13;
 }
 
 message ResponseMeta {
