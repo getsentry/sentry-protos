@@ -435,6 +435,20 @@ pub struct Contract {
     #[prost(message, optional, tag = "3")]
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(string, tag = "2")]
+    pub package_uid: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub user_configs: ::prost::alloc::vec::Vec<UserConfig>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateContractResponse {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetContractRequest {
     #[prost(uint64, tag = "1")]
