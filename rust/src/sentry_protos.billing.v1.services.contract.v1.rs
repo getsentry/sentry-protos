@@ -352,21 +352,26 @@ pub struct PaygBudget {
     #[prost(uint64, tag = "1")]
     pub budget_cents: u64,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct Reservation {
     #[prost(uint64, tag = "1")]
     pub reserved_price_cents: u64,
-    #[prost(oneof = "reservation::ReservedUnits", tags = "2, 3")]
+    #[prost(oneof = "reservation::ReservedUnits", tags = "2, 3, 4")]
     pub reserved_units: ::core::option::Option<reservation::ReservedUnits>,
 }
 /// Nested message and enum types in `Reservation`.
 pub mod reservation {
-    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
     pub enum ReservedUnits {
         #[prost(bool, tag = "2")]
         IsUnlimited(bool),
+        /// DEPRECATED: use converted_reserved_units
+        #[deprecated]
         #[prost(uint64, tag = "3")]
         NumReservedUnits(u64),
+        /// Converted from the types base units to display units
+        #[prost(float, tag = "4")]
+        ConvertedReservedUnits(f32),
     }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -374,7 +379,7 @@ pub struct LineItemUids {
     #[prost(string, repeated, tag = "1")]
     pub uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UserConfig {
     #[prost(message, optional, tag = "1")]
     pub payg_budget: ::core::option::Option<PaygBudget>,

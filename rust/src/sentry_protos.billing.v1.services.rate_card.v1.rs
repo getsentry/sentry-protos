@@ -15,19 +15,24 @@ pub struct RateCardLineItem {
     >,
     /// The following values are the effective values *after* contract overrides have been resolved. If there are no
     /// contract overrides, the default package values are used.
-    #[prost(oneof = "rate_card_line_item::ReservedUnits", tags = "2, 3")]
+    #[prost(oneof = "rate_card_line_item::ReservedUnits", tags = "2, 3, 6")]
     pub reserved_units: ::core::option::Option<rate_card_line_item::ReservedUnits>,
 }
 /// Nested message and enum types in `RateCardLineItem`.
 pub mod rate_card_line_item {
     /// The following values are the effective values *after* contract overrides have been resolved. If there are no
     /// contract overrides, the default package values are used.
-    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
     pub enum ReservedUnits {
         #[prost(bool, tag = "2")]
         IsUnlimited(bool),
+        /// DEPRECATED: Use converted_reserved_units instead
+        #[deprecated]
         #[prost(uint64, tag = "3")]
         NumReservedUnits(u64),
+        /// In display units
+        #[prost(float, tag = "6")]
+        ConvertedReservedUnits(f32),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
