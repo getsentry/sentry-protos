@@ -59,11 +59,23 @@ pub struct CategorySeatUsage {
     #[prost(uint64, tag = "2")]
     pub count: u64,
 }
+/// Seat usage data for a single day.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DailySeatUsage {
+    #[prost(message, optional, tag = "1")]
+    pub date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, repeated, tag = "2")]
+    pub seats: ::prost::alloc::vec::Vec<CategorySeatUsage>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUsageResponse {
     /// Usage broken down by day, each containing per-category usage.
     #[prost(message, repeated, tag = "1")]
     pub days: ::prost::alloc::vec::Vec<DailyUsage>,
+    #[prost(message, repeated, tag = "3")]
+    pub seat_days: ::prost::alloc::vec::Vec<DailySeatUsage>,
+    /// DEPRECATED: use seat_days
+    #[deprecated]
     #[prost(message, repeated, tag = "2")]
     pub seats: ::prost::alloc::vec::Vec<CategorySeatUsage>,
 }

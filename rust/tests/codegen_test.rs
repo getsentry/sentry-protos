@@ -18,7 +18,8 @@ use sentry_protos::billing::v1::SeatCategory;
 use sentry_protos::billing::v1::UsageData;
 use sentry_protos::billing::v1::services::contract::v1::{Contract, GetContractRequest};
 use sentry_protos::billing::v1::services::usage::v1::{
-    CategorySeatUsage, CategoryUsage, DailyUsage, GetUsageRequest, GetUsageResponse,
+    CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage, GetUsageRequest,
+    GetUsageResponse,
 };
 use sentry_protos::sentry::v1::RetryState;
 
@@ -64,9 +65,16 @@ fn roundtrip_get_usage_response() {
                 }),
             }],
         }],
-        seats: vec![CategorySeatUsage {
-            category: SeatCategory::Monitor as i32,
-            count: 5,
+        seat_days: vec![DailySeatUsage {
+            date: Some(Date {
+                year: 2026,
+                month: 1,
+                day: 15,
+            }),
+            seats: vec![CategorySeatUsage {
+                category: SeatCategory::Monitor as i32,
+                count: 5,
+            }],
         }],
     });
 }
