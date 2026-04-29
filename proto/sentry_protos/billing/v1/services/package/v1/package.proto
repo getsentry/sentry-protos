@@ -15,7 +15,9 @@ message LineItemConfig {
   // how many of this lineitem are included in the package, the customer can reserve more on their contract
   oneof included_reserved_units {
     bool is_unlimited = 5;
-    uint64 num_reserved_units = 6; // the type communicates whether the line item is unlimited or not, additionally reserved budget line items have a non-zero reserved_rate in addition to 0 reserved_units
+    uint64 num_reserved_units = 6 [deprecated = true]; // DEPRECATED: Use converted_reserved_units instead
+    // In display units
+    float converted_reserved_units = 8; // the type communicates whether the line item is unlimited or not, additionally reserved budget line items have a non-zero reserved_rate in addition to 0 reserved_units
   }
 
   sentry_protos.billing.v1.common.v1.LineItemDetails line_item = 7;

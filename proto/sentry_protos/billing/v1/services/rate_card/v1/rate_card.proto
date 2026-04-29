@@ -12,7 +12,9 @@ message RateCardLineItem {
   // contract overrides, the default package values are used.
   oneof reserved_units {
     bool is_unlimited = 2;
-    uint64 num_reserved_units = 3;
+    uint64 num_reserved_units = 3 [deprecated = true]; // DEPRECATED: Use converted_reserved_units instead
+    // In display units
+    float converted_reserved_units = 6;
   }
   sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 4;
   sentry_protos.billing.v1.common.v1.TieredPricingRate reserved_rate = 5;

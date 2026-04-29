@@ -60,7 +60,9 @@ message Reservation {
   uint64 reserved_price_cents = 1;
   oneof reserved_units {
     bool is_unlimited = 2;
-    uint64 num_reserved_units = 3;
+    uint64 num_reserved_units = 3 [deprecated = true]; // DEPRECATED: use converted_reserved_units
+    // Converted from the types base units to display units
+    float converted_reserved_units = 4;
   }
 }
 
