@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sentry_protos.billing.v1.services.charge.v1;
+package sentry_protos.billing.v1.common.v1;
 
 // Stripe-specific payment information for an organization.
 message StripePaymentData {
