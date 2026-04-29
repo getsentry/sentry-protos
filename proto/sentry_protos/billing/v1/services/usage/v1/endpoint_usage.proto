@@ -24,10 +24,18 @@ message CategorySeatUsage {
   uint64 count = 2;
 }
 
+// Seat usage data for a single day.
+message DailySeatUsage {
+  Date date = 1;
+  repeated CategorySeatUsage seats = 2;
+}
+
 message GetUsageResponse {
   // Usage broken down by day, each containing per-category usage.
   repeated DailyUsage days = 1;
-  repeated CategorySeatUsage seats = 2;
+  repeated DailySeatUsage seat_days = 3;
+
+  repeated CategorySeatUsage seats = 2 [deprecated = true]; // DEPRECATED: use seat_days
 }
 
 message GetUsageRequest {
