@@ -3,40 +3,40 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.invoicer.v1;
 
 message GeneratePdfRequest {
-    uint64 invoice_id = 1;
-    string invoice_guid = 2;
+  uint64 invoice_id = 1;
+  string invoice_guid = 2;
 }
 
 message PdfData {
-    // Right-aligned lines drawn at the top of the page (e.g. company address
-    // and tax IDs).
-    repeated string header = 1;
+  // Right-aligned lines drawn at the top of the page (e.g. company address
+  // and tax IDs).
+  repeated string header = 1;
 
-    // Left column of pre-formatted text lines drawn below the header.
-    repeated string billing_lines = 2;
+  // Left column of pre-formatted text lines drawn below the header.
+  repeated string billing_lines = 2;
 
-    // Right column below the header. Each entry renders as the `label` drawn
-    // in one text column and the corresponding `value` drawn in the next.
-    message LabeledLine {
-        string label = 1;
-        string value = 2;
-    }
-    repeated LabeledLine invoice_lines = 3;
+  // Right column below the header. Each entry renders as the `label` drawn
+  // in one text column and the corresponding `value` drawn in the next.
+  message LabeledLine {
+    string label = 1;
+    string value = 2;
+  }
+  repeated LabeledLine invoice_lines = 3;
 
-    // Rows of the invoice line-item table. The first row is the header row
-    // ("Description" / "Amount"); every subsequent row has the same number of
-    // cells. Cells may contain reportlab markup (e.g. <b>, <br/>, <small>) for
-    // multi-line/styled descriptions.
-    message TableRow {
-        repeated string cells = 1;
-    }
-    repeated TableRow table_data = 4;
+  // Rows of the invoice line-item table. The first row is the header row
+  // ("Description" / "Amount"); every subsequent row has the same number of
+  // cells. Cells may contain reportlab markup (e.g. <b>, <br/>, <small>) for
+  // multi-line/styled descriptions.
+  message TableRow {
+    repeated string cells = 1;
+  }
+  repeated TableRow table_data = 4;
 
-    // Optional FTC disclaimer paragraph drawn below the table.
-    optional string disclaimer = 5;
+  // Optional FTC disclaimer paragraph drawn below the table.
+  optional string disclaimer = 5;
 }
 
 message GeneratePdfResponse {
-    PdfData pdf_data = 1;
-    string filename = 2;
+  PdfData pdf_data = 1;
+  string filename = 2;
 }

@@ -5,7 +5,7 @@ package sentry_protos.billing.v1.services.billing_details.v1;
 import "sentry_protos/billing/v1/services/billing_details/v1/billing_details.proto";
 
 message GetBillingDetailsRequest {
-    uint64 organization_id = 1;
+  uint64 organization_id = 1;
 }
 
 message GetBillingDetailsResponse {

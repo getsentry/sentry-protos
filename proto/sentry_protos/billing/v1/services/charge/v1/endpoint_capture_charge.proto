@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.charge.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/charge/v1/payment_config.proto";
 
 // How the charge should be executed against the payment provider.
 enum ChargeMethod {
@@ -25,6 +26,7 @@ message CaptureChargeRequest {
   uint64 organization_id = 4;
   google.protobuf.Timestamp current_ts = 5;
   optional string invoice_id = 6;
+  optional PaymentConfig payment_config = 7;
 }
 
 message CaptureChargeResponse {
