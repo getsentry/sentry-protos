@@ -39,4 +39,5 @@ message PackageConfig {
   uint64 base_price_cents = 4;
   // Billing interval for this package.
   sentry_protos.billing.v1.common.v1.BillingInterval billing_interval = 5;
+  string title = 6;
 }
