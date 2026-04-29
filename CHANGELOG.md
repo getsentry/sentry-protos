@@ -1,3 +1,9 @@
+## 0.8.21
+
+### Internal Changes 🔧
+
+- (billing-platform) Update seat based usage proto by @brendanhsentry in [#227](https://github.com/getsentry/sentry-protos/pull/227)
+
 ## 0.8.20
 
 ### New Features ✨
