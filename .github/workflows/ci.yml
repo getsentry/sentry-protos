@@ -17,12 +17,12 @@ jobs:
 
       - uses: bufbuild/buf-setup-action@35c243d7f2a909b1d4e40399b348a7fdab27d78d # v1.34.0
 
-      - name: buf lint and breaking
+      - name: buf lint, format, and breaking
         uses: bufbuild/buf-action@91da6f6a1a2c877c182debad24ca0a8a9d848be7 # v1
         with:
           lint: true
           breaking: true
-          format: false
+          format: true
           breaking_against: 'https://github.com/getsentry/sentry-protos.git#branch=main'
 
   codegen-rust:
