@@ -26,7 +26,8 @@ message CaptureChargeRequest {
   uint64 organization_id = 4;
   google.protobuf.Timestamp current_ts = 5;
   optional string invoice_id = 6;
-  optional PaymentConfig payment_config = 7;
+  optional string invoice_guid = 7;
+  optional PaymentConfig payment_config = 8;
 }
 
 message CaptureChargeResponse {
