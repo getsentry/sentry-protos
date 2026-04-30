@@ -202,6 +202,33 @@ pub struct LineItemDetails {
     #[prost(message, optional, tag = "6")]
     pub billable_metric: ::core::option::Option<BillableMetric>,
 }
+/// Stripe-specific payment information for an organization.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StripePaymentData {
+    #[prost(string, optional, tag = "1")]
+    pub customer_stripe_id: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "2")]
+    pub default_payment_method_id: ::core::option::Option<
+        ::prost::alloc::string::String,
+    >,
+    #[prost(bool, tag = "3")]
+    pub has_payment_method: bool,
+}
+/// Payment provider configuration with support for multiple providers.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PaymentConfig {
+    #[prost(oneof = "payment_config::Config", tags = "1")]
+    pub config: ::core::option::Option<payment_config::Config>,
+}
+/// Nested message and enum types in `PaymentConfig`.
+pub mod payment_config {
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Config {
+        /// Future payment providers (e.g., PayPal, Braintree) can be added here
+        #[prost(message, tag = "1")]
+        Stripe(super::StripePaymentData),
+    }
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PricingTier {
     #[prost(int64, tag = "1")]
