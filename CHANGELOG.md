@@ -1,3 +1,9 @@
+## 0.8.24
+
+### New Features ✨
+
+- Add create contract endpoint to invoicer by @noahsmartin in [#235](https://github.com/getsentry/sentry-protos/pull/235)
+
 ## 0.8.23
 
 ### New Features ✨
