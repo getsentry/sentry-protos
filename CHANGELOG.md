@@ -1,3 +1,9 @@
+## 0.8.23
+
+### New Features ✨
+
+- (billing) Add payment config to charge service by @volokluev in [#229](https://github.com/getsentry/sentry-protos/pull/229)
+
 ## 0.8.22
 
 ### Internal Changes 🔧
