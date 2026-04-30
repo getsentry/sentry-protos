@@ -37,3 +37,15 @@ pub struct GetBillingDetailsResponse {
     #[prost(message, optional, tag = "1")]
     pub billing_details: ::core::option::Option<BillingDetails>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetStripePaymentDataRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetStripePaymentDataResponse {
+    #[prost(message, optional, tag = "1")]
+    pub stripe_payment_data: ::core::option::Option<
+        super::super::super::common::v1::StripePaymentData,
+    >,
+}

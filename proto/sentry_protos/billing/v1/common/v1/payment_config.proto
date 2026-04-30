@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+// Stripe-specific payment information for an organization.
+message StripePaymentData {
+  optional string customer_stripe_id = 1;
+  optional string default_payment_method_id = 2;
+}
+
+// Payment provider configuration with support for multiple providers.
+message PaymentConfig {
+  oneof config {
+    StripePaymentData stripe = 1;
+    // Future payment providers (e.g., PayPal, Braintree) can be added here
+  }
+}

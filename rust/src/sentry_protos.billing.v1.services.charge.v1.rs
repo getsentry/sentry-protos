@@ -13,6 +13,12 @@ pub struct CaptureChargeRequest {
     pub current_ts: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(string, optional, tag = "6")]
     pub invoice_id: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "7")]
+    pub invoice_guid: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "8")]
+    pub payment_config: ::core::option::Option<
+        super::super::super::common::v1::PaymentConfig,
+    >,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CaptureChargeResponse {

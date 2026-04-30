@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_details.v1;
+
+import "sentry_protos/billing/v1/common/v1/payment_config.proto";
+
+message GetStripePaymentDataRequest {
+  uint64 organization_id = 1;
+}
+
+message GetStripePaymentDataResponse {
+  sentry_protos.billing.v1.common.v1.StripePaymentData stripe_payment_data = 1;
+}
