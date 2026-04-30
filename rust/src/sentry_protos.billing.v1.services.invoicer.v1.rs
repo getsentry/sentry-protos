@@ -8,6 +8,20 @@ pub struct ChargeInvoicesRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ChargeInvoicesResponse {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateAndBillContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(string, tag = "2")]
+    pub package_uid: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateAndBillContractResponse {
+    #[prost(bool, tag = "1")]
+    pub success: bool,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateInvoicesRequest {
     /// The current time used to select contracts whose billing period has ended
