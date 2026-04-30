@@ -1,3 +1,13 @@
+## 0.8.22
+
+### Internal Changes 🔧
+
+- Add invoicing fields to create contract endpoint by @noahsmartin in [#234](https://github.com/getsentry/sentry-protos/pull/234)
+- Add invoice guid by @noahsmartin in [#230](https://github.com/getsentry/sentry-protos/pull/230)
+- Format proto files with buf formatter by @volokluev in [#231](https://github.com/getsentry/sentry-protos/pull/231)
+- Add line item quantity in usage pricer response by @noahsmartin in [#220](https://github.com/getsentry/sentry-protos/pull/220)
+- Add plan family to package by @noahsmartin in [#219](https://github.com/getsentry/sentry-protos/pull/219)
+
 ## 0.8.21
 
 ### Internal Changes 🔧
