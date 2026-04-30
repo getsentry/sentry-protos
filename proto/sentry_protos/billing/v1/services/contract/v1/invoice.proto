@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
+import "google/protobuf/timestamp.proto";
+
 // This is not the same as LineItemDetails, it includes
 // items not related to the package such as tax.
 message InvoiceLineItem {
@@ -15,4 +17,8 @@ message Invoice {
     repeated InvoiceLineItem line_items = 2;
     // Not just a sum of line items since there may be credit applied
     uint64 amount_billed = 3;
+    uint64 organization_id = 4;
+    bool paid = 5;
+    google.protobuf.Timestamp date_added = 6;
+    string guid = 7;
 }

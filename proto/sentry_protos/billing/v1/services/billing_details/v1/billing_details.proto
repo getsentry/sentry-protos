@@ -14,4 +14,7 @@ message Address {
 
 message BillingDetails {
   Address address = 1;
+  string display_address = 2;
+  string billing_email = 3;
+  string company_name = 4;
 }
