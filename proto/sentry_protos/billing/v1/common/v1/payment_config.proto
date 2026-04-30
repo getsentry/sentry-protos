@@ -6,7 +6,6 @@ package sentry_protos.billing.v1.common.v1;
 message StripePaymentData {
   optional string customer_stripe_id = 1;
   optional string default_payment_method_id = 2;
-  bool has_payment_method = 3;
 }
 
 // Payment provider configuration with support for multiple providers.
