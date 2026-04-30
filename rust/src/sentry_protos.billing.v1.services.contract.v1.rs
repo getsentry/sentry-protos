@@ -435,38 +435,6 @@ pub struct Contract {
     #[prost(message, optional, tag = "3")]
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateContractRequest {
-    #[prost(uint64, tag = "1")]
-    pub organization_id: u64,
-    #[prost(string, tag = "2")]
-    pub package_uid: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub user_configs: ::prost::alloc::vec::Vec<UserConfig>,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct CreateContractResponse {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct GetContractRequest {
-    #[prost(uint64, tag = "1")]
-    pub organization_id: u64,
-    /// If provided, returns the Contract active on this date. Otherwise, returns the current Contract.
-    #[prost(message, optional, tag = "2")]
-    pub date: ::core::option::Option<super::super::super::Date>,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct GetSpecificContractRequest {
-    #[prost(uint64, tag = "1")]
-    pub contract_id: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetContractResponse {
-    #[prost(message, optional, tag = "1")]
-    pub contract: ::core::option::Option<Contract>,
-}
 /// This is not the same as LineItemDetails, it includes
 /// items not related to the package such as tax.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -494,6 +462,48 @@ pub struct Invoice {
     pub date_added: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(string, tag = "7")]
     pub guid: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(string, tag = "2")]
+    pub package_uid: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub user_configs: ::prost::alloc::vec::Vec<UserConfig>,
+    #[prost(message, repeated, tag = "4")]
+    pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateContractResponse {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    #[prost(uint64, tag = "2")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "3")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(bool, tag = "4")]
+    pub needs_charge: bool,
+    #[prost(uint64, tag = "5")]
+    pub amount_billed: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// If provided, returns the Contract active on this date. Otherwise, returns the current Contract.
+    #[prost(message, optional, tag = "2")]
+    pub date: ::core::option::Option<super::super::super::Date>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSpecificContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetContractResponse {
+    #[prost(message, optional, tag = "1")]
+    pub contract: ::core::option::Option<Contract>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetInvoiceRequest {

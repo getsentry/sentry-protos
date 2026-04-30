@@ -2,14 +2,20 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
 
 message CreateContractRequest {
   uint64 organization_id = 1;
   string package_uid = 2;
   repeated UserConfig user_configs = 3;
+  repeated InvoiceLineItem line_items = 4;
 }
 
 message CreateContractResponse {
   uint64 id = 1;
+  uint64 invoice_id = 2;
+  string invoice_guid = 3;
+  bool needs_charge = 4;
+  uint64 amount_billed = 5;
 }
