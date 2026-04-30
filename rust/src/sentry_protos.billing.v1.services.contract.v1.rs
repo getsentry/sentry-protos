@@ -472,6 +472,14 @@ pub struct Invoice {
     /// Not just a sum of line items since there may be credit applied
     #[prost(uint64, tag = "3")]
     pub amount_billed: u64,
+    #[prost(uint64, tag = "4")]
+    pub organization_id: u64,
+    #[prost(bool, tag = "5")]
+    pub paid: bool,
+    #[prost(message, optional, tag = "6")]
+    pub date_added: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(string, tag = "7")]
+    pub guid: ::prost::alloc::string::String,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetInvoiceRequest {
