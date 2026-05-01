@@ -158,6 +158,7 @@ pub enum BaseUnit {
     Byte = 1,
     Count = 2,
     Second = 3,
+    Millisecond = 4,
 }
 impl BaseUnit {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -170,6 +171,7 @@ impl BaseUnit {
             Self::Byte => "BASE_UNIT_BYTE",
             Self::Count => "BASE_UNIT_COUNT",
             Self::Second => "BASE_UNIT_SECOND",
+            Self::Millisecond => "BASE_UNIT_MILLISECOND",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -179,6 +181,7 @@ impl BaseUnit {
             "BASE_UNIT_BYTE" => Some(Self::Byte),
             "BASE_UNIT_COUNT" => Some(Self::Count),
             "BASE_UNIT_SECOND" => Some(Self::Second),
+            "BASE_UNIT_MILLISECOND" => Some(Self::Millisecond),
             _ => None,
         }
     }
