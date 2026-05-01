@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/address.proto";
 
 // This is not the same as LineItemDetails, it includes
 // items not related to the package such as tax.
@@ -21,4 +22,6 @@ message Invoice {
   bool paid = 5;
   google.protobuf.Timestamp date_added = 6;
   string guid = 7;
+  bool needs_charged = 8;
+  sentry_protos.billing.v1.common.v1.Address address = 9;
 }
