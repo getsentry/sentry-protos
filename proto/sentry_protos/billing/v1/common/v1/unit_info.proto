@@ -8,6 +8,7 @@ enum BaseUnit {
   BASE_UNIT_BYTE = 1;
   BASE_UNIT_COUNT = 2;
   BASE_UNIT_SECOND = 3;
+  BASE_UNIT_MILLISECOND = 4;
 }
 
 // Unit information for measurement and conversion.
