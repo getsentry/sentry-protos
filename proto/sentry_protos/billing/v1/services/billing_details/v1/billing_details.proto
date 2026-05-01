@@ -2,7 +2,11 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.billing_details.v1;
 
+import "sentry_protos/billing/v1/common/v1/address.proto";
+
 message Address {
+  option deprecated = true;
+
   string city = 1;
   string region = 2;
   string country_code = 3;
@@ -13,8 +17,9 @@ message Address {
 }
 
 message BillingDetails {
-  Address address = 1;
+  Address address = 1 [deprecated = true];
   string display_address = 2;
   optional string company_name = 3;
   optional string billing_email = 4;
+  sentry_protos.billing.v1.common.v1.Address billing_address = 5;
 }

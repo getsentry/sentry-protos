@@ -462,6 +462,10 @@ pub struct Invoice {
     pub date_added: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(string, tag = "7")]
     pub guid: ::prost::alloc::string::String,
+    #[prost(bool, tag = "8")]
+    pub needs_charged: bool,
+    #[prost(message, optional, tag = "9")]
+    pub address: ::core::option::Option<super::super::super::common::v1::Address>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateContractRequest {
