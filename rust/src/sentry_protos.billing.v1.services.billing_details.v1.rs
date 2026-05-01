@@ -18,6 +18,7 @@ pub struct Address {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillingDetails {
+    #[deprecated]
     #[prost(message, optional, tag = "1")]
     pub address: ::core::option::Option<Address>,
     #[prost(string, tag = "2")]
@@ -26,6 +27,10 @@ pub struct BillingDetails {
     pub company_name: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, optional, tag = "4")]
     pub billing_email: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "5")]
+    pub billing_address: ::core::option::Option<
+        super::super::super::common::v1::Address,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetBillingDetailsRequest {
