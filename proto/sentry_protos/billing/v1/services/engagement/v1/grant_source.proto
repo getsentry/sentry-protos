@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+// Why a Grant exists. Kept in its own file so values can grow without
+// touching grant.proto review surface.
+//
+// Distinct from TrialSource (defined in trial.proto) — TrialSource records
+// HOW the trial was initiated (admin, promo, SF webhook); GrantSource
+// records WHAT kind of allowance this grant represents.
+enum GrantSource {
+  GRANT_SOURCE_UNSPECIFIED = 0;
+
+  // Derived from a Trial row. The trial-type subvalues let consumers
+  // distinguish without joining back to the trial table.
+  GRANT_SOURCE_TRIAL_PRODUCT = 1;
+  GRANT_SOURCE_TRIAL_SUBSCRIPTION = 2;
+  GRANT_SOURCE_TRIAL_PLAN = 3; // Plan trials typically produce zero grants,
+  // but an edge-case path can mint one per
+  // new SKU granted.
+  GRANT_SOURCE_TRIAL_ENTERPRISE = 4;
+
+  // Promo-code redemption. Unit-granting promos become this; the legacy
+  // trial_days branch is migrated separately.
+  GRANT_SOURCE_PROMO = 5;
+
+  // RecurringCredit of quota-flavor (ERROR / TRANSACTION / SPAN / ...).
+  GRANT_SOURCE_RECURRING = 6;
+
+  // One-off admin gift via the gifted-quota admin path.
+  GRANT_SOURCE_GIFT = 7;
+
+  // Partner pass-through (Vercel, GitHub Marketplace, etc.). Not yet
+  // active but the enum value is reserved so partners can land without a
+  // proto change.
+  GRANT_SOURCE_PARTNER = 8;
+
+  // Enterprise committed-spend contracts.
+  //
+  // Forward-looking encoding (not yet minted because GRANT_TYPE_CENTS is
+  // reserved):
+  //   Enterprise "$10k/year committed spend" materializes as 12 monthly
+  //   Grant rows minted by a recurring-credit-style cadence (one per
+  //   billing period), each carrying:
+  //     type        = GRANT_TYPE_CENTS   (once CENTS lands)
+  //     amount      = 833_33              (cents)
+  //     source      = GRANT_SOURCE_COMMITTED_SPEND
+  //     start_date, end_date = per-month window
+  //   The enum value exists but is unused at mint time until
+  //   dollar-denominated grants are supported.
+  GRANT_SOURCE_COMMITTED_SPEND = 9;
+}
