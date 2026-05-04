@@ -151,19 +151,14 @@ pub struct Grant {
     pub revoked_at: ::core::option::Option<::prost_types::Timestamp>,
 }
 /// Denomination of a Grant.
-///
-/// Currently UNITS only — every grant is denominated in units of a
-/// specific SKU.
-///
-/// Future: GRANT_TYPE_CENTS absorbs Customer.balance,
-/// RecurringCredit.DISCOUNT, PromoCode.amount, and freeReservedBudget.
-/// RecurringCredit.PERCENT does NOT become a Grant — it migrates to
-/// RateCard.adjustments\[\] (a rate modifier, not a balance-drain credit).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum GrantType {
     Unspecified = 0,
+    /// A quantity of units for a specific SKU.
     Units = 1,
+    /// A monetary allowance measured in cents.
+    Cents = 2,
 }
 impl GrantType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -174,6 +169,7 @@ impl GrantType {
         match self {
             Self::Unspecified => "GRANT_TYPE_UNSPECIFIED",
             Self::Units => "GRANT_TYPE_UNITS",
+            Self::Cents => "GRANT_TYPE_CENTS",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -181,6 +177,7 @@ impl GrantType {
         match value {
             "GRANT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
             "GRANT_TYPE_UNITS" => Some(Self::Units),
+            "GRANT_TYPE_CENTS" => Some(Self::Cents),
             _ => None,
         }
     }
