@@ -80,7 +80,7 @@ message Trial {
   // otherwise.
   optional uint64 created_by_user_id = 12;
 
-  // Reserved for Phase 3 extensions.
+  // Reserved for future extensions.
   //
   //   13 = optional uint64 project_id — project-scoped trials.
   //   14 = optional string external_reference — Salesforce opportunity ID
