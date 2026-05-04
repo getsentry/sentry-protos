@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/sku.proto";
+
+// The kind of trial. Drives feature entitlement composition and grant
+// production policy (plan=0 grants, product=1, subscription/enterprise=N).
+enum TrialType {
+  TRIAL_TYPE_UNSPECIFIED = 0;
+  TRIAL_TYPE_PLAN = 1;
+  TRIAL_TYPE_PRODUCT = 2;
+  TRIAL_TYPE_SUBSCRIPTION = 3;
+  TRIAL_TYPE_ENTERPRISE = 4;
+}
+
+// Lifecycle state of a Trial.
+enum TrialStatus {
+  TRIAL_STATUS_UNSPECIFIED = 0;
+  TRIAL_STATUS_ACTIVE = 1;
+  TRIAL_STATUS_COMPLETED = 2;
+  TRIAL_STATUS_CANCELLED = 3;
+}
+
+// How the trial was initiated.
+//
+// N5 — Single-ACTIVE-trial-per-natural-key:
+//   At most one Trial with status=ACTIVE exists per
+//   (organization_id, type, plan, sku) at any time — irrespective of
+//   source. The idempotency key (org, type, plan, sku, source)
+//   governs idempotent-start; the uniqueness key for concurrency is
+//   (org, type, plan, sku).
+//
+// In other words: source is idempotency-key suffix + audit metadata
+// only — it is explicitly NOT part of the concurrency key. A StartTrial
+// arriving with a different source while an ACTIVE trial exists for
+// the same (org, type, plan, sku) returns the existing row (or rejects
+// per service policy); it does NOT mint a second concurrent ACTIVE row.
+enum TrialSource {
+  TRIAL_SOURCE_UNSPECIFIED = 0;
+  // Self-service start from the product UI.
+  TRIAL_SOURCE_DEFAULT = 1;
+  // Ops / customer-support admin panel.
+  TRIAL_SOURCE_ADMIN = 2;
+  // Via promo-code redemption (trial_days branch).
+  TRIAL_SOURCE_PROMO = 3;
+  // Via Salesforce provision webhook.
+  TRIAL_SOURCE_SALESFORCE = 4;
+}
+
+// A Trial row — the declarative record of "this org started a trial."
+// Orthogonal to Grant: a Trial produces zero or more Grant rows depending
+// on type (plan=0 grants, product=1, subscription/enterprise=N).
+message Trial {
+  uint64 id = 1;
+  uint64 organization_id = 2;
+  TrialType type = 3;
+
+  // Set for SUBSCRIPTION / PLAN / ENTERPRISE trials. Drives feature
+  // entitlement composition.
+  optional string plan = 4;
+
+  // Set for PRODUCT trials only.
+  optional sentry_protos.billing.v1.SKU sku = 5;
+
+  sentry_protos.billing.v1.Date start_date = 6;
+  sentry_protos.billing.v1.Date end_date = 7;
+  TrialStatus status = 8;
+
+  // Set when status=CANCELLED.
+  optional google.protobuf.Timestamp cancelled_at = 9;
+  optional string cancellation_reason = 10;
+
+  // How the trial was initiated. See TrialSource comment above.
+  TrialSource source = 11;
+
+  // Audit: who started the trial. Required for SOURCE=ADMIN; optional
+  // otherwise.
+  optional uint64 created_by_user_id = 12;
+
+  // Reserved for Phase 3 extensions.
+  //
+  //   13 = optional uint64 project_id — project-scoped trials.
+  //   14 = optional string external_reference — Salesforce opportunity ID
+  //        or equivalent, for SOURCE=SALESFORCE.
+  //   15..20 = open.
+  reserved 13 to 20;
+}

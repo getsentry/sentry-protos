@@ -1,0 +1,180 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/engagement/v1/grant_source.proto";
+import "sentry_protos/billing/v1/sku.proto";
+
+// INVARIANTS — enforced server-side by the Engagement write path and/or
+// the Engagement/UsagePricer read path. They do NOT constrain the proto
+// wire shape but are pinned here so every generated-code consumer can
+// discover the contract alongside the message.
+//
+//   N1 — PENDING read visibility:
+//        GetActiveGrantsResponse returns only status=ACTIVE grants.
+//        PENDING and INACTIVE are exposed via an explicit request filter
+//        parameter (not in v1; reserved for v2). See
+//        endpoint_get_active_grants.proto.
+//
+//   N2 — Counter-grant sum floor:
+//        For any grant G and its counter-grant chain {C_1, C_2, ...}
+//        linked via parent_grant_id, server-side writes MUST enforce
+//        G.amount + Σ C_i.amount ≥ 0. Over-refund is rejected at write
+//        time.
+//
+//   N3 — No retroactive activation crediting:
+//        A Grant transitioning from PENDING to ACTIVE at time T applies
+//        to the window [max(start_date, T), end_date]. It does NOT
+//        retroactively credit usage that occurred between start_date
+//        and T.
+//
+//   N4 — EXPIRED vs INACTIVE disambiguation:
+//        status=EXPIRED is computed at read time from end_date < today
+//        (lazy). status=INACTIVE is set only by explicit admin
+//        cancel_* RPC calls, and MUST be written to the row BEFORE any
+//        end_date shortening, so that admin-intent revocations are
+//        distinguishable in the audit log from natural expiry.
+//
+//   N6 — Closed-period write prohibition:
+//        Server-side writes to any Grant (including counter-grants via
+//        parent_grant_id) where end_date < today - grace_period are
+//        rejected with FAILED_PRECONDITION. Closed-period compensation
+//        belongs in the Charge / dollar-credit domain.
+//
+//   N7 — Grant immutability set:
+//        Grant fields immutable after insert: id, organization_id,
+//        type, sku, amount, start_date, source,
+//        parent_grant_id, granted_by_user_id, reason, project_id.
+//        Mutable under explicit audit: end_date, status.
+//
+// N5 (TrialSource concurrency) is declared on trial.proto.
+// N8 (counter-grant allocation order) is declared on
+// endpoint_gift_grant.proto.
+
+// Denomination of a Grant.
+//
+// Phase 2: UNITS only — every grant is denominated in units of a
+// specific SKU.
+//
+// Phase 3 target (Option E): GRANT_TYPE_CENTS lands, absorbing
+// Customer.balance, RecurringCredit.DISCOUNT, PromoCode.amount,
+// and freeReservedBudget. RecurringCredit.PERCENT does NOT become a
+// Grant — it migrates to RateCard.adjustments[] (a rate modifier, not
+// a balance-drain credit).
+enum GrantType {
+  GRANT_TYPE_UNSPECIFIED = 0;
+  GRANT_TYPE_UNITS = 1;
+  reserved 2;
+  reserved "GRANT_TYPE_CENTS";
+}
+
+// Lifecycle state of a Grant.
+enum GrantStatus {
+  GRANT_STATUS_UNSPECIFIED = 0;
+  // Consumable now; within [start_date, end_date].
+  GRANT_STATUS_ACTIVE = 1;
+  // Manually deactivated (admin revoke, customer opt-out, etc.). Distinct
+  // from EXPIRED (which is automatic at end_date).
+  GRANT_STATUS_INACTIVE = 2;
+  // Created but not yet activated — waiting on acceptance, opt-in, or
+  // approval. Most legacy code handles only ACTIVE/EXPIRED, so PENDING is
+  // a cheap additive that unlocks promo-acceptance and approval-workflow
+  // scenarios.
+  GRANT_STATUS_PENDING = 3;
+  // Lifecycle-terminal: past end_date.
+  GRANT_STATUS_EXPIRED = 4;
+}
+
+// A quota allowance granted to an organization for a time window. Replaces
+// the legacy sentry_protos.billing.v1.Credit message (which is now
+// deprecated; see billing/v1/credit.proto).
+//
+// Renamed from Credit to Grant to resolve naming collision with legacy
+// dollar-credit paths (Customer.balance, RecurringCredit, invoice credit
+// lines). Industry precedent: Stripe Credit Grant, Metronome Credit Grant,
+// Orb Credit Block.
+message Grant {
+  // Stable identifier. Required for updates, audit references, and
+  // parent_grant_id linkage.
+  uint64 id = 1;
+
+  // Owning organization.
+  uint64 organization_id = 2;
+
+  // Denomination. Phase 2: always GRANT_TYPE_UNITS.
+  GrantType type = 3;
+
+  // The SKU this grant applies to. Required when type=UNITS (Phase 2
+  // validator enforces HasField). Absent/unset in Phase 3 CENTS grants
+  // whose scope is invoice-total; narrower CENTS scope uses applicable_skus
+  // (reserved field 14).
+  optional sentry_protos.billing.v1.SKU sku = 4;
+
+  // Phase 2: units of the SKU. Phase 3: cents when type=CENTS.
+  // "Unlimited" is represented by a sentinel large enough to never be
+  // exhausted within a period (e.g., sys.maxsize), NOT by null.
+  int64 amount = 5;
+
+  // Time window. Inclusive on both ends. Usage outside the window does not
+  // draw against this grant.
+  sentry_protos.billing.v1.Date start_date = 6;
+  sentry_protos.billing.v1.Date end_date = 7;
+
+  // Lifecycle state.
+  GrantStatus status = 8;
+
+  // Why this grant exists. Used by reporting, UI, and UsagePricer
+  // drain-ordering heuristics (cheapest-first / expiring-first).
+  sentry_protos.billing.v1.services.engagement.v1.GrantSource source = 9;
+
+  // Counter-grant / refund linkage. When a grant is revoked or a trial is
+  // cancelled mid-flight, the system can mint a negative-amount grant
+  // that points back at the original via parent_grant_id.
+  optional uint64 parent_grant_id = 10;
+
+  // SOX-adjacent audit fields. Required for type=gift writes; optional for
+  // trial-derived grants.
+  optional uint64 granted_by_user_id = 11;
+  optional string reason = 12;
+
+  // Phase 2: accepted as a write input but rejected by server-side
+  // validator with "project-scoped grants not yet supported." Flip the
+  // validator to enable in Phase 3 (or earlier, without a proto change).
+  optional uint64 project_id = 13;
+
+  // Reserved for Phase 3 additive fields.
+  //
+  //   14 = repeated SKU applicable_skus
+  //        — explicit SKU override for multi-SKU CENTS scope.
+  //
+  //   15 = int32 priority
+  //        — tiebreaker ordering when multiple grants are eligible.
+  //
+  //   16 = GrantCategory category
+  //        — PAID vs PROMOTIONAL (GAAP treatment).
+  //
+  //   17 = BillingInterval cap_period
+  //        — refill period for multi-period capped grants.
+  //
+  //   18 = int64 cap_amount
+  //        — cap per cap_period.
+  //
+  //   19 = optional uint64 pool_id
+  //        — bundle/cross-SKU pool identifier.
+  //
+  //   20 = repeated string applicable_sku_tags
+  //        — tag-scoped Grant (primary multi-SKU CENTS scope mechanism).
+  reserved 14 to 20;
+
+  // Revocation audit fields. Populated when a grant is revoked via an admin
+  // cancel_* RPC or by the counter-grant write path; unset for grants that
+  // never transition out of ACTIVE.
+  optional uint64 revoked_by_user_id = 21;
+  optional string revocation_reason = 22;
+  optional google.protobuf.Timestamp revoked_at = 23;
+
+  // Remaining Phase-3 reservation band.
+  reserved 24 to 25;
+}

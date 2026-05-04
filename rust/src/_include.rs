@@ -24,6 +24,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.contract.v1.rs");
                     }
                 }
+                pub mod engagement {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.engagement.v1.rs");
+                    }
+                }
                 pub mod invoicer {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.invoicer.v1.rs");
