@@ -7,52 +7,6 @@ import "sentry_protos/billing/v1/date.proto";
 import "sentry_protos/billing/v1/services/engagement/v1/grant_source.proto";
 import "sentry_protos/billing/v1/sku.proto";
 
-// INVARIANTS — enforced server-side by the Engagement write path and/or
-// the Engagement/UsagePricer read path. They do NOT constrain the proto
-// wire shape but are pinned here so every generated-code consumer can
-// discover the contract alongside the message.
-//
-//   N1 — PENDING read visibility:
-//        GetActiveGrantsResponse returns only status=ACTIVE grants.
-//        PENDING and INACTIVE are exposed via an explicit request filter
-//        parameter (not in v1; reserved for v2). See
-//        endpoint_get_active_grants.proto.
-//
-//   N2 — Counter-grant sum floor:
-//        For any grant G and its counter-grant chain {C_1, C_2, ...}
-//        linked via parent_grant_id, server-side writes MUST enforce
-//        G.amount + Σ C_i.amount ≥ 0. Over-refund is rejected at write
-//        time.
-//
-//   N3 — No retroactive activation crediting:
-//        A Grant transitioning from PENDING to ACTIVE at time T applies
-//        to the window [max(start_date, T), end_date]. It does NOT
-//        retroactively credit usage that occurred between start_date
-//        and T.
-//
-//   N4 — EXPIRED vs INACTIVE disambiguation:
-//        status=EXPIRED is computed at read time from end_date < today
-//        (lazy). status=INACTIVE is set only by explicit admin
-//        cancel_* RPC calls, and MUST be written to the row BEFORE any
-//        end_date shortening, so that admin-intent revocations are
-//        distinguishable in the audit log from natural expiry.
-//
-//   N6 — Closed-period write prohibition:
-//        Server-side writes to any Grant (including counter-grants via
-//        parent_grant_id) where end_date < today - grace_period are
-//        rejected with FAILED_PRECONDITION. Closed-period compensation
-//        belongs in the Charge / dollar-credit domain.
-//
-//   N7 — Grant immutability set:
-//        Grant fields immutable after insert: id, organization_id,
-//        type, sku, amount, start_date, source,
-//        parent_grant_id, granted_by_user_id, reason, project_id.
-//        Mutable under explicit audit: end_date, status.
-//
-// N5 (TrialSource concurrency) is declared on trial.proto.
-// N8 (counter-grant allocation order) is declared on
-// endpoint_gift_grant.proto.
-
 // Denomination of a Grant.
 //
 // Currently UNITS only — every grant is denominated in units of a

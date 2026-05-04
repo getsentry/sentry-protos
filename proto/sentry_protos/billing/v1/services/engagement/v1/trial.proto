@@ -24,20 +24,8 @@ enum TrialStatus {
   TRIAL_STATUS_CANCELLED = 3;
 }
 
-// How the trial was initiated.
-//
-// N5 — Single-ACTIVE-trial-per-natural-key:
-//   At most one Trial with status=ACTIVE exists per
-//   (organization_id, type, plan, sku) at any time — irrespective of
-//   source. The idempotency key (org, type, plan, sku, source)
-//   governs idempotent-start; the uniqueness key for concurrency is
-//   (org, type, plan, sku).
-//
-// In other words: source is idempotency-key suffix + audit metadata
-// only — it is explicitly NOT part of the concurrency key. A StartTrial
-// arriving with a different source while an ACTIVE trial exists for
-// the same (org, type, plan, sku) returns the existing row (or rejects
-// per service policy); it does NOT mint a second concurrent ACTIVE row.
+// How the trial was initiated. Source is audit metadata — it is NOT part
+// of the active-trial uniqueness key (organization_id, type, plan, sku).
 enum TrialSource {
   TRIAL_SOURCE_UNSPECIFIED = 0;
   // Self-service start from the product UI.
