@@ -1,3 +1,12 @@
+## 0.8.25
+
+### Internal Changes 🔧
+
+- (billing-platform) Add millisecond base unit by @brendanhsentry in [#237](https://github.com/getsentry/sentry-protos/pull/237)
+- Pass org_id through pdf requests by @noahsmartin in [#242](https://github.com/getsentry/sentry-protos/pull/242)
+- Add address to rollover contract request by @noahsmartin in [#239](https://github.com/getsentry/sentry-protos/pull/239)
+- Add address fields to invoice by @noahsmartin in [#236](https://github.com/getsentry/sentry-protos/pull/236)
+
 ## 0.8.24
 
 ### New Features ✨
