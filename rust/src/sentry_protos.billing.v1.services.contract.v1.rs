@@ -515,6 +515,8 @@ pub struct GetInvoiceRequest {
     pub invoice_id: u64,
     #[prost(string, tag = "2")]
     pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub organization_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetInvoiceResponse {
@@ -581,6 +583,8 @@ pub struct RolloverContractRequest {
     pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, repeated, tag = "3")]
     pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+    #[prost(message, optional, tag = "4")]
+    pub address: ::core::option::Option<super::super::super::common::v1::Address>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
