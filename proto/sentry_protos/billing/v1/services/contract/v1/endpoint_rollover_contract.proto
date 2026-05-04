@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/address.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 
 // Creates a new contract for a new billing period. Closes out the current contract by
@@ -11,6 +12,7 @@ message RolloverContractRequest {
   uint64 contract_id = 1;
   google.protobuf.Timestamp last_usage_ts = 2;
   repeated InvoiceLineItem line_items = 3;
+  sentry_protos.billing.v1.common.v1.Address address = 4;
 }
 
 message RolloverContractResponse {
