@@ -5,6 +5,7 @@ package sentry_protos.billing.v1.services.invoicer.v1;
 message GeneratePdfRequest {
   uint64 invoice_id = 1;
   string invoice_guid = 2;
+  uint64 organization_id = 3;
 }
 
 message PdfData {

@@ -515,6 +515,8 @@ pub struct GetInvoiceRequest {
     pub invoice_id: u64,
     #[prost(string, tag = "2")]
     pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub organization_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetInvoiceResponse {
