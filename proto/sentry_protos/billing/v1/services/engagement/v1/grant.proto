@@ -8,19 +8,12 @@ import "sentry_protos/billing/v1/services/engagement/v1/grant_source.proto";
 import "sentry_protos/billing/v1/sku.proto";
 
 // Denomination of a Grant.
-//
-// Currently UNITS only — every grant is denominated in units of a
-// specific SKU.
-//
-// Future: GRANT_TYPE_CENTS absorbs Customer.balance,
-// RecurringCredit.DISCOUNT, PromoCode.amount, and freeReservedBudget.
-// RecurringCredit.PERCENT does NOT become a Grant — it migrates to
-// RateCard.adjustments[] (a rate modifier, not a balance-drain credit).
 enum GrantType {
   GRANT_TYPE_UNSPECIFIED = 0;
+  // A quantity of units for a specific SKU.
   GRANT_TYPE_UNITS = 1;
-  reserved 2;
-  reserved "GRANT_TYPE_CENTS";
+  // A monetary allowance measured in cents.
+  GRANT_TYPE_CENTS = 2;
 }
 
 // Lifecycle state of a Grant.
