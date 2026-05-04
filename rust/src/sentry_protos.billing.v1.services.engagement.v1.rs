@@ -18,31 +18,30 @@ pub enum GrantSource {
     /// but an edge-case path can mint one per
     /// new SKU granted.
     TrialEnterprise = 4,
-    /// Promo-code redemption (trial_days branch stays legacy in Phase 2;
-    /// unit-granting promos become this).
+    /// Promo-code redemption. Unit-granting promos become this; the legacy
+    /// trial_days branch is migrated separately.
     Promo = 5,
     /// RecurringCredit of quota-flavor (ERROR / TRANSACTION / SPAN / ...).
     Recurring = 6,
     /// One-off admin gift via the gifted-quota admin path.
     Gift = 7,
-    /// Partner pass-through (Vercel, GitHub Marketplace, etc.). Out-of-scope
-    /// for Phase 2 but the enum value is reserved so partners can land
-    /// without a proto change.
+    /// Partner pass-through (Vercel, GitHub Marketplace, etc.). Not yet
+    /// active but the enum value is reserved so partners can land without a
+    /// proto change.
     Partner = 8,
     /// Enterprise committed-spend contracts.
     ///
-    /// Phase-2 encoding (forward-looking — not minted by Phase-2 writers
-    /// because GRANT_TYPE_CENTS is reserved):
+    /// Forward-looking encoding (not yet minted because GRANT_TYPE_CENTS is
+    /// reserved):
     /// Enterprise "$10k/year committed spend" materializes as 12 monthly
     /// Grant rows minted by a recurring-credit-style cadence (one per
     /// billing period), each carrying:
-    /// type        = GRANT_TYPE_CENTS   (Phase 3)
-    /// amount      = 833_33              (cents, once CENTS lands)
+    /// type        = GRANT_TYPE_CENTS   (once CENTS lands)
+    /// amount      = 833_33              (cents)
     /// source      = GRANT_SOURCE_COMMITTED_SPEND
     /// start_date, end_date = per-month window
-    /// In Phase 2 the enum value is reserved but unused at mint time —
-    /// true dollar-denominated committed-spend awaits the Phase-3 CENTS
-    /// type.
+    /// The enum value exists but is unused at mint time until
+    /// dollar-denominated grants are supported.
     CommittedSpend = 9,
 }
 impl GrantSource {
@@ -98,16 +97,16 @@ pub struct Grant {
     /// Owning organization.
     #[prost(uint64, tag = "2")]
     pub organization_id: u64,
-    /// Denomination. Phase 2: always GRANT_TYPE_UNITS.
+    /// Denomination. Currently always GRANT_TYPE_UNITS.
     #[prost(enumeration = "GrantType", tag = "3")]
     pub r#type: i32,
-    /// The SKU this grant applies to. Required when type=UNITS (Phase 2
-    /// validator enforces HasField). Absent/unset in Phase 3 CENTS grants
+    /// The SKU this grant applies to. Required when type=UNITS (server-side
+    /// validator enforces HasField). Absent/unset in future CENTS grants
     /// whose scope is invoice-total; narrower CENTS scope uses applicable_skus
     /// (reserved field 14).
     #[prost(enumeration = "super::super::super::Sku", optional, tag = "4")]
     pub sku: ::core::option::Option<i32>,
-    /// Phase 2: units of the SKU. Phase 3: cents when type=CENTS.
+    /// Currently: units of the SKU. Future: cents when type=CENTS.
     /// "Unlimited" is represented by a sentinel large enough to never be
     /// exhausted within a period (e.g., sys.maxsize), NOT by null.
     #[prost(int64, tag = "5")]
@@ -136,9 +135,9 @@ pub struct Grant {
     pub granted_by_user_id: ::core::option::Option<u64>,
     #[prost(string, optional, tag = "12")]
     pub reason: ::core::option::Option<::prost::alloc::string::String>,
-    /// Phase 2: accepted as a write input but rejected by server-side
+    /// Accepted as a write input but currently rejected by the server-side
     /// validator with "project-scoped grants not yet supported." Flip the
-    /// validator to enable in Phase 3 (or earlier, without a proto change).
+    /// validator to enable without a proto change.
     #[prost(uint64, optional, tag = "13")]
     pub project_id: ::core::option::Option<u64>,
     /// Revocation audit fields. Populated when a grant is revoked via an admin
@@ -153,14 +152,13 @@ pub struct Grant {
 }
 /// Denomination of a Grant.
 ///
-/// Phase 2: UNITS only — every grant is denominated in units of a
+/// Currently UNITS only — every grant is denominated in units of a
 /// specific SKU.
 ///
-/// Phase 3 target: GRANT_TYPE_CENTS lands, absorbing
-/// Customer.balance, RecurringCredit.DISCOUNT, PromoCode.amount,
-/// and freeReservedBudget. RecurringCredit.PERCENT does NOT become a
-/// Grant — it migrates to RateCard.adjustments\[\] (a rate modifier, not
-/// a balance-drain credit).
+/// Future: GRANT_TYPE_CENTS absorbs Customer.balance,
+/// RecurringCredit.DISCOUNT, PromoCode.amount, and freeReservedBudget.
+/// RecurringCredit.PERCENT does NOT become a Grant — it migrates to
+/// RateCard.adjustments\[\] (a rate modifier, not a balance-drain credit).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum GrantType {
