@@ -57,9 +57,6 @@ pub struct PackageConfig {
     pub line_item_configs: ::prost::alloc::vec::Vec<LineItemConfig>,
     #[prost(message, repeated, tag = "3")]
     pub shared_line_item_pools: ::prost::alloc::vec::Vec<SharedLineItemPool>,
-    /// Base price for the package.
-    #[prost(uint64, tag = "4")]
-    pub base_price_cents: u64,
     /// Billing interval for this package.
     #[prost(enumeration = "super::super::super::common::v1::BillingInterval", tag = "5")]
     pub billing_interval: i32,

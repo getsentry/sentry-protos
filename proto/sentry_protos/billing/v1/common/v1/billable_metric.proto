@@ -10,9 +10,6 @@ message BillableMetric {
   // Unique identifier for the billable metric.
   string id = 1;
 
-  // Name of the billable metric (e.g., "performance_units").
-  string name = 2;
-
   // Expression defining how to calculate this metric from usage data.
   Expression expression = 3;
 }
