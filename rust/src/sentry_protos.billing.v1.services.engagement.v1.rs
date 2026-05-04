@@ -156,7 +156,7 @@ pub struct Grant {
 /// Phase 2: UNITS only — every grant is denominated in units of a
 /// specific SKU.
 ///
-/// Phase 3 target (Option E): GRANT_TYPE_CENTS lands, absorbing
+/// Phase 3 target: GRANT_TYPE_CENTS lands, absorbing
 /// Customer.balance, RecurringCredit.DISCOUNT, PromoCode.amount,
 /// and freeReservedBudget. RecurringCredit.PERCENT does NOT become a
 /// Grant — it migrates to RateCard.adjustments\[\] (a rate modifier, not
