@@ -20,8 +20,8 @@ enum GrantSource {
   // new SKU granted.
   GRANT_SOURCE_TRIAL_ENTERPRISE = 4;
 
-  // Promo-code redemption (trial_days branch stays legacy in Phase 2;
-  // unit-granting promos become this).
+  // Promo-code redemption. Unit-granting promos become this; the legacy
+  // trial_days branch is migrated separately.
   GRANT_SOURCE_PROMO = 5;
 
   // RecurringCredit of quota-flavor (ERROR / TRANSACTION / SPAN / ...).
@@ -30,24 +30,23 @@ enum GrantSource {
   // One-off admin gift via the gifted-quota admin path.
   GRANT_SOURCE_GIFT = 7;
 
-  // Partner pass-through (Vercel, GitHub Marketplace, etc.). Out-of-scope
-  // for Phase 2 but the enum value is reserved so partners can land
-  // without a proto change.
+  // Partner pass-through (Vercel, GitHub Marketplace, etc.). Not yet
+  // active but the enum value is reserved so partners can land without a
+  // proto change.
   GRANT_SOURCE_PARTNER = 8;
 
   // Enterprise committed-spend contracts.
   //
-  // Phase-2 encoding (forward-looking — not minted by Phase-2 writers
-  // because GRANT_TYPE_CENTS is reserved):
+  // Forward-looking encoding (not yet minted because GRANT_TYPE_CENTS is
+  // reserved):
   //   Enterprise "$10k/year committed spend" materializes as 12 monthly
   //   Grant rows minted by a recurring-credit-style cadence (one per
   //   billing period), each carrying:
-  //     type        = GRANT_TYPE_CENTS   (Phase 3)
-  //     amount      = 833_33              (cents, once CENTS lands)
+  //     type        = GRANT_TYPE_CENTS   (once CENTS lands)
+  //     amount      = 833_33              (cents)
   //     source      = GRANT_SOURCE_COMMITTED_SPEND
   //     start_date, end_date = per-month window
-  //   In Phase 2 the enum value is reserved but unused at mint time —
-  //   true dollar-denominated committed-spend awaits the Phase-3 CENTS
-  //   type.
+  //   The enum value exists but is unused at mint time until
+  //   dollar-denominated grants are supported.
   GRANT_SOURCE_COMMITTED_SPEND = 9;
 }

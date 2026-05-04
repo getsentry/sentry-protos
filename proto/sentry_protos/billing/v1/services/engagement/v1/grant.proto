@@ -55,14 +55,13 @@ import "sentry_protos/billing/v1/sku.proto";
 
 // Denomination of a Grant.
 //
-// Phase 2: UNITS only — every grant is denominated in units of a
+// Currently UNITS only — every grant is denominated in units of a
 // specific SKU.
 //
-// Phase 3 target: GRANT_TYPE_CENTS lands, absorbing
-// Customer.balance, RecurringCredit.DISCOUNT, PromoCode.amount,
-// and freeReservedBudget. RecurringCredit.PERCENT does NOT become a
-// Grant — it migrates to RateCard.adjustments[] (a rate modifier, not
-// a balance-drain credit).
+// Future: GRANT_TYPE_CENTS absorbs Customer.balance,
+// RecurringCredit.DISCOUNT, PromoCode.amount, and freeReservedBudget.
+// RecurringCredit.PERCENT does NOT become a Grant — it migrates to
+// RateCard.adjustments[] (a rate modifier, not a balance-drain credit).
 enum GrantType {
   GRANT_TYPE_UNSPECIFIED = 0;
   GRANT_TYPE_UNITS = 1;
@@ -103,16 +102,16 @@ message Grant {
   // Owning organization.
   uint64 organization_id = 2;
 
-  // Denomination. Phase 2: always GRANT_TYPE_UNITS.
+  // Denomination. Currently always GRANT_TYPE_UNITS.
   GrantType type = 3;
 
-  // The SKU this grant applies to. Required when type=UNITS (Phase 2
-  // validator enforces HasField). Absent/unset in Phase 3 CENTS grants
+  // The SKU this grant applies to. Required when type=UNITS (server-side
+  // validator enforces HasField). Absent/unset in future CENTS grants
   // whose scope is invoice-total; narrower CENTS scope uses applicable_skus
   // (reserved field 14).
   optional sentry_protos.billing.v1.SKU sku = 4;
 
-  // Phase 2: units of the SKU. Phase 3: cents when type=CENTS.
+  // Currently: units of the SKU. Future: cents when type=CENTS.
   // "Unlimited" is represented by a sentinel large enough to never be
   // exhausted within a period (e.g., sys.maxsize), NOT by null.
   int64 amount = 5;
@@ -139,12 +138,12 @@ message Grant {
   optional uint64 granted_by_user_id = 11;
   optional string reason = 12;
 
-  // Phase 2: accepted as a write input but rejected by server-side
+  // Accepted as a write input but currently rejected by the server-side
   // validator with "project-scoped grants not yet supported." Flip the
-  // validator to enable in Phase 3 (or earlier, without a proto change).
+  // validator to enable without a proto change.
   optional uint64 project_id = 13;
 
-  // Reserved for Phase 3 additive fields.
+  // Reserved for future additive fields.
   //
   //   14 = repeated SKU applicable_skus
   //        — explicit SKU override for multi-SKU CENTS scope.
@@ -175,6 +174,6 @@ message Grant {
   optional string revocation_reason = 22;
   optional google.protobuf.Timestamp revoked_at = 23;
 
-  // Remaining Phase-3 reservation band.
+  // Remaining reservation band for future extensions.
   reserved 24 to 25;
 }
