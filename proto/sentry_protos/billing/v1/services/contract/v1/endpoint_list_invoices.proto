@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
+message ListInvoicesRequest {
+  // Only invoices owned by this organization are returned.
+  uint64 organization_id = 1;
+
+  // Maximum number of invoices to return in the response. If more invoices
+  // match the request than this limit, the response will have truncated set
+  // to true and next_offset populated for the following page.
+  uint32 max_items = 2;
+
+  // Zero-based offset into the result set. Pair with max_items to page
+  // through results.
+  optional uint32 offset = 3;
+}
+
+message ListInvoicesResponse {
+  // Invoices for the requested organization, ordered newest-first by
+  // date_added.
+  repeated Invoice invoices = 1;
+
+  // True if additional matching invoices existed beyond max_items and were
+  // not included in this response.
+  bool truncated = 2;
+
+  // Offset to use in a subsequent ListInvoicesRequest to fetch the next
+  // page. Only set when truncated is true.
+  optional uint32 next_offset = 3;
+
+  // Total number of invoices matching the request, ignoring offset and
+  // max_items.
+  uint32 total = 4;
+}
