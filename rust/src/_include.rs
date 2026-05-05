@@ -34,11 +34,6 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.package.v1.rs");
                     }
                 }
-                pub mod quotas {
-                    pub mod v1 {
-                        include!("sentry_protos.billing.v1.services.quotas.v1.rs");
-                    }
-                }
                 pub mod rate_card {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.rate_card.v1.rs");
