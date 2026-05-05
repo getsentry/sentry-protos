@@ -1,3 +1,9 @@
+## 0.8.27
+
+### New Features ✨
+
+- Add mark paid and mark failed invoice endpoints by @noahsmartin in [#245](https://github.com/getsentry/sentry-protos/pull/245)
+
 ## 0.8.26
 
 ### New Features ✨
