@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Records a failed charge attempt against an invoice.
+message RecordFailedChargeAttemptRequest {
+  uint64 invoice_id = 1;
+}
+
+message RecordFailedChargeAttemptResponse {
+  // True if a matching invoice was found and updated.
+  bool updated = 1;
+}

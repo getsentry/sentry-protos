@@ -607,6 +607,31 @@ pub struct ListInvoicesResponse {
     #[prost(uint32, tag = "4")]
     pub total: u32,
 }
+/// Marks an invoice as paid and clears its needs_charged flag so it is no longer
+/// returned by GetUnchargedInvoices.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MarkInvoicePaidRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MarkInvoicePaidResponse {
+    /// True if a matching invoice was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
+/// Records a failed charge attempt against an invoice.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordFailedChargeAttemptRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordFailedChargeAttemptResponse {
+    /// True if a matching invoice was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
 /// Creates a new contract for a new billing period. Closes out the current contract by
 /// creating an invoice and setting the last usage date
 #[derive(Clone, PartialEq, ::prost::Message)]
