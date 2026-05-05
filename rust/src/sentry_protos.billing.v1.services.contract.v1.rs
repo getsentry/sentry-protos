@@ -515,6 +515,8 @@ pub struct GetInvoiceRequest {
     pub invoice_id: u64,
     #[prost(string, tag = "2")]
     pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub organization_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetInvoiceResponse {
@@ -571,6 +573,40 @@ pub struct GetUninvoicedContractsResponse {
     #[prost(uint64, repeated, tag = "3")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListInvoicesRequest {
+    /// Only invoices owned by this organization are returned.
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Maximum number of invoices to return in the response. If more invoices
+    /// match the request than this limit, the response will have truncated set
+    /// to true and next_offset populated for the following page.
+    #[prost(uint32, tag = "2")]
+    pub max_items: u32,
+    /// Zero-based offset into the result set. Pair with max_items to page
+    /// through results.
+    #[prost(uint32, optional, tag = "3")]
+    pub offset: ::core::option::Option<u32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListInvoicesResponse {
+    /// Invoices for the requested organization, ordered newest-first by
+    /// date_added.
+    #[prost(message, repeated, tag = "1")]
+    pub invoices: ::prost::alloc::vec::Vec<Invoice>,
+    /// True if additional matching invoices existed beyond max_items and were
+    /// not included in this response.
+    #[prost(bool, tag = "2")]
+    pub truncated: bool,
+    /// Offset to use in a subsequent ListInvoicesRequest to fetch the next
+    /// page. Only set when truncated is true.
+    #[prost(uint32, optional, tag = "3")]
+    pub next_offset: ::core::option::Option<u32>,
+    /// Total number of invoices matching the request, ignoring offset and
+    /// max_items.
+    #[prost(uint32, tag = "4")]
+    pub total: u32,
+}
 /// Creates a new contract for a new billing period. Closes out the current contract by
 /// creating an invoice and setting the last usage date
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -581,6 +617,8 @@ pub struct RolloverContractRequest {
     pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, repeated, tag = "3")]
     pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+    #[prost(message, optional, tag = "4")]
+    pub address: ::core::option::Option<super::super::super::common::v1::Address>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
