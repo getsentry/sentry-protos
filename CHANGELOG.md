@@ -1,3 +1,13 @@
+## 0.8.26
+
+### New Features ✨
+
+- Add list invoices endpoint by @noahsmartin in [#243](https://github.com/getsentry/sentry-protos/pull/243)
+
+### Other
+
+- billing code to tag revenue team by @armenzg in [#241](https://github.com/getsentry/sentry-protos/pull/241)
+
 ## 0.8.25
 
 ### Internal Changes 🔧
