@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
+import "google/protobuf/timestamp.proto";
+
 // Records a failed charge attempt against an invoice.
 message RecordFailedChargeAttemptRequest {
   uint64 invoice_id = 1;
@@ -10,4 +12,11 @@ message RecordFailedChargeAttemptRequest {
 message RecordFailedChargeAttemptResponse {
   // True if a matching invoice was found and updated.
   bool updated = 1;
+
+  // Post-update attempt_count on the invoice.
+  uint32 attempt_count = 2;
+
+  // Post-update next_payment_attempt on the invoice. Unset if the retry
+  // schedule has been exhausted and no further automatic retries will run.
+  optional google.protobuf.Timestamp next_payment_attempt = 3;
 }
