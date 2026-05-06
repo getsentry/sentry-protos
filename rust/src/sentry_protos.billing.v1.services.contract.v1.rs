@@ -631,6 +631,13 @@ pub struct RecordFailedChargeAttemptResponse {
     /// True if a matching invoice was found and updated.
     #[prost(bool, tag = "1")]
     pub updated: bool,
+    /// Post-update attempt_count on the invoice.
+    #[prost(uint32, tag = "2")]
+    pub attempt_count: u32,
+    /// Post-update next_payment_attempt on the invoice. Unset if the retry
+    /// schedule has been exhausted and no further automatic retries will run.
+    #[prost(message, optional, tag = "3")]
+    pub next_payment_attempt: ::core::option::Option<::prost_types::Timestamp>,
 }
 /// Creates a new contract for a new billing period. Closes out the current contract by
 /// creating an invoice and setting the last usage date
