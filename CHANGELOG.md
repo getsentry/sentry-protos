@@ -1,3 +1,9 @@
+## 0.8.29
+
+### New Features ✨
+
+- Add org metadata endpoint to billing details by @noahsmartin in [#247](https://github.com/getsentry/sentry-protos/pull/247)
+
 ## 0.8.28
 
 ### Bug Fixes 🐛
