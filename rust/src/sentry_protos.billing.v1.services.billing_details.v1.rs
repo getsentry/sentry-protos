@@ -42,6 +42,31 @@ pub struct GetBillingDetailsResponse {
     #[prost(message, optional, tag = "1")]
     pub billing_details: ::core::option::Option<BillingDetails>,
 }
+/// Fetches lightweight identity fields for an organization. Used by callers
+/// that need slug/name/default_user_id without pulling the full Organization
+/// record across service boundaries.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrganizationMetadataRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrganizationMetadataResponse {
+    #[prost(string, tag = "1")]
+    pub slug: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    /// Unset when the organization has no default owner.
+    #[prost(uint64, optional, tag = "3")]
+    pub default_user_id: ::core::option::Option<u64>,
+    /// Email of the default owner.
+    #[prost(string, optional, tag = "4")]
+    pub default_owner_email: ::core::option::Option<::prost::alloc::string::String>,
+    /// Emails of every active org member whose role grants the "org:billing"
+    /// scope (e.g. owner, manager, billing).
+    #[prost(string, repeated, tag = "5")]
+    pub billing_role_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetStripePaymentDataRequest {
     #[prost(uint64, tag = "1")]
