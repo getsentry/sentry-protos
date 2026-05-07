@@ -1,3 +1,13 @@
+## 0.8.28
+
+### Bug Fixes 🐛
+
+- Use sys.executable in generate.py and bump buf pre-commit hook by @armenzg in [#244](https://github.com/getsentry/sentry-protos/pull/244)
+
+### Internal Changes 🔧
+
+- Add retry details to failed charge response by @noahsmartin in [#246](https://github.com/getsentry/sentry-protos/pull/246)
+
 ## 0.8.27
 
 ### New Features ✨
