@@ -261,3 +261,45 @@ pub struct TieredPricingRate {
     #[prost(message, repeated, tag = "1")]
     pub tiers: ::prost::alloc::vec::Vec<PricingTier>,
 }
+/// Card payment method details.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Card {
+    #[prost(string, tag = "1")]
+    pub last_4: ::prost::alloc::string::String,
+}
+/// Provider-specific payment method information attached to a charge.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PaymentMethodDetails {
+    #[prost(oneof = "payment_method_details::Details", tags = "1")]
+    pub details: ::core::option::Option<payment_method_details::Details>,
+}
+/// Nested message and enum types in `PaymentMethodDetails`.
+pub mod payment_method_details {
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Details {
+        #[prost(message, tag = "1")]
+        Card(super::Card),
+    }
+}
+/// A snapshot of a Stripe charge object. Used as the payload when reacting
+/// to Stripe webhook events.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StripeCharge {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub amount: u64,
+    #[prost(bool, tag = "3")]
+    pub refunded: bool,
+    #[prost(bool, tag = "4")]
+    pub paid: bool,
+    #[prost(uint64, tag = "5")]
+    pub amount_refunded: u64,
+    /// Stripe's "created" field, expressed as Unix epoch seconds.
+    #[prost(int64, tag = "6")]
+    pub created_st: i64,
+    #[prost(string, optional, tag = "7")]
+    pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "8")]
+    pub payment_method_details: ::core::option::Option<PaymentMethodDetails>,
+}
