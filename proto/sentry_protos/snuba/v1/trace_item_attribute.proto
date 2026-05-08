@@ -20,7 +20,7 @@ message AttributeKey {
   // `sentry.` to allow users to send attributes of the same name.
   // Exampe: `sentry.duration`, `sentry.span_id` etc
   string name = 2;
-  
+
   // Optional indexed access into an array-typed attribute (only meaningful when type == TYPE_ARRAY).
   // Signed to allow negative indexing (e.g. -1 for the last element).
   optional sint32 index = 3;
