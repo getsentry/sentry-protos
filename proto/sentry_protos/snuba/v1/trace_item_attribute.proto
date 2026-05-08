@@ -22,8 +22,7 @@ message AttributeKey {
   string name = 2;
 
   // Optional indexed access into an array-typed attribute (only meaningful when type == TYPE_ARRAY).
-  // Signed to allow negative indexing (e.g. -1 for the last element).
-  optional sint32 index = 3;
+  optional uint32 index = 3;
 }
 
 // this allow us to select single key such as span.attr1
