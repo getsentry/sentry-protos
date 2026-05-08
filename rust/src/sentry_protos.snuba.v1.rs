@@ -8,6 +8,10 @@ pub struct AttributeKey {
     /// Exampe: `sentry.duration`, `sentry.span_id` etc
     #[prost(string, tag = "2")]
     pub name: ::prost::alloc::string::String,
+    /// Optional indexed access into an array-typed attribute (only meaningful when type == TYPE_ARRAY).
+    /// Signed to allow negative indexing (e.g. -1 for the last element).
+    #[prost(sint32, optional, tag = "3")]
+    pub index: ::core::option::Option<i32>,
 }
 /// Nested message and enum types in `AttributeKey`.
 pub mod attribute_key {
