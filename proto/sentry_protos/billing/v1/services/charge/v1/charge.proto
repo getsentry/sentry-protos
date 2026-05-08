@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+// Canonical projection of a stored platform charge. Returned by charge
+// service endpoints that need to expose the persisted charge state to
+// callers.
+message PlatformCharge {
+  string stripe_id = 1;
+  uint64 organization_id = 2;
+  // Unset when the charge is not associated with an invoice (e.g. ad-hoc
+  // charges created outside the invoicing flow).
+  optional uint64 invoice_id = 3;
+  bool paid = 4;
+  uint64 amount = 5;
+  optional string failure_code = 6;
+  bool refunded = 7;
+  uint64 amount_refunded = 8;
+  optional string card_last_4 = 9;
+}

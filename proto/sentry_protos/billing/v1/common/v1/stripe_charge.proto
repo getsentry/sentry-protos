@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+// Card payment method details.
+message Card {
+  string last_4 = 1;
+}
+
+// Provider-specific payment method information attached to a charge.
+message PaymentMethodDetails {
+  oneof details {
+    Card card = 1;
+  }
+}
+
+// A snapshot of a Stripe charge object. Used as the payload when reacting
+// to Stripe webhook events.
+message StripeCharge {
+  string id = 1;
+  uint64 amount = 2;
+  bool refunded = 3;
+  bool paid = 4;
+  uint64 amount_refunded = 5;
+  // Stripe's "created" field, expressed as Unix epoch seconds.
+  int64 created_st = 6;
+  optional string failure_code = 7;
+  PaymentMethodDetails payment_method_details = 8;
+}

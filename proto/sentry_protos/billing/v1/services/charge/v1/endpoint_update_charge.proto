@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
+import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
+
+// Synchronizes a stored platform charge with the latest snapshot from
+// Stripe. The charge is identified by ``stripe_charge.id``. Fields like
+// ``paid``, ``failure_code`` and refund state are copied onto the stored
+// record so the database reflects the current payment-provider state.
+message UpdateChargeRequest {
+  sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 1;
+}
+
+message UpdateChargeResponse {
+  // Unset when no platform charge with the given stripe_id exists.
+  optional PlatformCharge charge = 1;
+}
