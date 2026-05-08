@@ -85,3 +85,19 @@ pub struct GeneratePdfResponse {
     #[prost(string, tag = "2")]
     pub filename: ::prost::alloc::string::String,
 }
+/// Request to react to a Stripe `charge.succeeded` webhook event for a
+/// charge created by the billing platform.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HandleChargeSucceededRequest {
+    #[prost(message, optional, tag = "1")]
+    pub stripe_charge: ::core::option::Option<
+        super::super::super::common::v1::StripeCharge,
+    >,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HandleChargeSucceededResponse {
+    /// True when the charge was created by the billing platform and the
+    /// service has finished its handling.
+    #[prost(bool, tag = "1")]
+    pub handled: bool,
+}
