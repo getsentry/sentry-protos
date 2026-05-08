@@ -14,4 +14,7 @@ echo "$NEW_VERSION" > VERSION
 # Update rust/Cargo.toml
 perl -pi -e "s/^version = \".*?\"/version = \"$NEW_VERSION\"/" rust/Cargo.toml
 
+# Update Cargo.lock to reflect the new version
+cargo generate-lockfile --quiet
+
 echo "New version: $NEW_VERSION"
