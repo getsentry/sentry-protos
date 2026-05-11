@@ -125,12 +125,12 @@ message SetTaskStatusRequest {
   // If fetch_next is provided, receive a new task in the response
   optional FetchNextTask fetch_next_task = 3;
 
-  // Maximum number of retry attempts for this task.
+  // Maximum number of attempts for this task (including the initial attempt).
   // When status is RETRY and this field is set, the broker will update
   // the activation's retry_state with this value. This allows workers
   // to communicate the retry policy for tasks from raw topics that
   // don't have retry_state embedded in the message.
-  optional uint32 max_retries = 4;
+  optional uint32 max_attempts = 4;
 }
 
 message SetTaskStatusResponse {
