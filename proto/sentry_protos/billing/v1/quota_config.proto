@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1;
+
+import "sentry_protos/billing/v1/data_category.proto";
+
+// The scope at which a quota is enforced. Each scope instance maintains
+// independent counters (e.g. each project has its own counter for
+// PROJECT-scoped quotas).
+enum QuotaScope {
+  QUOTA_SCOPE_UNSPECIFIED = 0;
+  QUOTA_SCOPE_ORGANIZATION = 1;
+  QUOTA_SCOPE_PROJECT = 2;
+  QUOTA_SCOPE_KEY = 3;
+}
+
+// Configuration for a single quota rule. Quotas limit the number of events
+// (or bytes, depending on category) accepted within a time window.
+//
+// Three limit states:
+//   - absent:   unlimited (counted but never rejected)
+//   - 0:        reject-all (statically enforced, no window needed)
+//   - positive: enforcement threshold within the given window
+message QuotaConfig {
+  string id = 1;
+  // categories that this quota config applies to
+  repeated DataCategory categories = 2;
+  QuotaScope scope = 3;
+  // id of the scope that this quota config applies to
+  optional string scope_id = 4;
+  // limit of the quota
+  optional uint64 limit = 5;
+  // window of the quota in seconds - unset means unlimited
+  optional uint64 window = 6;
+  // reason code for the quota
+  optional string reason_code = 7;
+}

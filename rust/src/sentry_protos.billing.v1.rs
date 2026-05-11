@@ -357,6 +357,71 @@ pub struct FeatureOptions {
     #[prost(message, optional, tag = "3")]
     pub end_date: ::core::option::Option<Date>,
 }
+/// Configuration for a single quota rule. Quotas limit the number of events
+/// (or bytes, depending on category) accepted within a time window.
+///
+/// Three limit states:
+///
+/// * absent:   unlimited (counted but never rejected)
+/// * 0:        reject-all (statically enforced, no window needed)
+/// * positive: enforcement threshold within the given window
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct QuotaConfig {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// categories that this quota config applies to
+    #[prost(enumeration = "DataCategory", repeated, tag = "2")]
+    pub categories: ::prost::alloc::vec::Vec<i32>,
+    #[prost(enumeration = "QuotaScope", tag = "3")]
+    pub scope: i32,
+    /// id of the scope that this quota config applies to
+    #[prost(string, optional, tag = "4")]
+    pub scope_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// limit of the quota
+    #[prost(uint64, optional, tag = "5")]
+    pub limit: ::core::option::Option<u64>,
+    /// window of the quota in seconds - unset means unlimited
+    #[prost(uint64, optional, tag = "6")]
+    pub window: ::core::option::Option<u64>,
+    /// reason code for the quota
+    #[prost(string, optional, tag = "7")]
+    pub reason_code: ::core::option::Option<::prost::alloc::string::String>,
+}
+/// The scope at which a quota is enforced. Each scope instance maintains
+/// independent counters (e.g. each project has its own counter for
+/// PROJECT-scoped quotas).
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum QuotaScope {
+    Unspecified = 0,
+    Organization = 1,
+    Project = 2,
+    Key = 3,
+}
+impl QuotaScope {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "QUOTA_SCOPE_UNSPECIFIED",
+            Self::Organization => "QUOTA_SCOPE_ORGANIZATION",
+            Self::Project => "QUOTA_SCOPE_PROJECT",
+            Self::Key => "QUOTA_SCOPE_KEY",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "QUOTA_SCOPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "QUOTA_SCOPE_ORGANIZATION" => Some(Self::Organization),
+            "QUOTA_SCOPE_PROJECT" => Some(Self::Project),
+            "QUOTA_SCOPE_KEY" => Some(Self::Key),
+            _ => None,
+        }
+    }
+}
 /// Aggregated usage counts for a single data category.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UsageData {
