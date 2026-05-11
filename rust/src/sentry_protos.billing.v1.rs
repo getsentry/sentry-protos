@@ -369,23 +369,18 @@ pub struct FeatureOptions {
 pub struct QuotaConfig {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
-    /// categories that this quota config applies to
     #[prost(enumeration = "DataCategory", repeated, tag = "2")]
     pub categories: ::prost::alloc::vec::Vec<i32>,
     #[prost(enumeration = "QuotaScope", tag = "3")]
     pub scope: i32,
-    /// id of the scope that this quota config applies to
     #[prost(string, optional, tag = "4")]
     pub scope_id: ::core::option::Option<::prost::alloc::string::String>,
-    /// limit of the quota
     #[prost(uint64, optional, tag = "5")]
     pub limit: ::core::option::Option<u64>,
-    /// window of the quota in seconds - unset means unlimited
     #[prost(uint64, optional, tag = "6")]
     pub window: ::core::option::Option<u64>,
-    /// reason code for the quota
-    #[prost(string, optional, tag = "7")]
-    pub reason_code: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(enumeration = "ReasonCode", tag = "7")]
+    pub reason_code: i32,
 }
 /// The scope at which a quota is enforced. Each scope instance maintains
 /// independent counters (e.g. each project has its own counter for
@@ -418,6 +413,244 @@ impl QuotaScope {
             "QUOTA_SCOPE_ORGANIZATION" => Some(Self::Organization),
             "QUOTA_SCOPE_PROJECT" => Some(Self::Project),
             "QUOTA_SCOPE_KEY" => Some(Self::Key),
+            _ => None,
+        }
+    }
+}
+/// Machine-readable reason returned when a quota is exceeded.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ReasonCode {
+    Unspecified = 0,
+    /// Org-level usage exceeded quotas.
+    UsageExceeded = 1,
+    ErrorUsageExceeded = 2,
+    AttachmentUsageExceeded = 3,
+    ReplayUsageExceeded = 4,
+    TransactionUsageExceeded = 5,
+    ProfileDurationUsageExceeded = 6,
+    ProfileDurationUiUsageExceeded = 7,
+    SpanUsageExceeded = 8,
+    LogByteUsageExceeded = 9,
+    SizeAnalysisUsageExceeded = 10,
+    InstallableBuildUsageExceeded = 11,
+    TraceMetricByteUsageExceeded = 12,
+    SmartRateLimit = 13,
+    /// Category disabled quotas.
+    TransactionsDisabled = 14,
+    AttachmentsDisabled = 15,
+    ReplaysDisabled = 16,
+    ProfilesDisabled = 17,
+    ProfileDurationDisabled = 18,
+    ProfileDurationUiDisabled = 19,
+    SpansDisabled = 20,
+    LogBytesDisabled = 21,
+    SizeAnalysisDisabled = 22,
+    InstallableBuildDisabled = 23,
+    TraceMetricBytesDisabled = 24,
+    Trial = 25,
+    Beta = 26,
+    /// Abuse and administrative quotas.
+    ProjectAbuseLimit = 27,
+    OrgAbuseLimit = 28,
+    OrgSubMissing = 29,
+    Suspended = 30,
+    InactiveAccount = 31,
+    /// Project-level quota usage exceeded.
+    ProjectQuotaErrorUsageExceeded = 32,
+    ProjectQuotaAttachmentUsageExceeded = 33,
+    ProjectQuotaTransactionUsageExceeded = 34,
+    ProjectQuotaReplayUsageExceeded = 35,
+    ProjectQuotaProfileUsageExceeded = 36,
+    ProjectQuotaProfileDurationUsageExceeded = 37,
+    ProjectQuotaProfileDurationUiUsageExceeded = 38,
+    ProjectQuotaSpanUsageExceeded = 39,
+    ProjectQuotaLogByteUsageExceeded = 40,
+    ProjectQuotaSizeAnalysisUsageExceeded = 41,
+    ProjectQuotaInstallableBuildUsageExceeded = 42,
+    ProjectQuotaTraceMetricByteUsageExceeded = 43,
+    DynamicSampling = 44,
+}
+impl ReasonCode {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "REASON_CODE_UNSPECIFIED",
+            Self::UsageExceeded => "REASON_CODE_USAGE_EXCEEDED",
+            Self::ErrorUsageExceeded => "REASON_CODE_ERROR_USAGE_EXCEEDED",
+            Self::AttachmentUsageExceeded => "REASON_CODE_ATTACHMENT_USAGE_EXCEEDED",
+            Self::ReplayUsageExceeded => "REASON_CODE_REPLAY_USAGE_EXCEEDED",
+            Self::TransactionUsageExceeded => "REASON_CODE_TRANSACTION_USAGE_EXCEEDED",
+            Self::ProfileDurationUsageExceeded => {
+                "REASON_CODE_PROFILE_DURATION_USAGE_EXCEEDED"
+            }
+            Self::ProfileDurationUiUsageExceeded => {
+                "REASON_CODE_PROFILE_DURATION_UI_USAGE_EXCEEDED"
+            }
+            Self::SpanUsageExceeded => "REASON_CODE_SPAN_USAGE_EXCEEDED",
+            Self::LogByteUsageExceeded => "REASON_CODE_LOG_BYTE_USAGE_EXCEEDED",
+            Self::SizeAnalysisUsageExceeded => "REASON_CODE_SIZE_ANALYSIS_USAGE_EXCEEDED",
+            Self::InstallableBuildUsageExceeded => {
+                "REASON_CODE_INSTALLABLE_BUILD_USAGE_EXCEEDED"
+            }
+            Self::TraceMetricByteUsageExceeded => {
+                "REASON_CODE_TRACE_METRIC_BYTE_USAGE_EXCEEDED"
+            }
+            Self::SmartRateLimit => "REASON_CODE_SMART_RATE_LIMIT",
+            Self::TransactionsDisabled => "REASON_CODE_TRANSACTIONS_DISABLED",
+            Self::AttachmentsDisabled => "REASON_CODE_ATTACHMENTS_DISABLED",
+            Self::ReplaysDisabled => "REASON_CODE_REPLAYS_DISABLED",
+            Self::ProfilesDisabled => "REASON_CODE_PROFILES_DISABLED",
+            Self::ProfileDurationDisabled => "REASON_CODE_PROFILE_DURATION_DISABLED",
+            Self::ProfileDurationUiDisabled => "REASON_CODE_PROFILE_DURATION_UI_DISABLED",
+            Self::SpansDisabled => "REASON_CODE_SPANS_DISABLED",
+            Self::LogBytesDisabled => "REASON_CODE_LOG_BYTES_DISABLED",
+            Self::SizeAnalysisDisabled => "REASON_CODE_SIZE_ANALYSIS_DISABLED",
+            Self::InstallableBuildDisabled => "REASON_CODE_INSTALLABLE_BUILD_DISABLED",
+            Self::TraceMetricBytesDisabled => "REASON_CODE_TRACE_METRIC_BYTES_DISABLED",
+            Self::Trial => "REASON_CODE_TRIAL",
+            Self::Beta => "REASON_CODE_BETA",
+            Self::ProjectAbuseLimit => "REASON_CODE_PROJECT_ABUSE_LIMIT",
+            Self::OrgAbuseLimit => "REASON_CODE_ORG_ABUSE_LIMIT",
+            Self::OrgSubMissing => "REASON_CODE_ORG_SUB_MISSING",
+            Self::Suspended => "REASON_CODE_SUSPENDED",
+            Self::InactiveAccount => "REASON_CODE_INACTIVE_ACCOUNT",
+            Self::ProjectQuotaErrorUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_ERROR_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaAttachmentUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_ATTACHMENT_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaTransactionUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_TRANSACTION_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaReplayUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_REPLAY_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaProfileUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_PROFILE_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaProfileDurationUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_PROFILE_DURATION_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaProfileDurationUiUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_PROFILE_DURATION_UI_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaSpanUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_SPAN_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaLogByteUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_LOG_BYTE_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaSizeAnalysisUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_SIZE_ANALYSIS_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaInstallableBuildUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_INSTALLABLE_BUILD_USAGE_EXCEEDED"
+            }
+            Self::ProjectQuotaTraceMetricByteUsageExceeded => {
+                "REASON_CODE_PROJECT_QUOTA_TRACE_METRIC_BYTE_USAGE_EXCEEDED"
+            }
+            Self::DynamicSampling => "REASON_CODE_DYNAMIC_SAMPLING",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "REASON_CODE_UNSPECIFIED" => Some(Self::Unspecified),
+            "REASON_CODE_USAGE_EXCEEDED" => Some(Self::UsageExceeded),
+            "REASON_CODE_ERROR_USAGE_EXCEEDED" => Some(Self::ErrorUsageExceeded),
+            "REASON_CODE_ATTACHMENT_USAGE_EXCEEDED" => {
+                Some(Self::AttachmentUsageExceeded)
+            }
+            "REASON_CODE_REPLAY_USAGE_EXCEEDED" => Some(Self::ReplayUsageExceeded),
+            "REASON_CODE_TRANSACTION_USAGE_EXCEEDED" => {
+                Some(Self::TransactionUsageExceeded)
+            }
+            "REASON_CODE_PROFILE_DURATION_USAGE_EXCEEDED" => {
+                Some(Self::ProfileDurationUsageExceeded)
+            }
+            "REASON_CODE_PROFILE_DURATION_UI_USAGE_EXCEEDED" => {
+                Some(Self::ProfileDurationUiUsageExceeded)
+            }
+            "REASON_CODE_SPAN_USAGE_EXCEEDED" => Some(Self::SpanUsageExceeded),
+            "REASON_CODE_LOG_BYTE_USAGE_EXCEEDED" => Some(Self::LogByteUsageExceeded),
+            "REASON_CODE_SIZE_ANALYSIS_USAGE_EXCEEDED" => {
+                Some(Self::SizeAnalysisUsageExceeded)
+            }
+            "REASON_CODE_INSTALLABLE_BUILD_USAGE_EXCEEDED" => {
+                Some(Self::InstallableBuildUsageExceeded)
+            }
+            "REASON_CODE_TRACE_METRIC_BYTE_USAGE_EXCEEDED" => {
+                Some(Self::TraceMetricByteUsageExceeded)
+            }
+            "REASON_CODE_SMART_RATE_LIMIT" => Some(Self::SmartRateLimit),
+            "REASON_CODE_TRANSACTIONS_DISABLED" => Some(Self::TransactionsDisabled),
+            "REASON_CODE_ATTACHMENTS_DISABLED" => Some(Self::AttachmentsDisabled),
+            "REASON_CODE_REPLAYS_DISABLED" => Some(Self::ReplaysDisabled),
+            "REASON_CODE_PROFILES_DISABLED" => Some(Self::ProfilesDisabled),
+            "REASON_CODE_PROFILE_DURATION_DISABLED" => {
+                Some(Self::ProfileDurationDisabled)
+            }
+            "REASON_CODE_PROFILE_DURATION_UI_DISABLED" => {
+                Some(Self::ProfileDurationUiDisabled)
+            }
+            "REASON_CODE_SPANS_DISABLED" => Some(Self::SpansDisabled),
+            "REASON_CODE_LOG_BYTES_DISABLED" => Some(Self::LogBytesDisabled),
+            "REASON_CODE_SIZE_ANALYSIS_DISABLED" => Some(Self::SizeAnalysisDisabled),
+            "REASON_CODE_INSTALLABLE_BUILD_DISABLED" => {
+                Some(Self::InstallableBuildDisabled)
+            }
+            "REASON_CODE_TRACE_METRIC_BYTES_DISABLED" => {
+                Some(Self::TraceMetricBytesDisabled)
+            }
+            "REASON_CODE_TRIAL" => Some(Self::Trial),
+            "REASON_CODE_BETA" => Some(Self::Beta),
+            "REASON_CODE_PROJECT_ABUSE_LIMIT" => Some(Self::ProjectAbuseLimit),
+            "REASON_CODE_ORG_ABUSE_LIMIT" => Some(Self::OrgAbuseLimit),
+            "REASON_CODE_ORG_SUB_MISSING" => Some(Self::OrgSubMissing),
+            "REASON_CODE_SUSPENDED" => Some(Self::Suspended),
+            "REASON_CODE_INACTIVE_ACCOUNT" => Some(Self::InactiveAccount),
+            "REASON_CODE_PROJECT_QUOTA_ERROR_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaErrorUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_ATTACHMENT_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaAttachmentUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_TRANSACTION_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaTransactionUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_REPLAY_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaReplayUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_PROFILE_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaProfileUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_PROFILE_DURATION_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaProfileDurationUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_PROFILE_DURATION_UI_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaProfileDurationUiUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_SPAN_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaSpanUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_LOG_BYTE_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaLogByteUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_SIZE_ANALYSIS_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaSizeAnalysisUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_INSTALLABLE_BUILD_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaInstallableBuildUsageExceeded)
+            }
+            "REASON_CODE_PROJECT_QUOTA_TRACE_METRIC_BYTE_USAGE_EXCEEDED" => {
+                Some(Self::ProjectQuotaTraceMetricByteUsageExceeded)
+            }
+            "REASON_CODE_DYNAMIC_SAMPLING" => Some(Self::DynamicSampling),
             _ => None,
         }
     }
