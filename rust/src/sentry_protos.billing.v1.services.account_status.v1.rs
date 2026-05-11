@@ -7,13 +7,10 @@ pub struct AccountStatus {
     /// Legacy soft cap flag. When true, no category is rate-limited regardless of usage.
     #[prost(bool, tag = "2")]
     pub soft_cap: bool,
-    /// Current account status (active, closed, past-due).
+    /// Current account status (active, closed, past-due, suspended).
     #[prost(enumeration = "Status", tag = "3")]
     pub status: i32,
-    /// Whether the account is suspended by an admin (e.g., for fraud).
-    #[prost(bool, tag = "4")]
-    pub is_suspended: bool,
-    /// Free-form reason for admin suspension (e.g., "fraud", "tos_violation").
+    /// Free-form reason when status is STATUS_SUSPENDED (e.g., "fraud", "tos_violation").
     #[prost(string, tag = "5")]
     pub suspension_reason: ::prost::alloc::string::String,
     /// PAYG on-demand spending status.
@@ -27,6 +24,7 @@ pub enum Status {
     Active = 1,
     Closed = 2,
     PastDue = 3,
+    Suspended = 4,
 }
 impl Status {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -39,6 +37,7 @@ impl Status {
             Self::Active => "STATUS_ACTIVE",
             Self::Closed => "STATUS_CLOSED",
             Self::PastDue => "STATUS_PAST_DUE",
+            Self::Suspended => "STATUS_SUSPENDED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -48,6 +47,7 @@ impl Status {
             "STATUS_ACTIVE" => Some(Self::Active),
             "STATUS_CLOSED" => Some(Self::Closed),
             "STATUS_PAST_DUE" => Some(Self::PastDue),
+            "STATUS_SUSPENDED" => Some(Self::Suspended),
             _ => None,
         }
     }

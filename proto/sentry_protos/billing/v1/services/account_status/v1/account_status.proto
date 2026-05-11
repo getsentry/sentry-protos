@@ -7,6 +7,7 @@ enum Status {
   STATUS_ACTIVE = 1;
   STATUS_CLOSED = 2;
   STATUS_PAST_DUE = 3;
+  STATUS_SUSPENDED = 4;
 }
 
 enum OnDemandStatus {
@@ -20,11 +21,9 @@ message AccountStatus {
   uint64 organization_id = 1;
   // Legacy soft cap flag. When true, no category is rate-limited regardless of usage.
   bool soft_cap = 2;
-  // Current account status (active, closed, past-due).
+  // Current account status (active, closed, past-due, suspended).
   Status status = 3;
-  // Whether the account is suspended by an admin (e.g., for fraud).
-  bool is_suspended = 4;
-  // Free-form reason for admin suspension (e.g., "fraud", "tos_violation").
+  // Free-form reason when status is STATUS_SUSPENDED (e.g., "fraud", "tos_violation").
   string suspension_reason = 5;
   // PAYG on-demand spending status.
   OnDemandStatus ondemand_status = 6;
