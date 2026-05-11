@@ -106,6 +106,13 @@ pub struct SetTaskStatusRequest {
     /// If fetch_next is provided, receive a new task in the response
     #[prost(message, optional, tag = "3")]
     pub fetch_next_task: ::core::option::Option<FetchNextTask>,
+    /// Maximum number of retry attempts for this task.
+    /// When status is RETRY and this field is set, the broker will update
+    /// the activation's retry_state with this value. This allows workers
+    /// to communicate the retry policy for tasks from raw topics that
+    /// don't have retry_state embedded in the message.
+    #[prost(uint32, optional, tag = "4")]
+    pub max_retries: ::core::option::Option<u32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SetTaskStatusResponse {
