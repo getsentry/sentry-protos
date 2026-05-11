@@ -14,66 +14,6 @@ enum QuotaScope {
   QUOTA_SCOPE_KEY = 3;
 }
 
-// Machine-readable reason returned when a quota is exceeded.
-enum ReasonCode {
-  REASON_CODE_UNSPECIFIED = 0;
-
-  // Org-level usage exceeded quotas.
-  REASON_CODE_USAGE_EXCEEDED = 1;
-  REASON_CODE_ERROR_USAGE_EXCEEDED = 2;
-  REASON_CODE_ATTACHMENT_USAGE_EXCEEDED = 3;
-  REASON_CODE_REPLAY_USAGE_EXCEEDED = 4;
-  REASON_CODE_TRANSACTION_USAGE_EXCEEDED = 5;
-  REASON_CODE_PROFILE_DURATION_USAGE_EXCEEDED = 6;
-  REASON_CODE_PROFILE_DURATION_UI_USAGE_EXCEEDED = 7;
-  REASON_CODE_SPAN_USAGE_EXCEEDED = 8;
-  REASON_CODE_LOG_BYTE_USAGE_EXCEEDED = 9;
-  REASON_CODE_SIZE_ANALYSIS_USAGE_EXCEEDED = 10;
-  REASON_CODE_INSTALLABLE_BUILD_USAGE_EXCEEDED = 11;
-  REASON_CODE_TRACE_METRIC_BYTE_USAGE_EXCEEDED = 12;
-
-  REASON_CODE_SMART_RATE_LIMIT = 13;
-
-  // Category disabled quotas.
-  REASON_CODE_TRANSACTIONS_DISABLED = 14;
-  REASON_CODE_ATTACHMENTS_DISABLED = 15;
-  REASON_CODE_REPLAYS_DISABLED = 16;
-  REASON_CODE_PROFILES_DISABLED = 17;
-  REASON_CODE_PROFILE_DURATION_DISABLED = 18;
-  REASON_CODE_PROFILE_DURATION_UI_DISABLED = 19;
-  REASON_CODE_SPANS_DISABLED = 20;
-  REASON_CODE_LOG_BYTES_DISABLED = 21;
-  REASON_CODE_SIZE_ANALYSIS_DISABLED = 22;
-  REASON_CODE_INSTALLABLE_BUILD_DISABLED = 23;
-  REASON_CODE_TRACE_METRIC_BYTES_DISABLED = 24;
-
-  REASON_CODE_TRIAL = 25;
-  REASON_CODE_BETA = 26;
-
-  // Abuse and administrative quotas.
-  REASON_CODE_PROJECT_ABUSE_LIMIT = 27;
-  REASON_CODE_ORG_ABUSE_LIMIT = 28;
-  REASON_CODE_ORG_SUB_MISSING = 29;
-  REASON_CODE_SUSPENDED = 30;
-  REASON_CODE_INACTIVE_ACCOUNT = 31;
-
-  // Project-level quota usage exceeded.
-  REASON_CODE_PROJECT_QUOTA_ERROR_USAGE_EXCEEDED = 32;
-  REASON_CODE_PROJECT_QUOTA_ATTACHMENT_USAGE_EXCEEDED = 33;
-  REASON_CODE_PROJECT_QUOTA_TRANSACTION_USAGE_EXCEEDED = 34;
-  REASON_CODE_PROJECT_QUOTA_REPLAY_USAGE_EXCEEDED = 35;
-  REASON_CODE_PROJECT_QUOTA_PROFILE_USAGE_EXCEEDED = 36;
-  REASON_CODE_PROJECT_QUOTA_PROFILE_DURATION_USAGE_EXCEEDED = 37;
-  REASON_CODE_PROJECT_QUOTA_PROFILE_DURATION_UI_USAGE_EXCEEDED = 38;
-  REASON_CODE_PROJECT_QUOTA_SPAN_USAGE_EXCEEDED = 39;
-  REASON_CODE_PROJECT_QUOTA_LOG_BYTE_USAGE_EXCEEDED = 40;
-  REASON_CODE_PROJECT_QUOTA_SIZE_ANALYSIS_USAGE_EXCEEDED = 41;
-  REASON_CODE_PROJECT_QUOTA_INSTALLABLE_BUILD_USAGE_EXCEEDED = 42;
-  REASON_CODE_PROJECT_QUOTA_TRACE_METRIC_BYTE_USAGE_EXCEEDED = 43;
-
-  REASON_CODE_DYNAMIC_SAMPLING = 44;
-}
-
 // Configuration for a single quota rule. Quotas limit the number of events
 // (or bytes, depending on category) accepted within a time window.
 //
@@ -88,5 +28,15 @@ message QuotaConfig {
   optional string scope_id = 4;
   optional uint64 limit = 5;
   optional uint64 window = 6;
-  ReasonCode reason_code = 7;
+  // Machine-readable reason returned when this quota is exceeded.
+  // Defined and extended in sentry/getsentry, not in this proto.
+  // Common formats:
+  //   "{category}_usage_exceeded"         — org-level usage exceeded (e.g. "error_usage_exceeded")
+  //   "{category}s_disabled"              — category disabled (e.g. "transactions_disabled")
+  //   "project_quota_{category}_usage_exceeded" — project-level quota exceeded
+  //   "project_abuse_limit"               — per-project abuse quota
+  //   "org_abuse_limit"                   — per-org abuse quota
+  //   "smart_rate_limit"                  — spike protection
+  //   "Sampled:..."                       — dynamic sampling
+  optional string reason_code = 7;
 }

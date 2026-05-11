@@ -57,7 +57,7 @@ from sentry_protos.billing.v1.services.package.v1.endpoint_get_package_pb2 impor
     GetPackageResponse,
 )
 from sentry_protos.billing.v1.data_category_pb2 import DataCategory
-from sentry_protos.billing.v1.quota_config_pb2 import QuotaConfig, QuotaScope, ReasonCode
+from sentry_protos.billing.v1.quota_config_pb2 import QuotaConfig, QuotaScope
 
 
 def test_contract_with_all_sub_messages():
@@ -518,7 +518,7 @@ def test_quota_config_basic():
         scope_id="42",
         limit=1000,
         window=3600,
-        reason_code=ReasonCode.REASON_CODE_PROJECT_ABUSE_LIMIT,
+        reason_code="project_abuse_limit",
     )
     assert quota.id == "pae"
     assert list(quota.categories) == [DataCategory.DATA_CATEGORY_ERROR]
@@ -526,7 +526,7 @@ def test_quota_config_basic():
     assert quota.scope_id == "42"
     assert quota.limit == 1000
     assert quota.window == 3600
-    assert quota.reason_code == ReasonCode.REASON_CODE_PROJECT_ABUSE_LIMIT
+    assert quota.reason_code == "project_abuse_limit"
 
     serialized = quota.SerializeToString()
     parsed = QuotaConfig()
@@ -566,13 +566,13 @@ def test_quota_config_reject_all():
         limit=0,
         scope=QuotaScope.QUOTA_SCOPE_PROJECT,
         categories=[DataCategory.DATA_CATEGORY_ATTACHMENT],
-        reason_code=ReasonCode.REASON_CODE_ATTACHMENTS_DISABLED,
+        reason_code="attachments_disabled",
     )
     assert quota.HasField("limit")
     assert quota.limit == 0
     assert not quota.HasField("window")
     assert quota.id == "reject_all"
-    assert quota.reason_code == ReasonCode.REASON_CODE_ATTACHMENTS_DISABLED
+    assert quota.reason_code == "attachments_disabled"
 
 
 def test_quota_config_empty_categories():
@@ -581,7 +581,7 @@ def test_quota_config_empty_categories():
         scope=QuotaScope.QUOTA_SCOPE_ORGANIZATION,
         limit=50000,
         window=3600,
-        reason_code=ReasonCode.REASON_CODE_USAGE_EXCEEDED,
+        reason_code="usage_exceeded",
     )
     assert len(quota.categories) == 0
 
