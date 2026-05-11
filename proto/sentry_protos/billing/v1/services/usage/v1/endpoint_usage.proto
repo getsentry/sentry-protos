@@ -36,6 +36,12 @@ message GetUsageResponse {
   repeated DailySeatUsage seat_days = 3;
 
   repeated CategorySeatUsage seats = 2 [deprecated = true]; // DEPRECATED: use seat_days
+
+  // The latest timestamp of usage data included in this response (inclusive
+  // — there is at least one row at exactly this timestamp). Callers persist
+  // this as the contract's watermark; subsequent queries should resume
+  // strictly after this timestamp to avoid double-counting the boundary.
+  optional google.protobuf.Timestamp last_usage_ts = 4;
 }
 
 message GetUsageRequest {

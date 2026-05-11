@@ -78,6 +78,12 @@ pub struct GetUsageResponse {
     #[deprecated]
     #[prost(message, repeated, tag = "2")]
     pub seats: ::prost::alloc::vec::Vec<CategorySeatUsage>,
+    /// The latest timestamp of usage data included in this response (inclusive
+    /// — there is at least one row at exactly this timestamp). Callers persist
+    /// this as the contract's watermark; subsequent queries should resume
+    /// strictly after this timestamp to avoid double-counting the boundary.
+    #[prost(message, optional, tag = "4")]
+    pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUsageRequest {
