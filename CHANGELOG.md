@@ -1,3 +1,9 @@
+## 0.8.30
+
+### New Features ✨
+
+- Add protos for handling stripe webhooks by @noahsmartin in [#248](https://github.com/getsentry/sentry-protos/pull/248)
+
 ## 0.8.29
 
 ### New Features ✨
