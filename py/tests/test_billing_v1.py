@@ -566,13 +566,13 @@ def test_quota_config_reject_all():
         limit=0,
         scope=QuotaScope.QUOTA_SCOPE_PROJECT,
         categories=[DataCategory.DATA_CATEGORY_ATTACHMENT],
-        reason_code=ReasonCode.REASON_CODE_TRANSACTIONS_DISABLED,
+        reason_code=ReasonCode.REASON_CODE_ATTACHMENTS_DISABLED,
     )
     assert quota.HasField("limit")
     assert quota.limit == 0
     assert not quota.HasField("window")
     assert quota.id == "reject_all"
-    assert quota.reason_code == ReasonCode.REASON_CODE_TRANSACTIONS_DISABLED
+    assert quota.reason_code == ReasonCode.REASON_CODE_ATTACHMENTS_DISABLED
 
 
 def test_quota_config_empty_categories():
