@@ -1,3 +1,9 @@
+## 0.8.31
+
+### Internal Changes 🔧
+
+- Add max usage ts by @noahsmartin in [#252](https://github.com/getsentry/sentry-protos/pull/252)
+
 ## 0.8.30
 
 ### New Features ✨
