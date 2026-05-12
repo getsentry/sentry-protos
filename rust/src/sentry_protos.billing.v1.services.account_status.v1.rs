@@ -4,17 +4,14 @@ pub struct AccountStatus {
     /// The organization this status belongs to. Each org has one AccountStatus.
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
-    /// Legacy soft cap flag. When true, no category is rate-limited regardless of usage.
-    #[prost(bool, tag = "2")]
-    pub soft_cap: bool,
     /// Current account status (active, closed, past-due, suspended).
-    #[prost(enumeration = "Status", tag = "3")]
+    #[prost(enumeration = "Status", tag = "2")]
     pub status: i32,
     /// Free-form reason when status is STATUS_SUSPENDED (e.g., "fraud", "tos_violation").
-    #[prost(string, tag = "5")]
-    pub suspension_reason: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "3")]
+    pub suspension_reason: ::core::option::Option<::prost::alloc::string::String>,
     /// PAYG on-demand spending status.
-    #[prost(enumeration = "OnDemandStatus", tag = "6")]
+    #[prost(enumeration = "OnDemandStatus", tag = "4")]
     pub ondemand_status: i32,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

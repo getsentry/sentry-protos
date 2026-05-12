@@ -19,12 +19,10 @@ enum OnDemandStatus {
 message AccountStatus {
   // The organization this status belongs to. Each org has one AccountStatus.
   uint64 organization_id = 1;
-  // Legacy soft cap flag. When true, no category is rate-limited regardless of usage.
-  bool soft_cap = 2;
   // Current account status (active, closed, past-due, suspended).
-  Status status = 3;
+  Status status = 2;
   // Free-form reason when status is STATUS_SUSPENDED (e.g., "fraud", "tos_violation").
-  string suspension_reason = 5;
+  optional string suspension_reason = 3;
   // PAYG on-demand spending status.
-  OnDemandStatus ondemand_status = 6;
+  OnDemandStatus ondemand_status = 4;
 }
