@@ -78,3 +78,13 @@ impl OnDemandStatus {
         }
     }
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetAccountStatusRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetAccountStatusResponse {
+    #[prost(message, optional, tag = "1")]
+    pub account_status: ::core::option::Option<AccountStatus>,
+}

@@ -56,6 +56,15 @@ from sentry_protos.billing.v1.services.package.v1.endpoint_get_package_pb2 impor
     GetPackageRequest,
     GetPackageResponse,
 )
+from sentry_protos.billing.v1.services.account_status.v1.account_status_pb2 import (
+    AccountStatus,
+    OnDemandStatus,
+    Status,
+)
+from sentry_protos.billing.v1.services.account_status.v1.endpoint_get_account_status_pb2 import (
+    GetAccountStatusRequest,
+    GetAccountStatusResponse,
+)
 from sentry_protos.billing.v1.data_category_pb2 import DataCategory
 from sentry_protos.billing.v1.quota_config_pb2 import QuotaConfig, QuotaScope
 
@@ -584,5 +593,34 @@ def test_quota_config_empty_categories():
         reason_code="usage_exceeded",
     )
     assert len(quota.categories) == 0
+
+
+def test_get_account_status_request():
+    request = GetAccountStatusRequest(organization_id=12345)
+    assert request.organization_id == 12345
+
+    serialized = request.SerializeToString()
+    parsed = GetAccountStatusRequest()
+    parsed.ParseFromString(serialized)
+    assert parsed.organization_id == 12345
+
+
+def test_get_account_status_response():
+    account_status = AccountStatus(
+        organization_id=99,
+        status=Status.STATUS_SUSPENDED,
+        suspension_reason="tos_violation",
+        ondemand_status=OnDemandStatus.ON_DEMAND_STATUS_DISABLED,
+    )
+    response = GetAccountStatusResponse(account_status=account_status)
+    assert response.account_status.organization_id == 99
+    assert response.account_status.status == Status.STATUS_SUSPENDED
+    assert response.account_status.suspension_reason == "tos_violation"
+    assert response.account_status.ondemand_status == OnDemandStatus.ON_DEMAND_STATUS_DISABLED
+
+
+def test_get_account_status_response_empty():
+    response = GetAccountStatusResponse()
+    assert not response.HasField("account_status")
 
 
