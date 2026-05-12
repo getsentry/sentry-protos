@@ -1,3 +1,17 @@
+## 0.8.32
+
+### New Features ✨
+
+#### Billing
+
+- AccountService request and response messages(REVENG-76) by @krithikravi in [#255](https://github.com/getsentry/sentry-protos/pull/255)
+- Added account protos(REVENG-79) by @krithikravi in [#254](https://github.com/getsentry/sentry-protos/pull/254)
+- Added QuotaConfig protos(REVENG-74) by @krithikravi in [#253](https://github.com/getsentry/sentry-protos/pull/253)
+
+#### Other
+
+- (taskbroker) Add max_attempts to SetTaskStatusRequest by @untitaker in [#251](https://github.com/getsentry/sentry-protos/pull/251)
+
 ## 0.8.31
 
 ### Internal Changes 🔧
