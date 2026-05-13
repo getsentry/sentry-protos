@@ -88,3 +88,24 @@ pub struct GetAccountStatusResponse {
     #[prost(message, optional, tag = "1")]
     pub account_status: ::core::option::Option<AccountStatus>,
 }
+/// Creates or updates the account status for an organization. If no record
+/// exists for the given organization_id, one is created. If a record already
+/// exists, it is updated with the provided fields.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UpsertAccountStatusRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(enumeration = "Status", tag = "2")]
+    pub status: i32,
+    #[prost(string, optional, tag = "3")]
+    pub suspension_reason: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(enumeration = "OnDemandStatus", tag = "4")]
+    pub ondemand_status: i32,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UpsertAccountStatusResponse {
+    /// True if a new record was created or an existing record was modified.
+    /// False if the record already existed with identical field values.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}

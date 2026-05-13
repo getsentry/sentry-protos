@@ -65,6 +65,10 @@ from sentry_protos.billing.v1.services.account_status.v1.endpoint_get_account_st
     GetAccountStatusRequest,
     GetAccountStatusResponse,
 )
+from sentry_protos.billing.v1.services.account_status.v1.endpoint_upsert_account_status_pb2 import (
+    UpsertAccountStatusRequest,
+    UpsertAccountStatusResponse,
+)
 from sentry_protos.billing.v1.data_category_pb2 import DataCategory
 from sentry_protos.billing.v1.quota_config_pb2 import QuotaConfig, QuotaScope
 
@@ -622,5 +626,48 @@ def test_get_account_status_response():
 def test_get_account_status_response_empty():
     response = GetAccountStatusResponse()
     assert not response.HasField("account_status")
+
+
+def test_upsert_account_status_request():
+    request = UpsertAccountStatusRequest(
+        organization_id=12345,
+        status=Status.STATUS_ACTIVE,
+        ondemand_status=OnDemandStatus.ON_DEMAND_STATUS_ENABLED,
+    )
+    assert request.organization_id == 12345
+    assert request.status == Status.STATUS_ACTIVE
+    assert not request.HasField("suspension_reason")
+    assert request.ondemand_status == OnDemandStatus.ON_DEMAND_STATUS_ENABLED
+
+    serialized = request.SerializeToString()
+    parsed = UpsertAccountStatusRequest()
+    parsed.ParseFromString(serialized)
+    assert parsed.organization_id == 12345
+    assert parsed.status == Status.STATUS_ACTIVE
+    assert parsed.ondemand_status == OnDemandStatus.ON_DEMAND_STATUS_ENABLED
+
+
+def test_upsert_account_status_request_with_suspension():
+    request = UpsertAccountStatusRequest(
+        organization_id=99,
+        status=Status.STATUS_SUSPENDED,
+        suspension_reason="tos_violation",
+        ondemand_status=OnDemandStatus.ON_DEMAND_STATUS_DISABLED,
+    )
+    assert request.status == Status.STATUS_SUSPENDED
+    assert request.HasField("suspension_reason")
+    assert request.suspension_reason == "tos_violation"
+    assert request.ondemand_status == OnDemandStatus.ON_DEMAND_STATUS_DISABLED
+
+
+def test_upsert_account_status_response():
+    updated_response = UpsertAccountStatusResponse(updated=True)
+    assert updated_response.updated is True
+
+    not_updated_response = UpsertAccountStatusResponse(updated=False)
+    assert not_updated_response.updated is False
+
+    default_response = UpsertAccountStatusResponse()
+    assert default_response.updated is False
 
 

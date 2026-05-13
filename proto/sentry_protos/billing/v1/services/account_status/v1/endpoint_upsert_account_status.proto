@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.account_status.v1;
+
+import "sentry_protos/billing/v1/services/account_status/v1/account_status.proto";
+
+// Creates or updates the account status for an organization. If no record
+// exists for the given organization_id, one is created. If a record already
+// exists, it is updated with the provided fields.
+message UpsertAccountStatusRequest {
+  uint64 organization_id = 1;
+  Status status = 2;
+  optional string suspension_reason = 3;
+  OnDemandStatus ondemand_status = 4;
+}
+
+message UpsertAccountStatusResponse {
+  // True if a new record was created or an existing record was modified.
+  // False if the record already existed with identical field values.
+  bool updated = 1;
+}
