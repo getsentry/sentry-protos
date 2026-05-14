@@ -1,3 +1,13 @@
+## 0.10.0
+
+### New Features ✨
+
+- (billing) Added upsert response+request messages(REVENG-78) by @krithikravi in [#257](https://github.com/getsentry/sentry-protos/pull/257)
+
+### Internal Changes 🔧
+
+- (release) Auto-release when proto schemas change on main by @armenzg in [#260](https://github.com/getsentry/sentry-protos/pull/260)
+
 ## 0.9.0
 
 ### New Features ✨
