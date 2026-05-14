@@ -1,3 +1,9 @@
+## 0.8.33
+
+### Internal Changes 🔧
+
+- Version bump to 0.8.33
+
 ## 0.8.32
 
 ### New Features ✨
