@@ -93,9 +93,9 @@ The `Type` enum would be available as `sentry_protos::snuba::v1alpha::attribute_
 
 ## Releasing
 
-Releases are automated on every merge to `main`. The `release` GitHub Actions workflow
-runs with `version=auto`, which creates the next version and publishes packages for each
-supported language.
+Releases are automated for merges to `main` that include changes under `proto/`.
+The `release` GitHub Actions workflow runs with `version=auto`, which creates
+the next version and publishes packages for each supported language.
 
 ### Manual release workflow dispatch
 
