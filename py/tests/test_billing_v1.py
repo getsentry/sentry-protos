@@ -635,8 +635,10 @@ def test_upsert_account_status_request():
         ondemand_status=OnDemandStatus.ON_DEMAND_STATUS_ENABLED,
     )
     assert request.organization_id == 12345
+    assert request.HasField("status")
     assert request.status == Status.STATUS_ACTIVE
     assert not request.HasField("suspension_reason")
+    assert request.HasField("ondemand_status")
     assert request.ondemand_status == OnDemandStatus.ON_DEMAND_STATUS_ENABLED
 
     serialized = request.SerializeToString()
@@ -645,6 +647,11 @@ def test_upsert_account_status_request():
     assert parsed.organization_id == 12345
     assert parsed.status == Status.STATUS_ACTIVE
     assert parsed.ondemand_status == OnDemandStatus.ON_DEMAND_STATUS_ENABLED
+
+    partial_request = UpsertAccountStatusRequest(organization_id=99)
+    assert not partial_request.HasField("status")
+    assert not partial_request.HasField("suspension_reason")
+    assert not partial_request.HasField("ondemand_status")
 
 
 def test_upsert_account_status_request_with_suspension():

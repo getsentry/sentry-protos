@@ -9,9 +9,9 @@ import "sentry_protos/billing/v1/services/account_status/v1/account_status.proto
 // exists, it is updated with the provided fields.
 message UpsertAccountStatusRequest {
   uint64 organization_id = 1;
-  Status status = 2;
+  optional Status status = 2;
   optional string suspension_reason = 3;
-  OnDemandStatus ondemand_status = 4;
+  optional OnDemandStatus ondemand_status = 4;
 }
 
 message UpsertAccountStatusResponse {

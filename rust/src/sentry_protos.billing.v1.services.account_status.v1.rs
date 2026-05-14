@@ -95,12 +95,12 @@ pub struct GetAccountStatusResponse {
 pub struct UpsertAccountStatusRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
-    #[prost(enumeration = "Status", tag = "2")]
-    pub status: i32,
+    #[prost(enumeration = "Status", optional, tag = "2")]
+    pub status: ::core::option::Option<i32>,
     #[prost(string, optional, tag = "3")]
     pub suspension_reason: ::core::option::Option<::prost::alloc::string::String>,
-    #[prost(enumeration = "OnDemandStatus", tag = "4")]
-    pub ondemand_status: i32,
+    #[prost(enumeration = "OnDemandStatus", optional, tag = "4")]
+    pub ondemand_status: ::core::option::Option<i32>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UpsertAccountStatusResponse {
