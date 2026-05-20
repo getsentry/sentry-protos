@@ -93,11 +93,14 @@ The `Type` enum would be available as `sentry_protos::snuba::v1alpha::attribute_
 
 ## Releasing
 
-Use the `release` workflow in GitHub actions to create new releases. Each time a release is created, packages will be published for each supported language.
+Releases are automated for merges to `main` that include changes under `proto/`.
+The `release` GitHub Actions workflow runs with `version=auto`, which creates
+the next version and publishes packages for each supported language.
 
-In this repo, click on Actions:
+### Manual release workflow dispatch
 
-![image](https://github.com/user-attachments/assets/ce9f638e-5f16-4ff7-9457-d92d2738dc06)
+If you need to manually run a release with explicit inputs (for example custom `version`
+or `force`), use the `release` workflow in GitHub Actions:
 
 Select `release`
 

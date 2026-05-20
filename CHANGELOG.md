@@ -1,3 +1,33 @@
+## 0.10.0
+
+### New Features ✨
+
+- (billing) Added upsert response+request messages(REVENG-78) by @krithikravi in [#257](https://github.com/getsentry/sentry-protos/pull/257)
+
+### Internal Changes 🔧
+
+- (release) Auto-release when proto schemas change on main by @armenzg in [#260](https://github.com/getsentry/sentry-protos/pull/260)
+
+## 0.9.0
+
+### New Features ✨
+
+- (billing) Add address to CreateContractRequest by @armenzg in [#256](https://github.com/getsentry/sentry-protos/pull/256)
+
+### Bug Fixes 🐛
+
+- Update craft minVersion to 2.14.0 for auto-versioning support by @armenzg in [#259](https://github.com/getsentry/sentry-protos/pull/259)
+
+### Internal Changes 🔧
+
+- Bump version to 0.8.33 by @armenzg in [#258](https://github.com/getsentry/sentry-protos/pull/258)
+
+## 0.8.33
+
+### Internal Changes 🔧
+
+- Version bump to 0.8.33
+
 ## 0.8.32
 
 ### New Features ✨

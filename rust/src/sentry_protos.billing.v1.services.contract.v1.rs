@@ -477,6 +477,8 @@ pub struct CreateContractRequest {
     pub user_configs: ::prost::alloc::vec::Vec<UserConfig>,
     #[prost(message, repeated, tag = "4")]
     pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+    #[prost(message, optional, tag = "5")]
+    pub address: ::core::option::Option<super::super::super::common::v1::Address>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateContractResponse {
