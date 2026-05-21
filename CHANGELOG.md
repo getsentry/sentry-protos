@@ -1,3 +1,13 @@
+## 0.11.0
+
+### New Features ✨
+
+- (taskbroker) Add delay_on_retry to SetTaskStatusRequest by @untitaker in [#262](https://github.com/getsentry/sentry-protos/pull/262)
+
+### Internal Changes 🔧
+
+- Limit PR workflow to proto and Buf config changes by @armenzg in [#261](https://github.com/getsentry/sentry-protos/pull/261)
+
 ## 0.10.0
 
 ### New Features ✨
