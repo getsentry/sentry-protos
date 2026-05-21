@@ -131,6 +131,11 @@ message SetTaskStatusRequest {
   // to communicate the retry policy for tasks from raw topics that
   // don't have retry_state embedded in the message.
   optional uint32 max_attempts = 4;
+
+  // Duration in seconds to wait before retrying the task.
+  // When status is RETRY and this field is set, the broker will update
+  // the activation's retry_state.delay_on_retry with this value.
+  optional uint64 delay_on_retry = 5;
 }
 
 message SetTaskStatusResponse {

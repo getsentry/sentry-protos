@@ -113,6 +113,11 @@ pub struct SetTaskStatusRequest {
     /// don't have retry_state embedded in the message.
     #[prost(uint32, optional, tag = "4")]
     pub max_attempts: ::core::option::Option<u32>,
+    /// Duration in seconds to wait before retrying the task.
+    /// When status is RETRY and this field is set, the broker will update
+    /// the activation's retry_state.delay_on_retry with this value.
+    #[prost(uint64, optional, tag = "5")]
+    pub delay_on_retry: ::core::option::Option<u64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SetTaskStatusResponse {
