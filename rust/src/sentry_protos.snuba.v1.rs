@@ -1738,6 +1738,8 @@ pub struct TraceItemAttributeValuesResponse {
     /// all the values that matched the criteria specified in the request
     #[prost(string, repeated, tag = "1")]
     pub values: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(int64, repeated, tag = "3")]
+    pub counts: ::prost::alloc::vec::Vec<i64>,
     /// page token for the next page of results
     #[prost(message, optional, tag = "6")]
     pub page_token: ::core::option::Option<PageToken>,

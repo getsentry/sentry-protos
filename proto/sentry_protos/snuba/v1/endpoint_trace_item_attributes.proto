@@ -91,6 +91,7 @@ message TraceItemAttributeValuesRequest {
 message TraceItemAttributeValuesResponse {
   // all the values that matched the criteria specified in the request
   repeated string values = 1;
+  repeated int64 counts = 3;
 
   // page token for the next page of results
   PageToken page_token = 6;
