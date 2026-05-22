@@ -1,3 +1,9 @@
+## 0.13.0
+
+### New Features ✨
+
+- (billing-platform) Add bare-minimum Grant proto for Engagement Service by @dashed in [#238](https://github.com/getsentry/sentry-protos/pull/238)
+
 ## 0.12.0
 
 ### New Features ✨
