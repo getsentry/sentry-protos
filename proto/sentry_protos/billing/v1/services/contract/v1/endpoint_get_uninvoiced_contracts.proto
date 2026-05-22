@@ -3,7 +3,6 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v1;
 
 import "google/protobuf/timestamp.proto";
-import "sentry_protos/billing/v1/services/contract/v1/contract.proto";
 
 message GetUninvoicedContractsRequest {
   // Returns Contracts whose current billing period ends before this time and
@@ -19,7 +18,8 @@ message GetUninvoicedContractsRequest {
 }
 
 message GetUninvoicedContractsResponse {
-  repeated Contract contracts = 1 [deprecated = true]; //DEPRECATED: use contract_ids instead
+  reserved 1;
+  reserved "contracts";
   // True if additional matching contracts existed beyond max_items and were
   // not included in this response.
   bool truncated = 2;

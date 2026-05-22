@@ -1,3 +1,19 @@
+## Unreleased
+
+### Breaking Changes
+
+#### Billing
+
+- Remove deprecated fields, messages, and enums from billing v1 protos:
+  `SKUConfig`, `SharedSKUBudget`, `PricingTier`, and `TieredPricingRate`
+  in `services/contract/v1/pricing_config.proto`; `BillingChannel`,
+  `ExternalBillingProvider`, and `Address` in
+  `services/contract/v1/billing_config.proto`; `FeatureOption` and
+  `FeatureOptions` in `contract_metadata.proto`; `SKUUsageSummary` and
+  `SharedBudgetUsageSummary` in `endpoint_usage_pricer.proto`; the legacy
+  `Address` in `billing_details.proto`; and deprecated response fields
+  `seats` and `contracts`. All removed field numbers and names are now reserved.
+
 ## 0.13.0
 
 ### New Features ✨

@@ -12,19 +12,6 @@ message OptionValue {
   }
 }
 
-message FeatureOption {
-  option deprecated = true;
-
-  string key = 1;
-  bool enabled = 2;
-}
-
-message FeatureOptions {
-  option deprecated = true;
-
-  repeated FeatureOption options = 1;
-}
-
 message MetadataOption {
   string key = 1;
   OptionValue value = 2;
@@ -43,10 +30,6 @@ message ContractMetadata {
   MetadataOptions custom_options = 6;
   sentry_protos.billing.v1.FeatureOptions billing_features = 7;
   string package_uid = 9;
-
-  uint64 package_id = 8 [deprecated = true];
-  // Includes information like plan ID, tier, etc.
-  MetadataOptions package_metadata = 4 [deprecated = true];
-  // Entitlements, used in frontend features or gating access to certain features.
-  FeatureOptions features = 5 [deprecated = true]; //DEPRECATED: use billing_features instead
+  reserved 4, 5, 8;
+  reserved "package_metadata", "features", "package_id";
 }

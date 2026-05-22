@@ -34,8 +34,8 @@ message GetUsageResponse {
   // Usage broken down by day, each containing per-category usage.
   repeated DailyUsage days = 1;
   repeated DailySeatUsage seat_days = 3;
-
-  repeated CategorySeatUsage seats = 2 [deprecated = true]; // DEPRECATED: use seat_days
+  reserved 2;
+  reserved "seats";
 
   // The latest timestamp of usage data included in this response (inclusive
   // — there is at least one row at exactly this timestamp). Callers persist

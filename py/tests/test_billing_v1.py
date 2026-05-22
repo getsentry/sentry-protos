@@ -1,10 +1,7 @@
 from sentry_protos.billing.v1.services.contract.v1.billing_config_pb2 import (
-    Address,
-    BillingChannel,
     BillingConfig,
     BillingType,
     Date,
-    ExternalBillingProvider,
 )
 from sentry_protos.billing.v1.services.contract.v1.contract_metadata_pb2 import (
     ContractMetadata,
@@ -22,11 +19,7 @@ from sentry_protos.billing.v1.services.contract.v1.pricing_config_pb2 import (
     LineItemUids,
     PAYGBudget,
     PricingConfig,
-    PricingTier,
     Reservation,
-    SharedSKUBudget,
-    SKUConfig,
-    TieredPricingRate,
     UserConfig,
 )
 from sentry_protos.billing.v1 import feature_pb2 as billing_feature_pb2
@@ -74,55 +67,12 @@ from sentry_protos.billing.v1.quota_config_pb2 import QuotaConfig, QuotaScope
 
 
 def test_contract_with_all_sub_messages():
-    payg_rate = TieredPricingRate(
-        tiers=[
-            PricingTier(start=0, end=100_000, rate_per_unit_cpe=500),
-            PricingTier(start=100_001, end=-1, rate_per_unit_cpe=300),
-        ]
-    )
-    reserved_rate = TieredPricingRate(
-        tiers=[
-            PricingTier(start=0, end=-1, rate_per_unit_cpe=100),
-        ]
-    )
-
-    errors_config = SKUConfig(
-        billing_sku=SKU.SKU_ERRORS,
-        base_price_cents=2900,
-        payg_budget_cents=10000,
-        payg_rate=payg_rate,
-        reserved_rate=reserved_rate,
-    )
-    assert errors_config.HasField("payg_budget_cents")
-    assert errors_config.billing_sku == SKU.SKU_ERRORS
-
-    spans_config = SKUConfig(
-        billing_sku=SKU.SKU_SPANS,
-        base_price_cents=0,
-        payg_rate=payg_rate,
-        reserved_rate=reserved_rate,
-    )
-    assert not spans_config.HasField("payg_budget_cents")
-
-    shared_budget = SharedSKUBudget(
-        billing_skus=[SKU.SKU_SPANS],
-        reserved_budget_cents=50000,
-        payg_budget_cents=25000,
-    )
-
     contract = Contract(
         metadata=ContractMetadata(
             id=12345,
             organization_id=67890,
             ruleset_version="2024.1",
-            package_metadata=MetadataOptions(
-                options=[
-                    MetadataOption(key="plan", value=OptionValue(string_value="business")),
-                    MetadataOption(
-                        key="tier", value=OptionValue(string_value="enterprise")
-                    ),
-                ],
-            ),
+            package_uid="business-plan",
             billing_features=FeatureOptions(
                 options=[
                     FeatureOption(key="sso", enabled=True),
@@ -141,43 +91,19 @@ def test_contract_with_all_sub_messages():
         ),
         billing_config=BillingConfig(
             billing_type=BillingType.BILLING_TYPE_CREDIT_CARD,
-            channel=BillingChannel.BILLING_CHANNEL_SELF_SERVE,
-            external_billing_provider=ExternalBillingProvider.EXTERNAL_BILLING_PROVIDER_STRIPE,
-            contract_start_date=Date(year=2024, month=1, day=1),
-            contract_end_date=Date(year=2025, month=1, day=1),
-            address=Address(
-                city="San Francisco",
-                region="CA",
-                country_code="US",
-                postal_code="94107",
-                address_line_1="45 Fremont St",
-            ),
         ),
         pricing_config=PricingConfig(
-            sku_configs=[errors_config],
-            shared_sku_budgets=[shared_budget],
             billing_period_start_date=Date(year=2024, month=6, day=1),
             billing_period_end_date=Date(year=2024, month=7, day=1),
-            max_spend_cents=100000,
-            base_price_cents=8900,
+            ondemand_period_start_date=Date(year=2024, month=6, day=1),
+            ondemand_period_end_date=Date(year=2024, month=7, day=1),
         ),
     )
 
     assert contract.metadata.id == 12345
     assert contract.metadata.organization_id == 67890
-    assert contract.billing_config.contract_start_date.year == 2024
-    assert len(contract.pricing_config.sku_configs) == 1
-    assert contract.pricing_config.sku_configs[0].billing_sku == SKU.SKU_ERRORS
-    assert len(contract.pricing_config.shared_sku_budgets) == 1
-    assert list(contract.pricing_config.shared_sku_budgets[0].billing_skus) == [SKU.SKU_SPANS]
-    assert contract.billing_config.address.city == "San Francisco"
-
-    package_metadata = {
-        option.key: option.value.string_value
-        for option in contract.metadata.package_metadata.options
-    }
-    assert package_metadata["plan"] == "business"
-    assert package_metadata["tier"] == "enterprise"
+    assert contract.metadata.package_uid == "business-plan"
+    assert contract.pricing_config.billing_period_start_date.year == 2024
 
     billing_features = {
         option.key: option.enabled for option in contract.metadata.billing_features.options
@@ -208,14 +134,14 @@ def test_get_contract_response():
             billing_type=BillingType.BILLING_TYPE_CREDIT_CARD,
         ),
         pricing_config=PricingConfig(
-            base_price_cents=8900,
+            billing_period_start_date=Date(year=2024, month=6, day=1),
         ),
     )
     response = GetContractResponse(contract=contract)
     assert response.contract.metadata.id == 12345
     assert response.contract.metadata.organization_id == 67890
     assert response.contract.billing_config.billing_type == BillingType.BILLING_TYPE_CREDIT_CARD
-    assert response.contract.pricing_config.base_price_cents == 8900
+    assert response.contract.pricing_config.billing_period_start_date.year == 2024
 
 
 def test_get_trials_request():
@@ -451,7 +377,7 @@ def test_create_contract():
             id=12345,
             organization_id=67890,
             ruleset_version="1",
-            package_id=42,
+            package_uid="package-42",
             billing_features=billing_feature_pb2.FeatureOptions(
                 options=[
                     billing_feature_pb2.FeatureOption(key="sso", enabled=True),
@@ -487,7 +413,7 @@ def test_create_contract():
         ),
     )
 
-    assert contract.metadata.package_id == 42
+    assert contract.metadata.package_uid == "package-42"
     assert contract.metadata.id == 12345
     assert contract.metadata.organization_id == 67890
 
