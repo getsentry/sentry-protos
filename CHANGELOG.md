@@ -1,3 +1,9 @@
+## 0.12.0
+
+### New Features ✨
+
+- (trace-item-values) Add counts to response by @wmak in [#263](https://github.com/getsentry/sentry-protos/pull/263)
+
 ## 0.11.0
 
 ### New Features ✨
