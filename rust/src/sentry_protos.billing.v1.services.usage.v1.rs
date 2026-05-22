@@ -74,10 +74,6 @@ pub struct GetUsageResponse {
     pub days: ::prost::alloc::vec::Vec<DailyUsage>,
     #[prost(message, repeated, tag = "3")]
     pub seat_days: ::prost::alloc::vec::Vec<DailySeatUsage>,
-    /// DEPRECATED: use seat_days
-    #[deprecated]
-    #[prost(message, repeated, tag = "2")]
-    pub seats: ::prost::alloc::vec::Vec<CategorySeatUsage>,
     /// The latest timestamp of usage data included in this response (inclusive
     /// — there is at least one row at exactly this timestamp). Callers persist
     /// this as the contract's watermark; subsequent queries should resume

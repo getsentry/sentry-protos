@@ -8,44 +8,10 @@ pub struct Date {
     #[prost(uint32, tag = "3")]
     pub day: u32,
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct Address {
-    #[prost(string, tag = "1")]
-    pub city: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub region: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub country_code: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub postal_code: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
-    pub address_line_1: ::prost::alloc::string::String,
-    #[prost(string, tag = "6")]
-    pub address_line_2: ::prost::alloc::string::String,
-    #[prost(string, tag = "7")]
-    pub address_line_3: ::prost::alloc::string::String,
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillingConfig {
     #[prost(enumeration = "BillingType", tag = "1")]
     pub billing_type: i32,
-    /// Remaining fields are deprecated
-    #[deprecated]
-    #[prost(enumeration = "BillingChannel", tag = "2")]
-    pub channel: i32,
-    #[deprecated]
-    #[prost(enumeration = "ExternalBillingProvider", tag = "3")]
-    pub external_billing_provider: i32,
-    #[deprecated]
-    #[prost(message, optional, tag = "4")]
-    pub address: ::core::option::Option<Address>,
-    /// Use PricingConfig.billing_period_start_date and PricingConfig.billing_period_end_date
-    #[deprecated]
-    #[prost(message, optional, tag = "5")]
-    pub contract_start_date: ::core::option::Option<Date>,
-    #[deprecated]
-    #[prost(message, optional, tag = "6")]
-    pub contract_end_date: ::core::option::Option<Date>,
 }
 /// Indicates how the account is billed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -80,69 +46,6 @@ impl BillingType {
         }
     }
 }
-/// The channel through which the contract is billed.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum BillingChannel {
-    Unspecified = 0,
-    SelfServe = 1,
-    Sales = 2,
-    Partner = 3,
-}
-impl BillingChannel {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "BILLING_CHANNEL_UNSPECIFIED",
-            Self::SelfServe => "BILLING_CHANNEL_SELF_SERVE",
-            Self::Sales => "BILLING_CHANNEL_SALES",
-            Self::Partner => "BILLING_CHANNEL_PARTNER",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "BILLING_CHANNEL_UNSPECIFIED" => Some(Self::Unspecified),
-            "BILLING_CHANNEL_SELF_SERVE" => Some(Self::SelfServe),
-            "BILLING_CHANNEL_SALES" => Some(Self::Sales),
-            "BILLING_CHANNEL_PARTNER" => Some(Self::Partner),
-            _ => None,
-        }
-    }
-}
-/// The external billing provider used to process payments for the contract.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum ExternalBillingProvider {
-    Unspecified = 0,
-    Stripe = 1,
-    Vercel = 2,
-}
-impl ExternalBillingProvider {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "EXTERNAL_BILLING_PROVIDER_UNSPECIFIED",
-            Self::Stripe => "EXTERNAL_BILLING_PROVIDER_STRIPE",
-            Self::Vercel => "EXTERNAL_BILLING_PROVIDER_VERCEL",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "EXTERNAL_BILLING_PROVIDER_UNSPECIFIED" => Some(Self::Unspecified),
-            "EXTERNAL_BILLING_PROVIDER_STRIPE" => Some(Self::Stripe),
-            "EXTERNAL_BILLING_PROVIDER_VERCEL" => Some(Self::Vercel),
-            _ => None,
-        }
-    }
-}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
     #[prost(oneof = "option_value::Value", tags = "1, 2, 3")]
@@ -159,18 +62,6 @@ pub mod option_value {
         #[prost(bool, tag = "3")]
         BoolValue(bool),
     }
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct FeatureOption {
-    #[prost(string, tag = "1")]
-    pub key: ::prost::alloc::string::String,
-    #[prost(bool, tag = "2")]
-    pub enabled: bool,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FeatureOptions {
-    #[prost(message, repeated, tag = "1")]
-    pub options: ::prost::alloc::vec::Vec<FeatureOption>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct MetadataOption {
@@ -200,152 +91,6 @@ pub struct ContractMetadata {
     pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
     #[prost(string, tag = "9")]
     pub package_uid: ::prost::alloc::string::String,
-    #[deprecated]
-    #[prost(uint64, tag = "8")]
-    pub package_id: u64,
-    /// Includes information like plan ID, tier, etc.
-    #[deprecated]
-    #[prost(message, optional, tag = "4")]
-    pub package_metadata: ::core::option::Option<MetadataOptions>,
-    /// Entitlements, used in frontend features or gating access to certain features.
-    ///
-    /// DEPRECATED: use billing_features instead
-    #[deprecated]
-    #[prost(message, optional, tag = "5")]
-    pub features: ::core::option::Option<FeatureOptions>,
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum Sku {
-    Unspecified = 0,
-    Errors = 1,
-    Spans = 2,
-    Replays = 3,
-    PerformanceUnits = 4,
-    Cron = 5,
-    Uptime = 6,
-    Attachments = 7,
-    Profiling = 8,
-    ProfilingUi = 9,
-    Logs = 10,
-    Seer = 11,
-    SizeAnalysis = 12,
-    BuildDistribution = 13,
-    Autofix = 14,
-    Scanner = 15,
-}
-impl Sku {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "SKU_UNSPECIFIED",
-            Self::Errors => "SKU_ERRORS",
-            Self::Spans => "SKU_SPANS",
-            Self::Replays => "SKU_REPLAYS",
-            Self::PerformanceUnits => "SKU_PERFORMANCE_UNITS",
-            Self::Cron => "SKU_CRON",
-            Self::Uptime => "SKU_UPTIME",
-            Self::Attachments => "SKU_ATTACHMENTS",
-            Self::Profiling => "SKU_PROFILING",
-            Self::ProfilingUi => "SKU_PROFILING_UI",
-            Self::Logs => "SKU_LOGS",
-            Self::Seer => "SKU_SEER",
-            Self::SizeAnalysis => "SKU_SIZE_ANALYSIS",
-            Self::BuildDistribution => "SKU_BUILD_DISTRIBUTION",
-            Self::Autofix => "SKU_AUTOFIX",
-            Self::Scanner => "SKU_SCANNER",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "SKU_UNSPECIFIED" => Some(Self::Unspecified),
-            "SKU_ERRORS" => Some(Self::Errors),
-            "SKU_SPANS" => Some(Self::Spans),
-            "SKU_REPLAYS" => Some(Self::Replays),
-            "SKU_PERFORMANCE_UNITS" => Some(Self::PerformanceUnits),
-            "SKU_CRON" => Some(Self::Cron),
-            "SKU_UPTIME" => Some(Self::Uptime),
-            "SKU_ATTACHMENTS" => Some(Self::Attachments),
-            "SKU_PROFILING" => Some(Self::Profiling),
-            "SKU_PROFILING_UI" => Some(Self::ProfilingUi),
-            "SKU_LOGS" => Some(Self::Logs),
-            "SKU_SEER" => Some(Self::Seer),
-            "SKU_SIZE_ANALYSIS" => Some(Self::SizeAnalysis),
-            "SKU_BUILD_DISTRIBUTION" => Some(Self::BuildDistribution),
-            "SKU_AUTOFIX" => Some(Self::Autofix),
-            "SKU_SCANNER" => Some(Self::Scanner),
-            _ => None,
-        }
-    }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct PricingTier {
-    #[prost(int64, tag = "1")]
-    pub start: i64,
-    #[prost(int64, tag = "2")]
-    pub end: i64,
-    #[prost(int64, tag = "3")]
-    pub rate_per_unit_cpe: i64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct TieredPricingRate {
-    #[prost(message, repeated, tag = "1")]
-    pub tiers: ::prost::alloc::vec::Vec<PricingTier>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SkuConfig {
-    /// DEPRECATED: use billing_sku instead
-    #[deprecated]
-    #[prost(enumeration = "Sku", tag = "1")]
-    pub sku: i32,
-    /// Base price for the SKU (upgraded reserved volumes or add-on activation fees)
-    #[prost(uint64, tag = "2")]
-    pub base_price_cents: u64,
-    #[prost(uint64, optional, tag = "3")]
-    pub payg_budget_cents: ::core::option::Option<u64>,
-    /// DEPRECATED: use signed reserved_units instead for support for unlimited/reserved budget categories
-    #[deprecated]
-    #[prost(uint64, tag = "4")]
-    pub reserved_volume: u64,
-    #[prost(message, optional, tag = "5")]
-    pub payg_rate: ::core::option::Option<TieredPricingRate>,
-    /// for reserved budget SKUs
-    #[prost(message, optional, tag = "6")]
-    pub reserved_rate: ::core::option::Option<TieredPricingRate>,
-    #[prost(enumeration = "super::super::super::Sku", tag = "9")]
-    pub billing_sku: i32,
-    #[prost(oneof = "sku_config::ReservedUnits", tags = "7, 8")]
-    pub reserved_units: ::core::option::Option<sku_config::ReservedUnits>,
-}
-/// Nested message and enum types in `SKUConfig`.
-pub mod sku_config {
-    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum ReservedUnits {
-        #[prost(bool, tag = "7")]
-        IsUnlimited(bool),
-        /// the type communicates whether the SKU is unlimited or not, additionally reserved budget SKUs have a non-zero reserved_rate in addition to 0 reserved_units
-        #[prost(uint64, tag = "8")]
-        NumReservedUnits(u64),
-    }
-}
-/// Represents a budget that is collectively used by one or more SKUs,
-/// allowing multiple SKUs to draw from the same reserved budget.
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct SharedSkuBudget {
-    /// DEPRECATED: use billing_skus instead
-    #[deprecated]
-    #[prost(enumeration = "Sku", repeated, packed = "false", tag = "1")]
-    pub skus: ::prost::alloc::vec::Vec<i32>,
-    #[prost(uint64, tag = "2")]
-    pub reserved_budget_cents: u64,
-    #[prost(uint64, tag = "3")]
-    pub payg_budget_cents: u64,
-    #[prost(enumeration = "super::super::super::Sku", repeated, tag = "4")]
-    pub billing_skus: ::prost::alloc::vec::Vec<i32>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PaygBudget {
@@ -409,22 +154,6 @@ pub struct PricingConfig {
     pub usage_watermark_ts: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, repeated, tag = "10")]
     pub user_config: ::prost::alloc::vec::Vec<UserConfig>,
-    /// DEPRECATED: use package instead.
-    #[deprecated]
-    #[prost(uint64, tag = "6")]
-    pub base_price_cents: u64,
-    /// DEPRECATED: use package/user_parameters instead.
-    #[deprecated]
-    #[prost(message, repeated, tag = "1")]
-    pub sku_configs: ::prost::alloc::vec::Vec<SkuConfig>,
-    /// DEPRECATED: use package/user_parameters instead.
-    #[deprecated]
-    #[prost(message, repeated, tag = "2")]
-    pub shared_sku_budgets: ::prost::alloc::vec::Vec<SharedSkuBudget>,
-    /// DEPRECATED: use user_parameters instead
-    #[deprecated]
-    #[prost(uint64, tag = "5")]
-    pub max_spend_cents: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Contract {
@@ -562,12 +291,8 @@ pub struct GetUninvoicedContractsRequest {
     #[prost(uint32, optional, tag = "3")]
     pub offset: ::core::option::Option<u32>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUninvoicedContractsResponse {
-    /// DEPRECATED: use contract_ids instead
-    #[deprecated]
-    #[prost(message, repeated, tag = "1")]
-    pub contracts: ::prost::alloc::vec::Vec<Contract>,
     /// True if additional matching contracts existed beyond max_items and were
     /// not included in this response.
     #[prost(bool, tag = "2")]
@@ -662,4 +387,72 @@ pub struct RolloverContractResponse {
     pub needs_charge: bool,
     #[prost(uint64, tag = "3")]
     pub amount_billed: u64,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum Sku {
+    Unspecified = 0,
+    Errors = 1,
+    Spans = 2,
+    Replays = 3,
+    PerformanceUnits = 4,
+    Cron = 5,
+    Uptime = 6,
+    Attachments = 7,
+    Profiling = 8,
+    ProfilingUi = 9,
+    Logs = 10,
+    Seer = 11,
+    SizeAnalysis = 12,
+    BuildDistribution = 13,
+    Autofix = 14,
+    Scanner = 15,
+}
+impl Sku {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SKU_UNSPECIFIED",
+            Self::Errors => "SKU_ERRORS",
+            Self::Spans => "SKU_SPANS",
+            Self::Replays => "SKU_REPLAYS",
+            Self::PerformanceUnits => "SKU_PERFORMANCE_UNITS",
+            Self::Cron => "SKU_CRON",
+            Self::Uptime => "SKU_UPTIME",
+            Self::Attachments => "SKU_ATTACHMENTS",
+            Self::Profiling => "SKU_PROFILING",
+            Self::ProfilingUi => "SKU_PROFILING_UI",
+            Self::Logs => "SKU_LOGS",
+            Self::Seer => "SKU_SEER",
+            Self::SizeAnalysis => "SKU_SIZE_ANALYSIS",
+            Self::BuildDistribution => "SKU_BUILD_DISTRIBUTION",
+            Self::Autofix => "SKU_AUTOFIX",
+            Self::Scanner => "SKU_SCANNER",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SKU_UNSPECIFIED" => Some(Self::Unspecified),
+            "SKU_ERRORS" => Some(Self::Errors),
+            "SKU_SPANS" => Some(Self::Spans),
+            "SKU_REPLAYS" => Some(Self::Replays),
+            "SKU_PERFORMANCE_UNITS" => Some(Self::PerformanceUnits),
+            "SKU_CRON" => Some(Self::Cron),
+            "SKU_UPTIME" => Some(Self::Uptime),
+            "SKU_ATTACHMENTS" => Some(Self::Attachments),
+            "SKU_PROFILING" => Some(Self::Profiling),
+            "SKU_PROFILING_UI" => Some(Self::ProfilingUi),
+            "SKU_LOGS" => Some(Self::Logs),
+            "SKU_SEER" => Some(Self::Seer),
+            "SKU_SIZE_ANALYSIS" => Some(Self::SizeAnalysis),
+            "SKU_BUILD_DISTRIBUTION" => Some(Self::BuildDistribution),
+            "SKU_AUTOFIX" => Some(Self::Autofix),
+            "SKU_SCANNER" => Some(Self::Scanner),
+            _ => None,
+        }
+    }
 }

@@ -15,28 +15,6 @@ pub struct GetPriceForContractRequest {
     #[prost(message, optional, tag = "2")]
     pub usage_start_watermark_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct SkuUsageSummary {
-    #[prost(enumeration = "super::super::super::Sku", tag = "1")]
-    pub sku: i32,
-    /// Net cents consumed by this SKU in the billing period (after credits/trials applied).
-    #[prost(uint64, tag = "2")]
-    pub payg_spend_cents: u64,
-    /// Total units consumed by this SKU in the billing period.
-    #[prost(uint64, tag = "3")]
-    pub usage_volume: u64,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SharedBudgetUsageSummary {
-    #[prost(enumeration = "super::super::super::Sku", repeated, tag = "1")]
-    pub skus: ::prost::alloc::vec::Vec<i32>,
-    /// Net cents consumed across all SKUs in this shared budget (after credits/trials applied).
-    #[prost(uint64, tag = "2")]
-    pub payg_spend_cents: u64,
-    /// Per-SKU breakdown within the shared budget.
-    #[prost(message, repeated, tag = "3")]
-    pub sku_summaries: ::prost::alloc::vec::Vec<SkuUsageSummary>,
-}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct LineItemUsageSummary {
     /// Refers to uid in sentry_protos.billing.v1.common.v1.LineItemDetails
@@ -60,14 +38,6 @@ pub struct SharedLineItemUsageSummary {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsagePricerResponse {
-    /// use line_item_summaries
-    #[deprecated]
-    #[prost(message, repeated, tag = "1")]
-    pub sku_summaries: ::prost::alloc::vec::Vec<SkuUsageSummary>,
-    /// use shared_line_item_summaries
-    #[deprecated]
-    #[prost(message, repeated, tag = "2")]
-    pub shared_budget_summaries: ::prost::alloc::vec::Vec<SharedBudgetUsageSummary>,
     #[prost(message, repeated, tag = "3")]
     pub line_item_summaries: ::prost::alloc::vec::Vec<LineItemUsageSummary>,
     #[prost(message, repeated, tag = "4")]
