@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
+import "sentry_protos/billing/v1/common/v1/billing_interval.proto";
+
 message Date {
   uint32 year = 1;
   uint32 month = 2;
@@ -57,4 +59,8 @@ message BillingConfig {
   // Use PricingConfig.billing_period_start_date and PricingConfig.billing_period_end_date
   Date contract_start_date = 5 [deprecated = true];
   Date contract_end_date = 6 [deprecated = true];
+
+  // Snapshot of the package billing interval at the time the contract was
+  // created. Frozen for the life of the contract.
+  sentry_protos.billing.v1.common.v1.BillingInterval billing_interval = 7;
 }
