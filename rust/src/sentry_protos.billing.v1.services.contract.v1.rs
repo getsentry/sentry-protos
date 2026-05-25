@@ -46,6 +46,10 @@ pub struct BillingConfig {
     #[deprecated]
     #[prost(message, optional, tag = "6")]
     pub contract_end_date: ::core::option::Option<Date>,
+    /// Snapshot of the package billing interval at the time the contract was
+    /// created. Frozen for the life of the contract.
+    #[prost(enumeration = "super::super::super::common::v1::BillingInterval", tag = "7")]
+    pub billing_interval: i32,
 }
 /// Indicates how the account is billed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
