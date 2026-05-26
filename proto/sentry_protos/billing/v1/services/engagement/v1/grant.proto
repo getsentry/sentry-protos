@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.engagement.v1;
 
 import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/engagement/v1/grant_source.proto";
 
 // Denomination of a Grant.
 enum GrantType {
@@ -35,4 +36,5 @@ message Grant {
   sentry_protos.billing.v1.Date start_date = 6;
   sentry_protos.billing.v1.Date end_date = 7;
   GrantStatus status = 8;
+  GrantSource source = 9;
 }
