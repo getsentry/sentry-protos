@@ -90,6 +90,21 @@ impl ChargeMethod {
         }
     }
 }
+/// Reads the stored platform charge for a given Stripe charge id. Returns an
+/// unset `charge` when no platform charge exists for the id; callers can use
+/// this to distinguish charges owned by the billing platform from charges
+/// owned by the legacy billing path.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetChargeByStripeIdRequest {
+    #[prost(string, tag = "1")]
+    pub stripe_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetChargeByStripeIdResponse {
+    /// Unset when no platform charge with the given stripe_id exists.
+    #[prost(message, optional, tag = "1")]
+    pub charge: ::core::option::Option<PlatformCharge>,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Charge {
     #[prost(uint64, tag = "1")]

@@ -85,6 +85,29 @@ pub struct GeneratePdfResponse {
     #[prost(string, tag = "2")]
     pub filename: ::prost::alloc::string::String,
 }
+/// Request to react to a Stripe `charge.dispute.created` webhook event for a
+/// charge created by the billing platform.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HandleChargeDisputedRequest {
+    /// Stripe id of the disputed charge (e.g. "ch_xxx").
+    #[prost(string, tag = "1")]
+    pub stripe_charge_id: ::prost::alloc::string::String,
+    /// Stripe id of the dispute itself (e.g. "dp_xxx"). Used for logging and
+    /// correlation; not required to process the event.
+    #[prost(string, optional, tag = "2")]
+    pub stripe_dispute_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// Stripe-supplied reason for the dispute (e.g. "fraudulent",
+    /// "product_not_received"). Used for logging and correlation.
+    #[prost(string, optional, tag = "3")]
+    pub reason: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HandleChargeDisputedResponse {
+    /// True when the charge was created by the billing platform and the
+    /// service has finished its handling.
+    #[prost(bool, tag = "1")]
+    pub handled: bool,
+}
 /// Request to react to a Stripe `charge.succeeded` webhook event for a
 /// charge created by the billing platform.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
