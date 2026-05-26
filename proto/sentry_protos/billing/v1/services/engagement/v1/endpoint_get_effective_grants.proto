@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/engagement/v1/grant.proto";
+
+// A grant with counter-grant chains collapsed into a single effective amount.
+// Returned in drain priority order (end_date ASC, effective_amount ASC, id ASC).
+message EffectiveGrant {
+  Grant grant = 1;
+  // The usable amount after counter-grant chain collapse.
+  // May differ from grant.amount when counter-grants exist.
+  int64 effective_amount = 2;
+}
+
+message GetEffectiveGrantsRequest {
+  uint64 organization_id = 1;
+  // When set, returns only grants whose line_item_uids contain this value.
+  optional string line_item_uid = 2;
+  sentry_protos.billing.v1.Date start_date = 3;
+  sentry_protos.billing.v1.Date end_date = 4;
+}
+
+message GetEffectiveGrantsResponse {
+  // Grants with counter-chains collapsed, sorted by drain priority.
+  repeated EffectiveGrant effective_grants = 1;
+}
