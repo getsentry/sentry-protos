@@ -1,3 +1,9 @@
+## 0.14.0
+
+### New Features ✨
+
+- (billing-platform) Add charge-disputed handler + charge lookup endpoints by @armcknight in [#267](https://github.com/getsentry/sentry-protos/pull/267)
+
 ## 0.13.0
 
 ### New Features ✨
