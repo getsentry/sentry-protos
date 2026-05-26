@@ -208,3 +208,32 @@ pub struct GetActiveGrantsResponse {
     #[prost(message, repeated, tag = "1")]
     pub grants: ::prost::alloc::vec::Vec<Grant>,
 }
+/// A grant with counter-grant chains collapsed into a single effective amount.
+/// Returned in drain priority order (end_date ASC, effective_amount ASC, id ASC).
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EffectiveGrant {
+    #[prost(message, optional, tag = "1")]
+    pub grant: ::core::option::Option<Grant>,
+    /// The usable amount after counter-grant chain collapse.
+    /// May differ from grant.amount when counter-grants exist.
+    #[prost(int64, tag = "2")]
+    pub effective_amount: i64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetEffectiveGrantsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// When set, returns only grants whose line_item_uids contain this value.
+    #[prost(string, optional, tag = "2")]
+    pub line_item_uid: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "3")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "4")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetEffectiveGrantsResponse {
+    /// Grants with counter-chains collapsed, sorted by drain priority.
+    #[prost(message, repeated, tag = "1")]
+    pub effective_grants: ::prost::alloc::vec::Vec<EffectiveGrant>,
+}
