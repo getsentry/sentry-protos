@@ -88,3 +88,82 @@ impl GrantStatus {
         }
     }
 }
+/// A grant with counter-grant chains collapsed into a single effective amount.
+/// Returned in drain priority order (end_date ASC, effective_amount ASC, id ASC).
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EffectiveGrant {
+    #[prost(message, optional, tag = "1")]
+    pub grant: ::core::option::Option<Grant>,
+    /// The usable amount after counter-grant chain collapse.
+    /// May differ from grant.amount when counter-grants exist.
+    #[prost(int64, tag = "2")]
+    pub effective_amount: i64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetEffectiveGrantsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// When set, returns only grants whose line_item_uids contain this value.
+    #[prost(string, optional, tag = "2")]
+    pub line_item_uid: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "3")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "4")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetEffectiveGrantsResponse {
+    /// Grants with counter-chains collapsed, sorted by drain priority.
+    #[prost(message, repeated, tag = "1")]
+    pub effective_grants: ::prost::alloc::vec::Vec<EffectiveGrant>,
+}
+/// Why a Grant exists. Kept in its own file so values can grow without
+/// touching grant.proto review surface.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum GrantSource {
+    Unspecified = 0,
+    /// Derived from a Trial row.
+    TrialProduct = 1,
+    TrialSubscription = 2,
+    TrialPlan = 3,
+    TrialEnterprise = 4,
+    /// Promo-code redemption.
+    Promo = 5,
+    /// Recurring quota credit (e.g. monthly free errors).
+    Recurring = 6,
+    /// One-off admin/support gift.
+    Gift = 7,
+}
+impl GrantSource {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "GRANT_SOURCE_UNSPECIFIED",
+            Self::TrialProduct => "GRANT_SOURCE_TRIAL_PRODUCT",
+            Self::TrialSubscription => "GRANT_SOURCE_TRIAL_SUBSCRIPTION",
+            Self::TrialPlan => "GRANT_SOURCE_TRIAL_PLAN",
+            Self::TrialEnterprise => "GRANT_SOURCE_TRIAL_ENTERPRISE",
+            Self::Promo => "GRANT_SOURCE_PROMO",
+            Self::Recurring => "GRANT_SOURCE_RECURRING",
+            Self::Gift => "GRANT_SOURCE_GIFT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "GRANT_SOURCE_UNSPECIFIED" => Some(Self::Unspecified),
+            "GRANT_SOURCE_TRIAL_PRODUCT" => Some(Self::TrialProduct),
+            "GRANT_SOURCE_TRIAL_SUBSCRIPTION" => Some(Self::TrialSubscription),
+            "GRANT_SOURCE_TRIAL_PLAN" => Some(Self::TrialPlan),
+            "GRANT_SOURCE_TRIAL_ENTERPRISE" => Some(Self::TrialEnterprise),
+            "GRANT_SOURCE_PROMO" => Some(Self::Promo),
+            "GRANT_SOURCE_RECURRING" => Some(Self::Recurring),
+            "GRANT_SOURCE_GIFT" => Some(Self::Gift),
+            _ => None,
+        }
+    }
+}
