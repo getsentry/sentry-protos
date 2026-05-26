@@ -57,4 +57,8 @@ message BillingConfig {
   // Use PricingConfig.billing_period_start_date and PricingConfig.billing_period_end_date
   Date contract_start_date = 5 [deprecated = true];
   Date contract_end_date = 6 [deprecated = true];
+
+  // The number-of-months interval the contract was signed under
+  // (1 = monthly, 12 = annual). Frozen for the life of the contract.
+  uint32 month_interval = 7;
 }
