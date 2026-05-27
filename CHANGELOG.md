@@ -1,3 +1,9 @@
+## 0.16.0
+
+### New Features ✨
+
+- Add pending change service by @noahsmartin in [#276](https://github.com/getsentry/sentry-protos/pull/276)
+
 ## 0.15.0
 
 ### New Features ✨
