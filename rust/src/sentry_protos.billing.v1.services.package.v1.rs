@@ -60,11 +60,16 @@ pub struct PackageConfig {
     /// Base price for the package.
     #[prost(uint64, tag = "4")]
     pub base_price_cents: u64,
-    /// Billing interval for this package.
+    /// Deprecated. Use supported_month_intervals.
+    #[deprecated]
     #[prost(enumeration = "super::super::super::common::v1::BillingInterval", tag = "5")]
     pub billing_interval: i32,
     #[prost(string, tag = "6")]
     pub title: ::prost::alloc::string::String,
+    /// Number-of-months billing intervals this package offers.
+    /// \[1\] = monthly only, \[1, 12\] = monthly or annual, \[12\] = annual only.
+    #[prost(uint32, repeated, tag = "7")]
+    pub supported_month_intervals: ::prost::alloc::vec::Vec<u32>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {

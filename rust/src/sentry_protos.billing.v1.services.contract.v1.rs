@@ -46,6 +46,10 @@ pub struct BillingConfig {
     #[deprecated]
     #[prost(message, optional, tag = "6")]
     pub contract_end_date: ::core::option::Option<Date>,
+    /// The number-of-months interval the contract was signed under
+    /// (1 = monthly, 12 = annual). Frozen for the life of the contract.
+    #[prost(uint32, tag = "7")]
+    pub month_interval: u32,
 }
 /// Indicates how the account is billed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -479,6 +483,11 @@ pub struct CreateContractRequest {
     pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
     #[prost(message, optional, tag = "5")]
     pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+    /// The customer's chosen cadence. Must be one of the package's
+    /// supported_month_intervals. If unset, defaults to the package's first
+    /// supported interval.
+    #[prost(uint32, tag = "6")]
+    pub month_interval: u32,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateContractResponse {
