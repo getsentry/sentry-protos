@@ -35,6 +35,16 @@ pull requests.
 
 You'll need a local clone of this repository to start.
 
+### New worktrees
+
+For a newly created git worktree, bootstrap the local environment before running `make`:
+
+```shell
+./scripts/setup-worktree.sh
+```
+
+This runs `devenv sync` for the worktree and (when installed) enables direnv for the repo.
+
 ### Python
 
 From the root of `sentry-protos` run:
