@@ -15,7 +15,10 @@ echo "Bootstrapping sentry-protos worktree at ${repo_root}"
 devenv sync
 
 if command -v direnv >/dev/null 2>&1 && [ -f .envrc ]; then
-  direnv allow "${repo_root}" >/dev/null 2>&1 || true
+  expected_repo_name="$(awk -F'[][.]' '/^\[venv\./{print $3; exit}' devenv/config.ini 2>/dev/null)"
+  if [ -z "$expected_repo_name" ] || [ "$(basename "${repo_root}")" = "$expected_repo_name" ]; then
+    direnv allow "${repo_root}" >/dev/null 2>&1 || true
+  fi
 fi
 
 echo "Worktree setup complete."
