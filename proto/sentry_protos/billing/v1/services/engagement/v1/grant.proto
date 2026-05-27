@@ -25,13 +25,23 @@ enum GrantStatus {
   GRANT_STATUS_EXPIRED = 3;
 }
 
-// A quota allowance granted to an organization for a time window.
+// A non-billable quota allowance for an organization within a time window.
+//
+// Grants can be offset by counter-grants: separate Grant rows with a negative
+// amount that reference the original via parent_grant_id. The effective amount
+// available for consumption is the original amount plus the sum of all
+// counter-grant amounts. For example, a grant of 100k with a counter-grant
+// of -40k has an effective amount of 60k.
+//
+// UNITS grants must have exactly one line_item_uid. CENTS grants may cover
+// multiple line items.
 message Grant {
   uint64 id = 1;
   uint64 organization_id = 2;
   GrantType type = 3;
   // The line items this grant applies to.
   repeated string line_item_uids = 4;
+  // The original amount. Negative for counter-grants.
   int64 amount = 5;
   sentry_protos.billing.v1.Date start_date = 6;
   sentry_protos.billing.v1.Date end_date = 7;
