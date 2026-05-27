@@ -247,6 +247,85 @@ pub mod payment_config {
         Stripe(super::StripePaymentData),
     }
 }
+/// A pending change is a deferred subscription change for an organization that
+/// will apply at the next billing period rollover. Each org has at most one
+/// pending change at a time. Any field left unset means that aspect of the
+/// subscription is not being changed.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PendingChange {
+    /// The package the subscription will switch to. Unset means the package is
+    /// not changing.
+    #[prost(string, optional, tag = "1")]
+    pub package_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// Pending PAYG-budget and reservation overrides, grouped by the set of line
+    /// items they apply to. This mirrors the UserConfig shape used by the
+    /// contract pricing config: each entry describes a line-item subset (or "all
+    /// line items") together with its pending PAYG budget and/or reservation.
+    /// Shared reserved-budget pools (e.g. Seer covering autofix + scanner +
+    /// users) are represented as a single PendingUserConfig that lists every
+    /// line item in the pool.
+    #[prost(message, repeated, tag = "2")]
+    pub user_configs: ::prost::alloc::vec::Vec<PendingUserConfig>,
+}
+/// Pending overrides for a set of line items. payg_budget and reservation are
+/// each independently optional - either, both, or neither may be set on a
+/// given config.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PendingUserConfig {
+    /// Pending PAYG budget for the covered line items. Unset means the PAYG
+    /// budget is not changing.
+    #[prost(message, optional, tag = "1")]
+    pub payg_budget: ::core::option::Option<PaygBudget>,
+    /// Pending reservation (price and unit count) for the covered line items.
+    /// Unset means the reservation is not changing.
+    #[prost(message, optional, tag = "2")]
+    pub reservation: ::core::option::Option<Reservation>,
+    /// The line items this config applies to.
+    #[prost(oneof = "pending_user_config::LineItems", tags = "3, 4")]
+    pub line_items: ::core::option::Option<pending_user_config::LineItems>,
+}
+/// Nested message and enum types in `PendingUserConfig`.
+pub mod pending_user_config {
+    /// The line items this config applies to.
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum LineItems {
+        /// Explicit list of line item uids (e.g. one line item, or multiple line
+        /// items that share a reserved-budget pool).
+        #[prost(message, tag = "3")]
+        SpecificItems(super::LineItemUids),
+        /// Sentinel meaning "all line items on the package." Used for top-level
+        /// shared PAYG budgets.
+        #[prost(message, tag = "4")]
+        AllItems(()),
+    }
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PaygBudget {
+    #[prost(uint64, tag = "1")]
+    pub budget_cents: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Reservation {
+    #[prost(uint64, tag = "1")]
+    pub reserved_price_cents: u64,
+    #[prost(oneof = "reservation::ReservedUnits", tags = "2, 3")]
+    pub reserved_units: ::core::option::Option<reservation::ReservedUnits>,
+}
+/// Nested message and enum types in `Reservation`.
+pub mod reservation {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum ReservedUnits {
+        #[prost(bool, tag = "2")]
+        IsUnlimited(bool),
+        #[prost(uint64, tag = "3")]
+        NumReservedUnits(u64),
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct LineItemUids {
+    #[prost(string, repeated, tag = "1")]
+    pub uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PricingTier {
     #[prost(int64, tag = "1")]
