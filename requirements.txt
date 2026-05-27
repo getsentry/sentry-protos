@@ -1,8 +1,8 @@
 build
 protobuf==5.29.5
-grpcio==1.65.4
+grpcio>=1.66,<2
 grpc-stubs==1.53.0.5
-grpcio-tools==1.65.4
+grpcio-tools>=1.66,<2
 types-protobuf==5.27.0.20240626
 mypy-protobuf==3.6.0
 mypy==1.10.1
