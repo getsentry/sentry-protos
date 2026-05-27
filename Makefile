@@ -3,10 +3,10 @@
 
 # unstable protos are only included in local development and not part of release packages
 SENTRY_PROTOS_BUILD_UNSTABLE := 1
-PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python)
-PIP ?= $(if $(wildcard .venv/bin/pip),.venv/bin/pip,pip)
-PYTEST ?= $(if $(wildcard .venv/bin/pytest),.venv/bin/pytest,pytest)
-SABLEDOCS ?= $(if $(wildcard .venv/bin/sabledocs),.venv/bin/sabledocs,sabledocs)
+PYTHON ?= $(if $(wildcard .venv/bin/python),$(CURDIR)/.venv/bin/python,python)
+PIP ?= $(if $(wildcard .venv/bin/pip),$(CURDIR)/.venv/bin/pip,pip)
+PYTEST ?= $(if $(wildcard .venv/bin/pytest),$(CURDIR)/.venv/bin/pytest,pytest)
+SABLEDOCS ?= $(if $(wildcard .venv/bin/sabledocs),$(CURDIR)/.venv/bin/sabledocs,sabledocs)
 
 .PHONY: update-venv
 update-venv:
