@@ -12,6 +12,10 @@ message CreateContractRequest {
   repeated UserConfig user_configs = 3;
   repeated InvoiceLineItem line_items = 4;
   sentry_protos.billing.v1.common.v1.Address address = 5;
+  // The customer's chosen cadence. Must be one of the package's
+  // supported_month_intervals. If unset, defaults to the package's first
+  // supported interval.
+  uint32 month_interval = 6;
 }
 
 message CreateContractResponse {
