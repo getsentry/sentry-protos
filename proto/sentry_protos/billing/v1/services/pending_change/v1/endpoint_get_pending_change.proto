@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.pending_change.v1;
+
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+
+// Fetches the active pending change for an organization, if any.
+message GetPendingChangeRequest {
+  uint64 organization_id = 1;
+}
+
+message GetPendingChangeResponse {
+  // The active pending change for the org. Unset if no change is currently
+  // staged.
+  optional sentry_protos.billing.v1.common.v1.PendingChange pending_change = 1;
+}

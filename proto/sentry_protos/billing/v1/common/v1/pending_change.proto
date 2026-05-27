@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+import "google/protobuf/empty.proto";
+
+// A pending change is a deferred subscription change for an organization that
+// will apply at the next billing period rollover. Each org has at most one
+// pending change at a time. Any field left unset means that aspect of the
+// subscription is not being changed.
+message PendingChange {
+  // The package the subscription will switch to. Unset means the package is
+  // not changing.
+  optional string package_id = 1;
+
+  // Pending PAYG-budget and reservation overrides, grouped by the set of line
+  // items they apply to. This mirrors the UserConfig shape used by the
+  // contract pricing config: each entry describes a line-item subset (or "all
+  // line items") together with its pending PAYG budget and/or reservation.
+  // Shared reserved-budget pools (e.g. Seer covering autofix + scanner +
+  // users) are represented as a single PendingUserConfig that lists every
+  // line item in the pool.
+  repeated PendingUserConfig user_configs = 2;
+}
+
+// Pending overrides for a set of line items. payg_budget and reservation are
+// each independently optional - either, both, or neither may be set on a
+// given config.
+message PendingUserConfig {
+  // Pending PAYG budget for the covered line items. Unset means the PAYG
+  // budget is not changing.
+  optional PAYGBudget payg_budget = 1;
+
+  // Pending reservation (price and unit count) for the covered line items.
+  // Unset means the reservation is not changing.
+  optional Reservation reservation = 2;
+
+  // The line items this config applies to.
+  oneof line_items {
+    // Explicit list of line item uids (e.g. one line item, or multiple line
+    // items that share a reserved-budget pool).
+    LineItemUids specific_items = 3;
+
+    // Sentinel meaning "all line items on the package." Used for top-level
+    // shared PAYG budgets.
+    google.protobuf.Empty all_items = 4;
+  }
+}
+
+message PAYGBudget {
+  uint64 budget_cents = 1;
+}
+
+message Reservation {
+  uint64 reserved_price_cents = 1;
+  oneof reserved_units {
+    bool is_unlimited = 2;
+    uint64 num_reserved_units = 3;
+  }
+}
+
+message LineItemUids {
+  repeated string uids = 1;
+}
