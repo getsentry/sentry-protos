@@ -1,3 +1,15 @@
+## 0.15.0
+
+### New Features ✨
+
+- (devenv) Guard sentry-protos worktree basename mismatches by @armenzg in [#270](https://github.com/getsentry/sentry-protos/pull/270)
+
+### Internal Changes 🔧
+
+- (billing) Split package support and contract month interval by @armenzg in [#269](https://github.com/getsentry/sentry-protos/pull/269)
+- (deps) Widen grpcio ranges for modern Python by @armenzg in [#271](https://github.com/getsentry/sentry-protos/pull/271)
+- (python) Use .python-version as single source of truth by @armenzg in [#272](https://github.com/getsentry/sentry-protos/pull/272)
+
 ## 0.14.0
 
 ### New Features ✨
