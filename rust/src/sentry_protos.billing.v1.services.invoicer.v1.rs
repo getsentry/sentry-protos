@@ -16,6 +16,8 @@ pub struct CreateAndBillContractRequest {
     pub package_uid: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "3")]
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
+    #[prost(uint32, tag = "4")]
+    pub month_interval: u32,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateAndBillContractResponse {
