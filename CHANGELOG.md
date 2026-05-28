@@ -1,3 +1,9 @@
+## 0.17.0
+
+### New Features ✨
+
+- (billing-platform) Support add-on line items by @brendanhsentry in [#279](https://github.com/getsentry/sentry-protos/pull/279)
+
 ## 0.16.2
 
 ### Internal Changes 🔧
