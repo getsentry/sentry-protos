@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.pending_change.v1;
+
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+
+// Adds a PendingUserConfig to the org's pending change. Creates a pending
+// change if none exists. The new config is added to the existing
+// user_configs list, overwriting any with conflicting line items.
+message AddPendingUserConfigRequest {
+  uint64 organization_id = 1;
+
+  // The pending user config to add (PAYG budget and/or reservation overrides
+  // for a set of line items).
+  sentry_protos.billing.v1.common.v1.PendingUserConfig user_config = 2;
+}
+
+message AddPendingUserConfigResponse {}

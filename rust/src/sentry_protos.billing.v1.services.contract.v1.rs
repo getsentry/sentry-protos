@@ -662,6 +662,12 @@ pub struct RolloverContractRequest {
     pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
     #[prost(message, optional, tag = "4")]
     pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+    /// The pending change to apply to the new contract, if any. Unset means no
+    /// pending change is being applied during this rollover.
+    #[prost(message, optional, tag = "5")]
+    pub pending_change: ::core::option::Option<
+        super::super::super::common::v1::PendingChange,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {

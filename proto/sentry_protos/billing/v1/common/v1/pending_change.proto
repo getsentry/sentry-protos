@@ -21,6 +21,9 @@ message PendingChange {
   // users) are represented as a single PendingUserConfig that lists every
   // line item in the pool.
   repeated PendingUserConfig user_configs = 2;
+
+  // New contract month_interval. Used for downgrades from annual to monthly
+  optional uint32 month_interval = 3;
 }
 
 // Pending overrides for a set of line items. payg_budget and reservation are

@@ -7,6 +7,13 @@ package sentry_protos.billing.v1.services.pending_change.v1;
 // customer's new plan change supersedes the pending one.
 message ClearPendingChangeRequest {
   uint64 organization_id = 1;
+
+  // If true, only clear the pending PAYG-budget overrides (the payg_budget
+  // field on each PendingUserConfig) from the pending change, leaving
+  // package_id, month_interval, and pending reservations intact. If this
+  // leaves the pending change with no remaining changes, it is removed
+  // entirely.
+  bool on_demand_only = 2;
 }
 
 message ClearPendingChangeResponse {
