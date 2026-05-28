@@ -4,6 +4,7 @@ package sentry_protos.billing.v1.services.contract.v1;
 
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/common/v1/address.proto";
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 
 // Creates a new contract for a new billing period. Closes out the current contract by
@@ -13,6 +14,10 @@ message RolloverContractRequest {
   google.protobuf.Timestamp last_usage_ts = 2;
   repeated InvoiceLineItem line_items = 3;
   sentry_protos.billing.v1.common.v1.Address address = 4;
+
+  // The pending change to apply to the new contract, if any. Unset means no
+  // pending change is being applied during this rollover.
+  optional sentry_protos.billing.v1.common.v1.PendingChange pending_change = 5;
 }
 
 message RolloverContractResponse {
