@@ -1,3 +1,9 @@
+## 0.16.2
+
+### Internal Changes 🔧
+
+- Add pending change to rollover contract and create APIs by @noahsmartin in [#277](https://github.com/getsentry/sentry-protos/pull/277)
+
 ## 0.16.1
 
 ### Internal Changes 🔧
