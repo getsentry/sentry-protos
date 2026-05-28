@@ -378,12 +378,17 @@ pub struct LineItemUids {
     #[prost(string, repeated, tag = "1")]
     pub uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+/// For activating add-ons that do not necessarily require Reservation or PAYGBudget changes
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Activation {}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UserConfig {
     #[prost(message, optional, tag = "1")]
     pub payg_budget: ::core::option::Option<PaygBudget>,
     #[prost(message, optional, tag = "2")]
     pub reservation: ::core::option::Option<Reservation>,
+    #[prost(message, optional, tag = "5")]
+    pub activation: ::core::option::Option<Activation>,
     #[prost(oneof = "user_config::LineItems", tags = "3, 4")]
     pub line_items: ::core::option::Option<user_config::LineItems>,
 }
