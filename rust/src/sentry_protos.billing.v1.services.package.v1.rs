@@ -17,6 +17,9 @@ pub struct LineItemConfig {
     pub line_item: ::core::option::Option<
         super::super::super::common::v1::LineItemDetails,
     >,
+    /// Whether this LineItem is included in the base package or not (ie Seer)
+    #[prost(bool, tag = "8")]
+    pub is_optional_add_on: bool,
     /// how many of this lineitem are included in the package, the customer can reserve more on their contract
     #[prost(oneof = "line_item_config::IncludedReservedUnits", tags = "5, 6")]
     pub included_reserved_units: ::core::option::Option<
@@ -48,6 +51,9 @@ pub struct SharedLineItemPool {
     pub line_items: ::prost::alloc::vec::Vec<
         super::super::super::common::v1::LineItemDetails,
     >,
+    /// Whether this LineItem is included in the base package or not (ie Seer)
+    #[prost(bool, tag = "4")]
+    pub is_optional_add_on: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PackageConfig {

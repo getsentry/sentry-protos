@@ -19,6 +19,9 @@ message LineItemConfig {
   }
 
   sentry_protos.billing.v1.common.v1.LineItemDetails line_item = 7;
+
+  // Whether this LineItem is included in the base package or not (ie Seer)
+  bool is_optional_add_on = 8;
 }
 
 // Represents a budget included in a package that is collectively used by one or more line items,
@@ -29,6 +32,9 @@ message SharedLineItemPool {
   // would be 500 ($5)
   uint64 reserved_pool_cents = 1;
   repeated sentry_protos.billing.v1.common.v1.LineItemDetails line_items = 3;
+
+  // Whether this LineItem is included in the base package or not (ie Seer)
+  bool is_optional_add_on = 4;
 }
 
 message PackageConfig {
