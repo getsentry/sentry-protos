@@ -8,6 +8,7 @@ message CreateAndBillContractRequest {
   uint64 organization_id = 1;
   string package_uid = 2;
   repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_configs = 3;
+  uint32 month_interval = 4;
 }
 
 message CreateAndBillContractResponse {
