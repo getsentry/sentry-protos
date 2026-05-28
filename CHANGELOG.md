@@ -1,3 +1,9 @@
+## 0.16.1
+
+### Internal Changes 🔧
+
+- Add month interval to create and bill by @noahsmartin in [#278](https://github.com/getsentry/sentry-protos/pull/278)
+
 ## 0.16.0
 
 ### New Features ✨
