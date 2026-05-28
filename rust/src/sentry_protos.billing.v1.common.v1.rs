@@ -266,6 +266,9 @@ pub struct PendingChange {
     /// line item in the pool.
     #[prost(message, repeated, tag = "2")]
     pub user_configs: ::prost::alloc::vec::Vec<PendingUserConfig>,
+    /// New contract month_interval. Used for downgrades from annual to monthly
+    #[prost(uint32, optional, tag = "3")]
+    pub month_interval: ::core::option::Option<u32>,
 }
 /// Pending overrides for a set of line items. payg_budget and reservation are
 /// each independently optional - either, both, or neither may be set on a
