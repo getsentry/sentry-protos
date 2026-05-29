@@ -1,3 +1,9 @@
+## 0.19.0
+
+### New Features ✨
+
+- (billing-platform) Add uncapped_rate to LineItemConfig by @brendanhsentry in [#280](https://github.com/getsentry/sentry-protos/pull/280)
+
 ## 0.18.0
 
 ### New Features ✨
