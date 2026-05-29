@@ -59,6 +59,14 @@ pub struct SharedLineItemPool {
     /// Whether this LineItem is included in the base package or not (ie Seer)
     #[prost(bool, tag = "4")]
     pub is_optional_add_on: bool,
+    /// The unique line item details used when invoicing this shared pool.
+    #[prost(message, optional, tag = "5")]
+    pub shared_line_item: ::core::option::Option<
+        super::super::super::common::v1::LineItemDetails,
+    >,
+    /// Cost of the shared line item pool, in cents(a customer can pay $X and get $Y of credit, where X!=Y).
+    #[prost(uint64, tag = "6")]
+    pub base_price_cents: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PackageConfig {
