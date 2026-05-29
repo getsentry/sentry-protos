@@ -20,6 +20,11 @@ pub struct LineItemConfig {
     /// Whether this LineItem is included in the base package or not (ie Seer)
     #[prost(bool, tag = "8")]
     pub is_optional_add_on: bool,
+    /// Used for calculating spend that should not apply towards an organization's PAYG budget (ie Seer seats)
+    #[prost(message, optional, tag = "9")]
+    pub uncapped_rate: ::core::option::Option<
+        super::super::super::common::v1::TieredPricingRate,
+    >,
     /// how many of this lineitem are included in the package, the customer can reserve more on their contract
     #[prost(oneof = "line_item_config::IncludedReservedUnits", tags = "5, 6")]
     pub included_reserved_units: ::core::option::Option<
@@ -54,6 +59,14 @@ pub struct SharedLineItemPool {
     /// Whether this LineItem is included in the base package or not (ie Seer)
     #[prost(bool, tag = "4")]
     pub is_optional_add_on: bool,
+    /// The unique line item details used when invoicing this shared pool.
+    #[prost(message, optional, tag = "5")]
+    pub shared_line_item: ::core::option::Option<
+        super::super::super::common::v1::LineItemDetails,
+    >,
+    /// Cost of the shared line item pool, in cents(a customer can pay $X and get $Y of credit, where X!=Y).
+    #[prost(uint64, tag = "6")]
+    pub base_price_cents: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PackageConfig {

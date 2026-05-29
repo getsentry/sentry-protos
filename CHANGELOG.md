@@ -1,3 +1,21 @@
+## 0.20.0
+
+### New Features ✨
+
+- (billing) Added support for reserved budgets by @krithikravi in [#281](https://github.com/getsentry/sentry-protos/pull/281)
+
+## 0.19.0
+
+### New Features ✨
+
+- (billing-platform) Add uncapped_rate to LineItemConfig by @brendanhsentry in [#280](https://github.com/getsentry/sentry-protos/pull/280)
+
+## 0.18.0
+
+### New Features ✨
+
+- (billing) Add GrantSource, source field, and GetEffectiveGrants protos by @dashed in [#268](https://github.com/getsentry/sentry-protos/pull/268)
+
 ## 0.17.0
 
 ### New Features ✨
