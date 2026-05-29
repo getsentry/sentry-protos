@@ -1,3 +1,9 @@
+## 0.18.0
+
+### New Features ✨
+
+- (billing) Add GrantSource, source field, and GetEffectiveGrants protos by @dashed in [#268](https://github.com/getsentry/sentry-protos/pull/268)
+
 ## 0.17.0
 
 ### New Features ✨
