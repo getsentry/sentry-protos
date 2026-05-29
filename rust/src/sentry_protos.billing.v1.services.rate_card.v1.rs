@@ -13,6 +13,10 @@ pub struct RateCardLineItem {
     pub reserved_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
     >,
+    #[prost(message, optional, tag = "6")]
+    pub uncapped_rate: ::core::option::Option<
+        super::super::super::common::v1::TieredPricingRate,
+    >,
     /// The following values are the effective values *after* contract overrides have been resolved. If there are no
     /// contract overrides, the default package values are used.
     #[prost(oneof = "rate_card_line_item::ReservedUnits", tags = "2, 3")]
