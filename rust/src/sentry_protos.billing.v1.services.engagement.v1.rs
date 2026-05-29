@@ -161,6 +161,10 @@ pub struct EffectiveGrant {
     /// Usable amount after counter-grant collapse; always > 0.
     #[prost(int64, tag = "4")]
     pub effective_amount: i64,
+    /// The grant's own active window, inclusive on both ends. These are the
+    /// grant's stored dates, not clipped to the query window: the grant applies
+    /// only to usage on days within \[start_date, end_date\], so a grant ending
+    /// mid-window stops covering usage after end_date.
     #[prost(message, optional, tag = "5")]
     pub start_date: ::core::option::Option<super::super::super::Date>,
     #[prost(message, optional, tag = "6")]
