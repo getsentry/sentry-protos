@@ -1,3 +1,9 @@
+## 0.20.0
+
+### New Features ✨
+
+- (billing) Added support for reserved budgets by @krithikravi in [#281](https://github.com/getsentry/sentry-protos/pull/281)
+
 ## 0.19.0
 
 ### New Features ✨
