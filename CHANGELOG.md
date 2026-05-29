@@ -1,3 +1,9 @@
+## 0.21.0
+
+### New Features ✨
+
+- (billing-platform) Add uncapped_rate to RateCard by @brendanhsentry in [#282](https://github.com/getsentry/sentry-protos/pull/282)
+
 ## 0.20.0
 
 ### New Features ✨
