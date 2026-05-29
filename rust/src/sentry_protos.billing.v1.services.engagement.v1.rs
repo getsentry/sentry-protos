@@ -51,13 +51,12 @@ impl GrantSource {
 /// A non-billable quota allowance for an organization within a time window.
 ///
 /// Grants can be offset by counter-grants: separate Grant rows with a negative
-/// amount that reference the original via parent_grant_id. The effective amount
-/// available for consumption is the original amount plus the sum of all
-/// counter-grant amounts. For example, a grant of 100k with a counter-grant
-/// of -40k has an effective amount of 60k.
+/// amount. The effective amount is the original amount plus the sum of all
+/// counter-grant amounts, netted server-side and returned via
+/// GetEffectiveGrants.
 ///
-/// UNITS grants must have exactly one line_item_uid. CENTS grants may cover
-/// multiple line items.
+/// UNITS grants have exactly one entry in line_item_uids. CENTS grants may
+/// have several.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Grant {
     #[prost(uint64, tag = "1")]
@@ -69,7 +68,7 @@ pub struct Grant {
     /// The line items this grant applies to.
     #[prost(string, repeated, tag = "4")]
     pub line_item_uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// The original amount. Negative for counter-grants.
+    /// The original amount. May be negative for counter-grants.
     #[prost(int64, tag = "5")]
     pub amount: i64,
     #[prost(message, optional, tag = "6")]
@@ -150,15 +149,22 @@ impl GrantStatus {
     }
 }
 /// A grant with counter-grant chains collapsed into a single effective amount.
-/// Returned in drain priority order (end_date ASC, effective_amount ASC, id ASC).
+/// Returned in drain priority order (end_date ASC, effective_amount ASC, grant_id ASC).
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct EffectiveGrant {
-    #[prost(message, optional, tag = "1")]
-    pub grant: ::core::option::Option<Grant>,
-    /// The usable amount after counter-grant chain collapse.
-    /// May differ from grant.amount when counter-grants exist.
-    #[prost(int64, tag = "2")]
+    #[prost(uint64, tag = "1")]
+    pub grant_id: u64,
+    #[prost(enumeration = "GrantType", tag = "2")]
+    pub r#type: i32,
+    #[prost(string, repeated, tag = "3")]
+    pub line_item_uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// Usable amount after counter-grant collapse; always > 0.
+    #[prost(int64, tag = "4")]
     pub effective_amount: i64,
+    #[prost(message, optional, tag = "5")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "6")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetEffectiveGrantsRequest {
@@ -167,6 +173,12 @@ pub struct GetEffectiveGrantsRequest {
     /// When set, returns only grants whose line_item_uids contain this value.
     #[prost(string, optional, tag = "2")]
     pub line_item_uid: ::core::option::Option<::prost::alloc::string::String>,
+    /// start_date / end_date define the query window. A grant is returned if its
+    /// own \[start_date, end_date\] overlaps this window (grant.start_date \<=
+    /// end_date AND grant.end_date >= start_date), inclusive on both ends. A grant
+    /// that begins before the window or ends inside it is therefore included.
+    /// Returned grants apply only to usage on the days each grant is itself active
+    /// — a grant ending mid-window does not cover usage after its end_date.
     #[prost(message, optional, tag = "3")]
     pub start_date: ::core::option::Option<super::super::super::Date>,
     #[prost(message, optional, tag = "4")]
