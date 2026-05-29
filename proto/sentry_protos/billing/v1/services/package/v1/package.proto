@@ -39,7 +39,7 @@ message SharedLineItemPool {
   // The unique line item details used when invoicing this shared pool.
   sentry_protos.billing.v1.common.v1.LineItemDetails shared_line_item = 5;
 
-  // Cost of the shared line item pool, in cents.
+  // Cost of the shared line item pool, in cents(a customer can pay $X and get $Y of credit, where X!=Y).
   uint64 base_price_cents = 6;
 }
 

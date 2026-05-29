@@ -59,7 +59,7 @@ pub struct SharedLineItemPool {
     pub shared_line_item: ::core::option::Option<
         super::super::super::common::v1::LineItemDetails,
     >,
-    /// Cost of the shared line item pool, in cents.
+    /// Cost of the shared line item pool, in cents(a customer can pay $X and get $Y of credit, where X!=Y).
     #[prost(uint64, tag = "6")]
     pub base_price_cents: u64,
 }
