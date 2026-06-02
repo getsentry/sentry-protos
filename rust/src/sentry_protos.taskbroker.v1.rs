@@ -125,6 +125,45 @@ pub struct SetTaskStatusResponse {
     #[prost(message, optional, tag = "1")]
     pub task: ::core::option::Option<TaskActivation>,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct TaskActivationStatusData {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// Maximum number of attempts for this task (including the initial attempt).
+    /// When status is RETRY and this field is set, the broker will update
+    /// the activation's retry_state with this value. This allows workers
+    /// to communicate the retry policy for tasks from raw topics that
+    /// don't have retry_state embedded in the message.
+    #[prost(uint32, optional, tag = "2")]
+    pub max_attempts: ::core::option::Option<u32>,
+    /// Duration in seconds to wait before retrying the task.
+    /// When status is RETRY and this field is set, the broker will update
+    /// the activation's retry_state.delay_on_retry with this value.
+    #[prost(uint64, optional, tag = "3")]
+    pub delay_on_retry: ::core::option::Option<u64>,
+}
+/// Contains a batch of tasks to be updated to `status`.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetTaskStatusBatchEntry {
+    /// All tasks in `tasks` should be updated to have this status.
+    #[prost(enumeration = "TaskActivationStatus", tag = "1")]
+    pub status: i32,
+    /// All tasks in this list should be updated to have status `status`.
+    #[prost(message, repeated, tag = "2")]
+    pub tasks: ::prost::alloc::vec::Vec<TaskActivationStatusData>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetTaskStatusBatchRequest {
+    /// Tasks to update grouped by status.
+    #[prost(message, repeated, tag = "1")]
+    pub batches: ::prost::alloc::vec::Vec<SetTaskStatusBatchEntry>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetTaskStatusBatchResponse {
+    /// List of IDs for tasks that were updated successfully.
+    #[prost(string, repeated, tag = "1")]
+    pub updated: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PushTaskRequest {
     #[prost(message, optional, tag = "1")]
@@ -355,6 +394,36 @@ pub mod consumer_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// Update the state of many tasks at the same time.
+        pub async fn set_task_status_batch(
+            &mut self,
+            request: impl tonic::IntoRequest<super::SetTaskStatusBatchRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::SetTaskStatusBatchResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sentry_protos.taskbroker.v1.ConsumerService/SetTaskStatusBatch",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "sentry_protos.taskbroker.v1.ConsumerService",
+                        "SetTaskStatusBatch",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -381,6 +450,14 @@ pub mod consumer_service_server {
             request: tonic::Request<super::SetTaskStatusRequest>,
         ) -> std::result::Result<
             tonic::Response<super::SetTaskStatusResponse>,
+            tonic::Status,
+        >;
+        /// Update the state of many tasks at the same time.
+        async fn set_task_status_batch(
+            &self,
+            request: tonic::Request<super::SetTaskStatusBatchRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::SetTaskStatusBatchResponse>,
             tonic::Status,
         >;
     }
@@ -539,6 +616,55 @@ pub mod consumer_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = SetTaskStatusSvc(inner);
+                        let codec = tonic_prost::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/sentry_protos.taskbroker.v1.ConsumerService/SetTaskStatusBatch" => {
+                    #[allow(non_camel_case_types)]
+                    struct SetTaskStatusBatchSvc<T: ConsumerService>(pub Arc<T>);
+                    impl<
+                        T: ConsumerService,
+                    > tonic::server::UnaryService<super::SetTaskStatusBatchRequest>
+                    for SetTaskStatusBatchSvc<T> {
+                        type Response = super::SetTaskStatusBatchResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::SetTaskStatusBatchRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ConsumerService>::set_task_status_batch(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = SetTaskStatusBatchSvc(inner);
                         let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

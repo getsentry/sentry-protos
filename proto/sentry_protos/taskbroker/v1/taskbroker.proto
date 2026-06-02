@@ -96,6 +96,9 @@ service ConsumerService {
 
   // Update the state of a task with execution results.
   rpc SetTaskStatus(SetTaskStatusRequest) returns (SetTaskStatusResponse) {}
+
+  // Update the state of many tasks at the same time.
+  rpc SetTaskStatusBatch(SetTaskStatusBatchRequest) returns (SetTaskStatusBatchResponse) {}
 }
 
 message GetTaskRequest {
@@ -141,6 +144,41 @@ message SetTaskStatusRequest {
 message SetTaskStatusResponse {
   // The next task the worker should execute. Requires fetch_next to be set on the request.
   optional TaskActivation task = 1;
+}
+
+message TaskActivationStatusData {
+  string id = 1;
+
+  // Maximum number of attempts for this task (including the initial attempt).
+  // When status is RETRY and this field is set, the broker will update
+  // the activation's retry_state with this value. This allows workers
+  // to communicate the retry policy for tasks from raw topics that
+  // don't have retry_state embedded in the message.
+  optional uint32 max_attempts = 2;
+
+  // Duration in seconds to wait before retrying the task.
+  // When status is RETRY and this field is set, the broker will update
+  // the activation's retry_state.delay_on_retry with this value.
+  optional uint64 delay_on_retry = 3;
+}
+
+// Contains a batch of tasks to be updated to `status`.
+message SetTaskStatusBatchEntry {
+  // All tasks in `tasks` should be updated to have this status.
+  TaskActivationStatus status = 1;
+
+  // All tasks in this list should be updated to have status `status`.
+  repeated TaskActivationStatusData tasks = 2;
+}
+
+message SetTaskStatusBatchRequest {
+  // Tasks to update grouped by status.
+  repeated SetTaskStatusBatchEntry batches = 1;
+}
+
+message SetTaskStatusBatchResponse {
+  // List of IDs for tasks that were updated successfully.
+  repeated string updated = 1;
 }
 
 service WorkerService {
