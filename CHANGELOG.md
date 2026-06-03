@@ -1,3 +1,9 @@
+## 0.22.0
+
+### New Features ✨
+
+- Add a batched endpoint for taskbroker status updates by @evanh in [#283](https://github.com/getsentry/sentry-protos/pull/283)
+
 ## 0.21.0
 
 ### New Features ✨
