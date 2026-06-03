@@ -4,31 +4,31 @@ pub struct RetryState {
     /// Current attempt number
     #[prost(uint32, tag = "1")]
     pub attempts: u32,
-    /// After this number of attempts, the task is either discarded or deadlettered.
+    /// After this number of attempts, the activation is either discarded or deadlettered.
     #[prost(uint32, tag = "2")]
     pub max_attempts: u32,
     /// The action to take after the max_attempts is exceeded.
     #[prost(enumeration = "OnAttemptsExceeded", tag = "3")]
     pub on_attempts_exceeded: i32,
-    /// Whether a task should be executed at most once.
+    /// Whether an activation should be executed at most once.
     #[prost(bool, optional, tag = "4")]
     pub at_most_once: ::core::option::Option<bool>,
-    /// Duration in seconds that a task must wait to begin execution after it is retried.
+    /// Duration in seconds that an activation must wait to begin execution after it is retried.
     #[prost(uint64, optional, tag = "5")]
     pub delay_on_retry: ::core::option::Option<u64>,
 }
-/// Task message that is stored in Kafka and shared over RPC.
+/// Activation message that is stored in Kafka and shared over RPC.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskActivation {
-    /// A GUID for the task. Used to update tasks
+    /// A GUID for the activation. Used to update activations
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
-    /// The task namespace. Applications can contain multiple namespaces.
+    /// The activation namespace. Applications can contain multiple namespaces.
     /// While namespaces within an application must be unique, different
     /// applications can have overlapping namespace values.
     #[prost(string, tag = "2")]
     pub namespace: ::prost::alloc::string::String,
-    /// The name of the task. This name is resolved within the worker
+    /// The name of the activation. This name is resolved within the worker
     #[prost(string, tag = "3")]
     pub taskname: ::prost::alloc::string::String,
     /// DEPRECATED: Use parameters_bytes instead.
@@ -41,28 +41,28 @@ pub struct TaskActivation {
     /// Mutually exclusive with `parameters`.
     #[prost(bytes = "vec", tag = "13")]
     pub parameters_bytes: ::prost::alloc::vec::Vec<u8>,
-    /// A map of headers for the task.
+    /// A map of headers for the activation.
     #[prost(map = "string, string", tag = "5")]
     pub headers: ::std::collections::HashMap<
         ::prost::alloc::string::String,
         ::prost::alloc::string::String,
     >,
-    /// The timestamp a task was stored in Kafka
+    /// The timestamp an activation was stored in Kafka
     #[prost(message, optional, tag = "6")]
     pub received_at: ::core::option::Option<::prost_types::Timestamp>,
     /// Retry state
     #[prost(message, optional, tag = "7")]
     pub retry_state: ::core::option::Option<RetryState>,
-    /// The duration in seconds that a worker has to complete task execution.
+    /// The duration in seconds that a worker has to complete activation execution.
     /// When an activation is moved from pending -> processing a result is expected
     /// in this many seconds.
     #[prost(uint64, tag = "8")]
     pub processing_deadline_duration: u64,
-    /// The duration in seconds that a task has to start execution.
+    /// The duration in seconds that an activation has to start execution.
     /// After received_at + expires has passed an activation is expired and will not be executed.
     #[prost(uint64, optional, tag = "9")]
     pub expires: ::core::option::Option<u64>,
-    /// The duration in seconds that a task must wait to begin execution after it is emitted.
+    /// The duration in seconds that an activation must wait to begin execution after it is emitted.
     /// After received_at + delay has passed, the activation will become pending.
     #[prost(uint64, optional, tag = "11")]
     pub delay: ::core::option::Option<u64>,
@@ -84,7 +84,7 @@ pub struct GetTaskRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTaskResponse {
-    /// If there are no tasks available, this will be empty
+    /// If there are no activations available, this will be empty
     #[prost(message, optional, tag = "1")]
     pub task: ::core::option::Option<TaskActivation>,
 }
@@ -103,17 +103,17 @@ pub struct SetTaskStatusRequest {
     pub id: ::prost::alloc::string::String,
     #[prost(enumeration = "TaskActivationStatus", tag = "2")]
     pub status: i32,
-    /// If fetch_next is provided, receive a new task in the response
+    /// If fetch_next is provided, receive a new activation in the response
     #[prost(message, optional, tag = "3")]
     pub fetch_next_task: ::core::option::Option<FetchNextTask>,
-    /// Maximum number of attempts for this task (including the initial attempt).
+    /// Maximum number of attempts for this activation (including the initial attempt).
     /// When status is RETRY and this field is set, the broker will update
     /// the activation's retry_state with this value. This allows workers
     /// to communicate the retry policy for tasks from raw topics that
     /// don't have retry_state embedded in the message.
     #[prost(uint32, optional, tag = "4")]
     pub max_attempts: ::core::option::Option<u32>,
-    /// Duration in seconds to wait before retrying the task.
+    /// Duration in seconds to wait before retrying the activation.
     /// When status is RETRY and this field is set, the broker will update
     /// the activation's retry_state.delay_on_retry with this value.
     #[prost(uint64, optional, tag = "5")]
@@ -121,10 +121,18 @@ pub struct SetTaskStatusRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SetTaskStatusResponse {
-    /// The next task the worker should execute. Requires fetch_next to be set on the request.
+    /// The next activation the worker should execute. Requires fetch_next to be set on the request.
     #[prost(message, optional, tag = "1")]
     pub task: ::core::option::Option<TaskActivation>,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetBatchActivationStatusRequest {
+    /// The status updates the broker should execute
+    #[prost(message, repeated, tag = "1")]
+    pub updates: ::prost::alloc::vec::Vec<SetTaskStatusRequest>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetBatchActivationStatusResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PushTaskRequest {
     #[prost(message, optional, tag = "1")]
@@ -295,7 +303,7 @@ pub mod consumer_service_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
-        /// Fetch a new task activation to process.
+        /// Fetch a new activation to process.
         pub async fn get_task(
             &mut self,
             request: impl tonic::IntoRequest<super::GetTaskRequest>,
@@ -325,7 +333,7 @@ pub mod consumer_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
-        /// Update the state of a task with execution results.
+        /// Update the state of an activation with execution results.
         pub async fn set_task_status(
             &mut self,
             request: impl tonic::IntoRequest<super::SetTaskStatusRequest>,
@@ -355,6 +363,36 @@ pub mod consumer_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// Update the status of multiple activations
+        pub async fn set_batch_activation_status(
+            &mut self,
+            request: impl tonic::IntoRequest<super::SetBatchActivationStatusRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::SetBatchActivationStatusResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sentry_protos.taskbroker.v1.ConsumerService/SetBatchActivationStatus",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "sentry_protos.taskbroker.v1.ConsumerService",
+                        "SetBatchActivationStatus",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -370,17 +408,25 @@ pub mod consumer_service_server {
     /// Generated trait containing gRPC methods that should be implemented for use with ConsumerServiceServer.
     #[async_trait]
     pub trait ConsumerService: std::marker::Send + std::marker::Sync + 'static {
-        /// Fetch a new task activation to process.
+        /// Fetch a new activation to process.
         async fn get_task(
             &self,
             request: tonic::Request<super::GetTaskRequest>,
         ) -> std::result::Result<tonic::Response<super::GetTaskResponse>, tonic::Status>;
-        /// Update the state of a task with execution results.
+        /// Update the state of an activation with execution results.
         async fn set_task_status(
             &self,
             request: tonic::Request<super::SetTaskStatusRequest>,
         ) -> std::result::Result<
             tonic::Response<super::SetTaskStatusResponse>,
+            tonic::Status,
+        >;
+        /// Update the status of multiple activations
+        async fn set_batch_activation_status(
+            &self,
+            request: tonic::Request<super::SetBatchActivationStatusRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::SetBatchActivationStatusResponse>,
             tonic::Status,
         >;
     }
@@ -554,6 +600,57 @@ pub mod consumer_service_server {
                     };
                     Box::pin(fut)
                 }
+                "/sentry_protos.taskbroker.v1.ConsumerService/SetBatchActivationStatus" => {
+                    #[allow(non_camel_case_types)]
+                    struct SetBatchActivationStatusSvc<T: ConsumerService>(pub Arc<T>);
+                    impl<
+                        T: ConsumerService,
+                    > tonic::server::UnaryService<super::SetBatchActivationStatusRequest>
+                    for SetBatchActivationStatusSvc<T> {
+                        type Response = super::SetBatchActivationStatusResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::SetBatchActivationStatusRequest,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ConsumerService>::set_batch_activation_status(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = SetBatchActivationStatusSvc(inner);
+                        let codec = tonic_prost::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
                 _ => {
                     Box::pin(async move {
                         let mut response = http::Response::new(
@@ -685,7 +782,7 @@ pub mod worker_service_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
-        /// Provide the worker with a task to execute.
+        /// Provide the worker with an activation to execute.
         pub async fn push_task(
             &mut self,
             request: impl tonic::IntoRequest<super::PushTaskRequest>,
@@ -730,7 +827,7 @@ pub mod worker_service_server {
     /// Generated trait containing gRPC methods that should be implemented for use with WorkerServiceServer.
     #[async_trait]
     pub trait WorkerService: std::marker::Send + std::marker::Sync + 'static {
-        /// Provide the worker with a task to execute.
+        /// Provide the worker with an activation to execute.
         async fn push_task(
             &self,
             request: tonic::Request<super::PushTaskRequest>,
