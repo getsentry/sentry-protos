@@ -38,6 +38,10 @@ pub mod rate_card_line_item {
 pub struct SharedRateCardLineItem {
     #[prost(message, repeated, tag = "1")]
     pub rate_card_line_items: ::prost::alloc::vec::Vec<RateCardLineItem>,
+    #[prost(message, optional, tag = "4")]
+    pub shared_line_item_detail: ::core::option::Option<
+        super::super::super::common::v1::LineItemDetails,
+    >,
     /// Effective reserved_pool_cents after contract overrides have been resolved. If there are no
     /// contract overrides, the default package values are used.
     #[prost(oneof = "shared_rate_card_line_item::ReservedPoolCents", tags = "2, 3")]
