@@ -28,6 +28,8 @@ message SharedRateCardLineItem {
     bool is_unlimited = 2;
     uint64 num_reserved_cents = 3;
   }
+
+  sentry_protos.billing.v1.common.v1.LineItemDetails shared_line_item_detail = 4;
 }
 
 message RateCard {
