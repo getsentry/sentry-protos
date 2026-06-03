@@ -22,5 +22,6 @@ message BillingDetails {
   optional string company_name = 3;
   optional string billing_email = 4;
   sentry_protos.billing.v1.common.v1.Address billing_address = 5;
+  // The customer's tax registration number (e.g. VAT ID), if on file.
   optional string tax_number = 6;
 }

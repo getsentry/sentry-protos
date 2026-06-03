@@ -31,6 +31,7 @@ pub struct BillingDetails {
     pub billing_address: ::core::option::Option<
         super::super::super::common::v1::Address,
     >,
+    /// The customer's tax registration number (e.g. VAT ID), if on file.
     #[prost(string, optional, tag = "6")]
     pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
 }
