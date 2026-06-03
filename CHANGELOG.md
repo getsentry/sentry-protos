@@ -1,3 +1,9 @@
+## 0.22.1
+
+### Internal Changes 🔧
+
+- Pass shared line item details through RateCard by @brendanhsentry in [#285](https://github.com/getsentry/sentry-protos/pull/285)
+
 ## 0.22.0
 
 ### New Features ✨
