@@ -16,6 +16,9 @@ message CreateContractRequest {
   // supported_month_intervals. If unset, defaults to the package's first
   // supported interval.
   uint32 month_interval = 6;
+  // The customer's tax registration number (e.g. VAT ID), used to determine
+  // tax treatment for this contract. Unset if none is on file.
+  optional string customer_tax_id = 7;
 }
 
 message CreateContractResponse {

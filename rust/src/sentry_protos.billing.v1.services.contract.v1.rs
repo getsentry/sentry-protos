@@ -493,6 +493,10 @@ pub struct CreateContractRequest {
     /// supported interval.
     #[prost(uint32, tag = "6")]
     pub month_interval: u32,
+    /// The customer's tax registration number (e.g. VAT ID), used to determine
+    /// tax treatment for this contract. Unset if none is on file.
+    #[prost(string, optional, tag = "7")]
+    pub customer_tax_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateContractResponse {
@@ -673,6 +677,10 @@ pub struct RolloverContractRequest {
     pub pending_change: ::core::option::Option<
         super::super::super::common::v1::PendingChange,
     >,
+    /// The customer's tax registration number (e.g. VAT ID), used to determine
+    /// tax treatment for this contract. Unset if none is on file.
+    #[prost(string, optional, tag = "6")]
+    pub customer_tax_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {

@@ -31,6 +31,8 @@ pub struct BillingDetails {
     pub billing_address: ::core::option::Option<
         super::super::super::common::v1::Address,
     >,
+    #[prost(string, optional, tag = "6")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetBillingDetailsRequest {

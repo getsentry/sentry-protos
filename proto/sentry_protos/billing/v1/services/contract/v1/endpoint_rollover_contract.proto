@@ -18,6 +18,9 @@ message RolloverContractRequest {
   // The pending change to apply to the new contract, if any. Unset means no
   // pending change is being applied during this rollover.
   optional sentry_protos.billing.v1.common.v1.PendingChange pending_change = 5;
+  // The customer's tax registration number (e.g. VAT ID), used to determine
+  // tax treatment for this contract. Unset if none is on file.
+  optional string customer_tax_id = 6;
 }
 
 message RolloverContractResponse {
