@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+message FlexiblePrice {
+  uint64 base = 1;
+  oneof annual_price {
+    uint64 fixed = 2;
+  }
+}
