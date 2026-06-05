@@ -224,6 +224,9 @@ pub struct LineItemDetails {
     /// Unique identifier for the line item.
     #[prost(string, tag = "1")]
     pub uid: ::prost::alloc::string::String,
+    /// InvoiceItemType identifiers for this SKU, keyed by billing context.
+    #[prost(message, optional, tag = "2")]
+    pub invoice_item_types: ::core::option::Option<InvoiceItemTypes>,
     /// Customer-facing display name for the line item.
     #[prost(string, tag = "3")]
     pub customer_facing_name: ::prost::alloc::string::String,
@@ -236,6 +239,23 @@ pub struct LineItemDetails {
     /// Defines how usage data is transformed into this line item.
     #[prost(message, optional, tag = "6")]
     pub billable_metric: ::core::option::Option<BillableMetric>,
+}
+/// InvoiceItemType identifiers for a single SKU, split by billing context.
+/// Reserved, on-demand, and activated usage of the same SKU can each settle as a
+/// distinct InvoiceItemType, so every context carries its own identifier instead
+/// of collapsing into one. Contexts are optional because some SKUs (e.g. Seer)
+/// fold their usage irregularly and do not populate every context.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct InvoiceItemTypes {
+    /// Type for reserved (prepaid) usage of this SKU.
+    #[prost(string, optional, tag = "1")]
+    pub reserved: ::core::option::Option<::prost::alloc::string::String>,
+    /// Type for on-demand (pay-as-you-go) usage of this SKU.
+    #[prost(string, optional, tag = "2")]
+    pub ondemand: ::core::option::Option<::prost::alloc::string::String>,
+    /// Type for activated usage of this SKU.
+    #[prost(string, optional, tag = "3")]
+    pub activated: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// Stripe-specific payment information for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
