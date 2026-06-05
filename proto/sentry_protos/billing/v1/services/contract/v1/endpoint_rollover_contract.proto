@@ -18,6 +18,12 @@ message RolloverContractRequest {
   // The pending change to apply to the new contract, if any. Unset means no
   // pending change is being applied during this rollover.
   optional sentry_protos.billing.v1.common.v1.PendingChange pending_change = 5;
+
+  // Whether the tax for this invoice could not be computed at creation time
+  // (the tax provider was unavailable) and must be backfilled later. When set,
+  // the invoice is created without a tax line item and held back from charging
+  // until a sweep recomputes the tax.
+  bool tax_pending = 6;
 }
 
 message RolloverContractResponse {

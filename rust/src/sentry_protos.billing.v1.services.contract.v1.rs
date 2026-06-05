@@ -691,6 +691,12 @@ pub struct RolloverContractRequest {
     pub pending_change: ::core::option::Option<
         super::super::super::common::v1::PendingChange,
     >,
+    /// Whether the tax for this invoice could not be computed at creation time
+    /// (the tax provider was unavailable) and must be backfilled later. When set,
+    /// the invoice is created without a tax line item and held back from charging
+    /// until a sweep recomputes the tax.
+    #[prost(bool, tag = "6")]
+    pub tax_pending: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
