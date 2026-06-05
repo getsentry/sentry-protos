@@ -1,3 +1,9 @@
+## 0.23.0
+
+### New Features ✨
+
+- (billing) Add optional type to InvoiceLineItem by @dashed in [#293](https://github.com/getsentry/sentry-protos/pull/293)
+
 ## 0.22.3
 
 ### Internal Changes 🔧
