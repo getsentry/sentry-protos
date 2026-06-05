@@ -77,8 +77,13 @@ pub struct PackageConfig {
     #[prost(message, repeated, tag = "3")]
     pub shared_line_item_pools: ::prost::alloc::vec::Vec<SharedLineItemPool>,
     /// Base price for the package.
+    #[deprecated]
     #[prost(uint64, tag = "4")]
     pub base_price_cents: u64,
+    #[prost(message, optional, tag = "8")]
+    pub flexible_base_price_cents: ::core::option::Option<
+        super::super::super::common::v1::FlexiblePrice,
+    >,
     /// Deprecated. Use supported_month_intervals.
     #[deprecated]
     #[prost(enumeration = "super::super::super::common::v1::BillingInterval", tag = "5")]
