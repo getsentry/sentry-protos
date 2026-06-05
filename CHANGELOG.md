@@ -1,3 +1,9 @@
+## 0.24.0
+
+### New Features ✨
+
+- (billing) Add tax_number to BillingDetails by @dashed in [#286](https://github.com/getsentry/sentry-protos/pull/286)
+
 ## 0.23.0
 
 ### New Features ✨
