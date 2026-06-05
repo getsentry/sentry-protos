@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+// Request to react to a Stripe `payment_method.detached` webhook event
+// for a customer whose billing is owned by the platform.
+message HandlePaymentMethodDetachedRequest {
+  // Stripe id of the payment method (e.g. "pm_xxx").
+  string stripe_payment_method_id = 1;
+  // Stripe id of the customer the payment method was attached to
+  // (e.g. "cus_xxx"). May come from `previous_attributes` since Stripe
+  // omits `customer` on the detached object itself.
+  string stripe_customer_id = 2;
+}
+
+message HandlePaymentMethodDetachedResponse {
+  // True when the organization's billing is owned by the platform and
+  // the service has finished its handling.
+  bool handled = 1;
+}
