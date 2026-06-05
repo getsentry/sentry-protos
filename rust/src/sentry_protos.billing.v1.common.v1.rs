@@ -151,6 +151,21 @@ impl BillingInterval {
         }
     }
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FlexiblePrice {
+    #[prost(uint64, tag = "1")]
+    pub base: u64,
+    #[prost(oneof = "flexible_price::AnnualPrice", tags = "2")]
+    pub annual_price: ::core::option::Option<flexible_price::AnnualPrice>,
+}
+/// Nested message and enum types in `FlexiblePrice`.
+pub mod flexible_price {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum AnnualPrice {
+        #[prost(uint64, tag = "2")]
+        Fixed(u64),
+    }
+}
 /// Unit information for measurement and conversion.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UnitInfo {
@@ -333,10 +348,14 @@ pub struct LineItemUids {
 pub struct PricingTier {
     #[prost(int64, tag = "1")]
     pub start: i64,
+    #[deprecated]
     #[prost(int64, tag = "2")]
     pub end: i64,
+    #[deprecated]
     #[prost(int64, tag = "3")]
     pub rate_per_unit_cpe: i64,
+    #[prost(message, optional, tag = "4")]
+    pub price: ::core::option::Option<FlexiblePrice>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TieredPricingRate {
