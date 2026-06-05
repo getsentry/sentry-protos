@@ -1,3 +1,9 @@
+## 0.22.2
+
+### Internal Changes 🔧
+
+- Add flexible price by @noahsmartin in [#288](https://github.com/getsentry/sentry-protos/pull/288)
+
 ## 0.22.1
 
 ### Internal Changes 🔧
