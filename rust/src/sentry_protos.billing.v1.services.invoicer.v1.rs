@@ -126,3 +126,23 @@ pub struct HandleChargeSucceededResponse {
     #[prost(bool, tag = "1")]
     pub handled: bool,
 }
+/// Request to react to a Stripe `payment_method.detached` webhook event
+/// for a customer whose billing is owned by the platform.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HandlePaymentMethodDetachedRequest {
+    /// Stripe id of the payment method (e.g. "pm_xxx").
+    #[prost(string, tag = "1")]
+    pub stripe_payment_method_id: ::prost::alloc::string::String,
+    /// Stripe id of the customer the payment method was attached to
+    /// (e.g. "cus_xxx"). May come from `previous_attributes` since Stripe
+    /// omits `customer` on the detached object itself.
+    #[prost(string, tag = "2")]
+    pub stripe_customer_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HandlePaymentMethodDetachedResponse {
+    /// True when the organization's billing is owned by the platform and
+    /// the service has finished its handling.
+    #[prost(bool, tag = "1")]
+    pub handled: bool,
+}
