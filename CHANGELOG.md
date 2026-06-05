@@ -1,3 +1,9 @@
+## 0.22.3
+
+### Internal Changes 🔧
+
+- (billing) Added flexible price to shared line item pools by @krithikravi in [#294](https://github.com/getsentry/sentry-protos/pull/294)
+
 ## 0.22.2
 
 ### Internal Changes 🔧
