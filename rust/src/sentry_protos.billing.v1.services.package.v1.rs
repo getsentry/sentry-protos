@@ -65,8 +65,13 @@ pub struct SharedLineItemPool {
         super::super::super::common::v1::LineItemDetails,
     >,
     /// Cost of the shared line item pool, in cents(a customer can pay $X and get $Y of credit, where X!=Y).
+    #[deprecated]
     #[prost(uint64, tag = "6")]
     pub base_price_cents: u64,
+    #[prost(message, optional, tag = "7")]
+    pub flexible_base_price_cents: ::core::option::Option<
+        super::super::super::common::v1::FlexiblePrice,
+    >,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PackageConfig {
