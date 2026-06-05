@@ -2,6 +2,7 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LineItemConfig {
     /// Base price for the line item (upgraded reserved volumes or add-on activation fees)
+    #[deprecated]
     #[prost(uint64, tag = "1")]
     pub base_price_cents: u64,
     #[prost(message, optional, tag = "3")]
