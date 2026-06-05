@@ -126,3 +126,29 @@ pub struct HandleChargeSucceededResponse {
     #[prost(bool, tag = "1")]
     pub handled: bool,
 }
+/// Request to react to a Stripe `payment_method.attached`,
+/// `payment_method.updated`, or `payment_method.automatically_updated`
+/// webhook event for a customer whose billing is owned by the platform.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HandlePaymentMethodChangedRequest {
+    /// Stripe id of the payment method (e.g. "pm_xxx").
+    #[prost(string, tag = "1")]
+    pub stripe_payment_method_id: ::prost::alloc::string::String,
+    /// Stripe id of the customer the payment method is attached to
+    /// (e.g. "cus_xxx").
+    #[prost(string, tag = "2")]
+    pub stripe_customer_id: ::prost::alloc::string::String,
+    /// Stripe event type, one of "payment_method.attached",
+    /// "payment_method.updated", "payment_method.automatically_updated".
+    /// Used to branch on per-event side effects (default-PM write,
+    /// older-PM guard, failed-charge retry).
+    #[prost(string, tag = "3")]
+    pub source: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HandlePaymentMethodChangedResponse {
+    /// True when the organization's billing is owned by the platform and
+    /// the service has finished its handling.
+    #[prost(bool, tag = "1")]
+    pub handled: bool,
+}
