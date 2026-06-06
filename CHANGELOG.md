@@ -1,3 +1,9 @@
+## 0.25.0
+
+### New Features ✨
+
+- (billing-platform) Add ChargeService.GetChargeByStripeId endpoint by @armcknight in [#289](https://github.com/getsentry/sentry-protos/pull/289)
+
 ## 0.24.0
 
 ### New Features ✨
