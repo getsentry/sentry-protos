@@ -46,6 +46,20 @@ pub struct GetBillingDetailsResponse {
     #[prost(message, optional, tag = "1")]
     pub billing_details: ::core::option::Option<BillingDetails>,
 }
+/// Request to look up the organization id that owns a Stripe customer id.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrganizationIdByStripeCustomerIdRequest {
+    /// Stripe id of the customer (e.g. "cus_xxx").
+    #[prost(string, tag = "1")]
+    pub stripe_customer_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrganizationIdByStripeCustomerIdResponse {
+    /// Organization id, when a customer record exists for the given Stripe
+    /// customer id and is associated with an organization.
+    #[prost(int64, optional, tag = "1")]
+    pub organization_id: ::core::option::Option<i64>,
+}
 /// Fetches lightweight identity fields for an organization. Used by callers
 /// that need slug/name/default_user_id without pulling the full Organization
 /// record across service boundaries.
