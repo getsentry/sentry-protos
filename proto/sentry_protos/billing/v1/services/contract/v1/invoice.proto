@@ -6,11 +6,16 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/common/v1/address.proto";
 
 // This is not the same as LineItemDetails, it includes
-// items not related to the package such as tax.
+// items not related to the package such as tax. Each line item may carry an
+// optional type that classifies it (e.g. "tax") so consumers can treat it
+// specially without inspecting the description.
 message InvoiceLineItem {
   // Intentionally not a uint (some line items could be discounts)
   int64 amount_cents = 1;
   optional string description = 2;
+  // Optional classifier for the line item, e.g. "tax". Unset for ordinary
+  // priced line items.
+  optional string type = 3;
 }
 
 message Invoice {
