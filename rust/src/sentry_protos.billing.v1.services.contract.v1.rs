@@ -513,6 +513,18 @@ pub struct CreateContractResponse {
     #[prost(uint64, tag = "5")]
     pub amount_billed: u64,
 }
+/// Ends a contract immediately, regardless of its scheduled end date.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EndContractImmediatelyRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EndContractImmediatelyResponse {
+    /// True if a matching contract was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetContractRequest {
     #[prost(uint64, tag = "1")]
