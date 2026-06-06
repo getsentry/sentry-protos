@@ -445,7 +445,9 @@ pub struct Contract {
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
 /// This is not the same as LineItemDetails, it includes
-/// items not related to the package such as tax.
+/// items not related to the package such as tax. Each line item may carry an
+/// optional type that classifies it (e.g. "tax") so consumers can treat it
+/// specially without inspecting the description.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct InvoiceLineItem {
     /// Intentionally not a uint (some line items could be discounts)
@@ -453,6 +455,10 @@ pub struct InvoiceLineItem {
     pub amount_cents: i64,
     #[prost(string, optional, tag = "2")]
     pub description: ::core::option::Option<::prost::alloc::string::String>,
+    /// Optional classifier for the line item, e.g. "tax". Unset for ordinary
+    /// priced line items.
+    #[prost(string, optional, tag = "3")]
+    pub r#type: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Invoice {
