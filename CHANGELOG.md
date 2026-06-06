@@ -1,3 +1,9 @@
+## 0.25.1
+
+### Internal Changes 🔧
+
+- Add end contract immediately protos by @noahsmartin in [#296](https://github.com/getsentry/sentry-protos/pull/296)
+
 ## 0.25.0
 
 ### New Features ✨
