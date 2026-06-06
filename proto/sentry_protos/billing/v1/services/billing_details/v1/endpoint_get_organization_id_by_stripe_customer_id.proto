@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_details.v1;
+
+// Request to look up the organization id that owns a Stripe customer id.
+message GetOrganizationIdByStripeCustomerIdRequest {
+  // Stripe id of the customer (e.g. "cus_xxx").
+  string stripe_customer_id = 1;
+}
+
+message GetOrganizationIdByStripeCustomerIdResponse {
+  // Organization id, when a customer record exists for the given Stripe
+  // customer id and is associated with an organization.
+  optional int64 organization_id = 1;
+}
