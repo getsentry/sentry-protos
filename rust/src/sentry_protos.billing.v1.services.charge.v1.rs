@@ -165,6 +165,31 @@ pub struct ListRefundsByInvoiceResponse {
     #[prost(message, repeated, tag = "1")]
     pub refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
 }
+/// Records platform refunds for a Stripe charge from a webhook payload.
+/// Mirrors the contents of `stripe_charge.refunds` as `PlatformRefund`
+/// rows idempotently keyed by Stripe refund id, and syncs the aggregate
+/// `amount_refunded` / `refunded` state on the stored `PlatformCharge`.
+/// Called by the presentation layer that owns the `charge.refunded`
+/// webhook handler; the charge service does not call Stripe in this path
+/// (Stripe initiated the refund).
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RecordChargeRefundsRequest {
+    #[prost(message, optional, tag = "1")]
+    pub stripe_charge: ::core::option::Option<
+        super::super::super::common::v1::StripeCharge,
+    >,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RecordChargeRefundsResponse {
+    /// Unset when no platform charge exists for `stripe_charge.id`. Callers
+    /// use this to distinguish platform charges from legacy charges.
+    #[prost(message, optional, tag = "1")]
+    pub charge: ::core::option::Option<PlatformCharge>,
+    /// The platform refund rows that were recorded or already existed,
+    /// ordered by `date_added_st` ascending.
+    #[prost(message, repeated, tag = "2")]
+    pub refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
+}
 /// Issues a refund against a platform charge by calling Stripe and
 /// recording a `PlatformRefund` row. Caller supplies the partial-refund
 /// amount; the service enforces the over-refund guard (sum of recorded
