@@ -147,77 +147,6 @@ impl ExternalBillingProvider {
         }
     }
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct OptionValue {
-    #[prost(oneof = "option_value::Value", tags = "1, 2, 3")]
-    pub value: ::core::option::Option<option_value::Value>,
-}
-/// Nested message and enum types in `OptionValue`.
-pub mod option_value {
-    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum Value {
-        #[prost(string, tag = "1")]
-        StringValue(::prost::alloc::string::String),
-        #[prost(int64, tag = "2")]
-        IntValue(i64),
-        #[prost(bool, tag = "3")]
-        BoolValue(bool),
-    }
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct FeatureOption {
-    #[prost(string, tag = "1")]
-    pub key: ::prost::alloc::string::String,
-    #[prost(bool, tag = "2")]
-    pub enabled: bool,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FeatureOptions {
-    #[prost(message, repeated, tag = "1")]
-    pub options: ::prost::alloc::vec::Vec<FeatureOption>,
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct MetadataOption {
-    #[prost(string, tag = "1")]
-    pub key: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub value: ::core::option::Option<OptionValue>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MetadataOptions {
-    #[prost(message, repeated, tag = "1")]
-    pub options: ::prost::alloc::vec::Vec<MetadataOption>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ContractMetadata {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-    #[prost(uint64, tag = "2")]
-    pub organization_id: u64,
-    /// The set of BillingRules that the BillingRulesEngine has to execute for this contract.
-    #[prost(string, tag = "3")]
-    pub ruleset_version: ::prost::alloc::string::String,
-    /// Catch-all for overrides and information not covered above.
-    #[prost(message, optional, tag = "6")]
-    pub custom_options: ::core::option::Option<MetadataOptions>,
-    #[prost(message, optional, tag = "7")]
-    pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
-    #[prost(string, tag = "9")]
-    pub package_uid: ::prost::alloc::string::String,
-    #[deprecated]
-    #[prost(uint64, tag = "8")]
-    pub package_id: u64,
-    /// Includes information like plan ID, tier, etc.
-    #[deprecated]
-    #[prost(message, optional, tag = "4")]
-    pub package_metadata: ::core::option::Option<MetadataOptions>,
-    /// Entitlements, used in frontend features or gating access to certain features.
-    ///
-    /// DEPRECATED: use billing_features instead
-    #[deprecated]
-    #[prost(message, optional, tag = "5")]
-    pub features: ::core::option::Option<FeatureOptions>,
-}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Sku {
@@ -435,15 +364,6 @@ pub struct PricingConfig {
     #[prost(uint64, tag = "5")]
     pub max_spend_cents: u64,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Contract {
-    #[prost(message, optional, tag = "1")]
-    pub metadata: ::core::option::Option<ContractMetadata>,
-    #[prost(message, optional, tag = "2")]
-    pub billing_config: ::core::option::Option<BillingConfig>,
-    #[prost(message, optional, tag = "3")]
-    pub pricing_config: ::core::option::Option<PricingConfig>,
-}
 /// This is not the same as LineItemDetails, it includes
 /// items not related to the package such as tax. Each line item may carry an
 /// optional type that classifies it (e.g. "tax") so consumers can treat it
@@ -481,6 +401,86 @@ pub struct Invoice {
     pub needs_charged: bool,
     #[prost(message, optional, tag = "9")]
     pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct OptionValue {
+    #[prost(oneof = "option_value::Value", tags = "1, 2, 3")]
+    pub value: ::core::option::Option<option_value::Value>,
+}
+/// Nested message and enum types in `OptionValue`.
+pub mod option_value {
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Value {
+        #[prost(string, tag = "1")]
+        StringValue(::prost::alloc::string::String),
+        #[prost(int64, tag = "2")]
+        IntValue(i64),
+        #[prost(bool, tag = "3")]
+        BoolValue(bool),
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FeatureOption {
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(bool, tag = "2")]
+    pub enabled: bool,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FeatureOptions {
+    #[prost(message, repeated, tag = "1")]
+    pub options: ::prost::alloc::vec::Vec<FeatureOption>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MetadataOption {
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub value: ::core::option::Option<OptionValue>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MetadataOptions {
+    #[prost(message, repeated, tag = "1")]
+    pub options: ::prost::alloc::vec::Vec<MetadataOption>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ContractMetadata {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    #[prost(uint64, tag = "2")]
+    pub organization_id: u64,
+    /// The set of BillingRules that the BillingRulesEngine has to execute for this contract.
+    #[prost(string, tag = "3")]
+    pub ruleset_version: ::prost::alloc::string::String,
+    /// Catch-all for overrides and information not covered above.
+    #[prost(message, optional, tag = "6")]
+    pub custom_options: ::core::option::Option<MetadataOptions>,
+    #[prost(message, optional, tag = "7")]
+    pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
+    #[prost(string, tag = "9")]
+    pub package_uid: ::prost::alloc::string::String,
+    #[deprecated]
+    #[prost(uint64, tag = "8")]
+    pub package_id: u64,
+    /// Includes information like plan ID, tier, etc.
+    #[deprecated]
+    #[prost(message, optional, tag = "4")]
+    pub package_metadata: ::core::option::Option<MetadataOptions>,
+    /// Entitlements, used in frontend features or gating access to certain features.
+    ///
+    /// DEPRECATED: use billing_features instead
+    #[deprecated]
+    #[prost(message, optional, tag = "5")]
+    pub features: ::core::option::Option<FeatureOptions>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Contract {
+    #[prost(message, optional, tag = "1")]
+    pub metadata: ::core::option::Option<ContractMetadata>,
+    #[prost(message, optional, tag = "2")]
+    pub billing_config: ::core::option::Option<BillingConfig>,
+    #[prost(message, optional, tag = "3")]
+    pub pricing_config: ::core::option::Option<PricingConfig>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateContractRequest {

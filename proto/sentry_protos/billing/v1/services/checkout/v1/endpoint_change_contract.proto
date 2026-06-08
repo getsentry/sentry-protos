@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.checkout.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+
+// Changes an organization's contract to a new configuration. Any unset field
+// leaves the corresponding part of the contract unchanged.
+message ChangeContractRequest {
+  uint64 organization_id = 1;
+
+  // The package the contract will switch to. If unset, the package is left
+  // unchanged.
+  optional string package_uid = 2;
+
+  // The contract month_interval the subscription will switch to. Must be one
+  // of the package's supported_month_intervals. If unset, the month_interval
+  // is left unchanged.
+  optional uint32 month_interval = 3;
+
+  // The new user configs (PAYG budgets and/or reservation overrides) to apply
+  // to the contract. If empty, the user configs are left unchanged.
+  repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_configs = 4;
+}
+
+message ChangeContractResponse {}
