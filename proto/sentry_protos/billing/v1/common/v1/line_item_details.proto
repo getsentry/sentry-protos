@@ -10,6 +10,9 @@ message LineItemDetails {
   // Unique identifier for the line item.
   string uid = 1;
 
+  // InvoiceItemType identifiers for this SKU, keyed by billing context.
+  InvoiceItemTypes invoice_item_types = 2;
+
   // Customer-facing display name for the line item.
   string customer_facing_name = 3;
 
@@ -21,4 +24,20 @@ message LineItemDetails {
 
   // Defines how usage data is transformed into this line item.
   BillableMetric billable_metric = 6;
+}
+
+// InvoiceItemType identifiers for a single SKU, split by billing context.
+// Reserved, on-demand, and activated usage of the same SKU can each settle as a
+// distinct InvoiceItemType, so every context carries its own identifier instead
+// of collapsing into one. Contexts are optional because some SKUs (e.g. Seer)
+// fold their usage irregularly and do not populate every context.
+message InvoiceItemTypes {
+  // Type for reserved (prepaid) usage of this SKU.
+  optional string reserved = 1;
+
+  // Type for on-demand (pay-as-you-go) usage of this SKU.
+  optional string ondemand = 2;
+
+  // Type for activated usage of this SKU.
+  optional string activated = 3;
 }
