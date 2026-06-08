@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
+
+// Request to react to a Stripe `charge.refunded` webhook event for a
+// charge created by the billing platform. The included ``stripe_charge``
+// carries the per-refund records on its ``refunds`` field; the handler
+// records each refund idempotently by Stripe refund id and syncs the
+// aggregate refund state on the stored platform charge.
+message HandleChargeRefundedRequest {
+  sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 1;
+}
+
+message HandleChargeRefundedResponse {
+  // True when the charge was created by the billing platform and the
+  // service has finished its handling.
+  bool handled = 1;
+}
