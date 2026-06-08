@@ -382,9 +382,26 @@ pub mod payment_method_details {
         Card(super::Card),
     }
 }
+/// A snapshot of a single Stripe refund attached to a charge. Conveys
+/// per-refund metadata so handlers can record refunds individually and
+/// dedupe by `id`; the aggregate `amount_refunded` on `StripeCharge`
+/// alone is not enough for idempotent ingestion.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StripeRefund {
+    /// Stripe id of the refund (e.g. "re_xxx").
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// Refund amount in the charge's smallest currency unit (cents for USD).
+    #[prost(uint64, tag = "2")]
+    pub amount: u64,
+    /// Stripe-supplied reason (e.g. "requested_by_customer", "duplicate",
+    /// "fraudulent"). Unset when Stripe did not provide one.
+    #[prost(string, optional, tag = "3")]
+    pub reason: ::core::option::Option<::prost::alloc::string::String>,
+}
 /// A snapshot of a Stripe charge object. Used as the payload when reacting
 /// to Stripe webhook events.
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct StripeCharge {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
@@ -403,4 +420,9 @@ pub struct StripeCharge {
     pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, optional, tag = "8")]
     pub payment_method_details: ::core::option::Option<PaymentMethodDetails>,
+    /// Per-refund records attached to this charge. Empty when the charge has
+    /// no refunds. The list reflects the state of refunds at the time the
+    /// webhook was emitted.
+    #[prost(message, repeated, tag = "9")]
+    pub refunds: ::prost::alloc::vec::Vec<StripeRefund>,
 }

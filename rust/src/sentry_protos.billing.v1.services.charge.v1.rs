@@ -25,6 +25,30 @@ pub struct PlatformCharge {
     #[prost(string, optional, tag = "9")]
     pub card_last_4: ::core::option::Option<::prost::alloc::string::String>,
 }
+/// Canonical projection of a stored platform refund. One row per recorded
+/// refund against a `PlatformCharge`; the aggregate `amount_refunded` on
+/// `PlatformCharge` is a cache of the sum of these.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PlatformRefund {
+    /// Stripe id of the refund (e.g. "re_xxx").
+    #[prost(string, tag = "1")]
+    pub stripe_id: ::prost::alloc::string::String,
+    /// Stripe id of the charge this refund is against (e.g. "ch_xxx"). Joins
+    /// back to `PlatformCharge.stripe_id`.
+    #[prost(string, tag = "2")]
+    pub charge_stripe_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub organization_id: u64,
+    /// Refund amount in cents.
+    #[prost(uint64, tag = "4")]
+    pub amount: u64,
+    /// Stripe-supplied refund reason. Unset when Stripe did not provide one.
+    #[prost(string, optional, tag = "5")]
+    pub reason: ::core::option::Option<::prost::alloc::string::String>,
+    /// Unix epoch seconds when the refund was recorded by the platform.
+    #[prost(int64, tag = "6")]
+    pub date_added_st: i64,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CaptureChargeRequest {
     #[prost(enumeration = "ChargeMethod", tag = "1")]
@@ -126,11 +150,54 @@ pub struct ListChargesForInvoiceResponse {
     #[prost(message, repeated, tag = "1")]
     pub charges: ::prost::alloc::vec::Vec<Charge>,
 }
+/// Lists every recorded refund associated with the charges for a single
+/// platform invoice. Callers in the presentation layer use this to render
+/// invoice-level refund state without crossing the charge service boundary.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListRefundsByInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListRefundsByInvoiceResponse {
+    /// Refunds ordered by `date_added_st` ascending. Empty when the invoice
+    /// has no refunds.
+    #[prost(message, repeated, tag = "1")]
+    pub refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
+}
+/// Issues a refund against a platform charge by calling Stripe and
+/// recording a `PlatformRefund` row. Caller supplies the partial-refund
+/// amount; the service enforces the over-refund guard (sum of recorded
+/// refunds + new amount \<= charge amount) under optimistic locking to
+/// prevent concurrent double refunds.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RefundChargeRequest {
+    /// Stripe id of the charge to refund (e.g. "ch_xxx"). Identifies the
+    /// `PlatformCharge` to refund against.
+    #[prost(string, tag = "1")]
+    pub stripe_charge_id: ::prost::alloc::string::String,
+    /// Refund amount in cents. Must be > 0 and \<= remaining refundable amount
+    /// on the charge.
+    #[prost(uint64, tag = "2")]
+    pub amount: u64,
+    /// Optional reason recorded with the refund and forwarded to Stripe.
+    #[prost(string, optional, tag = "3")]
+    pub reason: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RefundChargeResponse {
+    /// The refund record created by this call.
+    #[prost(message, optional, tag = "1")]
+    pub refund: ::core::option::Option<PlatformRefund>,
+    /// The charge with refund aggregates synced.
+    #[prost(message, optional, tag = "2")]
+    pub charge: ::core::option::Option<PlatformCharge>,
+}
 /// Synchronizes a stored platform charge with the latest snapshot from
 /// Stripe. The charge is identified by `stripe_charge.id`. Fields like
 /// `paid`, `failure_code` and refund state are copied onto the stored
 /// record so the database reflects the current payment-provider state.
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateChargeRequest {
     #[prost(message, optional, tag = "1")]
     pub stripe_charge: ::core::option::Option<

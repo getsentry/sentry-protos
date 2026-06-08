@@ -110,9 +110,28 @@ pub struct HandleChargeDisputedResponse {
     #[prost(bool, tag = "1")]
     pub handled: bool,
 }
+/// Request to react to a Stripe `charge.refunded` webhook event for a
+/// charge created by the billing platform. The included `stripe_charge`
+/// carries the per-refund records on its `refunds` field; the handler
+/// records each refund idempotently by Stripe refund id and syncs the
+/// aggregate refund state on the stored platform charge.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct HandleChargeRefundedRequest {
+    #[prost(message, optional, tag = "1")]
+    pub stripe_charge: ::core::option::Option<
+        super::super::super::common::v1::StripeCharge,
+    >,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HandleChargeRefundedResponse {
+    /// True when the charge was created by the billing platform and the
+    /// service has finished its handling.
+    #[prost(bool, tag = "1")]
+    pub handled: bool,
+}
 /// Request to react to a Stripe `charge.succeeded` webhook event for a
 /// charge created by the billing platform.
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HandleChargeSucceededRequest {
     #[prost(message, optional, tag = "1")]
     pub stripe_charge: ::core::option::Option<
