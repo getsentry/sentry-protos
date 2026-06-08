@@ -1,3 +1,9 @@
+## 0.26.0
+
+### New Features ✨
+
+- Add checkout service by @noahsmartin in [#297](https://github.com/getsentry/sentry-protos/pull/297)
+
 ## 0.25.1
 
 ### Internal Changes 🔧
