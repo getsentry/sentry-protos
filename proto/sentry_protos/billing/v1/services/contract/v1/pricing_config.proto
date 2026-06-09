@@ -4,6 +4,7 @@ package sentry_protos.billing.v1.services.contract.v1;
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/flexible_price.proto";
 import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
 import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
 import "sentry_protos/billing/v1/sku.proto";
@@ -57,11 +58,12 @@ message PAYGBudget {
 }
 
 message Reservation {
-  uint64 reserved_price_cents = 1;
+  uint64 reserved_price_cents = 1 [deprecated = true];
   oneof reserved_units {
     bool is_unlimited = 2;
     uint64 num_reserved_units = 3;
   }
+  sentry_protos.billing.v1.common.v1.FlexiblePrice flexible_reserved_price_cents = 4;
 }
 
 message LineItemUids {

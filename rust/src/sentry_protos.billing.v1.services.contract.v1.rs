@@ -287,8 +287,13 @@ pub struct PaygBudget {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Reservation {
+    #[deprecated]
     #[prost(uint64, tag = "1")]
     pub reserved_price_cents: u64,
+    #[prost(message, optional, tag = "4")]
+    pub flexible_reserved_price_cents: ::core::option::Option<
+        super::super::super::common::v1::FlexiblePrice,
+    >,
     #[prost(oneof = "reservation::ReservedUnits", tags = "2, 3")]
     pub reserved_units: ::core::option::Option<reservation::ReservedUnits>,
 }
