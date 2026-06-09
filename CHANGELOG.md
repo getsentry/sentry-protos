@@ -1,3 +1,9 @@
+## 0.26.1
+
+### Internal Changes 🔧
+
+- (billing) Add endpoint to create grants by @brendanhsentry in [#299](https://github.com/getsentry/sentry-protos/pull/299)
+
 ## 0.26.0
 
 ### New Features ✨
