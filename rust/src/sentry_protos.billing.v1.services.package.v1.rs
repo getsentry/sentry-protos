@@ -52,7 +52,7 @@ pub struct SharedLineItemPool {
     /// costs $1.00 per GB and we wanted to give metrics and logs a shared 5GB pool, the reserved_pool_cents
     /// would be 500 ($5)
     ///
-    /// DEPRACATED: Use reserved_tier
+    /// DEPRECATED: Use reserved_tier
     #[deprecated]
     #[prost(uint64, tag = "1")]
     pub reserved_pool_cents: u64,
@@ -70,11 +70,11 @@ pub struct SharedLineItemPool {
     >,
     /// Cost of the shared line item pool, in cents(a customer can pay $X and get $Y of credit, where X!=Y).
     ///
-    /// DEPRACATED: Use reserved_tier
+    /// DEPRECATED: Use reserved_tier
     #[deprecated]
     #[prost(uint64, tag = "6")]
     pub base_price_cents: u64,
-    /// DEPRACATED: Use reserved_tier
+    /// DEPRECATED: Use reserved_tier
     #[deprecated]
     #[prost(message, optional, tag = "7")]
     pub flexible_base_price_cents: ::core::option::Option<
