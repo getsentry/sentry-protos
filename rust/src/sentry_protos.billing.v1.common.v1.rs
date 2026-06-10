@@ -246,6 +246,8 @@ pub struct StripePaymentData {
     pub default_payment_method_id: ::core::option::Option<
         ::prost::alloc::string::String,
     >,
+    #[prost(bool, optional, tag = "3")]
+    pub has_card_on_file: ::core::option::Option<bool>,
 }
 /// Payment provider configuration with support for multiple providers.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]

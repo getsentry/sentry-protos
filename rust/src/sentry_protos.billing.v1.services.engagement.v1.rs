@@ -148,6 +148,32 @@ impl GrantStatus {
         }
     }
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateGrantRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Must be included when GrantType is UNITS
+    #[prost(string, optional, tag = "2")]
+    pub line_item_uid: ::core::option::Option<::prost::alloc::string::String>,
+    /// Active period, inclusive on both ends.
+    #[prost(message, optional, tag = "3")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "4")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(enumeration = "GrantType", tag = "5")]
+    pub r#type: i32,
+    #[prost(enumeration = "GrantSource", tag = "6")]
+    pub source: i32,
+    /// Interpretation depends on type. CENTS: amount in cents. UNITS: quantity in
+    /// the line item's billable metric base units (before conversion to hours, GB, etc.).
+    #[prost(int64, tag = "7")]
+    pub amount: i64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateGrantResponse {
+    #[prost(bool, tag = "1")]
+    pub created: bool,
+}
 /// A grant with counter-grant chains collapsed into a single effective amount.
 /// Returned in drain priority order (end_date ASC, effective_amount ASC, grant_id ASC).
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
