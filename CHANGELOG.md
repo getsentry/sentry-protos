@@ -1,3 +1,9 @@
+## 0.27.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Use TieredPricingRate in SharedLineItemPool by @brendanhsentry in [#302](https://github.com/getsentry/sentry-protos/pull/302)
+
 ## 0.27.0
 
 ### New Features ✨
