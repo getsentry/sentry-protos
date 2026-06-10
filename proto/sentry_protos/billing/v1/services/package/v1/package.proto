@@ -34,7 +34,7 @@ message SharedLineItemPool {
   // how much money this shared pool has. For example, if logs costs $1.00 per GB and metrics
   // costs $1.00 per GB and we wanted to give metrics and logs a shared 5GB pool, the reserved_pool_cents
   // would be 500 ($5)
-  uint64 reserved_pool_cents = 1 [deprecated = true]; // DEPRACATED: Use reserved_tier
+  uint64 reserved_pool_cents = 1 [deprecated = true]; // DEPRECATED: Use reserved_tier
   repeated sentry_protos.billing.v1.common.v1.LineItemDetails line_items = 3;
 
   // Whether this LineItem is included in the base package or not (ie Seer)
@@ -44,9 +44,9 @@ message SharedLineItemPool {
   sentry_protos.billing.v1.common.v1.LineItemDetails shared_line_item = 5;
 
   // Cost of the shared line item pool, in cents(a customer can pay $X and get $Y of credit, where X!=Y).
-  uint64 base_price_cents = 6 [deprecated = true]; // DEPRACATED: Use reserved_tier
+  uint64 base_price_cents = 6 [deprecated = true]; // DEPRECATED: Use reserved_tier
 
-  sentry_protos.billing.v1.common.v1.FlexiblePrice flexible_base_price_cents = 7 [deprecated = true]; // DEPRACATED: Use reserved_tier
+  sentry_protos.billing.v1.common.v1.FlexiblePrice flexible_base_price_cents = 7 [deprecated = true]; // DEPRECATED: Use reserved_tier
 
   // Similar to LineItemConfig.reserved_rate, this field will hold the list of available reserved tiers for this line item
   // as well as the prices for each respective tier.
