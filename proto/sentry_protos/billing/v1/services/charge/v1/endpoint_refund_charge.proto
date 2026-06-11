@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
+
+// Issues a refund against a platform charge by calling Stripe and
+// recording a ``PlatformRefund`` row. Caller supplies the partial-refund
+// amount; the service enforces the over-refund guard (sum of recorded
+// refunds + new amount <= charge amount) under optimistic locking to
+// prevent concurrent double refunds.
+message RefundChargeRequest {
+  // Stripe id of the charge to refund (e.g. "ch_xxx"). Identifies the
+  // ``PlatformCharge`` to refund against.
+  string stripe_charge_id = 1;
+  // Refund amount in cents. Must be > 0 and <= remaining refundable amount
+  // on the charge.
+  uint64 amount = 2;
+  // Optional reason recorded with the refund and forwarded to Stripe.
+  optional string reason = 3;
+}
+
+message RefundChargeResponse {
+  // The refund record created by this call.
+  PlatformRefund refund = 1;
+  // The charge with refund aggregates synced.
+  PlatformCharge charge = 2;
+}
