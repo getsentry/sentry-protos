@@ -14,6 +14,9 @@ message ClearPendingChangeRequest {
   // leaves the pending change with no remaining changes, it is removed
   // entirely.
   bool on_demand_only = 2;
+
+  // If set, only clear a pending change staged for this contract.
+  optional uint64 target_contract_id = 3;
 }
 
 message ClearPendingChangeResponse {

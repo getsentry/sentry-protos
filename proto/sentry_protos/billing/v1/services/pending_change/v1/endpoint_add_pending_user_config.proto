@@ -13,6 +13,9 @@ message AddPendingUserConfigRequest {
   // The pending user config to add (PAYG budget and/or reservation overrides
   // for a set of line items).
   sentry_protos.billing.v1.common.v1.PendingUserConfig user_config = 2;
+
+  // The contract this change is staged to apply to.
+  uint64 target_contract_id = 3;
 }
 
 message AddPendingUserConfigResponse {}

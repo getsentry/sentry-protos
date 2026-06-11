@@ -7,10 +7,17 @@ import "sentry_protos/billing/v1/common/v1/pending_change.proto";
 // Fetches the active pending change for an organization, if any.
 message GetPendingChangeRequest {
   uint64 organization_id = 1;
+
+  // If set, only return a pending change staged for this contract.
+  optional uint64 target_contract_id = 2;
 }
 
 message GetPendingChangeResponse {
   // The active pending change for the org. Unset if no change is currently
   // staged.
   optional sentry_protos.billing.v1.common.v1.PendingChange pending_change = 1;
+
+  // The contract this pending change is staged for. Set when pending_change is
+  // set.
+  optional uint64 target_contract_id = 2;
 }
