@@ -16,6 +16,10 @@ message CreateContractRequest {
   // supported_month_intervals. If unset, defaults to the package's first
   // supported interval.
   uint32 month_interval = 6;
+  // The customer's tax registration number at invoicing time, persisted on the
+  // created invoice for receipts and reverse-charge determination. Unset if none
+  // is on file.
+  optional string tax_number = 7;
 }
 
 message CreateContractResponse {
