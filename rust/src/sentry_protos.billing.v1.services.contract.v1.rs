@@ -401,6 +401,10 @@ pub struct Invoice {
     pub needs_charged: bool,
     #[prost(message, optional, tag = "9")]
     pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+    /// The customer's tax registration number as persisted at invoicing time.
+    /// Unset if none was on file.
+    #[prost(string, optional, tag = "10")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
@@ -499,6 +503,11 @@ pub struct CreateContractRequest {
     /// supported interval.
     #[prost(uint32, tag = "6")]
     pub month_interval: u32,
+    /// The customer's tax registration number at invoicing time, persisted on the
+    /// created invoice for receipts and reverse-charge determination. Unset if none
+    /// is on file.
+    #[prost(string, optional, tag = "7")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateContractResponse {
@@ -691,6 +700,11 @@ pub struct RolloverContractRequest {
     pub pending_change: ::core::option::Option<
         super::super::super::common::v1::PendingChange,
     >,
+    /// The customer's tax registration number at invoicing time, persisted on the
+    /// created invoice for receipts and reverse-charge determination. Unset if none
+    /// is on file.
+    #[prost(string, optional, tag = "6")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {

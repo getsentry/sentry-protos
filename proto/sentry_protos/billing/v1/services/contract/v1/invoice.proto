@@ -29,4 +29,7 @@ message Invoice {
   string guid = 7;
   bool needs_charged = 8;
   sentry_protos.billing.v1.common.v1.Address address = 9;
+  // The customer's tax registration number as persisted at invoicing time.
+  // Unset if none was on file.
+  optional string tax_number = 10;
 }
