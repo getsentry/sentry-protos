@@ -12,6 +12,9 @@ pub struct AddPendingUserConfigRequest {
     pub user_config: ::core::option::Option<
         super::super::super::common::v1::PendingUserConfig,
     >,
+    /// The contract this change is staged to apply to.
+    #[prost(uint64, tag = "3")]
+    pub target_contract_id: u64,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct AddPendingUserConfigResponse {}
@@ -29,6 +32,9 @@ pub struct ClearPendingChangeRequest {
     /// entirely.
     #[prost(bool, tag = "2")]
     pub on_demand_only: bool,
+    /// If set, only clear a pending change staged for this contract.
+    #[prost(uint64, optional, tag = "3")]
+    pub target_contract_id: ::core::option::Option<u64>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ClearPendingChangeResponse {
@@ -42,6 +48,9 @@ pub struct ClearPendingChangeResponse {
 pub struct GetPendingChangeRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
+    /// If set, only return a pending change staged for this contract.
+    #[prost(uint64, optional, tag = "2")]
+    pub target_contract_id: ::core::option::Option<u64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetPendingChangeResponse {
@@ -51,6 +60,10 @@ pub struct GetPendingChangeResponse {
     pub pending_change: ::core::option::Option<
         super::super::super::common::v1::PendingChange,
     >,
+    /// The contract this pending change is staged for. Set when pending_change is
+    /// set.
+    #[prost(uint64, optional, tag = "2")]
+    pub target_contract_id: ::core::option::Option<u64>,
 }
 /// Sets the pending month_interval on the org's pending change. Creates a
 /// pending change if none exists, or updates the month_interval on the
@@ -64,6 +77,9 @@ pub struct SetPendingMonthIntervalRequest {
     /// rollover.
     #[prost(uint32, tag = "2")]
     pub month_interval: u32,
+    /// The contract this change is staged to apply to.
+    #[prost(uint64, tag = "3")]
+    pub target_contract_id: u64,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingMonthIntervalResponse {}
@@ -77,6 +93,9 @@ pub struct SetPendingPackageRequest {
     /// The package the subscription will switch to at the next rollover.
     #[prost(string, tag = "2")]
     pub package_id: ::prost::alloc::string::String,
+    /// The contract this change is staged to apply to.
+    #[prost(uint64, tag = "3")]
+    pub target_contract_id: u64,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingPackageResponse {}
