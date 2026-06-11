@@ -18,9 +18,8 @@ message RecordChargeRefundsRequest {
 
 message RecordChargeRefundsResponse {
   // Unset when no platform charge exists for ``stripe_charge.id``. Callers
-  // use this to distinguish platform charges from legacy charges.
+  // use this to distinguish platform charges from legacy charges. When set,
+  // ``charge.refunds`` carries the platform refund rows that were recorded
+  // or already existed, ordered by ``date_added_st`` ascending.
   optional PlatformCharge charge = 1;
-  // The platform refund rows that were recorded or already existed,
-  // ordered by ``date_added_st`` ascending.
-  repeated PlatformRefund refunds = 2;
 }
