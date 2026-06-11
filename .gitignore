@@ -151,3 +151,6 @@ data/
 # Generated documentation
 /docs/build/*
 /docs/descriptor.pb
+
+# Local cache for buf CLI
+/.buf-cache/
