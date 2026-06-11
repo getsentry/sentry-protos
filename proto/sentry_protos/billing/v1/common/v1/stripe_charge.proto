@@ -14,6 +14,20 @@ message PaymentMethodDetails {
   }
 }
 
+// A snapshot of a single Stripe refund attached to a charge. Conveys
+// per-refund metadata so handlers can record refunds individually and
+// dedupe by ``id``; the aggregate ``amount_refunded`` on ``StripeCharge``
+// alone is not enough for idempotent ingestion.
+message StripeRefund {
+  // Stripe id of the refund (e.g. "re_xxx").
+  string id = 1;
+  // Refund amount in the charge's smallest currency unit (cents for USD).
+  uint64 amount = 2;
+  // Stripe-supplied reason (e.g. "requested_by_customer", "duplicate",
+  // "fraudulent"). Unset when Stripe did not provide one.
+  optional string reason = 3;
+}
+
 // A snapshot of a Stripe charge object. Used as the payload when reacting
 // to Stripe webhook events.
 message StripeCharge {
@@ -26,4 +40,8 @@ message StripeCharge {
   int64 created_st = 6;
   optional string failure_code = 7;
   PaymentMethodDetails payment_method_details = 8;
+  // Per-refund records attached to this charge. Empty when the charge has
+  // no refunds. The list reflects the state of refunds at the time the
+  // webhook was emitted.
+  repeated StripeRefund refunds = 9;
 }
