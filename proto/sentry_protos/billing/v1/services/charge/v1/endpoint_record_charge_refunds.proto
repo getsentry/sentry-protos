@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
+import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
+
+// Records platform refunds for a Stripe charge from a webhook payload.
+// Mirrors the contents of ``stripe_charge.refunds`` as ``PlatformRefund``
+// rows idempotently keyed by Stripe refund id, and syncs the aggregate
+// ``amount_refunded`` / ``refunded`` state on the stored ``PlatformCharge``.
+// Called by the presentation layer that owns the ``charge.refunded``
+// webhook handler; the charge service does not call Stripe in this path
+// (Stripe initiated the refund).
+message RecordChargeRefundsRequest {
+  sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 1;
+}
+
+message RecordChargeRefundsResponse {
+  // Unset when no platform charge exists for ``stripe_charge.id``. Callers
+  // use this to distinguish platform charges from legacy charges.
+  optional PlatformCharge charge = 1;
+  // The platform refund rows that were recorded or already existed,
+  // ordered by ``date_added_st`` ascending.
+  repeated PlatformRefund refunds = 2;
+}
