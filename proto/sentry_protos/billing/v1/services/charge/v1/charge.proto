@@ -32,7 +32,7 @@ message PlatformRefund {
   string stripe_id = 1;
   uint64 organization_id = 2;
   // Refund amount in cents.
-  uint64 amount = 3;
+  uint64 amount_cents = 3;
   // Stripe-supplied refund reason. Unset when Stripe did not provide one.
   optional string reason = 4;
   // Unix epoch seconds when the refund was recorded by the platform.
