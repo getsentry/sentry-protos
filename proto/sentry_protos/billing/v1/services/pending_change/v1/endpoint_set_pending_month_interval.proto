@@ -12,6 +12,9 @@ message SetPendingMonthIntervalRequest {
   // The contract month_interval the subscription will switch to at the next
   // rollover.
   uint32 month_interval = 2;
+
+  // The contract this change is staged to apply to.
+  uint64 target_contract_id = 3;
 }
 
 message SetPendingMonthIntervalResponse {}

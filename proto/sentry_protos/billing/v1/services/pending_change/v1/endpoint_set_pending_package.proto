@@ -10,6 +10,9 @@ message SetPendingPackageRequest {
 
   // The package the subscription will switch to at the next rollover.
   string package_id = 2;
+
+  // The contract this change is staged to apply to.
+  uint64 target_contract_id = 3;
 }
 
 message SetPendingPackageResponse {}
