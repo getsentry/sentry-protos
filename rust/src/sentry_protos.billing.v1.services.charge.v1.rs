@@ -25,6 +25,30 @@ pub struct PlatformCharge {
     #[prost(string, optional, tag = "9")]
     pub card_last_4: ::core::option::Option<::prost::alloc::string::String>,
 }
+/// Canonical projection of a stored platform refund. One row per recorded
+/// refund against a `PlatformCharge`; the aggregate `amount_refunded` on
+/// `PlatformCharge` is a cache of the sum of these.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PlatformRefund {
+    /// Stripe id of the refund (e.g. "re_xxx").
+    #[prost(string, tag = "1")]
+    pub stripe_id: ::prost::alloc::string::String,
+    /// Stripe id of the charge this refund is against (e.g. "ch_xxx"). Joins
+    /// back to `PlatformCharge.stripe_id`.
+    #[prost(string, tag = "2")]
+    pub charge_stripe_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub organization_id: u64,
+    /// Refund amount in cents.
+    #[prost(uint64, tag = "4")]
+    pub amount: u64,
+    /// Stripe-supplied refund reason. Unset when Stripe did not provide one.
+    #[prost(string, optional, tag = "5")]
+    pub reason: ::core::option::Option<::prost::alloc::string::String>,
+    /// Unix epoch seconds when the refund was recorded by the platform.
+    #[prost(int64, tag = "6")]
+    pub date_added_st: i64,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CaptureChargeRequest {
     #[prost(enumeration = "ChargeMethod", tag = "1")]
@@ -126,11 +150,36 @@ pub struct ListChargesForInvoiceResponse {
     #[prost(message, repeated, tag = "1")]
     pub charges: ::prost::alloc::vec::Vec<Charge>,
 }
+/// Records platform refunds for a Stripe charge from a webhook payload.
+/// Mirrors the contents of `stripe_charge.refunds` as `PlatformRefund`
+/// rows idempotently keyed by Stripe refund id, and syncs the aggregate
+/// `amount_refunded` / `refunded` state on the stored `PlatformCharge`.
+/// Called by the presentation layer that owns the `charge.refunded`
+/// webhook handler; the charge service does not call Stripe in this path
+/// (Stripe initiated the refund).
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RecordChargeRefundsRequest {
+    #[prost(message, optional, tag = "1")]
+    pub stripe_charge: ::core::option::Option<
+        super::super::super::common::v1::StripeCharge,
+    >,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RecordChargeRefundsResponse {
+    /// Unset when no platform charge exists for `stripe_charge.id`. Callers
+    /// use this to distinguish platform charges from legacy charges.
+    #[prost(message, optional, tag = "1")]
+    pub charge: ::core::option::Option<PlatformCharge>,
+    /// The platform refund rows that were recorded or already existed,
+    /// ordered by `date_added_st` ascending.
+    #[prost(message, repeated, tag = "2")]
+    pub refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
+}
 /// Synchronizes a stored platform charge with the latest snapshot from
 /// Stripe. The charge is identified by `stripe_charge.id`. Fields like
 /// `paid`, `failure_code` and refund state are copied onto the stored
 /// record so the database reflects the current payment-provider state.
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UpdateChargeRequest {
     #[prost(message, optional, tag = "1")]
     pub stripe_charge: ::core::option::Option<
