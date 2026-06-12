@@ -1,3 +1,13 @@
+## 0.28.0
+
+### New Features ✨
+
+- (billing-platform) Add refund types + record_charge_refunds/handle_charge_refunded endpoints (REVENG-157) by @armcknight in [#303](https://github.com/getsentry/sentry-protos/pull/303)
+
+### Other
+
+- Add admin_title field to PackageConfig by @noahsmartin in [#308](https://github.com/getsentry/sentry-protos/pull/308)
+
 ## 0.27.1
 
 ### Internal Changes 🔧
