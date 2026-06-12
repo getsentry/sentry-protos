@@ -113,6 +113,9 @@ pub struct PackageConfig {
     /// \[1\] = monthly only, \[1, 12\] = monthly or annual, \[12\] = annual only.
     #[prost(uint32, repeated, tag = "7")]
     pub supported_month_intervals: ::prost::alloc::vec::Vec<u32>,
+    /// Title shown in admin interfaces, not customer-facing.
+    #[prost(string, tag = "9")]
+    pub admin_title: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
