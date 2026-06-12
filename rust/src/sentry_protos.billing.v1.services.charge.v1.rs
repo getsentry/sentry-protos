@@ -60,6 +60,12 @@ pub struct PlatformRefund {
     /// Unix epoch seconds when the refund was recorded by the platform.
     #[prost(int64, tag = "5")]
     pub date_added_st: i64,
+    /// Stripe id of the `PlatformCharge` this refund applies to. Mirrors
+    /// Stripe's own `refund.charge` wire field. Lets callers disambiguate
+    /// refunds in flat responses like `ListRefundsByInvoiceResponse` when
+    /// an invoice has more than one charge (e.g. retries, partial capture).
+    #[prost(string, tag = "6")]
+    pub stripe_charge_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CaptureChargeRequest {
