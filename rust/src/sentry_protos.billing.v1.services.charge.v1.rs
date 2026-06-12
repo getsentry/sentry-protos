@@ -18,22 +18,17 @@ pub struct PlatformCharge {
     pub amount: u64,
     #[prost(string, optional, tag = "6")]
     pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
-    #[prost(bool, tag = "7")]
-    pub refunded: bool,
-    #[prost(uint64, tag = "8")]
-    pub amount_refunded: u64,
     #[prost(string, optional, tag = "9")]
     pub card_last_4: ::core::option::Option<::prost::alloc::string::String>,
     /// Recorded refunds against this charge, ordered by `date_added_st`
-    /// ascending. Populated by endpoints that have already paid the cost of
-    /// loading the refund rows (e.g. `record_charge_refunds`); left empty
-    /// by endpoints that only need the aggregate `amount_refunded` cache.
+    /// ascending. Source of truth for refund state on a charge -- consumers
+    /// sum `refunds\[*\].amount_cents` if they need the aggregate, and
+    /// `len(refunds) > 0` (or sum == amount) signals "refunded."
     #[prost(message, repeated, tag = "10")]
     pub refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
 }
 /// Canonical projection of a stored platform refund. One row per recorded
-/// refund against a `PlatformCharge`; the aggregate `amount_refunded` on
-/// `PlatformCharge` is a cache of the sum of these.
+/// refund against a `PlatformCharge`.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PlatformRefund {
     /// Stripe id of the refund (e.g. "re_xxx").
