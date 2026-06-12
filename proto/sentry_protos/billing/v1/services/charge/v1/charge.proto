@@ -45,4 +45,9 @@ message PlatformRefund {
   optional string reason = 4;
   // Unix epoch seconds when the refund was recorded by the platform.
   int64 date_added_st = 5;
+  // Stripe id of the ``PlatformCharge`` this refund applies to. Mirrors
+  // Stripe's own ``refund.charge`` wire field. Lets callers disambiguate
+  // refunds in flat responses like ``ListRefundsByInvoiceResponse`` when
+  // an invoice has more than one charge (e.g. retries, partial capture).
+  string stripe_charge_id = 6;
 }
