@@ -195,13 +195,11 @@ pub mod trial_config {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Trial {
-    #[prost(string, optional, tag = "1")]
-    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
-    #[prost(message, repeated, tag = "2")]
+    #[prost(message, repeated, tag = "1")]
     pub config: ::prost::alloc::vec::Vec<TrialConfig>,
-    #[prost(message, optional, tag = "3")]
+    #[prost(message, optional, tag = "2")]
     pub start_date: ::core::option::Option<super::super::super::Date>,
-    #[prost(message, optional, tag = "4")]
+    #[prost(message, optional, tag = "3")]
     pub end_date: ::core::option::Option<super::super::super::Date>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
