@@ -1,3 +1,21 @@
+## 0.27.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Use TieredPricingRate in SharedLineItemPool by @brendanhsentry in [#302](https://github.com/getsentry/sentry-protos/pull/302)
+
+## 0.27.0
+
+### New Features ✨
+
+- (billing) Add has_card_on_file to StripePaymentData by @skonves in [#301](https://github.com/getsentry/sentry-protos/pull/301)
+
+## 0.26.1
+
+### Internal Changes 🔧
+
+- (billing) Add endpoint to create grants by @brendanhsentry in [#299](https://github.com/getsentry/sentry-protos/pull/299)
+
 ## 0.26.0
 
 ### New Features ✨

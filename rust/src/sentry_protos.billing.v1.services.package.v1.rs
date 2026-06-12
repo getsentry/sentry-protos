@@ -51,6 +51,9 @@ pub struct SharedLineItemPool {
     /// how much money this shared pool has. For example, if logs costs $1.00 per GB and metrics
     /// costs $1.00 per GB and we wanted to give metrics and logs a shared 5GB pool, the reserved_pool_cents
     /// would be 500 ($5)
+    ///
+    /// DEPRECATED: Use reserved_tier
+    #[deprecated]
     #[prost(uint64, tag = "1")]
     pub reserved_pool_cents: u64,
     #[prost(message, repeated, tag = "3")]
@@ -66,12 +69,22 @@ pub struct SharedLineItemPool {
         super::super::super::common::v1::LineItemDetails,
     >,
     /// Cost of the shared line item pool, in cents(a customer can pay $X and get $Y of credit, where X!=Y).
+    ///
+    /// DEPRECATED: Use reserved_tier
     #[deprecated]
     #[prost(uint64, tag = "6")]
     pub base_price_cents: u64,
+    /// DEPRECATED: Use reserved_tier
+    #[deprecated]
     #[prost(message, optional, tag = "7")]
     pub flexible_base_price_cents: ::core::option::Option<
         super::super::super::common::v1::FlexiblePrice,
+    >,
+    /// Similar to LineItemConfig.reserved_rate, this field will hold the list of available reserved tiers for this line item
+    /// as well as the prices for each respective tier.
+    #[prost(message, optional, tag = "8")]
+    pub reserved_tier: ::core::option::Option<
+        super::super::super::common::v1::TieredPricingRate,
     >,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -100,6 +113,9 @@ pub struct PackageConfig {
     /// \[1\] = monthly only, \[1, 12\] = monthly or annual, \[12\] = annual only.
     #[prost(uint32, repeated, tag = "7")]
     pub supported_month_intervals: ::prost::alloc::vec::Vec<u32>,
+    /// Title shown in admin interfaces, not customer-facing.
+    #[prost(string, tag = "9")]
+    pub admin_title: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {

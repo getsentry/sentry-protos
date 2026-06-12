@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/engagement/v1/grant.proto";
+import "sentry_protos/billing/v1/services/engagement/v1/grant_source.proto";
+
+message CreateGrantRequest {
+  uint64 organization_id = 1;
+
+  // Must be included when GrantType is UNITS
+  optional string line_item_uid = 2;
+
+  // Active period, inclusive on both ends.
+  sentry_protos.billing.v1.Date start_date = 3;
+  sentry_protos.billing.v1.Date end_date = 4;
+
+  GrantType type = 5;
+  GrantSource source = 6;
+
+  // Interpretation depends on type. CENTS: amount in cents. UNITS: quantity in
+  // the line item's billable metric base units (before conversion to hours, GB, etc.).
+  int64 amount = 7;
+}
+
+message CreateGrantResponse {
+  bool created = 1;
+}
