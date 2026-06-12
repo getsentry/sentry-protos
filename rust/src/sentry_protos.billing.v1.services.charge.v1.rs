@@ -162,6 +162,21 @@ pub struct ListChargesForInvoiceResponse {
     #[prost(message, repeated, tag = "1")]
     pub charges: ::prost::alloc::vec::Vec<Charge>,
 }
+/// Lists every recorded refund associated with the charges for a single
+/// platform invoice. Callers in the presentation layer use this to render
+/// invoice-level refund state without crossing the charge service boundary.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListRefundsByInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListRefundsByInvoiceResponse {
+    /// Refunds ordered by `date_added_st` ascending. Empty when the invoice
+    /// has no refunds.
+    #[prost(message, repeated, tag = "1")]
+    pub refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
+}
 /// Records platform refunds for a Stripe charge from a webhook payload.
 /// Mirrors the contents of `stripe_charge.refunds` as `PlatformRefund`
 /// rows idempotently keyed by Stripe refund id, and syncs the aggregate
