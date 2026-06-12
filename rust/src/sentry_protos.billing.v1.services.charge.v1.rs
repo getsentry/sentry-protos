@@ -18,6 +18,21 @@ pub struct PlatformCharge {
     pub amount: u64,
     #[prost(string, optional, tag = "6")]
     pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// DEPRECATED: Source of truth for refund state is `refunds` below.
+    /// Consumers should check `len(refunds) > 0` (or
+    /// `sum(refunds\[*\].amount_cents) == amount`) instead. Left in the proto
+    /// because `sentry-protos` policy disallows field deletion. Not
+    /// populated by current producers.
+    #[deprecated]
+    #[prost(bool, tag = "7")]
+    pub refunded: bool,
+    /// DEPRECATED: Source of truth for refund amount is the sum of
+    /// `refunds\[*\].amount_cents` below. Left in the proto because
+    /// `sentry-protos` policy disallows field deletion. Not populated by
+    /// current producers.
+    #[deprecated]
+    #[prost(uint64, tag = "8")]
+    pub amount_refunded: u64,
     #[prost(string, optional, tag = "9")]
     pub card_last_4: ::core::option::Option<::prost::alloc::string::String>,
     /// Recorded refunds against this charge, ordered by `date_added_st`
@@ -146,6 +161,21 @@ pub struct ListChargesForInvoiceRequest {
 pub struct ListChargesForInvoiceResponse {
     #[prost(message, repeated, tag = "1")]
     pub charges: ::prost::alloc::vec::Vec<Charge>,
+}
+/// Lists every recorded refund associated with the charges for a single
+/// platform invoice. Callers in the presentation layer use this to render
+/// invoice-level refund state without crossing the charge service boundary.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListRefundsByInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListRefundsByInvoiceResponse {
+    /// Refunds ordered by `date_added_st` ascending. Empty when the invoice
+    /// has no refunds.
+    #[prost(message, repeated, tag = "1")]
+    pub refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
 }
 /// Records platform refunds for a Stripe charge from a webhook payload.
 /// Mirrors the contents of `stripe_charge.refunds` as `PlatformRefund`
