@@ -217,6 +217,97 @@ pub struct GetActiveTrialsResponse {
     #[prost(message, repeated, tag = "1")]
     pub trials: ::prost::alloc::vec::Vec<Trial>,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UnitGrant {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    #[prost(oneof = "unit_grant::Amount", tags = "2, 3")]
+    pub amount: ::core::option::Option<unit_grant::Amount>,
+}
+/// Nested message and enum types in `UnitGrant`.
+pub mod unit_grant {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Amount {
+        #[prost(bool, tag = "2")]
+        IsUnlimited(bool),
+        /// this should be expressed line item's billable metric prior to unit conversion (ie milliseconds, bytes, etc.)
+        #[prost(uint64, tag = "3")]
+        Units(u64),
+    }
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MonetaryGrant {
+    /// PERCENT amounts are percentage points: 10 = 10%
+    #[prost(uint64, tag = "1")]
+    pub amount: u64,
+    #[prost(enumeration = "MonetaryType", tag = "2")]
+    pub r#type: i32,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ActiveGrant {
+    /// Grants only apply to days between \[start_date, end_date\] (inclusive)
+    /// For units, this means Grants apply to usage that was accrued during the active period.
+    /// For monetary, Grants are applied to invoices created during the active period.
+    #[prost(message, optional, tag = "3")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "4")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(oneof = "active_grant::Kind", tags = "1, 2")]
+    pub kind: ::core::option::Option<active_grant::Kind>,
+}
+/// Nested message and enum types in `ActiveGrant`.
+pub mod active_grant {
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "1")]
+        Unit(super::UnitGrant),
+        #[prost(message, tag = "2")]
+        Monetary(super::MonetaryGrant),
+    }
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetActiveGrantsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(message, optional, tag = "3")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "4")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetActiveGrantsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub grants: ::prost::alloc::vec::Vec<ActiveGrant>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum MonetaryType {
+    Unspecified = 0,
+    Cents = 1,
+    Percent = 2,
+}
+impl MonetaryType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "MONETARY_TYPE_UNSPECIFIED",
+            Self::Cents => "MONETARY_TYPE_CENTS",
+            Self::Percent => "MONETARY_TYPE_PERCENT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "MONETARY_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "MONETARY_TYPE_CENTS" => Some(Self::Cents),
+            "MONETARY_TYPE_PERCENT" => Some(Self::Percent),
+            _ => None,
+        }
+    }
+}
 /// A grant with counter-grant chains collapsed into a single effective amount.
 /// Returned in drain priority order (end_date ASC, effective_amount ASC, grant_id ASC).
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
