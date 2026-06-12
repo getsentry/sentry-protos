@@ -18,6 +18,21 @@ pub struct PlatformCharge {
     pub amount: u64,
     #[prost(string, optional, tag = "6")]
     pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// DEPRECATED: Source of truth for refund state is `refunds` below.
+    /// Consumers should check `len(refunds) > 0` (or
+    /// `sum(refunds\[*\].amount_cents) == amount`) instead. Left in the proto
+    /// because `sentry-protos` policy disallows field deletion. Not
+    /// populated by current producers.
+    #[deprecated]
+    #[prost(bool, tag = "7")]
+    pub refunded: bool,
+    /// DEPRECATED: Source of truth for refund amount is the sum of
+    /// `refunds\[*\].amount_cents` below. Left in the proto because
+    /// `sentry-protos` policy disallows field deletion. Not populated by
+    /// current producers.
+    #[deprecated]
+    #[prost(uint64, tag = "8")]
+    pub amount_refunded: u64,
     #[prost(string, optional, tag = "9")]
     pub card_last_4: ::core::option::Option<::prost::alloc::string::String>,
     /// Recorded refunds against this charge, ordered by `date_added_st`
