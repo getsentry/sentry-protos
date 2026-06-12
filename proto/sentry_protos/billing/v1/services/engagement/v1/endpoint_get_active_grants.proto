@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+
+message UnitGrant {
+  string line_item_uid = 1;
+  oneof amount {
+    bool is_unlimited = 2;
+    // this should be expressed line item's billable metric prior to unit conversion (ie milliseconds, bytes, etc.)
+    uint64 units = 3;
+  }
+}
+
+enum MonetaryType {
+  MONETARY_TYPE_UNSPECIFIED = 0;
+  MONETARY_TYPE_CENTS = 1;
+  MONETARY_TYPE_PERCENT = 2;
+}
+
+message MonetaryGrant {
+  // PERCENT amounts are percentage points: 10 = 10%
+  uint64 amount = 1;
+  MonetaryType type = 2;
+}
+
+message ActiveGrant {
+  oneof kind {
+    UnitGrant unit = 1;
+    MonetaryGrant monetary = 2;
+  }
+
+  // Grants only apply to days between [start_date, end_date] (inclusive)
+  // For units, this means Grants apply to usage that was accrued during the active period.
+  // For monetary, Grants are applied to invoices created during the active period.
+  sentry_protos.billing.v1.Date start_date = 3;
+  sentry_protos.billing.v1.Date end_date = 4;
+}
+
+message GetActiveGrantsRequest {
+  uint64 organization_id = 1;
+  sentry_protos.billing.v1.Date start_date = 3;
+  sentry_protos.billing.v1.Date end_date = 4;
+}
+
+message GetActiveGrantsResponse {
+  repeated ActiveGrant grants = 1;
+}
