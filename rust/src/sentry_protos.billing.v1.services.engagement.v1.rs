@@ -174,6 +174,51 @@ pub struct CreateGrantResponse {
     #[prost(bool, tag = "1")]
     pub created: bool,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct TrialConfig {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    #[prost(oneof = "trial_config::Amount", tags = "2, 3")]
+    pub amount: ::core::option::Option<trial_config::Amount>,
+}
+/// Nested message and enum types in `TrialConfig`.
+pub mod trial_config {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Amount {
+        /// this should be expressed line item's billable metric prior to unit
+        /// conversion (ie milliseconds, bytes, etc.)
+        #[prost(uint64, tag = "2")]
+        Total(u64),
+        #[prost(bool, tag = "3")]
+        IsUnlimited(bool),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Trial {
+    #[prost(string, optional, tag = "1")]
+    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, repeated, tag = "2")]
+    pub config: ::prost::alloc::vec::Vec<TrialConfig>,
+    #[prost(message, optional, tag = "3")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "4")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetActiveTrialsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// returns all trials active between \[start_date, end_date\] inclusive
+    #[prost(message, optional, tag = "3")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "4")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetActiveTrialsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub trials: ::prost::alloc::vec::Vec<Trial>,
+}
 /// A grant with counter-grant chains collapsed into a single effective amount.
 /// Returned in drain priority order (end_date ASC, effective_amount ASC, grant_id ASC).
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
