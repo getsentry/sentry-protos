@@ -14,8 +14,17 @@ message PlatformCharge {
   bool paid = 4;
   uint64 amount = 5;
   optional string failure_code = 6;
-  reserved 7, 8;
-  reserved "refunded", "amount_refunded";
+  // DEPRECATED: Source of truth for refund state is ``refunds`` below.
+  // Consumers should check ``len(refunds) > 0`` (or
+  // ``sum(refunds[*].amount_cents) == amount``) instead. Left in the proto
+  // because ``sentry-protos`` policy disallows field deletion. Not
+  // populated by current producers.
+  bool refunded = 7 [deprecated = true];
+  // DEPRECATED: Source of truth for refund amount is the sum of
+  // ``refunds[*].amount_cents`` below. Left in the proto because
+  // ``sentry-protos`` policy disallows field deletion. Not populated by
+  // current producers.
+  uint64 amount_refunded = 8 [deprecated = true];
   optional string card_last_4 = 9;
   // Recorded refunds against this charge, ordered by ``date_added_st``
   // ascending. Source of truth for refund state on a charge -- consumers
