@@ -15,10 +15,9 @@ message TrialConfig {
 }
 
 message Trial {
-  optional string package_uid = 1;
-  repeated TrialConfig config = 2;
-  sentry_protos.billing.v1.Date start_date = 3;
-  sentry_protos.billing.v1.Date end_date = 4;
+  repeated TrialConfig config = 1;
+  sentry_protos.billing.v1.Date start_date = 2;
+  sentry_protos.billing.v1.Date end_date = 3;
 }
 
 message GetActiveTrialsRequest {
