@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+
+message TrialConfig {
+  string line_item_uid = 1;
+  oneof amount {
+    // this should be expressed line item's billable metric prior to unit
+    // conversion (ie milliseconds, bytes, etc.)
+    uint64 total = 2;
+    bool is_unlimited = 3;
+  }
+}
+
+message Trial {
+  repeated TrialConfig config = 1;
+  sentry_protos.billing.v1.Date start_date = 2;
+  sentry_protos.billing.v1.Date end_date = 3;
+}
+
+message GetActiveTrialsRequest {
+  uint64 organization_id = 1;
+
+  // returns all trials active between [start_date, end_date] inclusive
+  sentry_protos.billing.v1.Date start_date = 3;
+  sentry_protos.billing.v1.Date end_date = 4;
+}
+
+message GetActiveTrialsResponse {
+  repeated Trial trials = 1;
+}
