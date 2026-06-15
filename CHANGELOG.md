@@ -1,3 +1,9 @@
+## 0.29.0
+
+### New Features ✨
+
+- (billing-platform) Add ChargeService.list_refunds_by_invoice endpoint (REVENG-157) by @armcknight in [#305](https://github.com/getsentry/sentry-protos/pull/305)
+
 ## 0.28.0
 
 ### New Features ✨
