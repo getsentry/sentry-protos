@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
+message RetryChargeRequest {
+  Invoice invoice = 1;
+}
+
+message RetryChargeResponse {
+  Invoice invoice = 1;
+}
