@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+
+message StartTrialRequest {
+  uint64 organization_id = 1;
+
+  oneof scope {
+    // product trials
+    string line_item_uid = 2;
+    // subscription trials
+    string package_uid = 3;
+  }
+
+  // defaults to current date
+  optional sentry_protos.billing.v1.Date start_date = 4;
+
+  // defaults to start_date plus 14 days
+  optional sentry_protos.billing.v1.Date end_date = 5;
+}
+
+message StartTrialResponse {}
