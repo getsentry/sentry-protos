@@ -46,6 +46,25 @@ pub struct GetBillingDetailsResponse {
     #[prost(message, optional, tag = "1")]
     pub billing_details: ::core::option::Option<BillingDetails>,
 }
+/// Fetches the location facts cached from the organization's default card on
+/// file. Reads only the webhook-synced payment method row — never Stripe — so
+/// callers on the invoicing path don't block on a vendor round-trip.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetCardLocationRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetCardLocationResponse {
+    /// Postal code recorded for the default card on file. Unset when there is no
+    /// card, or the card has no postal code.
+    #[prost(string, optional, tag = "1")]
+    pub postal_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// Country where the card was issued (not the customer's billing country).
+    /// Unset when there is no card on file.
+    #[prost(string, optional, tag = "2")]
+    pub country_code: ::core::option::Option<::prost::alloc::string::String>,
+}
 /// Fetches lightweight identity fields for an organization. Used by callers
 /// that need slug/name/default_user_id without pulling the full Organization
 /// record across service boundaries.

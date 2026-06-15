@@ -14,7 +14,40 @@ message PlatformCharge {
   bool paid = 4;
   uint64 amount = 5;
   optional string failure_code = 6;
-  bool refunded = 7;
-  uint64 amount_refunded = 8;
+  // DEPRECATED: Source of truth for refund state is ``refunds`` below.
+  // Consumers should check ``len(refunds) > 0`` (or
+  // ``sum(refunds[*].amount_cents) == amount``) instead. Left in the proto
+  // because ``sentry-protos`` policy disallows field deletion. Not
+  // populated by current producers.
+  bool refunded = 7 [deprecated = true];
+  // DEPRECATED: Source of truth for refund amount is the sum of
+  // ``refunds[*].amount_cents`` below. Left in the proto because
+  // ``sentry-protos`` policy disallows field deletion. Not populated by
+  // current producers.
+  uint64 amount_refunded = 8 [deprecated = true];
   optional string card_last_4 = 9;
+  // Recorded refunds against this charge, ordered by ``date_added_st``
+  // ascending. Source of truth for refund state on a charge -- consumers
+  // sum ``refunds[*].amount_cents`` if they need the aggregate, and
+  // ``len(refunds) > 0`` (or sum == amount) signals "refunded."
+  repeated PlatformRefund refunds = 10;
+}
+
+// Canonical projection of a stored platform refund. One row per recorded
+// refund against a ``PlatformCharge``.
+message PlatformRefund {
+  // Stripe id of the refund (e.g. "re_xxx").
+  string stripe_id = 1;
+  uint64 organization_id = 2;
+  // Refund amount in cents.
+  uint64 amount_cents = 3;
+  // Stripe-supplied refund reason. Unset when Stripe did not provide one.
+  optional string reason = 4;
+  // Unix epoch seconds when the refund was recorded by the platform.
+  int64 date_added_st = 5;
+  // Stripe id of the ``PlatformCharge`` this refund applies to. Mirrors
+  // Stripe's own ``refund.charge`` wire field. Lets callers disambiguate
+  // refunds in flat responses like ``ListRefundsByInvoiceResponse`` when
+  // an invoice has more than one charge (e.g. retries, partial capture).
+  string stripe_charge_id = 6;
 }
