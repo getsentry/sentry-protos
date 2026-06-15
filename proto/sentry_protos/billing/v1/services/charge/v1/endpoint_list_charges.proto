@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.charge.v1;
 
+import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
+
 message Charge {
   uint64 amount_cents = 1;
   bool paid = 2;
@@ -16,4 +18,23 @@ message ListChargesForInvoiceRequest {
 
 message ListChargesForInvoiceResponse {
   repeated Charge charges = 1;
+}
+
+// Batched variant for paginated invoice surfaces. Returns
+// ``PlatformCharge`` (the canonical projection, with embedded refunds via
+// ``PlatformCharge.refunds``) for every charge tied to any of the
+// requested invoices, so callers get full per-invoice charge + refund
+// state in one round trip. Avoids the N+1 of fetching refunds or
+// charges per invoice when rendering paginated invoice lists.
+message ListChargesForInvoiceIdsRequest {
+  repeated uint64 invoice_ids = 1;
+}
+
+message ListChargesForInvoiceIdsResponse {
+  // Flat list of charges across all requested invoices, ordered by
+  // ``(invoice_id, date_added)`` ascending. Each ``PlatformCharge``
+  // carries its ``invoice_id`` and embedded ``refunds``; group by
+  // ``charge.invoice_id`` to reconstruct per-invoice state. Invoices
+  // with no charges simply don't appear.
+  repeated PlatformCharge charges = 1;
 }
