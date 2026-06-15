@@ -1,3 +1,9 @@
+## 0.30.0
+
+### New Features ✨
+
+- (billing-platform) Add BillingDetailsService.get_card_location endpoint by @dashed in [#311](https://github.com/getsentry/sentry-protos/pull/311)
+
 ## 0.29.0
 
 ### New Features ✨
