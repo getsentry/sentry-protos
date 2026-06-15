@@ -1,3 +1,9 @@
+## 0.30.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Active trials endpoint by @brendanhsentry in [#309](https://github.com/getsentry/sentry-protos/pull/309)
+
 ## 0.30.0
 
 ### New Features ✨
