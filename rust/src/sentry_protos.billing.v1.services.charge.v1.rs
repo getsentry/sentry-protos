@@ -60,6 +60,12 @@ pub struct PlatformRefund {
     /// Unix epoch seconds when the refund was recorded by the platform.
     #[prost(int64, tag = "5")]
     pub date_added_st: i64,
+    /// Stripe id of the `PlatformCharge` this refund applies to. Mirrors
+    /// Stripe's own `refund.charge` wire field. Lets callers disambiguate
+    /// refunds in flat responses like `ListRefundsByInvoiceResponse` when
+    /// an invoice has more than one charge (e.g. retries, partial capture).
+    #[prost(string, tag = "6")]
+    pub stripe_charge_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CaptureChargeRequest {
@@ -161,6 +167,21 @@ pub struct ListChargesForInvoiceRequest {
 pub struct ListChargesForInvoiceResponse {
     #[prost(message, repeated, tag = "1")]
     pub charges: ::prost::alloc::vec::Vec<Charge>,
+}
+/// Lists every recorded refund associated with the charges for a single
+/// platform invoice. Callers in the presentation layer use this to render
+/// invoice-level refund state without crossing the charge service boundary.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListRefundsByInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListRefundsByInvoiceResponse {
+    /// Refunds ordered by `date_added_st` ascending. Empty when the invoice
+    /// has no refunds.
+    #[prost(message, repeated, tag = "1")]
+    pub refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
 }
 /// Records platform refunds for a Stripe charge from a webhook payload.
 /// Mirrors the contents of `stripe_charge.refunds` as `PlatformRefund`
