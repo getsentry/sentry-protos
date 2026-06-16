@@ -168,6 +168,27 @@ pub struct ListChargesForInvoiceResponse {
     #[prost(message, repeated, tag = "1")]
     pub charges: ::prost::alloc::vec::Vec<Charge>,
 }
+/// Batched variant for paginated invoice surfaces. Returns
+/// `PlatformCharge` (the canonical projection, with embedded refunds via
+/// `PlatformCharge.refunds`) for every charge tied to any of the
+/// requested invoices, so callers get full per-invoice charge + refund
+/// state in one round trip. Avoids the N+1 of fetching refunds or
+/// charges per invoice when rendering paginated invoice lists.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListChargesForInvoiceIdsRequest {
+    #[prost(uint64, repeated, tag = "1")]
+    pub invoice_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListChargesForInvoiceIdsResponse {
+    /// Flat list of charges across all requested invoices, ordered by
+    /// `(invoice_id, date_added)` ascending. Each `PlatformCharge`
+    /// carries its `invoice_id` and embedded `refunds`; group by
+    /// `charge.invoice_id` to reconstruct per-invoice state. Invoices
+    /// with no charges simply don't appear.
+    #[prost(message, repeated, tag = "1")]
+    pub charges: ::prost::alloc::vec::Vec<PlatformCharge>,
+}
 /// Lists every recorded refund associated with the charges for a single
 /// platform invoice. Callers in the presentation layer use this to render
 /// invoice-level refund state without crossing the charge service boundary.
