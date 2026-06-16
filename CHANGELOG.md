@@ -1,3 +1,9 @@
+## 0.31.0
+
+### New Features ✨
+
+- (billing) Added retry charge endpoint protos by @krithikravi in [#313](https://github.com/getsentry/sentry-protos/pull/313)
+
 ## 0.30.1
 
 ### Internal Changes 🔧
