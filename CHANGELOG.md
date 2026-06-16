@@ -1,3 +1,9 @@
+## 0.31.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Active grants endpoint by @brendanhsentry in [#310](https://github.com/getsentry/sentry-protos/pull/310)
+
 ## 0.31.1
 
 ### Internal Changes 🔧
