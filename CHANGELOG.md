@@ -1,3 +1,12 @@
+## 0.31.1
+
+### Internal Changes 🔧
+
+#### Billing Platform
+
+- Active grants endpoint by @brendanhsentry in [#310](https://github.com/getsentry/sentry-protos/pull/310)
+- Add protos for start_trial endpoint by @brendanhsentry in [#314](https://github.com/getsentry/sentry-protos/pull/314)
+
 ## 0.31.0
 
 ### New Features ✨
