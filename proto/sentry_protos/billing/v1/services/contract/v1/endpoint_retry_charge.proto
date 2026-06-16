@@ -2,12 +2,10 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
-import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
-
 message RetryChargeRequest {
-  Invoice invoice = 1;
+  uint64 invoice_id = 1;
 }
 
 message RetryChargeResponse {
-  Invoice invoice = 1;
+  bool updated = 1;
 }
