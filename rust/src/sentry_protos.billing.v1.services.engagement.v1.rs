@@ -263,3 +263,30 @@ pub struct GetEffectiveGrantsResponse {
     #[prost(message, repeated, tag = "1")]
     pub effective_grants: ::prost::alloc::vec::Vec<EffectiveGrant>,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StartTrialRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// defaults to current date
+    #[prost(message, optional, tag = "4")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    /// defaults to start_date plus 14 days
+    #[prost(message, optional, tag = "5")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(oneof = "start_trial_request::Scope", tags = "2, 3")]
+    pub scope: ::core::option::Option<start_trial_request::Scope>,
+}
+/// Nested message and enum types in `StartTrialRequest`.
+pub mod start_trial_request {
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Scope {
+        /// product trials
+        #[prost(string, tag = "2")]
+        LineItemUid(::prost::alloc::string::String),
+        /// subscription trials
+        #[prost(string, tag = "3")]
+        PackageUid(::prost::alloc::string::String),
+    }
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StartTrialResponse {}
