@@ -3,7 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v1;
 
 message RetryChargeRequest {
-  uint64 invoice_id = 1;
+  string invoice_guid = 1;
 }
 
 message RetryChargeResponse {

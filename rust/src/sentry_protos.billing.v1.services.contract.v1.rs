@@ -673,10 +673,10 @@ pub struct RecordFailedChargeAttemptResponse {
     #[prost(message, optional, tag = "3")]
     pub next_payment_attempt: ::core::option::Option<::prost_types::Timestamp>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RetryChargeRequest {
-    #[prost(uint64, tag = "1")]
-    pub invoice_id: u64,
+    #[prost(string, tag = "1")]
+    pub invoice_guid: ::prost::alloc::string::String,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RetryChargeResponse {
