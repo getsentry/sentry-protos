@@ -673,6 +673,16 @@ pub struct RecordFailedChargeAttemptResponse {
     #[prost(message, optional, tag = "3")]
     pub next_payment_attempt: ::core::option::Option<::prost_types::Timestamp>,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetryChargeRequest {
+    #[prost(string, tag = "1")]
+    pub invoice_guid: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetryChargeResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
 /// Creates a new contract for a new billing period. Closes out the current contract by
 /// creating an invoice and setting the last usage date
 #[derive(Clone, PartialEq, ::prost::Message)]

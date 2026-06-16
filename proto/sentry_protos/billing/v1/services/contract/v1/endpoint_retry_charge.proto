@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+message RetryChargeRequest {
+  string invoice_guid = 1;
+}
+
+message RetryChargeResponse {
+  bool updated = 1;
+}
