@@ -711,3 +711,20 @@ pub struct RolloverContractResponse {
     #[prost(uint64, tag = "3")]
     pub amount_billed: u64,
 }
+/// Records the tax provider's document reference on an invoice as a pending tax
+/// transaction, linking the invoice to the opened tax document so it can be
+/// committed or voided once the charge outcome is known.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetPendingTaxTransactionRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    /// The tax provider's reference for the opened (uncommitted) tax document.
+    #[prost(string, tag = "2")]
+    pub external_reference: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetPendingTaxTransactionResponse {
+    /// True if a matching invoice was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
