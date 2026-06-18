@@ -61,4 +61,9 @@ message BillingConfig {
   // The number-of-months interval the contract was signed under
   // (1 = monthly, 12 = annual). Frozen for the life of the contract.
   uint32 month_interval = 7;
+
+  // Whether the org is allowed to incur pay-as-you-go usage.
+  // Credit-card orgs always support payg; invoiced orgs that should
+  // support it are an explicit override.
+  bool supports_payg = 8;
 }
