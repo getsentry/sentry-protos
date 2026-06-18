@@ -25,6 +25,12 @@ message CreateContractRequest {
   // Whether usage past reserved volume is allowed (and billed) instead of
   // hard-stopping ingestion.
   bool has_soft_cap = 8;
+
+  // The tax provider's reference for the tax document opened for this invoice.
+  // When set, the contract service records it on the created invoice as a
+  // pending tax transaction atomically with invoice creation. Unset means no
+  // tax document was opened.
+  optional string tax_transaction_code = 9;
 }
 
 message CreateContractResponse {
