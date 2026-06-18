@@ -79,6 +79,12 @@ message TraceItemAttributeNamesResponse {
   message Attribute {
     string name = 1;
     AttributeKey.Type type = 2;
+
+    // optional, how frequently this attribute occurs across the matched trace
+    // items. Only populated when the request opts in to count ordering
+    // (order_by.column = COLUMN_COUNT); unset otherwise. The presence of this
+    // field distinguishes "not computed" from a genuine count of zero.
+    optional uint64 count = 3;
   }
   // all attributes that matched the filters in the request
   repeated Attribute attributes = 1;

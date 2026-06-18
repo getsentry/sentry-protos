@@ -740,9 +740,16 @@ def test_example_attribute_names_request_ordered_by_count() -> None:
         ),
     )
 
+    # when ordering by count, the response can include the per-attribute count
     response = TraceItemAttributeNamesResponse(
-        attributes=[TraceItemAttributeNamesResponse.Attribute(name="foo", type=AttributeKey.Type.TYPE_STRING)]
+        attributes=[
+            TraceItemAttributeNamesResponse.Attribute(
+                name="foo", type=AttributeKey.Type.TYPE_STRING, count=42
+            )
+        ]
     )
+    assert response.attributes[0].HasField("count")
+    assert response.attributes[0].count == 42
 
 
 def test_example_time_series_cross_item_query() -> None:

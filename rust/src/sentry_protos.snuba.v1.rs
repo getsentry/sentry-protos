@@ -1771,6 +1771,12 @@ pub mod trace_item_attribute_names_response {
         pub name: ::prost::alloc::string::String,
         #[prost(enumeration = "super::attribute_key::Type", tag = "2")]
         pub r#type: i32,
+        /// optional, how frequently this attribute occurs across the matched trace
+        /// items. Only populated when the request opts in to count ordering
+        /// (order_by.column = COLUMN_COUNT); unset otherwise. The presence of this
+        /// field distinguishes "not computed" from a genuine count of zero.
+        #[prost(uint64, optional, tag = "3")]
+        pub count: ::core::option::Option<u64>,
     }
 }
 /// TraceItemAttributeValuesRequest is a request to the TraceItemAttributeValues endpoint,
