@@ -1,3 +1,9 @@
+## 0.32.2
+
+### Internal Changes 🔧
+
+- Add supports on demand by @noahsmartin in [#318](https://github.com/getsentry/sentry-protos/pull/318)
+
 ## 0.32.1
 
 ### Internal Changes 🔧
