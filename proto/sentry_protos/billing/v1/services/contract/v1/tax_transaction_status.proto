@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// The lifecycle status of an invoice's provider-side tax document. The integer
+// values mirror the statuses persisted on the invoice (PENDING = 1,
+// COMMITTED = 2, VOID = 3); UNSPECIFIED = 0 is the proto3 zero value and is
+// never a stored status.
+enum TaxTransactionStatus {
+  TAX_TRANSACTION_STATUS_UNSPECIFIED = 0;
+  TAX_TRANSACTION_STATUS_PENDING = 1;
+  TAX_TRANSACTION_STATUS_COMMITTED = 2;
+  TAX_TRANSACTION_STATUS_VOID = 3;
+}
