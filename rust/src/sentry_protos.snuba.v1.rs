@@ -1673,6 +1673,79 @@ pub struct TraceItemAttributeNamesRequest {
     /// 1 second, the endpoint returns without taking the intersecing attributes into account
     #[prost(message, optional, tag = "8")]
     pub intersecting_attributes_filter: ::core::option::Option<TraceItemFilter>,
+    /// optional, controls how the returned attribute names are ordered.
+    /// When unset, names are returned alphabetically (ascending), which preserves
+    /// the historical default for existing callers. Set this to opt in to a
+    /// different ordering, e.g. by attribute frequency.
+    #[prost(message, optional, tag = "9")]
+    pub order_by: ::core::option::Option<trace_item_attribute_names_request::OrderBy>,
+}
+/// Nested message and enum types in `TraceItemAttributeNamesRequest`.
+pub mod trace_item_attribute_names_request {
+    /// OrderBy controls how the returned attribute names are ordered.
+    ///
+    /// When `order_by` is not set on the request, attribute names are returned
+    /// in alphabetical (ascending by name) order. This is the historical default
+    /// and is preserved for callers that predate this field.
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+    pub struct OrderBy {
+        /// The column to order the returned attribute names by.
+        #[prost(enumeration = "order_by::Column", tag = "1")]
+        pub column: i32,
+        /// When true, results are returned in descending order. Defaults to
+        /// ascending. For example, to order by frequency with the most common
+        /// attributes first, set `column = COLUMN_COUNT` and `descending = true`.
+        #[prost(bool, tag = "2")]
+        pub descending: bool,
+    }
+    /// Nested message and enum types in `OrderBy`.
+    pub mod order_by {
+        /// Column identifies which property of an attribute to order by.
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            PartialOrd,
+            Ord,
+            ::prost::Enumeration
+        )]
+        #[repr(i32)]
+        pub enum Column {
+            /// Defaults to ordering by COLUMN_NAME (alphabetical). This keeps the
+            /// behaviour backwards compatible when `order_by` is left unset.
+            Unspecified = 0,
+            /// Order by the attribute name (alphabetical).
+            Name = 1,
+            /// Order by how frequently the attribute occurs across the matched trace
+            /// items (its count).
+            Count = 2,
+        }
+        impl Column {
+            /// String value of the enum field names used in the ProtoBuf definition.
+            ///
+            /// The values are not transformed in any way and thus are considered stable
+            /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+            pub fn as_str_name(&self) -> &'static str {
+                match self {
+                    Self::Unspecified => "COLUMN_UNSPECIFIED",
+                    Self::Name => "COLUMN_NAME",
+                    Self::Count => "COLUMN_COUNT",
+                }
+            }
+            /// Creates an enum from field names used in the ProtoBuf definition.
+            pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+                match value {
+                    "COLUMN_UNSPECIFIED" => Some(Self::Unspecified),
+                    "COLUMN_NAME" => Some(Self::Name),
+                    "COLUMN_COUNT" => Some(Self::Count),
+                    _ => None,
+                }
+            }
+        }
+    }
 }
 /// TraceItemAttributeNamesResponse is the response returned by the TraceItemAttributeNames endpoint.
 /// It is the counterpart to TraceItemAttributeNamesRequest.

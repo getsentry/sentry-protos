@@ -726,6 +726,25 @@ def test_example_attribute_names_request() -> None:
     )
 
 
+def test_example_attribute_names_request_ordered_by_count() -> None:
+    # Opt in to ordering attribute names by how frequently they occur,
+    # most common first. Leaving `order_by` unset preserves the default
+    # alphabetical (ascending) ordering.
+    request = TraceItemAttributeNamesRequest(
+        meta=COMMON_META,
+        limit=100,
+        type=AttributeKey.Type.TYPE_STRING,
+        order_by=TraceItemAttributeNamesRequest.OrderBy(
+            column=TraceItemAttributeNamesRequest.OrderBy.COLUMN_COUNT,
+            descending=True,
+        ),
+    )
+
+    response = TraceItemAttributeNamesResponse(
+        attributes=[TraceItemAttributeNamesResponse.Attribute(name="foo", type=AttributeKey.Type.TYPE_STRING)]
+    )
+
+
 def test_example_time_series_cross_item_query() -> None:
     """
     Find the number of spans with http.client over time in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
