@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/tax_transaction_status.proto";
+
+// Reads the tax-document linkage recorded on an invoice, so charge-outcome
+// settlement can decide whether to commit or void the provider-side document.
+message GetTaxTransactionRequest {
+  uint64 invoice_id = 1;
+}
+
+message GetTaxTransactionResponse {
+  // The tax provider's reference for the opened tax document. Unset when the
+  // invoice carries no tax document (e.g. a shadow or untaxed invoice).
+  optional string external_reference = 1;
+  // The tax document's lifecycle status. Unset when the invoice carries no tax
+  // document, or when a document is linked but no status has been recorded yet.
+  optional TaxTransactionStatus status = 2;
+  // True if a prior commit or void vendor call failed and must be re-driven by
+  // the reconciliation sweep.
+  bool needs_retry = 3;
+}

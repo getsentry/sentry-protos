@@ -557,6 +557,64 @@ pub struct GetInvoiceResponse {
     #[prost(message, optional, tag = "1")]
     pub invoice: ::core::option::Option<Invoice>,
 }
+/// The lifecycle status of an invoice's provider-side tax document. The integer
+/// values mirror the statuses persisted on the invoice (PENDING = 1,
+/// COMMITTED = 2, VOID = 3); UNSPECIFIED = 0 is the proto3 zero value and is
+/// never a stored status.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum TaxTransactionStatus {
+    Unspecified = 0,
+    Pending = 1,
+    Committed = 2,
+    Void = 3,
+}
+impl TaxTransactionStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "TAX_TRANSACTION_STATUS_UNSPECIFIED",
+            Self::Pending => "TAX_TRANSACTION_STATUS_PENDING",
+            Self::Committed => "TAX_TRANSACTION_STATUS_COMMITTED",
+            Self::Void => "TAX_TRANSACTION_STATUS_VOID",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "TAX_TRANSACTION_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "TAX_TRANSACTION_STATUS_PENDING" => Some(Self::Pending),
+            "TAX_TRANSACTION_STATUS_COMMITTED" => Some(Self::Committed),
+            "TAX_TRANSACTION_STATUS_VOID" => Some(Self::Void),
+            _ => None,
+        }
+    }
+}
+/// Reads the tax-document linkage recorded on an invoice, so charge-outcome
+/// settlement can decide whether to commit or void the provider-side document.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetTaxTransactionRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetTaxTransactionResponse {
+    /// The tax provider's reference for the opened tax document. Unset when the
+    /// invoice carries no tax document (e.g. a shadow or untaxed invoice).
+    #[prost(string, optional, tag = "1")]
+    pub external_reference: ::core::option::Option<::prost::alloc::string::String>,
+    /// The tax document's lifecycle status. Unset when the invoice carries no tax
+    /// document, or when a document is linked but no status has been recorded yet.
+    #[prost(enumeration = "TaxTransactionStatus", optional, tag = "2")]
+    pub status: ::core::option::Option<i32>,
+    /// True if a prior commit or void vendor call failed and must be re-driven by
+    /// the reconciliation sweep.
+    #[prost(bool, tag = "3")]
+    pub needs_retry: bool,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUnchargedInvoicesRequest {
     /// Returns Invoices whose current billing period ends before this time and
@@ -650,6 +708,42 @@ pub struct MarkInvoicePaidRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct MarkInvoicePaidResponse {
+    /// True if a matching invoice was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
+/// Marks an invoice's tax document as committed once the invoice is paid. The
+/// caller sets needs_retry when the vendor commit call could not be confirmed,
+/// so the reconciliation sweep can re-drive it.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MarkTaxTransactionCommittedRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    /// True if the vendor commit call did not confirm and must be re-driven.
+    #[prost(bool, tag = "2")]
+    pub needs_retry: bool,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MarkTaxTransactionCommittedResponse {
+    /// True if a matching invoice was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
+/// Marks an invoice's tax document as voided once the invoice is abandoned
+/// (dunning exhausted). The caller sets needs_retry when the vendor void call
+/// could not be confirmed, so the reconciliation sweep can re-drive it. A
+/// committed document is never voided here — unwinding a filed document is
+/// refund handling, not settlement.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MarkTaxTransactionVoidedRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    /// True if the vendor void call did not confirm and must be re-driven.
+    #[prost(bool, tag = "2")]
+    pub needs_retry: bool,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MarkTaxTransactionVoidedResponse {
     /// True if a matching invoice was found and updated.
     #[prost(bool, tag = "1")]
     pub updated: bool,

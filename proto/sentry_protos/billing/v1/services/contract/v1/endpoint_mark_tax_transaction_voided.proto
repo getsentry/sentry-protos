@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Marks an invoice's tax document as voided once the invoice is abandoned
+// (dunning exhausted). The caller sets needs_retry when the vendor void call
+// could not be confirmed, so the reconciliation sweep can re-drive it. A
+// committed document is never voided here — unwinding a filed document is
+// refund handling, not settlement.
+message MarkTaxTransactionVoidedRequest {
+  uint64 invoice_id = 1;
+  // True if the vendor void call did not confirm and must be re-driven.
+  bool needs_retry = 2;
+}
+
+message MarkTaxTransactionVoidedResponse {
+  // True if a matching invoice was found and updated.
+  bool updated = 1;
+}
