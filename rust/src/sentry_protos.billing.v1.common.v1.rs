@@ -323,11 +323,17 @@ pub mod pending_user_config {
 pub struct PaygBudget {
     #[prost(uint64, tag = "1")]
     pub budget_cents: u64,
+    /// Whether the next billing cycle should clear the Contract's existing UserParameter
+    #[prost(bool, tag = "2")]
+    pub clear_user_parameter: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Reservation {
     #[prost(uint64, tag = "1")]
     pub reserved_price_cents: u64,
+    /// Whether the next billing cycle should clear the Contract's existing UserParameter
+    #[prost(bool, tag = "4")]
+    pub clear_user_parameter: bool,
     #[prost(oneof = "reservation::ReservedUnits", tags = "2, 3")]
     pub reserved_units: ::core::option::Option<reservation::ReservedUnits>,
 }
