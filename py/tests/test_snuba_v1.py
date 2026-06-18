@@ -726,6 +726,55 @@ def test_example_attribute_names_request() -> None:
     )
 
 
+def test_example_attribute_names_request_ordered_by_count() -> None:
+    # Opt in to ordering attribute names by how frequently they occur,
+    # most common first. Leaving `order_by` unset preserves the default
+    # alphabetical (ascending) ordering.
+    request = TraceItemAttributeNamesRequest(
+        meta=COMMON_META,
+        limit=100,
+        type=AttributeKey.Type.TYPE_STRING,
+        order_by=TraceItemAttributeNamesRequest.OrderBy(
+            column=TraceItemAttributeNamesRequest.OrderBy.COLUMN_COUNT,
+            descending=True,
+        ),
+    )
+
+    # when ordering by count, the response can include the per-attribute count
+    response = TraceItemAttributeNamesResponse(
+        attributes=[
+            TraceItemAttributeNamesResponse.Attribute(
+                name="foo", type=AttributeKey.Type.TYPE_STRING, count=42
+            )
+        ]
+    )
+    assert response.attributes[0].HasField("count")
+    assert response.attributes[0].count == 42
+
+
+def test_example_attribute_values_request_ordered_by_count() -> None:
+    # Opt in to ordering attribute values by how frequently they occur,
+    # most common first. Leaving `order_by` unset preserves the default
+    # alphabetical (ascending) ordering.
+    request = TraceItemAttributeValuesRequest(
+        meta=COMMON_META,
+        key=AttributeKey(type=AttributeKey.TYPE_STRING, name="sentry.browser.name"),
+        limit=100,
+        order_by=TraceItemAttributeValuesRequest.OrderBy(
+            column=TraceItemAttributeValuesRequest.OrderBy.COLUMN_COUNT,
+            descending=True,
+        ),
+    )
+
+    # the values response already returns counts aligned with values
+    response = TraceItemAttributeValuesResponse(
+        values=["chrome", "safari"],
+        counts=[100, 25],
+    )
+    assert list(response.values) == ["chrome", "safari"]
+    assert list(response.counts) == [100, 25]
+
+
 def test_example_time_series_cross_item_query() -> None:
     """
     Find the number of spans with http.client over time in traces containing a span with op = 'db' that also contain errors with message = 'timeout'

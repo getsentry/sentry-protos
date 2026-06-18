@@ -13,6 +13,33 @@ import "sentry_protos/snuba/v1/trace_item_filter.proto";
 // TraceItem are things like: span, error, log, replay
 // TraceItemAttributes could be things like: sentry.duration,user_id cart_total, etc.
 message TraceItemAttributeNamesRequest {
+  // OrderBy controls how the returned attribute names are ordered.
+  //
+  // When `order_by` is not set on the request, attribute names are returned
+  // in alphabetical (ascending by name) order. This is the historical default
+  // and is preserved for callers that predate this field.
+  message OrderBy {
+    // Column identifies which property of an attribute to order by.
+    enum Column {
+      // Defaults to ordering by COLUMN_NAME (alphabetical). This keeps the
+      // behaviour backwards compatible when `order_by` is left unset.
+      COLUMN_UNSPECIFIED = 0;
+      // Order by the attribute name (alphabetical).
+      COLUMN_NAME = 1;
+      // Order by how frequently the attribute occurs across the matched trace
+      // items (its count).
+      COLUMN_COUNT = 2;
+    }
+
+    // The column to order the returned attribute names by.
+    Column column = 1;
+
+    // When true, results are returned in descending order. Defaults to
+    // ascending. For example, to order by frequency with the most common
+    // attributes first, set `column = COLUMN_COUNT` and `descending = true`.
+    bool descending = 2;
+  }
+
   // metadata about the request
   // this is where you specify organization, project, time range etc.
   RequestMeta meta = 1;
@@ -38,6 +65,12 @@ message TraceItemAttributeNamesRequest {
   // This is a BEST-EFFORT operation. If no co-occurring keys are found within
   // 1 second, the endpoint returns without taking the intersecing attributes into account
   TraceItemFilter intersecting_attributes_filter = 8;
+
+  // optional, controls how the returned attribute names are ordered.
+  // When unset, names are returned alphabetically (ascending), which preserves
+  // the historical default for existing callers. Set this to opt in to a
+  // different ordering, e.g. by attribute frequency.
+  OrderBy order_by = 9;
 }
 
 // TraceItemAttributeNamesResponse is the response returned by the TraceItemAttributeNames endpoint.
@@ -46,6 +79,12 @@ message TraceItemAttributeNamesResponse {
   message Attribute {
     string name = 1;
     AttributeKey.Type type = 2;
+
+    // optional, how frequently this attribute occurs across the matched trace
+    // items. Only populated when the request opts in to count ordering
+    // (order_by.column = COLUMN_COUNT); unset otherwise. The presence of this
+    // field distinguishes "not computed" from a genuine count of zero.
+    optional uint64 count = 3;
   }
   // all attributes that matched the filters in the request
   repeated Attribute attributes = 1;
@@ -64,6 +103,34 @@ message TraceItemAttributeNamesResponse {
 // This endpoint only supports string values, it does not make sense
 // to get all the possible values of a numerical attribute
 message TraceItemAttributeValuesRequest {
+  // OrderBy controls how the returned values are ordered.
+  //
+  // When `order_by` is not set on the request, values are returned in
+  // alphabetical (ascending) order. This is the historical default and is
+  // preserved for callers that predate this field.
+  message OrderBy {
+    // Column identifies which property of a value to order by.
+    enum Column {
+      // Defaults to ordering by COLUMN_VALUE (alphabetical). This keeps the
+      // behaviour backwards compatible when `order_by` is left unset.
+      COLUMN_UNSPECIFIED = 0;
+      // Order by the value itself (alphabetical).
+      COLUMN_VALUE = 1;
+      // Order by how frequently the value occurs across the matched trace
+      // items (its count). The counts are returned in the response's `counts`
+      // field.
+      COLUMN_COUNT = 2;
+    }
+
+    // The column to order the returned values by.
+    Column column = 1;
+
+    // When true, results are returned in descending order. Defaults to
+    // ascending. For example, to order by frequency with the most common
+    // values first, set `column = COLUMN_COUNT` and `descending = true`.
+    bool descending = 2;
+  }
+
   // metadata about the request
   // this is where you specify organization, project, time range etc.
   RequestMeta meta = 1;
@@ -84,6 +151,13 @@ message TraceItemAttributeValuesRequest {
 
   // optional, used for pagination, the next page token will be returned in the response
   PageToken page_token = 6;
+
+  // optional, controls how the returned values are ordered.
+  // When unset, values are returned alphabetically (ascending), which
+  // preserves the historical default for existing callers. Set this to opt in
+  // to a different ordering, e.g. by value frequency (the response already
+  // returns the corresponding `counts`).
+  OrderBy order_by = 7;
 }
 
 // TraceItemAttributeValuesResponse is a response from the TraceItemAttributeValues endpoint
