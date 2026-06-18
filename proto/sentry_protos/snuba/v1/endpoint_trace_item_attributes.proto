@@ -103,6 +103,34 @@ message TraceItemAttributeNamesResponse {
 // This endpoint only supports string values, it does not make sense
 // to get all the possible values of a numerical attribute
 message TraceItemAttributeValuesRequest {
+  // OrderBy controls how the returned values are ordered.
+  //
+  // When `order_by` is not set on the request, values are returned in
+  // alphabetical (ascending) order. This is the historical default and is
+  // preserved for callers that predate this field.
+  message OrderBy {
+    // Column identifies which property of a value to order by.
+    enum Column {
+      // Defaults to ordering by COLUMN_VALUE (alphabetical). This keeps the
+      // behaviour backwards compatible when `order_by` is left unset.
+      COLUMN_UNSPECIFIED = 0;
+      // Order by the value itself (alphabetical).
+      COLUMN_VALUE = 1;
+      // Order by how frequently the value occurs across the matched trace
+      // items (its count). The counts are returned in the response's `counts`
+      // field.
+      COLUMN_COUNT = 2;
+    }
+
+    // The column to order the returned values by.
+    Column column = 1;
+
+    // When true, results are returned in descending order. Defaults to
+    // ascending. For example, to order by frequency with the most common
+    // values first, set `column = COLUMN_COUNT` and `descending = true`.
+    bool descending = 2;
+  }
+
   // metadata about the request
   // this is where you specify organization, project, time range etc.
   RequestMeta meta = 1;
@@ -123,6 +151,13 @@ message TraceItemAttributeValuesRequest {
 
   // optional, used for pagination, the next page token will be returned in the response
   PageToken page_token = 6;
+
+  // optional, controls how the returned values are ordered.
+  // When unset, values are returned alphabetically (ascending), which
+  // preserves the historical default for existing callers. Set this to opt in
+  // to a different ordering, e.g. by value frequency (the response already
+  // returns the corresponding `counts`).
+  OrderBy order_by = 7;
 }
 
 // TraceItemAttributeValuesResponse is a response from the TraceItemAttributeValues endpoint

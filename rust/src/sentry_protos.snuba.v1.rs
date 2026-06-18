@@ -1809,6 +1809,81 @@ pub struct TraceItemAttributeValuesRequest {
     /// optional, used for pagination, the next page token will be returned in the response
     #[prost(message, optional, tag = "6")]
     pub page_token: ::core::option::Option<PageToken>,
+    /// optional, controls how the returned values are ordered.
+    /// When unset, values are returned alphabetically (ascending), which
+    /// preserves the historical default for existing callers. Set this to opt in
+    /// to a different ordering, e.g. by value frequency (the response already
+    /// returns the corresponding `counts`).
+    #[prost(message, optional, tag = "7")]
+    pub order_by: ::core::option::Option<trace_item_attribute_values_request::OrderBy>,
+}
+/// Nested message and enum types in `TraceItemAttributeValuesRequest`.
+pub mod trace_item_attribute_values_request {
+    /// OrderBy controls how the returned values are ordered.
+    ///
+    /// When `order_by` is not set on the request, values are returned in
+    /// alphabetical (ascending) order. This is the historical default and is
+    /// preserved for callers that predate this field.
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+    pub struct OrderBy {
+        /// The column to order the returned values by.
+        #[prost(enumeration = "order_by::Column", tag = "1")]
+        pub column: i32,
+        /// When true, results are returned in descending order. Defaults to
+        /// ascending. For example, to order by frequency with the most common
+        /// values first, set `column = COLUMN_COUNT` and `descending = true`.
+        #[prost(bool, tag = "2")]
+        pub descending: bool,
+    }
+    /// Nested message and enum types in `OrderBy`.
+    pub mod order_by {
+        /// Column identifies which property of a value to order by.
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            PartialOrd,
+            Ord,
+            ::prost::Enumeration
+        )]
+        #[repr(i32)]
+        pub enum Column {
+            /// Defaults to ordering by COLUMN_VALUE (alphabetical). This keeps the
+            /// behaviour backwards compatible when `order_by` is left unset.
+            Unspecified = 0,
+            /// Order by the value itself (alphabetical).
+            Value = 1,
+            /// Order by how frequently the value occurs across the matched trace
+            /// items (its count). The counts are returned in the response's `counts`
+            /// field.
+            Count = 2,
+        }
+        impl Column {
+            /// String value of the enum field names used in the ProtoBuf definition.
+            ///
+            /// The values are not transformed in any way and thus are considered stable
+            /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+            pub fn as_str_name(&self) -> &'static str {
+                match self {
+                    Self::Unspecified => "COLUMN_UNSPECIFIED",
+                    Self::Value => "COLUMN_VALUE",
+                    Self::Count => "COLUMN_COUNT",
+                }
+            }
+            /// Creates an enum from field names used in the ProtoBuf definition.
+            pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+                match value {
+                    "COLUMN_UNSPECIFIED" => Some(Self::Unspecified),
+                    "COLUMN_VALUE" => Some(Self::Value),
+                    "COLUMN_COUNT" => Some(Self::Count),
+                    _ => None,
+                }
+            }
+        }
+    }
 }
 /// TraceItemAttributeValuesResponse is a response from the TraceItemAttributeValues endpoint
 /// it is the counterpart to TraceItemAttributesRequest
