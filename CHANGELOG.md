@@ -1,3 +1,9 @@
+## 0.32.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add clear_user_parameter to PendingChange by @brendanhsentry in [#320](https://github.com/getsentry/sentry-protos/pull/320)
+
 ## 0.32.0
 
 ### New Features ✨
