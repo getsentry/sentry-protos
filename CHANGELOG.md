@@ -1,3 +1,9 @@
+## 0.32.0
+
+### New Features ✨
+
+- (snuba) Opt-in ordering for TraceItemAttributeNames (order_by + response count) by @phacops in [#316](https://github.com/getsentry/sentry-protos/pull/316)
+
 ## 0.31.2
 
 ### Internal Changes 🔧
