@@ -50,6 +50,19 @@ pub struct BillingConfig {
     /// (1 = monthly, 12 = annual). Frozen for the life of the contract.
     #[prost(uint32, tag = "7")]
     pub month_interval: u32,
+    /// Whether the org is allowed to incur pay-as-you-go usage.
+    /// Credit-card orgs always support payg; invoiced orgs that should
+    /// support it are an explicit override.
+    #[prost(bool, tag = "8")]
+    pub supports_payg: bool,
+    /// Whether this is a managed (sales-assisted) subscription rather than
+    /// self-serve.
+    #[prost(bool, tag = "9")]
+    pub is_managed: bool,
+    /// Whether the org has a soft cap: usage past reserved volume is allowed
+    /// (and billed) instead of hard-stopping ingestion.
+    #[prost(bool, tag = "10")]
+    pub has_soft_cap: bool,
 }
 /// Indicates how the account is billed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -499,6 +512,14 @@ pub struct CreateContractRequest {
     /// supported interval.
     #[prost(uint32, tag = "6")]
     pub month_interval: u32,
+    /// How the contract is billed. If unset (BILLING_TYPE_UNSPECIFIED), the
+    /// contract defaults to credit-card.
+    #[prost(enumeration = "BillingType", tag = "7")]
+    pub billing_type: i32,
+    /// Whether usage past reserved volume is allowed (and billed) instead of
+    /// hard-stopping ingestion.
+    #[prost(bool, tag = "8")]
+    pub has_soft_cap: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateContractResponse {

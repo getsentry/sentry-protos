@@ -116,6 +116,13 @@ pub struct PackageConfig {
     /// Title shown in admin interfaces, not customer-facing.
     #[prost(string, tag = "9")]
     pub admin_title: ::prost::alloc::string::String,
+    /// Whether the package is treated as enterprise in the UI (display name,
+    /// upsell suppression).
+    #[prost(bool, tag = "10")]
+    pub is_enterprise: bool,
+    /// Whether the package can be chosen in the self-serve checkout flow.
+    #[prost(bool, tag = "11")]
+    pub user_selectable: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
