@@ -70,4 +70,11 @@ message PackageConfig {
 
   // Title shown in admin interfaces, not customer-facing.
   string admin_title = 9;
+
+  // Whether the package is treated as enterprise in the UI (display name,
+  // upsell suppression).
+  bool is_enterprise = 10;
+
+  // Whether the package can be chosen in the self-serve checkout flow.
+  bool user_selectable = 11;
 }

@@ -66,4 +66,12 @@ message BillingConfig {
   // Credit-card orgs always support payg; invoiced orgs that should
   // support it are an explicit override.
   bool supports_payg = 8;
+
+  // Whether this is a managed (sales-assisted) subscription rather than
+  // self-serve.
+  bool is_managed = 9;
+
+  // Whether the org has a soft cap: usage past reserved volume is allowed
+  // (and billed) instead of hard-stopping ingestion.
+  bool has_soft_cap = 10;
 }
