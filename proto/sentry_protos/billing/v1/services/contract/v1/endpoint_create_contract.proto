@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v1;
 
 import "sentry_protos/billing/v1/common/v1/address.proto";
+import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
 
@@ -16,6 +17,14 @@ message CreateContractRequest {
   // supported_month_intervals. If unset, defaults to the package's first
   // supported interval.
   uint32 month_interval = 6;
+
+  // How the contract is billed. If unset (BILLING_TYPE_UNSPECIFIED), the
+  // contract defaults to credit-card.
+  BillingType billing_type = 7;
+
+  // Whether usage past reserved volume is allowed (and billed) instead of
+  // hard-stopping ingestion.
+  bool has_soft_cap = 8;
 }
 
 message CreateContractResponse {
