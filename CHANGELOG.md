@@ -1,3 +1,9 @@
+## 0.32.3
+
+### Internal Changes 🔧
+
+- Add protos fields for customer subscription API by @noahsmartin in [#322](https://github.com/getsentry/sentry-protos/pull/322)
+
 ## 0.32.2
 
 ### Internal Changes 🔧
