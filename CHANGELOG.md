@@ -1,3 +1,7 @@
+## 0.32.4
+
+- Add budget exhaustion field to UsagePricer by @volokluev in [#323](https://github.com/getsentry/sentry-protos/pull/323)
+
 ## 0.32.3
 
 ### Internal Changes 🔧
