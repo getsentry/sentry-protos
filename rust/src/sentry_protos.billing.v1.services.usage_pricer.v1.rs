@@ -45,9 +45,12 @@ pub struct LineItemUsageSummary {
     /// Net cents consumed by this line item in the billing period (after credits/trials applied).
     #[prost(uint64, tag = "2")]
     pub payg_spend_cents: u64,
-    /// How much of the line item was consumed (in the line item's units)
+    /// How much of the line item was consumed by PAYG (in the line item's units)
     #[prost(uint64, tag = "3")]
     pub quantity: u64,
+    /// Whether the usage pricer had to cap the spend based on the budget set by the contract
+    #[prost(bool, tag = "4")]
+    pub payg_budget_exhausted: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
@@ -57,6 +60,9 @@ pub struct SharedLineItemUsageSummary {
     /// Line item breakdown within shared budget
     #[prost(message, repeated, tag = "2")]
     pub line_item_summaries: ::prost::alloc::vec::Vec<LineItemUsageSummary>,
+    /// Whether the usage pricer had to cap the spend based on the budget set by the contract
+    #[prost(bool, tag = "3")]
+    pub payg_budget_exhausted: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsagePricerResponse {

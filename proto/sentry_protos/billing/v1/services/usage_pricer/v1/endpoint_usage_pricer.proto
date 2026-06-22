@@ -45,8 +45,11 @@ message LineItemUsageSummary {
   // Net cents consumed by this line item in the billing period (after credits/trials applied).
   uint64 payg_spend_cents = 2;
 
-  // How much of the line item was consumed (in the line item's units)
+  // How much of the line item was consumed by PAYG (in the line item's units)
   uint64 quantity = 3;
+
+  // Whether the usage pricer had to cap the spend based on the budget set by the contract
+  bool payg_budget_exhausted = 4;
 }
 
 message SharedLineItemUsageSummary {
@@ -55,6 +58,9 @@ message SharedLineItemUsageSummary {
 
   // Line item breakdown within shared budget
   repeated LineItemUsageSummary line_item_summaries = 2;
+
+  // Whether the usage pricer had to cap the spend based on the budget set by the contract
+  bool payg_budget_exhausted = 3;
 }
 
 message UsagePricerResponse {
