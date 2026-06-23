@@ -123,6 +123,9 @@ pub struct PackageConfig {
     /// Whether the package can be chosen in the self-serve checkout flow.
     #[prost(bool, tag = "11")]
     pub user_selectable: bool,
+    /// Whether the package allows pay-as-you-go (PAYG) billing.
+    #[prost(bool, tag = "12")]
+    pub allow_payg: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
