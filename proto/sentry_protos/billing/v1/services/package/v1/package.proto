@@ -78,6 +78,6 @@ message PackageConfig {
   // Whether the package can be chosen in the self-serve checkout flow.
   bool user_selectable = 11;
 
-  // Whether the package allows pay-as-you-go (PAYG) billing.
-  bool allow_payg = 12;
+  // Whether the package has pay-as-you-go (PAYG) modes.
+  bool has_payg_modes = 12;
 }
