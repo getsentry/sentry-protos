@@ -1,3 +1,9 @@
+## 0.33.0
+
+### New Features ✨
+
+- (snuba) Add conversation_id and session_id to TraceItem by @phacops in [#324](https://github.com/getsentry/sentry-protos/pull/324)
+
 ## 0.32.5
 
 ### Internal Changes 🔧
