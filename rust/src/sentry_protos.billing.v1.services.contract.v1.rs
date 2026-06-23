@@ -520,6 +520,12 @@ pub struct CreateContractRequest {
     /// hard-stopping ingestion.
     #[prost(bool, tag = "8")]
     pub has_soft_cap: bool,
+    /// The tax provider's reference for the tax document opened for this invoice.
+    /// When set, the contract service records it on the created invoice as a
+    /// pending tax transaction atomically with invoice creation. Unset means no
+    /// tax document was opened.
+    #[prost(string, optional, tag = "9")]
+    pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateContractResponse {
@@ -722,6 +728,12 @@ pub struct RolloverContractRequest {
     pub pending_change: ::core::option::Option<
         super::super::super::common::v1::PendingChange,
     >,
+    /// The tax provider's reference for the tax document opened for this invoice.
+    /// When set, the contract service records it on the new invoice as a pending
+    /// tax transaction atomically with invoice creation, so the document can later
+    /// be committed or voided. Unset means no tax document was opened.
+    #[prost(string, optional, tag = "7")]
+    pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
