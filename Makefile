@@ -1,23 +1,27 @@
-# Makefile assumes that direnv is active, or that pip/python on PATH
-# is what you want to use.
+# Makefile prefers local virtualenv tools when available, and falls
+# back to PATH tools when .venv has not been created yet.
 
 # unstable protos are only included in local development and not part of release packages
 SENTRY_PROTOS_BUILD_UNSTABLE := 1
+PYTHON ?= $(if $(wildcard .venv/bin/python),$(CURDIR)/.venv/bin/python,python)
+PIP ?= $(if $(wildcard .venv/bin/pip),$(CURDIR)/.venv/bin/pip,pip)
+PYTEST ?= $(if $(wildcard .venv/bin/pytest),$(CURDIR)/.venv/bin/pytest,pytest)
+SABLEDOCS ?= $(if $(wildcard .venv/bin/sabledocs),$(CURDIR)/.venv/bin/sabledocs,sabledocs)
 
 .PHONY: update-venv
 update-venv:
-	pip install -r requirements.txt
+	$(PIP) install -r requirements.txt
 
 # Python client targets
 .PHONY: build-py
 build-py:
-	pip install -r requirements.txt
-	SENTRY_PROTOS_BUILD_UNSTABLE=$(SENTRY_PROTOS_BUILD_UNSTABLE) python py/generate.py
+	$(PIP) install -r requirements.txt
+	SENTRY_PROTOS_BUILD_UNSTABLE=$(SENTRY_PROTOS_BUILD_UNSTABLE) $(PYTHON) py/generate.py
 
 .PHONY: package-py
 package-py:
 	make build-py SENTRY_PROTO_BUILD_UNSTABLE=0
-	cd py && python -m build
+	cd py && $(PYTHON) -m build
 
 .PHONY: clean-py
 clean-py:
@@ -68,11 +72,11 @@ ensure-protoc:
 
 .PHONY: docs
 docs: ensure-protoc
-	pip install sabledocs
+	$(PIP) install sabledocs
 	protoc ./proto/sentry_protos/*/*/*.proto -I ./proto/ -o ./docs/descriptor.pb --include_source_info
-	cd docs && sabledocs
+	cd docs && $(SABLEDOCS)
 
 .PHONY: test-py
 test-py:
-	cd py && pip install -e .
-	pytest py/tests/
+	cd py && $(PIP) install -e .
+	$(PYTEST) py/tests/
