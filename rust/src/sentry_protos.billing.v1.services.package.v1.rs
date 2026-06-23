@@ -31,6 +31,10 @@ pub struct LineItemConfig {
     pub included_reserved_units: ::core::option::Option<
         line_item_config::IncludedReservedUnits,
     >,
+    /// How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
+    /// this field will be unset for all line items.
+    #[prost(oneof = "line_item_config::TrialUnits", tags = "10, 11")]
+    pub trial_units: ::core::option::Option<line_item_config::TrialUnits>,
 }
 /// Nested message and enum types in `LineItemConfig`.
 pub mod line_item_config {
@@ -42,6 +46,15 @@ pub mod line_item_config {
         /// the type communicates whether the line item is unlimited or not, additionally reserved budget line items have a non-zero reserved_rate in addition to 0 reserved_units
         #[prost(uint64, tag = "6")]
         NumReservedUnits(u64),
+    }
+    /// How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
+    /// this field will be unset for all line items.
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum TrialUnits {
+        #[prost(bool, tag = "10")]
+        IsUnlimitedTrial(bool),
+        #[prost(uint64, tag = "11")]
+        NumTrialUnits(u64),
     }
 }
 /// Represents a budget included in a package that is collectively used by one or more line items,
@@ -86,6 +99,22 @@ pub struct SharedLineItemPool {
     pub reserved_tier: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
     >,
+    /// How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
+    /// this field will be unset for all line items.
+    #[prost(oneof = "shared_line_item_pool::TrialUnits", tags = "9, 10")]
+    pub trial_units: ::core::option::Option<shared_line_item_pool::TrialUnits>,
+}
+/// Nested message and enum types in `SharedLineItemPool`.
+pub mod shared_line_item_pool {
+    /// How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
+    /// this field will be unset for all line items.
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum TrialUnits {
+        #[prost(bool, tag = "9")]
+        IsUnlimitedTrial(bool),
+        #[prost(uint64, tag = "10")]
+        NumTrialUnits(u64),
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PackageConfig {
