@@ -1,3 +1,9 @@
+## 0.32.5
+
+### Internal Changes 🔧
+
+- (billing-platform) Carry tax_transaction_code on contract create/rollover requests by @dashed in [#319](https://github.com/getsentry/sentry-protos/pull/319)
+
 ## 0.32.4
 
 - Add budget exhaustion field to UsagePricer by @volokluev in [#323](https://github.com/getsentry/sentry-protos/pull/323)
