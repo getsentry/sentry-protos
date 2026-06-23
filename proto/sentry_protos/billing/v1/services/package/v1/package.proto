@@ -26,6 +26,13 @@ message LineItemConfig {
 
   // Used for calculating spend that should not apply towards an organization's PAYG budget (ie Seer seats)
   sentry_protos.billing.v1.common.v1.TieredPricingRate uncapped_rate = 9;
+
+  // How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
+  // this field will be unset for all line items.
+  oneof trial_units {
+    bool is_unlimited_trial = 10;
+    uint64 num_trial_units = 11;
+  }
 }
 
 // Represents a budget included in a package that is collectively used by one or more line items,
@@ -51,6 +58,13 @@ message SharedLineItemPool {
   // Similar to LineItemConfig.reserved_rate, this field will hold the list of available reserved tiers for this line item
   // as well as the prices for each respective tier.
   sentry_protos.billing.v1.common.v1.TieredPricingRate reserved_tier = 8;
+
+  // How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
+  // this field will be unset for all line items.
+  oneof trial_units {
+    bool is_unlimited_trial = 9;
+    uint64 num_trial_units = 10;
+  }
 }
 
 message PackageConfig {
