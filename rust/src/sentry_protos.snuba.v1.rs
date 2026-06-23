@@ -2520,6 +2520,12 @@ pub struct TraceItem {
     pub client_sample_rate: f64,
     #[prost(double, tag = "9")]
     pub server_sample_rate: f64,
+    /// The ID of the conversation this item belongs to, if any.
+    #[prost(string, tag = "10")]
+    pub conversation_id: ::prost::alloc::string::String,
+    /// The ID of the session this item belongs to, if any.
+    #[prost(string, tag = "11")]
+    pub session_id: ::prost::alloc::string::String,
     /// Internal fields
     #[prost(uint32, tag = "100")]
     pub retention_days: u32,
