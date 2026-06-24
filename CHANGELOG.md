@@ -1,3 +1,13 @@
+## 0.33.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add trial limits to package line items by @brendanhsentry in [#325](https://github.com/getsentry/sentry-protos/pull/325)
+
+### Other
+
+- Add allow_payg field to PackageConfig by @noahsmartin in [#326](https://github.com/getsentry/sentry-protos/pull/326)
+
 ## 0.33.0
 
 ### New Features ✨
