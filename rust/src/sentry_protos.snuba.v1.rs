@@ -1679,6 +1679,8 @@ pub struct TraceItemAttributeNamesRequest {
     /// different ordering, e.g. by attribute frequency.
     #[prost(message, optional, tag = "9")]
     pub order_by: ::core::option::Option<trace_item_attribute_names_request::OrderBy>,
+    #[prost(enumeration = "trace_item_attribute_names_request::MatchMode", tag = "10")]
+    pub match_mode: i32,
 }
 /// Nested message and enum types in `TraceItemAttributeNamesRequest`.
 pub mod trace_item_attribute_names_request {
@@ -1743,6 +1745,48 @@ pub mod trace_item_attribute_names_request {
                     "COLUMN_COUNT" => Some(Self::Count),
                     _ => None,
                 }
+            }
+        }
+    }
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
+    #[repr(i32)]
+    pub enum MatchMode {
+        /// Defaults to match all which is the current behaviour
+        Unspecified = 0,
+        /// All attributes in the filter must be matched when searching for results
+        All = 1,
+        /// At least one attribute in the filter should be matched when searching
+        Any = 2,
+    }
+    impl MatchMode {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Self::Unspecified => "MATCH_MODE_UNSPECIFIED",
+                Self::All => "MATCH_MODE_ALL",
+                Self::Any => "MATCH_MODE_ANY",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "MATCH_MODE_UNSPECIFIED" => Some(Self::Unspecified),
+                "MATCH_MODE_ALL" => Some(Self::All),
+                "MATCH_MODE_ANY" => Some(Self::Any),
+                _ => None,
             }
         }
     }
