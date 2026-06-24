@@ -40,13 +40,13 @@ message TraceItemAttributeNamesRequest {
     bool descending = 2;
   }
 
-  enum FilterMode {
+  enum MatchMode {
     // Defaults to match all which is the current behaviour
-    FILTER_MODE_UNSPECIFIED = 0;
+    MATCH_MODE_UNSPECIFIED = 0;
     // All attributes in the filter must be matched when searching for results
-    FILTER_MODE_MATCH_ALL = 1;
+    MATCH_MODE_MATCH_ALL = 1;
     // At least one attribute in the filter should be matched when searching
-    FILTER_MODE_MATCH_ANY = 2;
+    MATCH_MODE_MATCH_ANY = 2;
   }
 
   // metadata about the request
@@ -81,7 +81,7 @@ message TraceItemAttributeNamesRequest {
   // different ordering, e.g. by attribute frequency.
   OrderBy order_by = 9;
 
-  FilterMode filter_mode = 10;
+  MatchMode match_mode = 10;
 }
 
 // TraceItemAttributeNamesResponse is the response returned by the TraceItemAttributeNames endpoint.

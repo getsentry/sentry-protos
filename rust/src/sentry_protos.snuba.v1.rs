@@ -1679,8 +1679,8 @@ pub struct TraceItemAttributeNamesRequest {
     /// different ordering, e.g. by attribute frequency.
     #[prost(message, optional, tag = "9")]
     pub order_by: ::core::option::Option<trace_item_attribute_names_request::OrderBy>,
-    #[prost(enumeration = "trace_item_attribute_names_request::FilterMode", tag = "10")]
-    pub filter_mode: i32,
+    #[prost(enumeration = "trace_item_attribute_names_request::MatchMode", tag = "10")]
+    pub match_mode: i32,
 }
 /// Nested message and enum types in `TraceItemAttributeNamesRequest`.
 pub mod trace_item_attribute_names_request {
@@ -1760,32 +1760,32 @@ pub mod trace_item_attribute_names_request {
         ::prost::Enumeration
     )]
     #[repr(i32)]
-    pub enum FilterMode {
+    pub enum MatchMode {
         /// Defaults to match all which is the current behaviour
-        ModeUnspecified = 0,
+        Unspecified = 0,
         /// All attributes in the filter must be matched when searching for results
-        ModeMatchAll = 1,
+        MatchAll = 1,
         /// At least one attribute in the filter should be matched when searching
-        ModeMatchAny = 2,
+        MatchAny = 2,
     }
-    impl FilterMode {
+    impl MatchMode {
         /// String value of the enum field names used in the ProtoBuf definition.
         ///
         /// The values are not transformed in any way and thus are considered stable
         /// (if the ProtoBuf definition does not change) and safe for programmatic use.
         pub fn as_str_name(&self) -> &'static str {
             match self {
-                Self::ModeUnspecified => "MODE_UNSPECIFIED",
-                Self::ModeMatchAll => "MODE_MATCH_ALL",
-                Self::ModeMatchAny => "MODE_MATCH_ANY",
+                Self::Unspecified => "MATCH_MODE_UNSPECIFIED",
+                Self::MatchAll => "MATCH_MODE_MATCH_ALL",
+                Self::MatchAny => "MATCH_MODE_MATCH_ANY",
             }
         }
         /// Creates an enum from field names used in the ProtoBuf definition.
         pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
             match value {
-                "MODE_UNSPECIFIED" => Some(Self::ModeUnspecified),
-                "MODE_MATCH_ALL" => Some(Self::ModeMatchAll),
-                "MODE_MATCH_ANY" => Some(Self::ModeMatchAny),
+                "MATCH_MODE_UNSPECIFIED" => Some(Self::Unspecified),
+                "MATCH_MODE_MATCH_ALL" => Some(Self::MatchAll),
+                "MATCH_MODE_MATCH_ANY" => Some(Self::MatchAny),
                 _ => None,
             }
         }
