@@ -44,9 +44,9 @@ message TraceItemAttributeNamesRequest {
     // Defaults to match all which is the current behaviour
     MATCH_MODE_UNSPECIFIED = 0;
     // All attributes in the filter must be matched when searching for results
-    MATCH_MODE_MATCH_ALL = 1;
+    MATCH_MODE_ALL = 1;
     // At least one attribute in the filter should be matched when searching
-    MATCH_MODE_MATCH_ANY = 2;
+    MATCH_MODE_ANY = 2;
   }
 
   // metadata about the request

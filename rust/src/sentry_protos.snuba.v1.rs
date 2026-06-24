@@ -1764,9 +1764,9 @@ pub mod trace_item_attribute_names_request {
         /// Defaults to match all which is the current behaviour
         Unspecified = 0,
         /// All attributes in the filter must be matched when searching for results
-        MatchAll = 1,
+        All = 1,
         /// At least one attribute in the filter should be matched when searching
-        MatchAny = 2,
+        Any = 2,
     }
     impl MatchMode {
         /// String value of the enum field names used in the ProtoBuf definition.
@@ -1776,16 +1776,16 @@ pub mod trace_item_attribute_names_request {
         pub fn as_str_name(&self) -> &'static str {
             match self {
                 Self::Unspecified => "MATCH_MODE_UNSPECIFIED",
-                Self::MatchAll => "MATCH_MODE_MATCH_ALL",
-                Self::MatchAny => "MATCH_MODE_MATCH_ANY",
+                Self::All => "MATCH_MODE_ALL",
+                Self::Any => "MATCH_MODE_ANY",
             }
         }
         /// Creates an enum from field names used in the ProtoBuf definition.
         pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
             match value {
                 "MATCH_MODE_UNSPECIFIED" => Some(Self::Unspecified),
-                "MATCH_MODE_MATCH_ALL" => Some(Self::MatchAll),
-                "MATCH_MODE_MATCH_ANY" => Some(Self::MatchAny),
+                "MATCH_MODE_ALL" => Some(Self::All),
+                "MATCH_MODE_ANY" => Some(Self::Any),
                 _ => None,
             }
         }
