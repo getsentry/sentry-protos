@@ -1,3 +1,9 @@
+## 0.34.0
+
+### New Features ✨
+
+- (attributes) Add filter mode by @wmak in [#327](https://github.com/getsentry/sentry-protos/pull/327)
+
 ## 0.33.1
 
 ### Internal Changes 🔧
