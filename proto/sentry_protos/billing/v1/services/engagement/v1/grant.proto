@@ -7,6 +7,7 @@ import "sentry_protos/billing/v1/services/engagement/v1/grant_source.proto";
 
 // Denomination of a Grant.
 enum GrantType {
+  option deprecated = true;
   GRANT_TYPE_UNSPECIFIED = 0;
   // A quantity of units for specific line items.
   GRANT_TYPE_UNITS = 1;
@@ -16,6 +17,7 @@ enum GrantType {
 
 // Lifecycle state of a Grant.
 enum GrantStatus {
+  option deprecated = true;
   GRANT_STATUS_UNSPECIFIED = 0;
   // Consumable now; within [start_date, end_date].
   GRANT_STATUS_ACTIVE = 1;
@@ -35,6 +37,7 @@ enum GrantStatus {
 // UNITS grants have exactly one entry in line_item_uids. CENTS grants may
 // have several.
 message Grant {
+  option deprecated = true;
   uint64 id = 1;
   uint64 organization_id = 2;
   GrantType type = 3;
