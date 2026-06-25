@@ -460,11 +460,7 @@ pub mod effective_unit_grant {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUnitGrantsRequest {
     #[prost(uint64, tag = "1")]
-    pub organization_id: u64,
-    #[prost(message, optional, tag = "3")]
-    pub start_date: ::core::option::Option<super::super::super::Date>,
-    #[prost(message, optional, tag = "4")]
-    pub end_date: ::core::option::Option<super::super::super::Date>,
+    pub contract_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUnitGrantsResponse {
