@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.recurring_credit.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/recurring_credit/v1/recurring_credit.proto";
+
+message GetActiveRecurringCreditsRequest {
+  uint64 organization_id = 1;
+  // Returns all recurring credits active at any point within
+  // [start_date, end_date], inclusive.
+  sentry_protos.billing.v1.Date start_date = 2;
+  sentry_protos.billing.v1.Date end_date = 3;
+}
+
+message GetActiveRecurringCreditsResponse {
+  repeated RecurringCredit recurring_credits = 1;
+}

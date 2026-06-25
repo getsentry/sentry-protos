@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.recurring_credit.v1;
+
+message CancelRecurringCreditRequest {
+  // Id of the recurring credit to cancel.
+  uint64 id = 1;
+}
+
+message CancelRecurringCreditResponse {
+  // True if a matching record was found and cancelled.
+  bool updated = 1;
+}
