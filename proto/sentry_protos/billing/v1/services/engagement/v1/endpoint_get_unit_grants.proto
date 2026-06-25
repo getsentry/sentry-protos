@@ -19,9 +19,7 @@ message EffectiveUnitGrant {
 }
 
 message GetUnitGrantsRequest {
-  uint64 organization_id = 1;
-  sentry_protos.billing.v1.Date start_date = 3;
-  sentry_protos.billing.v1.Date end_date = 4;
+  uint64 contract_id = 1;
 }
 
 message GetUnitGrantsResponse {
