@@ -7,6 +7,12 @@ message StripePaymentData {
   optional string customer_stripe_id = 1;
   optional string default_payment_method_id = 2;
   optional bool has_card_on_file = 3;
+  optional string last4 = 4;
+  optional string postal_code = 5;
+  optional string country_code = 6;
+  optional uint32 exp_month = 7;
+  optional uint32 exp_year = 8;
+  optional string brand = 9;
 }
 
 // Payment provider configuration with support for multiple providers.
