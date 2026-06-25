@@ -248,6 +248,18 @@ pub struct StripePaymentData {
     >,
     #[prost(bool, optional, tag = "3")]
     pub has_card_on_file: ::core::option::Option<bool>,
+    #[prost(string, optional, tag = "4")]
+    pub last4: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "5")]
+    pub postal_code: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "6")]
+    pub country_code: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(uint32, optional, tag = "7")]
+    pub exp_month: ::core::option::Option<u32>,
+    #[prost(uint32, optional, tag = "8")]
+    pub exp_year: ::core::option::Option<u32>,
+    #[prost(string, optional, tag = "9")]
+    pub brand: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// Payment provider configuration with support for multiple providers.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
