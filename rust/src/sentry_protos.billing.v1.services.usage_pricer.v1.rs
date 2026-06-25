@@ -48,7 +48,8 @@ pub struct LineItemUsageSummary {
     /// How much of the line item was consumed by PAYG (in the line item's units)
     #[prost(uint64, tag = "3")]
     pub quantity: u64,
-    /// Whether the usage pricer had to cap the spend based on the budget set by the contract
+    /// Whether the contract PAYG budget for this line item's cap scope has no budget
+    /// remaining (pre-cap spend >= cap, or any spend when the cap is 0).
     #[prost(bool, tag = "4")]
     pub payg_budget_exhausted: bool,
 }
@@ -60,7 +61,8 @@ pub struct SharedLineItemUsageSummary {
     /// Line item breakdown within shared budget
     #[prost(message, repeated, tag = "2")]
     pub line_item_summaries: ::prost::alloc::vec::Vec<LineItemUsageSummary>,
-    /// Whether the usage pricer had to cap the spend based on the budget set by the contract
+    /// Whether the shared PAYG budget has no budget remaining (any member line item in the
+    /// pool is exhausted).
     #[prost(bool, tag = "3")]
     pub payg_budget_exhausted: bool,
 }
