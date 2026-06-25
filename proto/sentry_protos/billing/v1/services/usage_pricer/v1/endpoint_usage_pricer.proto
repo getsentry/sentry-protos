@@ -48,7 +48,8 @@ message LineItemUsageSummary {
   // How much of the line item was consumed by PAYG (in the line item's units)
   uint64 quantity = 3;
 
-  // Whether the usage pricer had to cap the spend based on the budget set by the contract
+  // Whether the contract PAYG budget for this line item's cap scope has no budget
+  // remaining (pre-cap spend >= cap, or any spend when the cap is 0).
   bool payg_budget_exhausted = 4;
 }
 
@@ -59,7 +60,8 @@ message SharedLineItemUsageSummary {
   // Line item breakdown within shared budget
   repeated LineItemUsageSummary line_item_summaries = 2;
 
-  // Whether the usage pricer had to cap the spend based on the budget set by the contract
+  // Whether the shared PAYG budget has no budget remaining (any member line item in the
+  // pool is exhausted).
   bool payg_budget_exhausted = 3;
 }
 
