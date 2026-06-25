@@ -1,3 +1,9 @@
+## 0.34.1
+
+### Internal Changes 🔧
+
+- Add payment config details by @noahsmartin in [#328](https://github.com/getsentry/sentry-protos/pull/328)
+
 ## 0.34.0
 
 ### New Features ✨
