@@ -354,6 +354,123 @@ pub struct GetEffectiveGrantsResponse {
     #[prost(message, repeated, tag = "1")]
     pub effective_grants: ::prost::alloc::vec::Vec<EffectiveGrant>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EffectiveMonetaryGrant {
+    /// PERCENT amounts are percentage points: 10 = 10%
+    #[prost(uint64, tag = "1")]
+    pub amount: u64,
+    #[prost(enumeration = "EffectiveMonetaryType", tag = "2")]
+    pub r#type: i32,
+    #[prost(enumeration = "EffectiveMonetarySource", tag = "3")]
+    pub source: i32,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetMonetaryGrantsRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetMonetaryGrantsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub monetary_grants: ::prost::alloc::vec::Vec<EffectiveMonetaryGrant>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum EffectiveMonetaryType {
+    Unspecified = 0,
+    Cents = 1,
+    Percent = 2,
+}
+impl EffectiveMonetaryType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "EFFECTIVE_MONETARY_TYPE_UNSPECIFIED",
+            Self::Cents => "EFFECTIVE_MONETARY_TYPE_CENTS",
+            Self::Percent => "EFFECTIVE_MONETARY_TYPE_PERCENT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "EFFECTIVE_MONETARY_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "EFFECTIVE_MONETARY_TYPE_CENTS" => Some(Self::Cents),
+            "EFFECTIVE_MONETARY_TYPE_PERCENT" => Some(Self::Percent),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum EffectiveMonetarySource {
+    Unspecified = 0,
+    Balance = 1,
+    RecurringCredit = 2,
+}
+impl EffectiveMonetarySource {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "EFFECTIVE_MONETARY_SOURCE_UNSPECIFIED",
+            Self::Balance => "EFFECTIVE_MONETARY_SOURCE_BALANCE",
+            Self::RecurringCredit => "EFFECTIVE_MONETARY_SOURCE_RECURRING_CREDIT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "EFFECTIVE_MONETARY_SOURCE_UNSPECIFIED" => Some(Self::Unspecified),
+            "EFFECTIVE_MONETARY_SOURCE_BALANCE" => Some(Self::Balance),
+            "EFFECTIVE_MONETARY_SOURCE_RECURRING_CREDIT" => Some(Self::RecurringCredit),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EffectiveUnitGrant {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    /// Grants only apply to days between \[start_date, end_date\] (inclusive)
+    /// For units, this means Grants apply to usage that was accrued during the active period.
+    /// For monetary, Grants are applied to invoices created during the active period.
+    #[prost(message, optional, tag = "4")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "5")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(oneof = "effective_unit_grant::Amount", tags = "2, 3")]
+    pub amount: ::core::option::Option<effective_unit_grant::Amount>,
+}
+/// Nested message and enum types in `EffectiveUnitGrant`.
+pub mod effective_unit_grant {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Amount {
+        #[prost(bool, tag = "2")]
+        IsUnlimited(bool),
+        /// this should be expressed line item's billable metric prior to unit conversion (ie milliseconds, bytes, etc.)
+        #[prost(uint64, tag = "3")]
+        Units(u64),
+    }
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetUnitGrantsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(message, optional, tag = "3")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "4")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetUnitGrantsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub grants: ::prost::alloc::vec::Vec<EffectiveUnitGrant>,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct StartTrialRequest {
     #[prost(uint64, tag = "1")]
