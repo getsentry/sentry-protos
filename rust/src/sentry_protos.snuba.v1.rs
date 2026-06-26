@@ -35,7 +35,13 @@ pub mod attribute_key {
         /// note: all numbers are stored as float64, so massive integers can be rounded. USE STRING FOR IDS.
         Int = 4,
         Double = 5,
+        /// deprecated, use TYPE_ARRAY_INT/DOUBLE/BOOL/STRING instead
+        #[deprecated]
         Array = 6,
+        ArrayInt = 7,
+        ArrayDouble = 8,
+        ArrayBool = 9,
+        ArrayString = 10,
     }
     impl Type {
         /// String value of the enum field names used in the ProtoBuf definition.
@@ -51,7 +57,12 @@ pub mod attribute_key {
                 Self::Float => "TYPE_FLOAT",
                 Self::Int => "TYPE_INT",
                 Self::Double => "TYPE_DOUBLE",
+                #[allow(deprecated)]
                 Self::Array => "TYPE_ARRAY",
+                Self::ArrayInt => "TYPE_ARRAY_INT",
+                Self::ArrayDouble => "TYPE_ARRAY_DOUBLE",
+                Self::ArrayBool => "TYPE_ARRAY_BOOL",
+                Self::ArrayString => "TYPE_ARRAY_STRING",
             }
         }
         /// Creates an enum from field names used in the ProtoBuf definition.
@@ -63,7 +74,11 @@ pub mod attribute_key {
                 "TYPE_FLOAT" => Some(#[allow(deprecated)] Self::Float),
                 "TYPE_INT" => Some(Self::Int),
                 "TYPE_DOUBLE" => Some(Self::Double),
-                "TYPE_ARRAY" => Some(Self::Array),
+                "TYPE_ARRAY" => Some(#[allow(deprecated)] Self::Array),
+                "TYPE_ARRAY_INT" => Some(Self::ArrayInt),
+                "TYPE_ARRAY_DOUBLE" => Some(Self::ArrayDouble),
+                "TYPE_ARRAY_BOOL" => Some(Self::ArrayBool),
+                "TYPE_ARRAY_STRING" => Some(Self::ArrayString),
                 _ => None,
             }
         }
