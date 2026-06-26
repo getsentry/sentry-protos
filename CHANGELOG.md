@@ -1,3 +1,9 @@
+## 0.35.0
+
+### New Features ✨
+
+- (eap) Add typed array types for int/double/bool/string by @phacops in [#332](https://github.com/getsentry/sentry-protos/pull/332)
+
 ## 0.34.2
 
 ### Internal Changes 🔧
