@@ -48,8 +48,12 @@ pub struct LineItemUsageSummary {
     /// How much of the line item was consumed by PAYG (in the line item's units)
     #[prost(uint64, tag = "3")]
     pub quantity: u64,
-    /// Whether the contract PAYG budget for this line item's cap scope has no budget
-    /// remaining (pre-cap spend >= cap, or any spend when the cap is 0).
+    /// Whether the contract PAYG budget covering this line item has no budget remaining.
+    /// "No budget remaining" means the pre-cap spend within the budget's scope reaches the
+    /// cap (>=), or there is any spend when the cap is 0. For a shared (all-items) budget the
+    /// comparison uses the pooled pre-cap spend, so a line item can be flagged exhausted even
+    /// when its own spend is small. Always false for items priced at an uncapped rate (e.g.
+    /// Seer) and for items with no configured cap, since neither counts against a PAYG budget.
     #[prost(bool, tag = "4")]
     pub payg_budget_exhausted: bool,
 }
@@ -61,8 +65,8 @@ pub struct SharedLineItemUsageSummary {
     /// Line item breakdown within shared budget
     #[prost(message, repeated, tag = "2")]
     pub line_item_summaries: ::prost::alloc::vec::Vec<LineItemUsageSummary>,
-    /// Whether the shared PAYG budget has no budget remaining (any member line item in the
-    /// pool is exhausted).
+    /// Whether the shared PAYG budget has no budget remaining, i.e. any member line item in
+    /// the pool is exhausted (see LineItemUsageSummary.payg_budget_exhausted).
     #[prost(bool, tag = "3")]
     pub payg_budget_exhausted: bool,
 }
