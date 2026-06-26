@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.recurring_credit.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/recurring_credit/v1/recurring_credit.proto";
+
+message AddRecurringCreditRequest {
+  uint64 organization_id = 1;
+  // Required when type is UNITS; unset for CENTS and DISCOUNT_PERCENT.
+  optional string line_item_uid = 2;
+  // Amount granted per billing period.
+  int64 amount = 3;
+  sentry_protos.billing.v1.Date start_date = 4;
+  // Number of consecutive billing periods, starting at start_date. 1 = one-off gift.
+  uint32 number_of_periods = 5;
+  RecurringCreditType type = 6;
+}
+
+message AddRecurringCreditResponse {
+  // True if a new recurring credit was created.
+  bool created = 1;
+}

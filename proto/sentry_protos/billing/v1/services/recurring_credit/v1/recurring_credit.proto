@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.recurring_credit.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+
+// Denomination of a RecurringCredit.
+enum RecurringCreditType {
+  RECURRING_CREDIT_TYPE_UNSPECIFIED = 0;
+  // A quantity of units for a specific line item.
+  RECURRING_CREDIT_TYPE_UNITS = 1;
+  // A monetary allowance measured in cents.
+  RECURRING_CREDIT_TYPE_CENTS = 2;
+  // A percentage discount applied to the invoice. Whole percent: 10 = 10%.
+  RECURRING_CREDIT_TYPE_DISCOUNT_PERCENT = 3;
+}
+
+// A recurring gift or discount granted to an organization.
+message RecurringCredit {
+  uint64 id = 1;
+  // The line item this credit applies to. Set only for UNITS; unset
+  // (absent) for CENTS and DISCOUNT_PERCENT.
+  optional string line_item_uid = 2;
+  RecurringCreditType type = 3;
+  // Amount granted for the billing period. Interpretation depends on type:
+  // UNITS -> unit quantity (billable metric base units), CENTS -> cents,
+  // DISCOUNT_PERCENT -> whole percent.
+  int64 amount = 4;
+  // Active window, inclusive on both ends.
+  sentry_protos.billing.v1.Date start_date = 5;
+  sentry_protos.billing.v1.Date end_date = 6;
+}

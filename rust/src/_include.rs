@@ -59,6 +59,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.rate_card.v1.rs");
                     }
                 }
+                pub mod recurring_credit {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.recurring_credit.v1.rs");
+                    }
+                }
                 pub mod trial {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.trial.v1.rs");
