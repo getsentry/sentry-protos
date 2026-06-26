@@ -7,6 +7,7 @@ import "sentry_protos/billing/v1/services/engagement/v1/grant.proto";
 import "sentry_protos/billing/v1/services/engagement/v1/grant_source.proto";
 
 message CreateGrantRequest {
+  option deprecated = true;
   uint64 organization_id = 1;
 
   // Must be included when GrantType is UNITS
@@ -25,5 +26,6 @@ message CreateGrantRequest {
 }
 
 message CreateGrantResponse {
+  option deprecated = true;
   bool created = 1;
 }

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+enum EffectiveMonetaryType {
+  EFFECTIVE_MONETARY_TYPE_UNSPECIFIED = 0;
+  EFFECTIVE_MONETARY_TYPE_CENTS = 1;
+  EFFECTIVE_MONETARY_TYPE_PERCENT = 2;
+}
+
+enum EffectiveMonetarySource {
+  EFFECTIVE_MONETARY_SOURCE_UNSPECIFIED = 0;
+  EFFECTIVE_MONETARY_SOURCE_BALANCE = 1;
+  EFFECTIVE_MONETARY_SOURCE_RECURRING_CREDIT = 2;
+}
+
+message EffectiveMonetaryGrant {
+  // PERCENT amounts are percentage points: 10 = 10%
+  uint64 amount = 1;
+  EffectiveMonetaryType type = 2;
+  EffectiveMonetarySource source = 3;
+}
+
+message GetMonetaryGrantsRequest {
+  uint64 contract_id = 1;
+}
+
+message GetMonetaryGrantsResponse {
+  repeated EffectiveMonetaryGrant monetary_grants = 1;
+}

@@ -8,6 +8,7 @@ import "sentry_protos/billing/v1/services/engagement/v1/grant.proto";
 // A grant with counter-grant chains collapsed into a single effective amount.
 // Returned in drain priority order (end_date ASC, effective_amount ASC, grant_id ASC).
 message EffectiveGrant {
+  option deprecated = true;
   uint64 grant_id = 1;
   GrantType type = 2;
   repeated string line_item_uids = 3;
@@ -22,6 +23,7 @@ message EffectiveGrant {
 }
 
 message GetEffectiveGrantsRequest {
+  option deprecated = true;
   uint64 organization_id = 1;
   // When set, returns only grants whose line_item_uids contain this value.
   optional string line_item_uid = 2;
@@ -36,6 +38,7 @@ message GetEffectiveGrantsRequest {
 }
 
 message GetEffectiveGrantsResponse {
+  option deprecated = true;
   // Grants with counter-chains collapsed, sorted by drain priority.
   repeated EffectiveGrant effective_grants = 1;
 }

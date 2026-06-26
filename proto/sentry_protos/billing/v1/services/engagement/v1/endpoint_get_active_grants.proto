@@ -5,6 +5,7 @@ package sentry_protos.billing.v1.services.engagement.v1;
 import "sentry_protos/billing/v1/date.proto";
 
 message UnitGrant {
+  option deprecated = true;
   string line_item_uid = 1;
   oneof amount {
     bool is_unlimited = 2;
@@ -14,18 +15,21 @@ message UnitGrant {
 }
 
 enum MonetaryType {
+  option deprecated = true;
   MONETARY_TYPE_UNSPECIFIED = 0;
   MONETARY_TYPE_CENTS = 1;
   MONETARY_TYPE_PERCENT = 2;
 }
 
 message MonetaryGrant {
+  option deprecated = true;
   // PERCENT amounts are percentage points: 10 = 10%
   uint64 amount = 1;
   MonetaryType type = 2;
 }
 
 message ActiveGrant {
+  option deprecated = true;
   oneof kind {
     UnitGrant unit = 1;
     MonetaryGrant monetary = 2;
@@ -39,11 +43,13 @@ message ActiveGrant {
 }
 
 message GetActiveGrantsRequest {
+  option deprecated = true;
   uint64 organization_id = 1;
   sentry_protos.billing.v1.Date start_date = 3;
   sentry_protos.billing.v1.Date end_date = 4;
 }
 
 message GetActiveGrantsResponse {
+  option deprecated = true;
   repeated ActiveGrant grants = 1;
 }

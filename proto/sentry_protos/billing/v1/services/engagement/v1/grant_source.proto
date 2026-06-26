@@ -4,6 +4,7 @@ package sentry_protos.billing.v1.services.engagement.v1;
 
 // How a Grant was created.
 enum GrantSource {
+  option deprecated = true;
   GRANT_SOURCE_UNSPECIFIED = 0;
 
   // Derived from a Trial row.
