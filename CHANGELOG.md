@@ -1,3 +1,9 @@
+## 0.34.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Split up monetary and unit grants by @brendanhsentry in [#331](https://github.com/getsentry/sentry-protos/pull/331)
+
 ## 0.34.1
 
 ### Internal Changes 🔧
