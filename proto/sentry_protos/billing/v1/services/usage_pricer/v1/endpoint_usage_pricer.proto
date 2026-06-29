@@ -51,11 +51,11 @@ message LineItemUsageSummary {
   // Whether the usage pricer had to cap the spend based on the budget set by the contract
   bool payg_budget_exhausted = 4;
 
-  // false when this line item still has reserved quantity left. 
+  // false when this line item still has reserved quantity left.
   // It's possible that PAYG is exhausted whereas reserved is not.
   // Example: there's an overall PAYG budget of $10, a customer sends $10 worth of errors
   // the payg_budget_exhausted field is true for all line items
-  // however, the plan still includes 5GB of free logs, so reserved_budget_exhausted is false for logs. 
+  // however, the plan still includes 5GB of free logs, so reserved_budget_exhausted is false for logs.
   bool reserved_budget_exhausted = 5;
 }
 
@@ -68,6 +68,9 @@ message SharedLineItemUsageSummary {
 
   // Whether the usage pricer had to cap the spend based on the budget set by the contract
   bool payg_budget_exhausted = 3;
+
+  // false when this pool still has reserved quantity left.
+  bool reserved_budget_exhausted = 4;
 }
 
 message UsagePricerResponse {
