@@ -103,6 +103,13 @@ pub struct LineItemUsageSummary {
     /// Whether the usage pricer had to cap the spend based on the budget set by the contract
     #[prost(bool, tag = "4")]
     pub payg_budget_exhausted: bool,
+    /// false when this line item still has reserved quantity left.
+    /// It's possible that PAYG is exhausted whereas reserved is not.
+    /// Example: there's an overall PAYG budget of $10, a customer sends $10 worth of errors
+    /// the payg_budget_exhausted field is true for all line items
+    /// however, the plan still includes 5GB of free logs, so reserved_budget_exhausted is false for logs.
+    #[prost(bool, tag = "5")]
+    pub reserved_budget_exhausted: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
