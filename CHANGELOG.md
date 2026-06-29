@@ -1,3 +1,9 @@
+## 0.36.0
+
+### New Features ✨
+
+- (billing-platform) Add daily usage breakdown endpoint protos by @skonves in [#321](https://github.com/getsentry/sentry-protos/pull/321)
+
 ## 0.35.0
 
 ### New Features ✨
