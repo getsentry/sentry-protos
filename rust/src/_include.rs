@@ -34,6 +34,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.contract.v1.rs");
                     }
                 }
+                pub mod contract_budget_enforcer {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.contract_budget_enforcer.v1.rs");
+                    }
+                }
                 pub mod engagement {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.engagement.v1.rs");
@@ -52,6 +57,11 @@ pub mod sentry_protos {
                 pub mod pending_change {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.pending_change.v1.rs");
+                    }
+                }
+                pub mod quotas {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.quotas.v1.rs");
                     }
                 }
                 pub mod rate_card {
