@@ -1,3 +1,9 @@
+## 0.37.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add new contract id in RolloverContractResponse by @brendanhsentry in [#337](https://github.com/getsentry/sentry-protos/pull/337)
+
 ## 0.37.0
 
 ### New Features ✨
