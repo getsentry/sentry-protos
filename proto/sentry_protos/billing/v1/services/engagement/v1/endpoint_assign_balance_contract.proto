@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+message AssignBalanceContractRequest {
+  optional uint64 previous_contract_id = 1;
+  uint64 contract_id = 2;
+}
+
+message AssignBalanceContractResponse {
+  bool assigned = 1;
+}

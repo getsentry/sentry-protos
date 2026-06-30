@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+message StageRolloverMonetaryGrantsRequest {
+  uint64 previous_contract_id = 1;
+  optional uint64 balance_cents_used = 2;
+}
+
+message StageRolloverMonetaryGrantsResponse {}
