@@ -236,6 +236,15 @@ pub struct LineItemDetails {
     /// Defines how usage data is transformed into this line item.
     #[prost(message, optional, tag = "6")]
     pub billable_metric: ::core::option::Option<BillableMetric>,
+    /// DEPRECATED: do not use. The getsentry DataCategory value this line item
+    /// bills (the unified getsentry/sentry DataCategory int, NOT the proto
+    /// sentry_protos.billing.v1.DataCategory enum). Exists only to support legacy
+    /// code that hardcodes category values during the billing-platform migration.
+    /// New line items must be addable, and new consumers written, without anyone
+    /// hardcoding or reading a category off the line item.
+    #[deprecated]
+    #[prost(int32, tag = "7")]
+    pub line_item_category: i32,
 }
 /// Stripe-specific payment information for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
