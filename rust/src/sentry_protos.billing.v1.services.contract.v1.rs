@@ -743,4 +743,6 @@ pub struct RolloverContractResponse {
     pub needs_charge: bool,
     #[prost(uint64, tag = "3")]
     pub amount_billed: u64,
+    #[prost(uint64, tag = "4")]
+    pub new_contract_id: u64,
 }
