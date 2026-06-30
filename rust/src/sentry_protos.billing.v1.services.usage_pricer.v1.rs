@@ -122,6 +122,9 @@ pub struct SharedLineItemUsageSummary {
     /// Whether the usage pricer had to cap the spend based on the budget set by the contract
     #[prost(bool, tag = "3")]
     pub payg_budget_exhausted: bool,
+    /// false when this pool still has reserved quantity left.
+    #[prost(bool, tag = "4")]
+    pub reserved_budget_exhausted: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsagePricerResponse {
