@@ -21,4 +21,12 @@ message LineItemDetails {
 
   // Defines how usage data is transformed into this line item.
   BillableMetric billable_metric = 6;
+
+  // DEPRECATED: do not use. The getsentry DataCategory value this line item
+  // bills (the unified getsentry/sentry DataCategory int, NOT the proto
+  // sentry_protos.billing.v1.DataCategory enum). Exists only to support legacy
+  // code that hardcodes category values during the billing-platform migration.
+  // New line items must be addable, and new consumers written, without anyone
+  // hardcoding or reading a category off the line item.
+  int32 line_item_category = 7 [deprecated = true];
 }
