@@ -30,4 +30,5 @@ message RolloverContractResponse {
   uint64 invoice_id = 1;
   bool needs_charge = 2;
   uint64 amount_billed = 3;
+  uint64 new_contract_id = 4;
 }
