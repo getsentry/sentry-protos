@@ -1,3 +1,9 @@
+## 0.37.0
+
+### New Features ✨
+
+- (billing) Add budget quota protos by @volokluev in [#333](https://github.com/getsentry/sentry-protos/pull/333)
+
 ## 0.36.1
 
 - add  reserved_budget_exhausted field behavior by @volokluev in [#335](https://github.com/getsentry/sentry-protos/pull/335)
