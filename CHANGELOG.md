@@ -1,3 +1,9 @@
+## 0.37.3
+
+### Internal Changes 🔧
+
+- (billing-platform) Include previous contract id in contract proto by @brendanhsentry in [#341](https://github.com/getsentry/sentry-protos/pull/341)
+
 ## 0.37.2
 
 ### Internal Changes 🔧
