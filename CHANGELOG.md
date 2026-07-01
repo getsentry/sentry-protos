@@ -1,3 +1,9 @@
+## 0.37.2
+
+### Internal Changes 🔧
+
+- Add legacy data category field to line items by @noahsmartin in [#340](https://github.com/getsentry/sentry-protos/pull/340)
+
 ## 0.37.1
 
 ### Internal Changes 🔧
