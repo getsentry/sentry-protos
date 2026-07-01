@@ -1,3 +1,25 @@
+## 0.37.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add new contract id in RolloverContractResponse by @brendanhsentry in [#337](https://github.com/getsentry/sentry-protos/pull/337)
+
+## 0.37.0
+
+### New Features ✨
+
+- (billing) Add budget quota protos by @volokluev in [#333](https://github.com/getsentry/sentry-protos/pull/333)
+
+## 0.36.1
+
+- add  reserved_budget_exhausted field behavior by @volokluev in [#335](https://github.com/getsentry/sentry-protos/pull/335)
+
+## 0.36.0
+
+### New Features ✨
+
+- (billing-platform) Add daily usage breakdown endpoint protos by @skonves in [#321](https://github.com/getsentry/sentry-protos/pull/321)
+
 ## 0.35.0
 
 ### New Features ✨

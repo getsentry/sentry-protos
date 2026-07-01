@@ -76,6 +76,7 @@ fn roundtrip_get_usage_response() {
                 count: 5,
             }],
         }],
+        ..Default::default()
     });
 }
 

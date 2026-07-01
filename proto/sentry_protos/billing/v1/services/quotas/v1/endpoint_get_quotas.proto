@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.quotas.v1;
+
+import "sentry_protos/billing/v1/quota_config.proto";
+
+message GetQuotasRequest {
+  uint64 organization_id = 1;
+  uint64 project_id = 2;
+}
+
+message GetQuotasResponse {
+  repeated sentry_protos.billing.v1.QuotaConfig quotas = 1;
+  bool contract_present = 2;
+}
