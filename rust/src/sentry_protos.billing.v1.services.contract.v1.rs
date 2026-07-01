@@ -472,6 +472,8 @@ pub struct ContractMetadata {
     pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
     #[prost(string, tag = "9")]
     pub package_uid: ::prost::alloc::string::String,
+    #[prost(uint64, optional, tag = "10")]
+    pub previous_id: ::core::option::Option<u64>,
     #[deprecated]
     #[prost(uint64, tag = "8")]
     pub package_id: u64,
