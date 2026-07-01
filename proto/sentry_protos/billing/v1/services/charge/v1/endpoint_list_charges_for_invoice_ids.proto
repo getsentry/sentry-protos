@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
+
+// Lists every recorded PlatformCharge for a batch of invoice ids, ordered by
+// (invoice_id, date_added_st) ascending, with each charge's refunds
+// pre-attached. Used by presentation surfaces that render full charge +
+// refund history for a customer's invoices.
+message ListChargesForInvoiceIdsRequest {
+  repeated uint64 invoice_ids = 1;
+}
+
+message ListChargesForInvoiceIdsResponse {
+  repeated PlatformCharge charges = 1;
+}

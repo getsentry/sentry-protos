@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Locates a PlatformInvoice by guid alone. Used by webhook handlers that have
+// the invoice guid in a Stripe event's metadata but haven't resolved the
+// parent organization yet -- the org-scoped GetInvoice isn't a fit. Returns
+// just identifying fields so callers don't need to handle the full Invoice
+// proto when all they want is to thread invoice_id / organization_id into
+// another service call.
+message FindInvoiceByGuidRequest {
+  string invoice_guid = 1;
+}
+
+message FindInvoiceByGuidResponse {
+  // Unset when no PlatformInvoice matches the guid. Callers should treat
+  // that as "this Stripe charge belongs to legacy billing, not platform"
+  // and fall through accordingly.
+  optional uint64 invoice_id = 1;
+
+  // Set whenever ``invoice_id`` is set; unset otherwise.
+  optional uint64 organization_id = 2;
+}

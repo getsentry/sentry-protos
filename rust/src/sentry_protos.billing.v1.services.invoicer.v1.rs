@@ -126,3 +126,33 @@ pub struct HandleChargeSucceededResponse {
     #[prost(bool, tag = "1")]
     pub handled: bool,
 }
+/// Backfills a PlatformCharge row for a Stripe charge that doesn't have one
+/// yet, by resolving the invoice guid via ContractService.find_invoice_by_guid
+/// and asking ChargeService.create_platform_charge_for_invoice to upsert the
+/// row atomically. Presentation-layer orchestrator -- the data services
+/// themselves stay decoupled.
+///
+/// Used by the `charge.succeeded` webhook to materialise the missing row
+/// after the manual Pay Now flow, where the endpoint only created a Stripe
+/// PaymentIntent and no local PlatformCharge yet exists.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MaterializePlatformChargeRequest {
+    #[prost(message, optional, tag = "1")]
+    pub stripe_charge: ::core::option::Option<
+        super::super::super::common::v1::StripeCharge,
+    >,
+    #[prost(string, tag = "2")]
+    pub invoice_guid: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MaterializePlatformChargeResponse {
+    /// Unset when no PlatformInvoice matches the guid -- caller falls
+    /// through to legacy handling (the charge belongs to the legacy Invoice
+    /// flow).
+    #[prost(uint64, optional, tag = "1")]
+    pub charge_id: ::core::option::Option<u64>,
+    /// True when this call inserted a new row; false on idempotent re-runs
+    /// or when no matching invoice was found.
+    #[prost(bool, tag = "2")]
+    pub created: bool,
+}
