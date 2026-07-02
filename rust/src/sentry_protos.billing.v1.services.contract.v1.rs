@@ -472,6 +472,8 @@ pub struct ContractMetadata {
     pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
     #[prost(string, tag = "9")]
     pub package_uid: ::prost::alloc::string::String,
+    #[prost(uint64, optional, tag = "10")]
+    pub previous_id: ::core::option::Option<u64>,
     #[deprecated]
     #[prost(uint64, tag = "8")]
     pub package_id: u64,
@@ -583,6 +585,18 @@ pub struct GetInvoiceRequest {
 pub struct GetInvoiceResponse {
     #[prost(message, optional, tag = "1")]
     pub invoice: ::core::option::Option<Invoice>,
+}
+/// Batch-resolves PlatformInvoice ids to their guids. Missing ids are
+/// silently omitted from the response.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetInvoiceGuidsForIdsRequest {
+    #[prost(uint64, repeated, tag = "1")]
+    pub invoice_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetInvoiceGuidsForIdsResponse {
+    #[prost(map = "uint64, string", tag = "1")]
+    pub invoice_guids: ::std::collections::HashMap<u64, ::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUnchargedInvoicesRequest {
@@ -745,4 +759,16 @@ pub struct RolloverContractResponse {
     pub amount_billed: u64,
     #[prost(uint64, tag = "4")]
     pub new_contract_id: u64,
+}
+/// Atomically stamps manual_payment_started_at on an unpaid PlatformInvoice.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StartManualPaymentRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StartManualPaymentResponse {
+    /// False when no row matched paid=false (invoice paid, missing, or raced).
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
 }

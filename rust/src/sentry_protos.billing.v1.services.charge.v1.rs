@@ -41,6 +41,9 @@ pub struct PlatformCharge {
     /// `len(refunds) > 0` (or sum == amount) signals "refunded."
     #[prost(message, repeated, tag = "10")]
     pub refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
+    /// Unix epoch seconds when the charge row was created locally.
+    #[prost(int64, tag = "11")]
+    pub date_added_st: i64,
 }
 /// Canonical projection of a stored platform refund. One row per recorded
 /// refund against a `PlatformCharge`.
@@ -167,6 +170,28 @@ pub struct ListChargesForInvoiceRequest {
 pub struct ListChargesForInvoiceResponse {
     #[prost(message, repeated, tag = "1")]
     pub charges: ::prost::alloc::vec::Vec<Charge>,
+}
+/// Lists PlatformCharges for a batch of invoice ids, refunds pre-attached.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListChargesForInvoiceIdsRequest {
+    #[prost(uint64, repeated, tag = "1")]
+    pub invoice_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListChargesForInvoiceIdsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub charges: ::prost::alloc::vec::Vec<PlatformCharge>,
+}
+/// Lists PlatformCharges for an organization, refunds pre-attached.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListChargesForOrganizationRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListChargesForOrganizationResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub charges: ::prost::alloc::vec::Vec<PlatformCharge>,
 }
 /// Lists every recorded refund associated with the charges for a single
 /// platform invoice. Callers in the presentation layer use this to render
