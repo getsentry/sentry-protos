@@ -1,3 +1,9 @@
+## 0.38.0
+
+### New Features ✨
+
+- (eap) Add filter support to ExportTraceItemsRequest endpoint by @pbhandari in [#343](https://github.com/getsentry/sentry-protos/pull/343)
+
 ## 0.37.3
 
 ### Internal Changes 🔧
