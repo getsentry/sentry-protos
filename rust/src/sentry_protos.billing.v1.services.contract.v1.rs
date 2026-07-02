@@ -472,6 +472,8 @@ pub struct ContractMetadata {
     pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
     #[prost(string, tag = "9")]
     pub package_uid: ::prost::alloc::string::String,
+    #[prost(uint64, optional, tag = "10")]
+    pub previous_id: ::core::option::Option<u64>,
     #[deprecated]
     #[prost(uint64, tag = "8")]
     pub package_id: u64,
@@ -675,11 +677,17 @@ pub struct MarkInvoicePaidRequest {
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MarkInvoicePaidResponse {
     /// True if a matching invoice was found and updated.
     #[prost(bool, tag = "1")]
     pub updated: bool,
+    /// The updated invoice after the mark-paid write. Unset when
+    /// `updated` is false. Callers that need the fresh proto (for
+    /// receipt rendering, downstream service calls) can consume this
+    /// directly rather than issuing a separate `GetInvoice` roundtrip.
+    #[prost(message, optional, tag = "2")]
+    pub invoice: ::core::option::Option<Invoice>,
 }
 /// Records a failed charge attempt against an invoice.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
@@ -699,6 +707,23 @@ pub struct RecordFailedChargeAttemptResponse {
     /// schedule has been exhausted and no further automatic retries will run.
     #[prost(message, optional, tag = "3")]
     pub next_payment_attempt: ::core::option::Option<::prost_types::Timestamp>,
+}
+/// Clears manual_payment_started_at on an unpaid invoice. Used by the manual
+/// Pay Now endpoint when `start_manual_payment` was acquired pre-Stripe and
+/// the Stripe PaymentIntent.create then failed -- releasing keeps the
+/// inline-cutoff window from delaying automated retries by up to 24h.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseManualPaymentLockRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseManualPaymentLockResponse {
+    /// False when no row was updated -- the invoice no longer exists or has
+    /// already been flipped paid. Callers can treat this as "nothing to
+    /// release" and proceed.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RetryChargeRequest {

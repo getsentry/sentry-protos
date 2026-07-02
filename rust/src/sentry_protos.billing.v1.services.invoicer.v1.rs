@@ -118,6 +118,15 @@ pub struct HandleChargeSucceededRequest {
     pub stripe_charge: ::core::option::Option<
         super::super::super::common::v1::StripeCharge,
     >,
+    /// Optional guid of the platform invoice this charge belongs to, read
+    /// from the Stripe charge's `metadata.invoiceGUID` by the webhook layer.
+    /// Populated for the manual Pay Now flow where no PlatformCharge row
+    /// exists yet -- the service uses it to materialise the row via
+    /// CaptureCharge with CHARGE_METHOD_STRIPE_PAYMENT_INTENT before the
+    /// existing update-charge lookup runs. Unset for the renewal flow,
+    /// where the charge row was already created by the invoicing job.
+    #[prost(string, optional, tag = "2")]
+    pub invoice_guid: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct HandleChargeSucceededResponse {

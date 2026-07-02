@@ -67,7 +67,7 @@ pub struct PlatformRefund {
     #[prost(string, tag = "6")]
     pub stripe_charge_id: ::prost::alloc::string::String,
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CaptureChargeRequest {
     #[prost(enumeration = "ChargeMethod", tag = "1")]
     pub charge_method: i32,
@@ -86,6 +86,14 @@ pub struct CaptureChargeRequest {
     #[prost(message, optional, tag = "8")]
     pub payment_config: ::core::option::Option<
         super::super::super::common::v1::PaymentConfig,
+    >,
+    /// Required when `charge_method` is CHARGE_METHOD_STRIPE_PAYMENT_INTENT.
+    /// Carries the already-succeeded Stripe charge object so the service can
+    /// populate the PlatformCharge row (stripe_id, amount, card_last4, etc.)
+    /// without a Stripe API call.
+    #[prost(message, optional, tag = "9")]
+    pub stripe_charge: ::core::option::Option<
+        super::super::super::common::v1::StripeCharge,
     >,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -109,6 +117,12 @@ pub enum ChargeMethod {
     None = 1,
     /// Call the Stripe API to bill the customer for this charge.
     Stripe = 2,
+    /// Record a PlatformCharge for a Stripe charge that already succeeded
+    /// via a PaymentIntent confirmed elsewhere (typically the customer-facing
+    /// manual Pay Now flow in the browser). The Stripe API is NOT called
+    /// from this code path -- amounts, currency, and status are taken from
+    /// the `stripe_charge` field on the request.
+    StripePaymentIntent = 3,
 }
 impl ChargeMethod {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -120,6 +134,7 @@ impl ChargeMethod {
             Self::Unspecified => "CHARGE_METHOD_UNSPECIFIED",
             Self::None => "CHARGE_METHOD_NONE",
             Self::Stripe => "CHARGE_METHOD_STRIPE",
+            Self::StripePaymentIntent => "CHARGE_METHOD_STRIPE_PAYMENT_INTENT",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -128,6 +143,7 @@ impl ChargeMethod {
             "CHARGE_METHOD_UNSPECIFIED" => Some(Self::Unspecified),
             "CHARGE_METHOD_NONE" => Some(Self::None),
             "CHARGE_METHOD_STRIPE" => Some(Self::Stripe),
+            "CHARGE_METHOD_STRIPE_PAYMENT_INTENT" => Some(Self::StripePaymentIntent),
             _ => None,
         }
     }
