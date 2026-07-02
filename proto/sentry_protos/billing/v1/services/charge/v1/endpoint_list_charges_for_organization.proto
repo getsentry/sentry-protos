@@ -4,8 +4,7 @@ package sentry_protos.billing.v1.services.charge.v1;
 
 import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
 
-// Lists every recorded PlatformCharge owned by an organization, ordered by
-// date_added_st ascending, with each charge's refunds pre-attached.
+// Lists PlatformCharges for an organization, refunds pre-attached.
 message ListChargesForOrganizationRequest {
   uint64 organization_id = 1;
 }

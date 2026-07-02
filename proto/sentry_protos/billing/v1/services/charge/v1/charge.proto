@@ -31,9 +31,7 @@ message PlatformCharge {
   // sum ``refunds[*].amount_cents`` if they need the aggregate, and
   // ``len(refunds) > 0`` (or sum == amount) signals "refunded."
   repeated PlatformRefund refunds = 10;
-  // Unix epoch seconds when the charge row was created locally. Mirrors
-  // PlatformRefund.date_added_st so consumers that render mixed charge +
-  // refund timelines can sort them off a single time axis.
+  // Unix epoch seconds when the charge row was created locally.
   int64 date_added_st = 11;
 }
 

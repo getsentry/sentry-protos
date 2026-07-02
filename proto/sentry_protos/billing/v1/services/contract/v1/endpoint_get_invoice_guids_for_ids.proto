@@ -2,16 +2,12 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
-// Batch-resolves PlatformInvoice ids to their guids. Caller is responsible
-// for passing only ids it has the right to see; this endpoint does not
-// filter by organization. Missing ids are silently omitted from the
-// response.
+// Batch-resolves PlatformInvoice ids to their guids. Missing ids are
+// silently omitted from the response.
 message GetInvoiceGuidsForIdsRequest {
   repeated uint64 invoice_ids = 1;
 }
 
 message GetInvoiceGuidsForIdsResponse {
-  // Mapping from invoice id to guid for every invoice that was found.
-  // Empty when the request supplied no ids or none of them matched.
   map<uint64, string> invoice_guids = 1;
 }
