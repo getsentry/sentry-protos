@@ -18,11 +18,7 @@ enum ChargeMethod {
   CHARGE_METHOD_NONE = 1;
   // Call the Stripe API to bill the customer for this charge.
   CHARGE_METHOD_STRIPE = 2;
-  // Record a PlatformCharge for a Stripe charge that already succeeded
-  // via a PaymentIntent confirmed elsewhere (typically the customer-facing
-  // manual Pay Now flow in the browser). The Stripe API is NOT called
-  // from this code path -- amounts, currency, and status are taken from
-  // the ``stripe_charge`` field on the request.
+  // Record an already-succeeded Stripe charge without calling Stripe.
   CHARGE_METHOD_STRIPE_PAYMENT_INTENT = 3;
 }
 
@@ -35,10 +31,7 @@ message CaptureChargeRequest {
   optional string invoice_id = 6;
   optional string invoice_guid = 7;
   optional sentry_protos.billing.v1.common.v1.PaymentConfig payment_config = 8;
-  // Required when ``charge_method`` is CHARGE_METHOD_STRIPE_PAYMENT_INTENT.
-  // Carries the already-succeeded Stripe charge object so the service can
-  // populate the PlatformCharge row (stripe_id, amount, card_last4, etc.)
-  // without a Stripe API call.
+  // Required when charge_method is CHARGE_METHOD_STRIPE_PAYMENT_INTENT.
   optional sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 9;
 }
 
