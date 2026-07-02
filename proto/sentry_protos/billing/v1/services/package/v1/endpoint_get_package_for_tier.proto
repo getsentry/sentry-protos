@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.package.v1;
+
+import "sentry_protos/billing/v1/services/package/v1/package.proto";
+
+enum PackageTier {
+  PACKAGE_TIER_UNSPECIFIED = 0;
+  PACKAGE_TIER_FREE = 1;
+  PACKAGE_TIER_TEAM = 2;
+  PACKAGE_TIER_BUSINESS = 3;
+}
+
+message GetPackageForTierRequest {
+  string package_uid = 1;
+  PackageTier tier = 2;
+}
+
+message GetPackageForTierResponse {
+  PackageConfig package_config = 1;
+}
