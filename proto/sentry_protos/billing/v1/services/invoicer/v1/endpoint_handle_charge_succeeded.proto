@@ -8,6 +8,14 @@ import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
 // charge created by the billing platform.
 message HandleChargeSucceededRequest {
   sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 1;
+  // Optional guid of the platform invoice this charge belongs to, read
+  // from the Stripe charge's `metadata.invoiceGUID` by the webhook layer.
+  // Populated for the manual Pay Now flow where no PlatformCharge row
+  // exists yet -- the service uses it to materialise the row via
+  // CaptureCharge with CHARGE_METHOD_STRIPE_PAYMENT_INTENT before the
+  // existing update-charge lookup runs. Unset for the renewal flow,
+  // where the charge row was already created by the invoicing job.
+  optional string invoice_guid = 2;
 }
 
 message HandleChargeSucceededResponse {
