@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Atomically stamps manual_payment_started_at on an unpaid PlatformInvoice.
+message StartManualPaymentRequest {
+  uint64 invoice_id = 1;
+}
+
+message StartManualPaymentResponse {
+  // False when no row matched paid=false (invoice paid, missing, or raced).
+  bool updated = 1;
+}

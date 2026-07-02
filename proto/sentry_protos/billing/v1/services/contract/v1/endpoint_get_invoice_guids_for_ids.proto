@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Batch-resolves PlatformInvoice ids to their guids. Missing ids are
+// silently omitted from the response.
+message GetInvoiceGuidsForIdsRequest {
+  repeated uint64 invoice_ids = 1;
+}
+
+message GetInvoiceGuidsForIdsResponse {
+  map<uint64, string> invoice_guids = 1;
+}

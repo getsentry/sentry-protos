@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
+
+// Lists PlatformCharges for a batch of invoice ids, refunds pre-attached.
+message ListChargesForInvoiceIdsRequest {
+  repeated uint64 invoice_ids = 1;
+}
+
+message ListChargesForInvoiceIdsResponse {
+  repeated PlatformCharge charges = 1;
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
+
+// Lists PlatformCharges for an organization, refunds pre-attached.
+message ListChargesForOrganizationRequest {
+  uint64 organization_id = 1;
+}
+
+message ListChargesForOrganizationResponse {
+  repeated PlatformCharge charges = 1;
+}
