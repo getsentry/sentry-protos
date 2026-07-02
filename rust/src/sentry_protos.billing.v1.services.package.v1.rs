@@ -166,3 +166,47 @@ pub struct GetPackageResponse {
     #[prost(message, optional, tag = "1")]
     pub package_config: ::core::option::Option<PackageConfig>,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetPackageForTierRequest {
+    #[prost(string, tag = "1")]
+    pub package_uid: ::prost::alloc::string::String,
+    #[prost(enumeration = "PackageTier", tag = "2")]
+    pub tier: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPackageForTierResponse {
+    #[prost(message, optional, tag = "1")]
+    pub package_config: ::core::option::Option<PackageConfig>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PackageTier {
+    Unspecified = 0,
+    Free = 1,
+    Team = 2,
+    Business = 3,
+}
+impl PackageTier {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PACKAGE_TIER_UNSPECIFIED",
+            Self::Free => "PACKAGE_TIER_FREE",
+            Self::Team => "PACKAGE_TIER_TEAM",
+            Self::Business => "PACKAGE_TIER_BUSINESS",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PACKAGE_TIER_UNSPECIFIED" => Some(Self::Unspecified),
+            "PACKAGE_TIER_FREE" => Some(Self::Free),
+            "PACKAGE_TIER_TEAM" => Some(Self::Team),
+            "PACKAGE_TIER_BUSINESS" => Some(Self::Business),
+            _ => None,
+        }
+    }
+}
