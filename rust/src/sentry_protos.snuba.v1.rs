@@ -2711,6 +2711,9 @@ pub struct ExportTraceItemsRequest {
     pub page_token: ::core::option::Option<PageToken>,
     #[prost(uint32, tag = "3")]
     pub limit: u32,
+    /// filter out trace items you dont want
+    #[prost(message, optional, tag = "4")]
+    pub filter: ::core::option::Option<TraceItemFilter>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExportTraceItemsResponse {

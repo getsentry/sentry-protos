@@ -85,6 +85,16 @@ from sentry_protos.snuba.v1.endpoint_trace_item_details_pb2 import (
     TraceItemDetailsResponse,
 )
 
+from sentry_protos.snuba.v1.endpoint_trace_items_pb2 import (
+    ExportTraceItemsRequest,
+    ExportTraceItemsResponse,
+)
+
+from sentry_protos.snuba.v1.trace_item_pb2 import (
+    TraceItem,
+    AnyValue,
+)
+
 COMMON_META = RequestMeta(
     project_ids=[1, 2, 3],
     organization_id=1,
@@ -423,6 +433,82 @@ def test_trace_item_details() -> None:
             )
         ]
     )
+
+def test_export_trace_items() -> None:
+    # Filter clause is optional
+    ExportTraceItemsRequest(
+        meta=COMMON_META,
+        page_token=PageToken(
+            filter_offset=TraceItemFilter(
+                comparison_filter=ComparisonFilter(
+                    key=AttributeKey(
+                        type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
+                    ),
+                    op=ComparisonFilter.OP_GREATER_THAN_OR_EQUALS,
+                    value=AttributeValue(val_double=6.9),
+                )
+            )
+        ),
+        limit=100,
+    )
+
+    # Filter clause is parsed properly
+    ExportTraceItemsRequest(
+        meta=COMMON_META,
+        page_token=PageToken(
+            filter_offset=TraceItemFilter(
+                comparison_filter=ComparisonFilter(
+                    key=AttributeKey(
+                        type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
+                    ),
+                    op=ComparisonFilter.OP_GREATER_THAN_OR_EQUALS,
+                    value=AttributeValue(val_double=6.9),
+                )
+            )
+        ),
+        limit=100,
+        filter=TraceItemFilter(
+            comparison_filter=ComparisonFilter(
+                key=AttributeKey(
+                    type=AttributeKey.TYPE_STRING,
+                    name="sentry.span_name",
+                ),
+                op=ComparisonFilter.OP_EQUALS,
+                value=AttributeValue(val_str="database_query"),
+            ),
+        ),
+    )
+
+    ExportTraceItemsResponse(
+        trace_items=[
+            TraceItem(
+                organization_id=1,
+                project_id=1,
+                trace_id="1234567890abcdef",
+                item_id=b"1234567812345678",
+                item_type=TraceItemType.TRACE_ITEM_TYPE_SPAN,
+                timestamp=COMMON_META.start_timestamp,
+                attributes={
+                    "sentry.span_name": AnyValue(string_value="database_query"),
+                    "sentry.duration": AnyValue(double_value=7.2),
+                },
+                client_sample_rate=1.0,
+                server_sample_rate=0.1,
+            ),
+        ],
+        page_token=PageToken(
+            filter_offset=TraceItemFilter(
+                comparison_filter=ComparisonFilter(
+                    key=AttributeKey(
+                        type=AttributeKey.TYPE_DOUBLE, name="sentry.duration"
+                    ),
+                    op=ComparisonFilter.OP_GREATER_THAN_OR_EQUALS,
+                    value=AttributeValue(val_double=6.9),
+                )
+            )
+        ),
+    )
+
 
 def test_example_find_traces() -> None:
     # Find traces that contain a span event with a `span_name` of "database_query"

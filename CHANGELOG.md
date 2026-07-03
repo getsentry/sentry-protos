@@ -1,3 +1,21 @@
+## 0.38.0
+
+### New Features ✨
+
+- (eap) Add filter support to ExportTraceItemsRequest endpoint by @pbhandari in [#343](https://github.com/getsentry/sentry-protos/pull/343)
+
+## 0.37.3
+
+### Internal Changes 🔧
+
+- (billing-platform) Include previous contract id in contract proto by @brendanhsentry in [#341](https://github.com/getsentry/sentry-protos/pull/341)
+
+## 0.37.2
+
+### Internal Changes 🔧
+
+- Add legacy data category field to line items by @noahsmartin in [#340](https://github.com/getsentry/sentry-protos/pull/340)
+
 ## 0.37.1
 
 ### Internal Changes 🔧
