@@ -1,3 +1,9 @@
+## 0.40.0
+
+### New Features ✨
+
+- (eap) Add sort type to EAP OrderBy messages by @phacops in [#346](https://github.com/getsentry/sentry-protos/pull/346)
+
 ## 0.39.0
 
 ### New Features ✨
