@@ -861,6 +861,62 @@ def test_example_attribute_values_request_ordered_by_count() -> None:
     assert list(response.counts) == [100, 25]
 
 
+def test_example_attribute_names_request_natural_sort() -> None:
+    # Opt in to natural ordering of attribute names so that alphanumeric names
+    # are sorted by the numeric value of their embedded digits (e.g. "item2"
+    # before "item10") rather than lexicographically. Leaving `sort` unset (or
+    # using SORT_DEFAULT) preserves the historical lexicographic ordering.
+    request = TraceItemAttributeNamesRequest(
+        meta=COMMON_META,
+        limit=100,
+        type=AttributeKey.Type.TYPE_STRING,
+        order_by=TraceItemAttributeNamesRequest.OrderBy(
+            column=TraceItemAttributeNamesRequest.OrderBy.COLUMN_NAME,
+            sort=TraceItemAttributeNamesRequest.OrderBy.SORT_NATURAL,
+        ),
+    )
+
+    assert (
+        request.order_by.sort
+        == TraceItemAttributeNamesRequest.OrderBy.SORT_NATURAL
+    )
+    # the field round-trips through serialization
+    roundtripped = TraceItemAttributeNamesRequest()
+    roundtripped.ParseFromString(request.SerializeToString())
+    assert (
+        roundtripped.order_by.sort
+        == TraceItemAttributeNamesRequest.OrderBy.SORT_NATURAL
+    )
+
+
+def test_example_attribute_values_request_natural_sort() -> None:
+    # Opt in to natural ordering of attribute values so that alphanumeric values
+    # are sorted by the numeric value of their embedded digits (e.g. "v2" before
+    # "v10") rather than lexicographically. Leaving `sort` unset (or using
+    # SORT_DEFAULT) preserves the historical lexicographic ordering.
+    request = TraceItemAttributeValuesRequest(
+        meta=COMMON_META,
+        key=AttributeKey(type=AttributeKey.TYPE_STRING, name="sentry.release"),
+        limit=100,
+        order_by=TraceItemAttributeValuesRequest.OrderBy(
+            column=TraceItemAttributeValuesRequest.OrderBy.COLUMN_VALUE,
+            sort=TraceItemAttributeValuesRequest.OrderBy.SORT_NATURAL,
+        ),
+    )
+
+    assert (
+        request.order_by.sort
+        == TraceItemAttributeValuesRequest.OrderBy.SORT_NATURAL
+    )
+    # the field round-trips through serialization
+    roundtripped = TraceItemAttributeValuesRequest()
+    roundtripped.ParseFromString(request.SerializeToString())
+    assert (
+        roundtripped.order_by.sort
+        == TraceItemAttributeValuesRequest.OrderBy.SORT_NATURAL
+    )
+
+
 def test_example_time_series_cross_item_query() -> None:
     """
     Find the number of spans with http.client over time in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
