@@ -1617,6 +1617,63 @@ pub mod get_traces_request {
         pub key: i32,
         #[prost(bool, tag = "2")]
         pub descending: bool,
+        /// The sort order to apply when ordering by a textual attribute. Defaults
+        /// to SORT_DEFAULT (lexicographic) when unset, preserving the historical
+        /// behaviour. Set to SORT_NATURAL to order alphanumeric values naturally
+        /// (e.g. "item2" before "item10"). Ignored for numeric attributes.
+        #[prost(enumeration = "order_by::Sort", tag = "3")]
+        pub sort: i32,
+    }
+    /// Nested message and enum types in `OrderBy`.
+    pub mod order_by {
+        /// Sort selects which sort order is applied when ordering by a textual
+        /// attribute (e.g. KEY_ROOT_SPAN_NAME). It has no effect when ordering by
+        /// a numeric attribute such as KEY_ROOT_SPAN_DURATION_MS.
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            PartialOrd,
+            Ord,
+            ::prost::Enumeration
+        )]
+        #[repr(i32)]
+        pub enum Sort {
+            /// Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+            /// backwards compatible when `sort` is left unset.
+            Unspecified = 0,
+            /// Default lexicographic ordering: values are compared by their Unicode
+            /// code points, so e.g. "item10" sorts before "item2".
+            Default = 1,
+            /// Natural ordering: embedded runs of digits are compared by their
+            /// numeric value, so e.g. "item2" sorts before "item10".
+            Natural = 2,
+        }
+        impl Sort {
+            /// String value of the enum field names used in the ProtoBuf definition.
+            ///
+            /// The values are not transformed in any way and thus are considered stable
+            /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+            pub fn as_str_name(&self) -> &'static str {
+                match self {
+                    Self::Unspecified => "SORT_UNSPECIFIED",
+                    Self::Default => "SORT_DEFAULT",
+                    Self::Natural => "SORT_NATURAL",
+                }
+            }
+            /// Creates an enum from field names used in the ProtoBuf definition.
+            pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+                match value {
+                    "SORT_UNSPECIFIED" => Some(Self::Unspecified),
+                    "SORT_DEFAULT" => Some(Self::Default),
+                    "SORT_NATURAL" => Some(Self::Natural),
+                    _ => None,
+                }
+            }
+        }
     }
     /// TraceFilter specifies conditions to apply on the items contained in a trace.
     #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2294,6 +2351,62 @@ pub mod trace_item_table_request {
         pub column: ::core::option::Option<super::Column>,
         #[prost(bool, tag = "2")]
         pub descending: bool,
+        /// The sort order to apply when ordering by a textual column. Defaults to
+        /// SORT_DEFAULT (lexicographic) when unset, preserving the historical
+        /// behaviour. Set to SORT_NATURAL to order alphanumeric values naturally
+        /// (e.g. "item2" before "item10"). Ignored for numeric columns.
+        #[prost(enumeration = "order_by::Sort", tag = "3")]
+        pub sort: i32,
+    }
+    /// Nested message and enum types in `OrderBy`.
+    pub mod order_by {
+        /// Sort selects which sort order is applied when ordering by a textual
+        /// column. It has no effect when ordering by a numeric column.
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            PartialOrd,
+            Ord,
+            ::prost::Enumeration
+        )]
+        #[repr(i32)]
+        pub enum Sort {
+            /// Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+            /// backwards compatible when `sort` is left unset.
+            Unspecified = 0,
+            /// Default lexicographic ordering: values are compared by their Unicode
+            /// code points, so e.g. "item10" sorts before "item2".
+            Default = 1,
+            /// Natural ordering: embedded runs of digits are compared by their
+            /// numeric value, so e.g. "item2" sorts before "item10".
+            Natural = 2,
+        }
+        impl Sort {
+            /// String value of the enum field names used in the ProtoBuf definition.
+            ///
+            /// The values are not transformed in any way and thus are considered stable
+            /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+            pub fn as_str_name(&self) -> &'static str {
+                match self {
+                    Self::Unspecified => "SORT_UNSPECIFIED",
+                    Self::Default => "SORT_DEFAULT",
+                    Self::Natural => "SORT_NATURAL",
+                }
+            }
+            /// Creates an enum from field names used in the ProtoBuf definition.
+            pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+                match value {
+                    "SORT_UNSPECIFIED" => Some(Self::Unspecified),
+                    "SORT_DEFAULT" => Some(Self::Default),
+                    "SORT_NATURAL" => Some(Self::Natural),
+                    _ => None,
+                }
+            }
+        }
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
