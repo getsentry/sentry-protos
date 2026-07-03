@@ -1,3 +1,9 @@
+## 0.39.0
+
+### New Features ✨
+
+- (snuba) Allow customizing attribute sort (default or natural) by @phacops in [#334](https://github.com/getsentry/sentry-protos/pull/334)
+
 ## 0.38.0
 
 ### New Features ✨
