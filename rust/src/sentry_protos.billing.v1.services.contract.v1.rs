@@ -497,6 +497,23 @@ pub struct Contract {
     #[prost(message, optional, tag = "3")]
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
+/// Atomically claims an unpaid PlatformInvoice for the manual Pay Now
+/// flow by stamping charge_in_progress_at. The same column is also
+/// claimed by the automated invoicing job (get_uncharged_invoices),
+/// so this write races on the shared lock -- only one actor holds a
+/// claim at a time. Failed claims surface as updated=false, letting
+/// the endpoint distinguish "already paid" from "already queued for
+/// automatic payment" by inspecting the invoice state.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ClaimForManualPaymentRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ClaimForManualPaymentResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateContractRequest {
     #[prost(uint64, tag = "1")]
@@ -740,20 +757,17 @@ pub struct RecordFailedChargeAttemptResponse {
     #[prost(message, optional, tag = "3")]
     pub next_payment_attempt: ::core::option::Option<::prost_types::Timestamp>,
 }
-/// Clears manual_payment_started_at on an unpaid invoice. Used by the manual
-/// Pay Now endpoint when `start_manual_payment` was acquired pre-Stripe and
-/// the Stripe PaymentIntent.create then failed -- releasing keeps the
-/// inline-cutoff window from delaying automated retries by up to 24h.
+/// Clears the manual Pay Now claim on an unpaid invoice. Used by the
+/// Pay Now endpoint when the Stripe PaymentIntent.create call fails
+/// after the claim was acquired -- releasing keeps the inline-cutoff
+/// window from delaying automated retries by up to 24h.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct ReleaseManualPaymentLockRequest {
+pub struct ReleaseManualPaymentClaimRequest {
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct ReleaseManualPaymentLockResponse {
-    /// False when no row was updated -- the invoice no longer exists or has
-    /// already been flipped paid. Callers can treat this as "nothing to
-    /// release" and proceed.
+pub struct ReleaseManualPaymentClaimResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
@@ -802,23 +816,4 @@ pub struct RolloverContractResponse {
     pub amount_billed: u64,
     #[prost(uint64, tag = "4")]
     pub new_contract_id: u64,
-}
-/// Atomically stamps manual_payment_started_at on an unpaid PlatformInvoice,
-/// locking it from automated billing for 24h while the user completes a manual
-/// Pay Now flow via Stripe.js.
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct StartManualPaymentRequest {
-    #[prost(uint64, tag = "1")]
-    pub invoice_id: u64,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct StartManualPaymentResponse {
-    /// False when no row was updated. That covers three cases: invoice id
-    /// unknown, the row is already paid, or the row was paid in the window
-    /// between the caller's last read and this call. The third case is the
-    /// race that the atomic `WHERE paid=false` filter closes -- callers
-    /// can treat `updated=false` as "the invoice is no longer in a payable
-    /// state, discard any side effects you took in the meantime."
-    #[prost(bool, tag = "1")]
-    pub updated: bool,
 }
