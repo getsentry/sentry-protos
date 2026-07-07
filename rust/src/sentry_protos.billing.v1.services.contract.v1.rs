@@ -730,10 +730,7 @@ pub struct MarkInvoicePaidResponse {
     /// True if a matching invoice was found and updated.
     #[prost(bool, tag = "1")]
     pub updated: bool,
-    /// The updated invoice after the mark-paid write. Unset when
-    /// `updated` is false. Callers that need the fresh proto (for
-    /// receipt rendering, downstream service calls) can consume this
-    /// directly rather than issuing a separate `GetInvoice` roundtrip.
+    /// The updated invoice; unset when updated is false.
     #[prost(message, optional, tag = "2")]
     pub invoice: ::core::option::Option<Invoice>,
 }

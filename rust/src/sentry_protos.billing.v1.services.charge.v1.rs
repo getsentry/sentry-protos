@@ -92,10 +92,7 @@ pub struct CaptureChargeRequest {
     pub payment_config: ::core::option::Option<
         super::super::super::common::v1::PaymentConfig,
     >,
-    /// Required when `charge_method` is CHARGE_METHOD_STRIPE_PAYMENT_INTENT.
-    /// Carries the already-succeeded Stripe charge object so the service can
-    /// populate the PlatformCharge row (stripe_id, amount, card_last4, etc.)
-    /// without a Stripe API call.
+    /// Required when charge_method is CHARGE_METHOD_STRIPE_PAYMENT_INTENT.
     #[prost(message, optional, tag = "9")]
     pub stripe_charge: ::core::option::Option<
         super::super::super::common::v1::StripeCharge,
@@ -122,11 +119,7 @@ pub enum ChargeMethod {
     None = 1,
     /// Call the Stripe API to bill the customer for this charge.
     Stripe = 2,
-    /// Record a PlatformCharge for a Stripe charge that already succeeded
-    /// via a PaymentIntent confirmed elsewhere (typically the customer-facing
-    /// manual Pay Now flow in the browser). The Stripe API is NOT called
-    /// from this code path -- amounts, currency, and status are taken from
-    /// the `stripe_charge` field on the request.
+    /// Record an already-succeeded Stripe charge without calling Stripe.
     StripePaymentIntent = 3,
 }
 impl ChargeMethod {
