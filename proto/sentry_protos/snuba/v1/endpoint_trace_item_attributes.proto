@@ -31,6 +31,21 @@ message TraceItemAttributeNamesRequest {
       COLUMN_COUNT = 2;
     }
 
+    // Sort selects which sort order is applied when ordering by a textual
+    // column (i.e. COLUMN_NAME). It has no effect when ordering by a numeric
+    // column such as COLUMN_COUNT.
+    enum Sort {
+      // Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+      // backwards compatible when `sort` is left unset.
+      SORT_UNSPECIFIED = 0;
+      // Default lexicographic ordering: names are compared by their Unicode
+      // code points, so e.g. "item10" sorts before "item2".
+      SORT_DEFAULT = 1;
+      // Natural ordering: embedded runs of digits are compared by their
+      // numeric value, so e.g. "item2" sorts before "item10".
+      SORT_NATURAL = 2;
+    }
+
     // The column to order the returned attribute names by.
     Column column = 1;
 
@@ -38,6 +53,12 @@ message TraceItemAttributeNamesRequest {
     // ascending. For example, to order by frequency with the most common
     // attributes first, set `column = COLUMN_COUNT` and `descending = true`.
     bool descending = 2;
+
+    // The sort order to apply when ordering by a textual column (COLUMN_NAME).
+    // Defaults to SORT_DEFAULT (lexicographic) when unset, preserving the
+    // historical behaviour. Set to SORT_NATURAL to order alphanumeric names
+    // naturally (e.g. "item2" before "item10"). Ignored for COLUMN_COUNT.
+    Sort sort = 3;
   }
 
   enum MatchMode {
@@ -133,6 +154,21 @@ message TraceItemAttributeValuesRequest {
       COLUMN_COUNT = 2;
     }
 
+    // Sort selects which sort order is applied when ordering by a textual
+    // column (i.e. COLUMN_VALUE). It has no effect when ordering by a numeric
+    // column such as COLUMN_COUNT.
+    enum Sort {
+      // Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+      // backwards compatible when `sort` is left unset.
+      SORT_UNSPECIFIED = 0;
+      // Default lexicographic ordering: values are compared by their Unicode
+      // code points, so e.g. "item10" sorts before "item2".
+      SORT_DEFAULT = 1;
+      // Natural ordering: embedded runs of digits are compared by their
+      // numeric value, so e.g. "item2" sorts before "item10".
+      SORT_NATURAL = 2;
+    }
+
     // The column to order the returned values by.
     Column column = 1;
 
@@ -140,6 +176,12 @@ message TraceItemAttributeValuesRequest {
     // ascending. For example, to order by frequency with the most common
     // values first, set `column = COLUMN_COUNT` and `descending = true`.
     bool descending = 2;
+
+    // The sort order to apply when ordering by a textual column (COLUMN_VALUE).
+    // Defaults to SORT_DEFAULT (lexicographic) when unset, preserving the
+    // historical behaviour. Set to SORT_NATURAL to order alphanumeric values
+    // naturally (e.g. "item2" before "item10"). Ignored for COLUMN_COUNT.
+    Sort sort = 3;
   }
 
   // metadata about the request

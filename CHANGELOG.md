@@ -1,3 +1,33 @@
+## 0.40.0
+
+### New Features ✨
+
+- (eap) Add sort type to EAP OrderBy messages by @phacops in [#346](https://github.com/getsentry/sentry-protos/pull/346)
+
+## 0.39.0
+
+### New Features ✨
+
+- (snuba) Allow customizing attribute sort (default or natural) by @phacops in [#334](https://github.com/getsentry/sentry-protos/pull/334)
+
+## 0.38.0
+
+### New Features ✨
+
+- (eap) Add filter support to ExportTraceItemsRequest endpoint by @pbhandari in [#343](https://github.com/getsentry/sentry-protos/pull/343)
+
+## 0.37.3
+
+### Internal Changes 🔧
+
+- (billing-platform) Include previous contract id in contract proto by @brendanhsentry in [#341](https://github.com/getsentry/sentry-protos/pull/341)
+
+## 0.37.2
+
+### Internal Changes 🔧
+
+- Add legacy data category field to line items by @noahsmartin in [#340](https://github.com/getsentry/sentry-protos/pull/340)
+
 ## 0.37.1
 
 ### Internal Changes 🔧

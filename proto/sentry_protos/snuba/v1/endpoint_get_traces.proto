@@ -60,8 +60,29 @@ message TraceAttribute {
 // GetTracesRequest lets you query traces with various attributes.
 message GetTracesRequest {
   message OrderBy {
+    // Sort selects which sort order is applied when ordering by a textual
+    // attribute (e.g. KEY_ROOT_SPAN_NAME). It has no effect when ordering by
+    // a numeric attribute such as KEY_ROOT_SPAN_DURATION_MS.
+    enum Sort {
+      // Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+      // backwards compatible when `sort` is left unset.
+      SORT_UNSPECIFIED = 0;
+      // Default lexicographic ordering: values are compared by their Unicode
+      // code points, so e.g. "item10" sorts before "item2".
+      SORT_DEFAULT = 1;
+      // Natural ordering: embedded runs of digits are compared by their
+      // numeric value, so e.g. "item2" sorts before "item10".
+      SORT_NATURAL = 2;
+    }
+
     TraceAttribute.Key key = 1;
     bool descending = 2;
+
+    // The sort order to apply when ordering by a textual attribute. Defaults
+    // to SORT_DEFAULT (lexicographic) when unset, preserving the historical
+    // behaviour. Set to SORT_NATURAL to order alphanumeric values naturally
+    // (e.g. "item2" before "item10"). Ignored for numeric attributes.
+    Sort sort = 3;
   }
 
   // TraceFilter specifies conditions to apply on the items contained in a trace.
