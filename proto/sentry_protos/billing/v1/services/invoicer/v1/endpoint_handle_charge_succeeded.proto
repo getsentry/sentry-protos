@@ -4,17 +4,12 @@ package sentry_protos.billing.v1.services.invoicer.v1;
 
 import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
 
-// Request to react to a Stripe `charge.succeeded` webhook event for a
-// charge created by the billing platform.
 message HandleChargeSucceededRequest {
   sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 1;
-  // From the Stripe charge's `metadata.invoiceGUID`; used to materialise
-  // a missing PlatformCharge row for the manual Pay Now flow.
-  optional string invoice_guid = 2;
+  optional uint64 invoice_id = 2;
+  optional uint64 organization_id = 3;
 }
 
 message HandleChargeSucceededResponse {
-  // True when the charge was created by the billing platform and the
-  // service has finished its handling.
   bool handled = 1;
 }
