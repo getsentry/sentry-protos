@@ -1,3 +1,9 @@
+## 0.41.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Get all contracts for organization by @brendanhsentry in [#348](https://github.com/getsentry/sentry-protos/pull/348)
+
 ## 0.41.0
 
 ### New Features ✨
