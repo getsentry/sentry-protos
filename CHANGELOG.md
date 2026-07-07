@@ -1,3 +1,9 @@
+## 0.41.0
+
+### New Features ✨
+
+- (billing) Protos for Pay Now / charge materialization endpoints by @armcknight in [#338](https://github.com/getsentry/sentry-protos/pull/338)
+
 ## 0.40.0
 
 ### New Features ✨
