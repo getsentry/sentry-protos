@@ -554,6 +554,38 @@ pub struct EndContractImmediatelyResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
+/// Locates a PlatformInvoice by guid alone. Used by webhook handlers that have
+/// the invoice guid in a Stripe event's metadata but haven't resolved the
+/// parent organization yet -- the org-scoped GetInvoice isn't a fit. Returns
+/// just identifying fields so callers don't need to handle the full Invoice
+/// proto when all they want is to thread invoice_id / organization_id into
+/// another service call.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FindInvoiceByGuidRequest {
+    #[prost(string, tag = "1")]
+    pub invoice_guid: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FindInvoiceByGuidResponse {
+    /// Unset when no PlatformInvoice matches the guid. Callers should treat
+    /// that as "this Stripe charge belongs to legacy billing, not platform"
+    /// and fall through accordingly.
+    #[prost(uint64, optional, tag = "1")]
+    pub invoice_id: ::core::option::Option<u64>,
+    /// Set whenever `invoice_id` is set; unset otherwise.
+    #[prost(uint64, optional, tag = "2")]
+    pub organization_id: ::core::option::Option<u64>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetAllContractsForOrganizationRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAllContractsForOrganizationResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub contracts: ::prost::alloc::vec::Vec<Contract>,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetContractRequest {
     #[prost(uint64, tag = "1")]
@@ -585,6 +617,22 @@ pub struct GetInvoiceRequest {
 pub struct GetInvoiceResponse {
     #[prost(message, optional, tag = "1")]
     pub invoice: ::core::option::Option<Invoice>,
+}
+/// Batch-resolves PlatformInvoice ids to their guids. Caller is responsible
+/// for passing only ids it has the right to see; this endpoint does not
+/// filter by organization. Missing ids are silently omitted from the
+/// response.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetInvoiceGuidsForIdsRequest {
+    #[prost(uint64, repeated, tag = "1")]
+    pub invoice_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetInvoiceGuidsForIdsResponse {
+    /// Mapping from invoice id to guid for every invoice that was found.
+    /// Empty when the request supplied no ids or none of them matched.
+    #[prost(map = "uint64, string", tag = "1")]
+    pub invoice_guids: ::std::collections::HashMap<u64, ::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUnchargedInvoicesRequest {
@@ -770,4 +818,23 @@ pub struct RolloverContractResponse {
     pub amount_billed: u64,
     #[prost(uint64, tag = "4")]
     pub new_contract_id: u64,
+}
+/// Atomically stamps manual_payment_started_at on an unpaid PlatformInvoice,
+/// locking it from automated billing for 24h while the user completes a manual
+/// Pay Now flow via Stripe.js.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StartManualPaymentRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StartManualPaymentResponse {
+    /// False when no row was updated. That covers three cases: invoice id
+    /// unknown, the row is already paid, or the row was paid in the window
+    /// between the caller's last read and this call. The third case is the
+    /// race that the atomic `WHERE paid=false` filter closes -- callers
+    /// can treat `updated=false` as "the invoice is no longer in a payable
+    /// state, discard any side effects you took in the meantime."
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
 }

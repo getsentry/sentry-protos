@@ -41,6 +41,11 @@ pub struct PlatformCharge {
     /// `len(refunds) > 0` (or sum == amount) signals "refunded."
     #[prost(message, repeated, tag = "10")]
     pub refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
+    /// Unix epoch seconds when the charge row was created locally. Mirrors
+    /// PlatformRefund.date_added_st so consumers that render mixed charge +
+    /// refund timelines can sort them off a single time axis.
+    #[prost(int64, tag = "11")]
+    pub date_added_st: i64,
 }
 /// Canonical projection of a stored platform refund. One row per recorded
 /// refund against a `PlatformCharge`.
@@ -148,6 +153,32 @@ impl ChargeMethod {
         }
     }
 }
+/// Upserts a PlatformCharge for an already-resolved invoice. Caller passes the
+/// invoice_id / organization_id (resolved upstream, typically by
+/// InvoicerService.materialize_platform_charge calling
+/// ContractService.find_invoice_by_guid). The write is performed via
+/// update_or_create on the unique `stripe_id` -- idempotent on Stripe
+/// webhook redelivery and race-safe under concurrent webhook deliveries.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreatePlatformChargeForInvoiceRequest {
+    #[prost(message, optional, tag = "1")]
+    pub stripe_charge: ::core::option::Option<
+        super::super::super::common::v1::StripeCharge,
+    >,
+    #[prost(uint64, tag = "2")]
+    pub invoice_id: u64,
+    #[prost(uint64, tag = "3")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreatePlatformChargeForInvoiceResponse {
+    #[prost(uint64, tag = "1")]
+    pub charge_id: u64,
+    /// True when this call inserted a new row; false on idempotent re-runs
+    /// (Stripe webhook redelivery for an already-materialised charge).
+    #[prost(bool, tag = "2")]
+    pub created: bool,
+}
 /// Reads the stored platform charge for a given Stripe charge id. Returns an
 /// unset `charge` when no platform charge exists for the id; callers can use
 /// this to distinguish charges owned by the billing platform from charges
@@ -183,6 +214,32 @@ pub struct ListChargesForInvoiceRequest {
 pub struct ListChargesForInvoiceResponse {
     #[prost(message, repeated, tag = "1")]
     pub charges: ::prost::alloc::vec::Vec<Charge>,
+}
+/// Lists every recorded PlatformCharge for a batch of invoice ids, ordered by
+/// (invoice_id, date_added_st) ascending, with each charge's refunds
+/// pre-attached. Used by presentation surfaces that render full charge +
+/// refund history for a customer's invoices.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListChargesForInvoiceIdsRequest {
+    #[prost(uint64, repeated, tag = "1")]
+    pub invoice_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListChargesForInvoiceIdsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub charges: ::prost::alloc::vec::Vec<PlatformCharge>,
+}
+/// Lists every recorded PlatformCharge owned by an organization, ordered by
+/// date_added_st ascending, with each charge's refunds pre-attached.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListChargesForOrganizationRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListChargesForOrganizationResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub charges: ::prost::alloc::vec::Vec<PlatformCharge>,
 }
 /// Lists every recorded refund associated with the charges for a single
 /// platform invoice. Callers in the presentation layer use this to render

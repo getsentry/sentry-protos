@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
+
+// Upserts a PlatformCharge for an already-resolved invoice. Caller passes the
+// invoice_id / organization_id (resolved upstream, typically by
+// InvoicerService.materialize_platform_charge calling
+// ContractService.find_invoice_by_guid). The write is performed via
+// update_or_create on the unique ``stripe_id`` -- idempotent on Stripe
+// webhook redelivery and race-safe under concurrent webhook deliveries.
+message CreatePlatformChargeForInvoiceRequest {
+  sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 1;
+  uint64 invoice_id = 2;
+  uint64 organization_id = 3;
+}
+
+message CreatePlatformChargeForInvoiceResponse {
+  uint64 charge_id = 1;
+  // True when this call inserted a new row; false on idempotent re-runs
+  // (Stripe webhook redelivery for an already-materialised charge).
+  bool created = 2;
+}
