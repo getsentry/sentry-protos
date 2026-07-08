@@ -1,3 +1,9 @@
+## 0.42.1
+
+### Internal Changes 🔧
+
+- Add reserved line item spend by @noahsmartin in [#353](https://github.com/getsentry/sentry-protos/pull/353)
+
 ## 0.42.0
 
 ### New Features ✨
