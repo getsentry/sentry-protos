@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
 // Marks an invoice as paid and clears its needs_charged flag so it is no longer
 // returned by GetUnchargedInvoices.
 message MarkInvoicePaidRequest {
@@ -11,4 +13,6 @@ message MarkInvoicePaidRequest {
 message MarkInvoicePaidResponse {
   // True if a matching invoice was found and updated.
   bool updated = 1;
+  // The updated invoice; unset when updated is false.
+  optional Invoice invoice = 2;
 }

@@ -725,11 +725,14 @@ pub struct MarkInvoicePaidRequest {
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MarkInvoicePaidResponse {
     /// True if a matching invoice was found and updated.
     #[prost(bool, tag = "1")]
     pub updated: bool,
+    /// The updated invoice; unset when updated is false.
+    #[prost(message, optional, tag = "2")]
+    pub invoice: ::core::option::Option<Invoice>,
 }
 /// Records a failed charge attempt against an invoice.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
