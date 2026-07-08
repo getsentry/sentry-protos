@@ -98,12 +98,20 @@ pub struct CaptureChargeRequest {
         super::super::super::common::v1::StripeCharge,
     >,
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CaptureChargeResponse {
     #[prost(bool, tag = "1")]
     pub paid: bool,
     #[prost(string, optional, tag = "2")]
     pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// The persisted PlatformCharge row produced (or updated) by this call.
+    /// Unset when the charge_method does not persist a row (e.g. legacy
+    /// paths that only report paid/failure_code without a stored charge).
+    /// Callers that need the full Charge projection can consume this field
+    /// directly instead of following capture_charge with a separate
+    /// update_charge round-trip.
+    #[prost(message, optional, tag = "3")]
+    pub charge: ::core::option::Option<PlatformCharge>,
 }
 /// How the charge should be executed against the payment provider.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
