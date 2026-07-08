@@ -8,7 +8,7 @@ message GetRecurringCreditsRequest {
   uint64 organization_id = 1;
   // The contract we're getting active credits for.
   uint64 contract_id = 2;
-  // All contract IDs for this organization.
+  // All contract IDs for this organization. Caller should provide them in ascending order.
   repeated uint64 contract_ids = 3;
 }
 
