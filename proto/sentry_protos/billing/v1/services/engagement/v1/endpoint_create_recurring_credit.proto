@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/services/engagement/v1/recurring_credit.proto";
+
+message CreateRecurringCreditRequest {
+  uint64 organization_id = 1;
+  // Required for UNITS; must be absent for monetary types.
+  optional string line_item_uid = 2;
+  RecurringCreditType type = 3;
+  uint64 amount = 4;
+  uint32 number_of_periods = 5;
+  uint64 contract_id = 6;
+}
+
+message CreateRecurringCreditResponse {}

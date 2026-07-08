@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+// Denomination of a RecurringCredit.
+enum RecurringCreditType {
+  RECURRING_CREDIT_TYPE_UNSPECIFIED = 0;
+  // A quantity of units for a specific line item.
+  RECURRING_CREDIT_TYPE_UNITS = 1;
+  // A monetary allowance measured in cents.
+  RECURRING_CREDIT_TYPE_CENTS = 2;
+  // A percentage-point discount: 10 = 10%.
+  RECURRING_CREDIT_TYPE_DISCOUNT_PERCENT = 3;
+}
+
+message RecurringCredit {
+  // Present only when type is UNITS; null for monetary types.
+  optional string line_item_uid = 1;
+  RecurringCreditType type = 2;
+  uint64 amount = 3;
+}
