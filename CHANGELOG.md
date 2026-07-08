@@ -1,3 +1,9 @@
+## 0.42.0
+
+### New Features ✨
+
+- (billing) Protos for platform Pay Now webhook loop by @armcknight in [#345](https://github.com/getsentry/sentry-protos/pull/345)
+
 ## 0.41.2
 
 ### Internal Changes 🔧
