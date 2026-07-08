@@ -175,6 +175,70 @@ pub struct CreateGrantResponse {
     pub created: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecurringCredit {
+    /// Present only when type is UNITS; null for monetary types.
+    #[prost(string, optional, tag = "1")]
+    pub line_item_uid: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(enumeration = "RecurringCreditType", tag = "2")]
+    pub r#type: i32,
+    #[prost(uint64, tag = "3")]
+    pub amount: u64,
+}
+/// Denomination of a RecurringCredit.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum RecurringCreditType {
+    Unspecified = 0,
+    /// A quantity of units for a specific line item.
+    Units = 1,
+    /// A monetary allowance measured in cents.
+    Cents = 2,
+    /// A percentage-point discount: 10 = 10%.
+    DiscountPercent = 3,
+}
+impl RecurringCreditType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "RECURRING_CREDIT_TYPE_UNSPECIFIED",
+            Self::Units => "RECURRING_CREDIT_TYPE_UNITS",
+            Self::Cents => "RECURRING_CREDIT_TYPE_CENTS",
+            Self::DiscountPercent => "RECURRING_CREDIT_TYPE_DISCOUNT_PERCENT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "RECURRING_CREDIT_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "RECURRING_CREDIT_TYPE_UNITS" => Some(Self::Units),
+            "RECURRING_CREDIT_TYPE_CENTS" => Some(Self::Cents),
+            "RECURRING_CREDIT_TYPE_DISCOUNT_PERCENT" => Some(Self::DiscountPercent),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateRecurringCreditRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Required for UNITS; must be absent for monetary types.
+    #[prost(string, optional, tag = "2")]
+    pub line_item_uid: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(enumeration = "RecurringCreditType", tag = "3")]
+    pub r#type: i32,
+    #[prost(uint64, tag = "4")]
+    pub amount: u64,
+    #[prost(uint32, tag = "5")]
+    pub number_of_periods: u32,
+    #[prost(uint64, tag = "6")]
+    pub contract_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateRecurringCreditResponse {}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UnitGrant {
     #[prost(string, tag = "1")]
     pub line_item_uid: ::prost::alloc::string::String,
@@ -431,6 +495,22 @@ impl EffectiveMonetarySource {
             _ => None,
         }
     }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetRecurringCreditsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The contract we're getting active credits for.
+    #[prost(uint64, tag = "2")]
+    pub contract_id: u64,
+    /// All contract IDs for this organization.
+    #[prost(uint64, repeated, tag = "3")]
+    pub contract_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetRecurringCreditsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub recurring_credits: ::prost::alloc::vec::Vec<RecurringCredit>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct EffectiveUnitGrant {
