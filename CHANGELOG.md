@@ -1,3 +1,9 @@
+## 0.41.2
+
+### Internal Changes 🔧
+
+- Add total quantity by @noahsmartin in [#349](https://github.com/getsentry/sentry-protos/pull/349)
+
 ## 0.41.1
 
 ### Internal Changes 🔧
