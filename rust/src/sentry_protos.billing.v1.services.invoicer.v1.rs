@@ -110,19 +110,19 @@ pub struct HandleChargeDisputedResponse {
     #[prost(bool, tag = "1")]
     pub handled: bool,
 }
-/// Request to react to a Stripe `charge.succeeded` webhook event for a
-/// charge created by the billing platform.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct HandleChargeSucceededRequest {
     #[prost(message, optional, tag = "1")]
     pub stripe_charge: ::core::option::Option<
         super::super::super::common::v1::StripeCharge,
     >,
+    #[prost(uint64, optional, tag = "2")]
+    pub invoice_id: ::core::option::Option<u64>,
+    #[prost(uint64, optional, tag = "3")]
+    pub organization_id: ::core::option::Option<u64>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct HandleChargeSucceededResponse {
-    /// True when the charge was created by the billing platform and the
-    /// service has finished its handling.
     #[prost(bool, tag = "1")]
     pub handled: bool,
 }

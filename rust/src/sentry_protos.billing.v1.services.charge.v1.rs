@@ -72,7 +72,7 @@ pub struct PlatformRefund {
     #[prost(string, tag = "6")]
     pub stripe_charge_id: ::prost::alloc::string::String,
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CaptureChargeRequest {
     #[prost(enumeration = "ChargeMethod", tag = "1")]
     pub charge_method: i32,
@@ -91,6 +91,11 @@ pub struct CaptureChargeRequest {
     #[prost(message, optional, tag = "8")]
     pub payment_config: ::core::option::Option<
         super::super::super::common::v1::PaymentConfig,
+    >,
+    /// Required when charge_method is CHARGE_METHOD_STRIPE_PAYMENT_INTENT.
+    #[prost(message, optional, tag = "9")]
+    pub stripe_charge: ::core::option::Option<
+        super::super::super::common::v1::StripeCharge,
     >,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -114,6 +119,8 @@ pub enum ChargeMethod {
     None = 1,
     /// Call the Stripe API to bill the customer for this charge.
     Stripe = 2,
+    /// Record an already-succeeded Stripe charge without calling Stripe.
+    StripePaymentIntent = 3,
 }
 impl ChargeMethod {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -125,6 +132,7 @@ impl ChargeMethod {
             Self::Unspecified => "CHARGE_METHOD_UNSPECIFIED",
             Self::None => "CHARGE_METHOD_NONE",
             Self::Stripe => "CHARGE_METHOD_STRIPE",
+            Self::StripePaymentIntent => "CHARGE_METHOD_STRIPE_PAYMENT_INTENT",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -133,6 +141,7 @@ impl ChargeMethod {
             "CHARGE_METHOD_UNSPECIFIED" => Some(Self::Unspecified),
             "CHARGE_METHOD_NONE" => Some(Self::None),
             "CHARGE_METHOD_STRIPE" => Some(Self::Stripe),
+            "CHARGE_METHOD_STRIPE_PAYMENT_INTENT" => Some(Self::StripePaymentIntent),
             _ => None,
         }
     }
