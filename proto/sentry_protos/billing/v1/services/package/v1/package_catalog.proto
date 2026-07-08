@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.package.v1;
+
+// How a customer can start on a package: sign up on their own, work with
+// sales, or receive it as a grant (e.g. open source / nonprofit).
+enum AcquisitionMode {
+  ACQUISITION_MODE_UNSPECIFIED = 0;
+  ACQUISITION_MODE_SELF_SERVE = 1; // customer can sign up on their own
+  ACQUISITION_MODE_SALES = 2; // requires working with sales
+  ACQUISITION_MODE_SPONSORED = 3; // granted (open source / nonprofit)
+}
+
+// A package a customer can subscribe to, such as the Team or Business package.
+message PackageOption {
+  // Unique identifier for this specific package. Use it with GetPackage to
+  // fetch the package's full details.
+  string uid = 1;
+
+  // The package's display name, e.g. "Team". Shown to customers as-is.
+  string display_name = 2;
+
+  AcquisitionMode acquisition = 3;
+
+  // Which billing terms the package offers, in number of months.
+  // [1] = monthly only, [12] = annual only, [1, 12] = monthly or annual.
+  repeated uint32 supported_month_intervals = 4;
+}
+
+// The set of packages a customer can choose from — the answer to "what can I
+// move to?". Returned relative to the customer's current package, or, when no
+// current package is given, the catalog for the latest upsell.
+message PackageCatalog {
+  // Every package option in the catalog, in the order they should be shown.
+  // Includes the free option, the package the customer is currently on (so it
+  // can be highlighted in context), and enterprise options (which require
+  // talking to sales, flagged via AcquisitionMode).
+  repeated PackageOption packages = 1;
+
+  // uid of the free option within `packages`. Being on it means having no paid
+  // subscription — a distinct state — so it is called out for consumers that
+  // treat it specially.
+  string free_package_uid = 2;
+
+  // uid of the default option within `packages`: the one checkout pre-selects.
+  string default_package_uid = 3;
+}

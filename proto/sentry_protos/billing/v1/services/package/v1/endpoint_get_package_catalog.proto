@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.package.v1;
+
+import "sentry_protos/billing/v1/services/package/v1/package_catalog.proto";
+
+message GetPackageCatalogRequest {
+  // The package the customer is currently on; the catalog is returned relative
+  // to it. Leave unset for a customer who has not signed up yet, in which case
+  // the catalog for the latest upsell is returned.
+  optional string package_uid = 1;
+}
+
+message GetPackageCatalogResponse {
+  PackageCatalog catalog = 1;
+}
