@@ -62,6 +62,11 @@ message LineItemUsageSummary {
   // both reserved and PAYG usage (in the line item's units). Unlike `quantity`,
   // this is not reduced by the reserved amount.
   uint64 total_quantity = 6;
+
+  // Cents this line item drew from its shared reserved budget in the billing
+  // period. Only set for members of a shared reserved-budget pool (e.g. Seer);
+  // 0 for line items without a reserved budget.
+  uint64 reserved_spend_cents = 7;
 }
 
 message SharedLineItemUsageSummary {
