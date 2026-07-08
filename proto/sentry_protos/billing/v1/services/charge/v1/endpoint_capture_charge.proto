@@ -5,6 +5,7 @@ package sentry_protos.billing.v1.services.charge.v1;
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/common/v1/payment_config.proto";
 import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
+import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
 
 // How the charge should be executed against the payment provider.
 enum ChargeMethod {
@@ -38,4 +39,11 @@ message CaptureChargeRequest {
 message CaptureChargeResponse {
   bool paid = 1;
   optional string failure_code = 2;
+  // The persisted PlatformCharge row produced (or updated) by this call.
+  // Unset when the charge_method does not persist a row (e.g. legacy
+  // paths that only report paid/failure_code without a stored charge).
+  // Callers that need the full Charge projection can consume this field
+  // directly instead of following capture_charge with a separate
+  // update_charge round-trip.
+  optional PlatformCharge charge = 3;
 }
