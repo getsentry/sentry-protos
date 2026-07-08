@@ -110,6 +110,11 @@ pub struct LineItemUsageSummary {
     /// however, the plan still includes 5GB of free logs, so reserved_budget_exhausted is false for logs.
     #[prost(bool, tag = "5")]
     pub reserved_budget_exhausted: bool,
+    /// Total units consumed by this line item in the billing period, including
+    /// both reserved and PAYG usage (in the line item's units). Unlike `quantity`,
+    /// this is not reduced by the reserved amount.
+    #[prost(uint64, tag = "6")]
+    pub total_quantity: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {

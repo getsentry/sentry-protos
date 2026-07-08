@@ -57,6 +57,11 @@ message LineItemUsageSummary {
   // the payg_budget_exhausted field is true for all line items
   // however, the plan still includes 5GB of free logs, so reserved_budget_exhausted is false for logs.
   bool reserved_budget_exhausted = 5;
+
+  // Total units consumed by this line item in the billing period, including
+  // both reserved and PAYG usage (in the line item's units). Unlike `quantity`,
+  // this is not reduced by the reserved amount.
+  uint64 total_quantity = 6;
 }
 
 message SharedLineItemUsageSummary {
