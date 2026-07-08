@@ -231,8 +231,8 @@ pub struct CreateRecurringCreditRequest {
     pub r#type: i32,
     #[prost(uint64, tag = "4")]
     pub amount: u64,
-    #[prost(uint32, tag = "5")]
-    pub number_of_periods: u32,
+    #[prost(uint64, tag = "5")]
+    pub number_of_periods: u64,
     #[prost(uint64, tag = "6")]
     pub contract_id: u64,
 }
@@ -503,7 +503,7 @@ pub struct GetRecurringCreditsRequest {
     /// The contract we're getting active credits for.
     #[prost(uint64, tag = "2")]
     pub contract_id: u64,
-    /// All contract IDs for this organization.
+    /// All contract IDs for this organization. Caller should provide them in ascending order.
     #[prost(uint64, repeated, tag = "3")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
