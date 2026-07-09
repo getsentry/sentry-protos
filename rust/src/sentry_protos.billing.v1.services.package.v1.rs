@@ -166,3 +166,97 @@ pub struct GetPackageResponse {
     #[prost(message, optional, tag = "1")]
     pub package_config: ::core::option::Option<PackageConfig>,
 }
+/// A package a customer can subscribe to, such as the Team or Business package.
+/// Carries only what a catalog needs beyond a bare reference; fetch full details
+/// (title, pricing, supported intervals) with GetPackage / GetPackages.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PackageOption {
+    /// Unique identifier for this package. Resolve it to full details via
+    /// GetPackage / GetPackages.
+    #[prost(string, tag = "1")]
+    pub uid: ::prost::alloc::string::String,
+    #[prost(enumeration = "AcquisitionMode", tag = "2")]
+    pub acquisition: i32,
+}
+/// The set of packages a customer can choose from — the answer to "what can I
+/// move to?". Returned relative to the customer's current package, or, when no
+/// current package is given, the catalog for the latest upsell.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PackageCatalog {
+    /// Every package option in the catalog, in the order they should be shown.
+    /// Includes the free option, the package the customer is currently on (so it
+    /// can be highlighted in context), and enterprise options (which require
+    /// talking to sales, flagged via AcquisitionMode).
+    #[prost(message, repeated, tag = "1")]
+    pub packages: ::prost::alloc::vec::Vec<PackageOption>,
+    /// uid of the free option within `packages`. Being on it means having no paid
+    /// subscription — a distinct state — so it is called out for consumers that
+    /// treat it specially.
+    #[prost(string, tag = "2")]
+    pub free_package_uid: ::prost::alloc::string::String,
+    /// uid of the default option within `packages`: the one checkout pre-selects.
+    #[prost(string, tag = "3")]
+    pub default_package_uid: ::prost::alloc::string::String,
+}
+/// How a customer can start on a package: sign up on their own, work with
+/// sales, or receive it as a grant (e.g. open source / nonprofit).
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum AcquisitionMode {
+    Unspecified = 0,
+    /// customer can sign up on their own
+    SelfServe = 1,
+    /// requires working with sales
+    Sales = 2,
+    /// granted (open source / nonprofit)
+    Sponsored = 3,
+}
+impl AcquisitionMode {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "ACQUISITION_MODE_UNSPECIFIED",
+            Self::SelfServe => "ACQUISITION_MODE_SELF_SERVE",
+            Self::Sales => "ACQUISITION_MODE_SALES",
+            Self::Sponsored => "ACQUISITION_MODE_SPONSORED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ACQUISITION_MODE_UNSPECIFIED" => Some(Self::Unspecified),
+            "ACQUISITION_MODE_SELF_SERVE" => Some(Self::SelfServe),
+            "ACQUISITION_MODE_SALES" => Some(Self::Sales),
+            "ACQUISITION_MODE_SPONSORED" => Some(Self::Sponsored),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetPackageCatalogRequest {
+    /// The package the customer is currently on; the catalog is returned relative
+    /// to it. Leave unset for a customer who has not signed up yet, in which case
+    /// the catalog for the latest upsell is returned.
+    #[prost(string, optional, tag = "1")]
+    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPackageCatalogResponse {
+    #[prost(message, optional, tag = "1")]
+    pub catalog: ::core::option::Option<PackageCatalog>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetPackagesRequest {
+    /// The package uids to fetch. Accepts one or many.
+    #[prost(string, repeated, tag = "1")]
+    pub package_uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPackagesResponse {
+    /// The requested packages, in the same order as the request.
+    #[prost(message, repeated, tag = "1")]
+    pub package_configs: ::prost::alloc::vec::Vec<PackageConfig>,
+}

@@ -78,3 +78,18 @@ pub struct GetRateCardResponse {
     #[prost(message, optional, tag = "1")]
     pub rate_card: ::core::option::Option<RateCard>,
 }
+/// Build a package's list-price rate card at a billing interval, without a
+/// contract. Kept separate from GetRateCardRequest so a request can never mix a
+/// contract with an unrelated package — each request is a single valid mode.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetRateCardForPackageRequest {
+    #[prost(string, tag = "1")]
+    pub package_uid: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "2")]
+    pub month_interval: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetRateCardForPackageResponse {
+    #[prost(message, optional, tag = "1")]
+    pub rate_card: ::core::option::Option<RateCard>,
+}
