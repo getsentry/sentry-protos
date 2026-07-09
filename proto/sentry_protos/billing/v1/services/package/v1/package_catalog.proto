@@ -12,19 +12,14 @@ enum AcquisitionMode {
 }
 
 // A package a customer can subscribe to, such as the Team or Business package.
+// Carries only what a catalog needs beyond a bare reference; fetch full details
+// (title, pricing, supported intervals) with GetPackage / GetPackages.
 message PackageOption {
-  // Unique identifier for this specific package. Use it with GetPackage to
-  // fetch the package's full details.
+  // Unique identifier for this package. Resolve it to full details via
+  // GetPackage / GetPackages.
   string uid = 1;
 
-  // The package's display name, e.g. "Team". Shown to customers as-is.
-  string display_name = 2;
-
-  AcquisitionMode acquisition = 3;
-
-  // Which billing terms the package offers, in number of months.
-  // [1] = monthly only, [12] = annual only, [1, 12] = monthly or annual.
-  repeated uint32 supported_month_intervals = 4;
+  AcquisitionMode acquisition = 2;
 }
 
 // The set of packages a customer can choose from — the answer to "what can I
