@@ -198,18 +198,13 @@ pub struct PackageCatalog {
     #[prost(string, tag = "3")]
     pub default_package_uid: ::prost::alloc::string::String,
 }
-/// How a customer can start on a package: sign up on their own, work with
-/// sales, or receive it as a grant (e.g. open source / nonprofit).
+/// How a customer can start on a package.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum AcquisitionMode {
     Unspecified = 0,
     /// customer can sign up on their own
     SelfServe = 1,
-    /// requires working with sales
-    Sales = 2,
-    /// granted (open source / nonprofit)
-    Sponsored = 3,
 }
 impl AcquisitionMode {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -220,8 +215,6 @@ impl AcquisitionMode {
         match self {
             Self::Unspecified => "ACQUISITION_MODE_UNSPECIFIED",
             Self::SelfServe => "ACQUISITION_MODE_SELF_SERVE",
-            Self::Sales => "ACQUISITION_MODE_SALES",
-            Self::Sponsored => "ACQUISITION_MODE_SPONSORED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -229,8 +222,6 @@ impl AcquisitionMode {
         match value {
             "ACQUISITION_MODE_UNSPECIFIED" => Some(Self::Unspecified),
             "ACQUISITION_MODE_SELF_SERVE" => Some(Self::SelfServe),
-            "ACQUISITION_MODE_SALES" => Some(Self::Sales),
-            "ACQUISITION_MODE_SPONSORED" => Some(Self::Sponsored),
             _ => None,
         }
     }
