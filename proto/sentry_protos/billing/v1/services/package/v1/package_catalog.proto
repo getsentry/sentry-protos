@@ -2,13 +2,10 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.package.v1;
 
-// How a customer can start on a package: sign up on their own, work with
-// sales, or receive it as a grant (e.g. open source / nonprofit).
+// How a customer can start on a package.
 enum AcquisitionMode {
   ACQUISITION_MODE_UNSPECIFIED = 0;
   ACQUISITION_MODE_SELF_SERVE = 1; // customer can sign up on their own
-  ACQUISITION_MODE_SALES = 2; // requires working with sales
-  ACQUISITION_MODE_SPONSORED = 3; // granted (open source / nonprofit)
 }
 
 // A package a customer can subscribe to, such as the Team or Business package.
