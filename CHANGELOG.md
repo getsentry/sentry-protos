@@ -1,3 +1,9 @@
+## 0.42.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Convert recurring credit dataclasses into protobufs by @brendanhsentry in [#351](https://github.com/getsentry/sentry-protos/pull/351)
+
 ## 0.42.1
 
 ### Internal Changes 🔧
