@@ -1,3 +1,9 @@
+## 0.43.0
+
+### New Features ✨
+
+- (billing) Add PackageOption/PackageCatalog domain model by @skonves in [#350](https://github.com/getsentry/sentry-protos/pull/350)
+
 ## 0.42.2
 
 ### Internal Changes 🔧
