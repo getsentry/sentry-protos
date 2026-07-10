@@ -155,6 +155,9 @@ pub struct PackageConfig {
     /// Whether the package has pay-as-you-go (PAYG) modes.
     #[prost(bool, tag = "12")]
     pub has_payg_modes: bool,
+    /// similar to is_enterprise, but for sponsored packages.
+    #[prost(bool, tag = "13")]
+    pub is_sponsored: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
