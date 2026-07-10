@@ -46,6 +46,9 @@ message SponsorshipConfig {
 
   // Whether this sponsored Contract is eligible to start trials.
   bool can_trial = 2;
+
+  // Whether this sponsored Contract can checkout.
+  bool can_checkout = 3;
 }
 
 // The external billing provider used to process payments for the contract.
