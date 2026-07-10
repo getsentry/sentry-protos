@@ -94,4 +94,7 @@ message PackageConfig {
 
   // Whether the package has pay-as-you-go (PAYG) modes.
   bool has_payg_modes = 12;
+
+  // similar to is_enterprise, but for sponsored packages.
+  bool is_sponsored = 13;
 }
