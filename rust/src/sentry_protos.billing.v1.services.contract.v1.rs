@@ -18,6 +18,9 @@ pub struct SponsorshipConfig {
     /// Whether this sponsored Contract is eligible to start trials.
     #[prost(bool, tag = "2")]
     pub can_trial: bool,
+    /// Whether this sponsored Contract can checkout.
+    #[prost(bool, tag = "3")]
+    pub can_checkout: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Address {
