@@ -13,7 +13,7 @@ pub struct Date {
 /// not.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SponsorshipConfig {
-    #[prost(enumeration = "SponsoredType", tag = "1")]
+    #[prost(enumeration = "super::super::super::common::v1::SponsoredType", tag = "1")]
     pub sponsored_type: i32,
     /// Whether this sponsored Contract is eligible to start trials.
     #[prost(bool, tag = "2")]
@@ -143,51 +143,6 @@ impl BillingChannel {
             "BILLING_CHANNEL_SELF_SERVE" => Some(Self::SelfServe),
             "BILLING_CHANNEL_SALES" => Some(Self::Sales),
             "BILLING_CHANNEL_PARTNER" => Some(Self::Partner),
-            _ => None,
-        }
-    }
-}
-/// The type of sponsorship associated with a contract.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum SponsoredType {
-    Unspecified = 0,
-    Education = 1,
-    OpenSource = 2,
-    NonProfit = 3,
-    FriendsAndFamily = 4,
-    FlyIo = 5,
-    Nintendo = 6,
-    Employee = 7,
-}
-impl SponsoredType {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "SPONSORED_TYPE_UNSPECIFIED",
-            Self::Education => "SPONSORED_TYPE_EDUCATION",
-            Self::OpenSource => "SPONSORED_TYPE_OPEN_SOURCE",
-            Self::NonProfit => "SPONSORED_TYPE_NON_PROFIT",
-            Self::FriendsAndFamily => "SPONSORED_TYPE_FRIENDS_AND_FAMILY",
-            Self::FlyIo => "SPONSORED_TYPE_FLY_IO",
-            Self::Nintendo => "SPONSORED_TYPE_NINTENDO",
-            Self::Employee => "SPONSORED_TYPE_EMPLOYEE",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "SPONSORED_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
-            "SPONSORED_TYPE_EDUCATION" => Some(Self::Education),
-            "SPONSORED_TYPE_OPEN_SOURCE" => Some(Self::OpenSource),
-            "SPONSORED_TYPE_NON_PROFIT" => Some(Self::NonProfit),
-            "SPONSORED_TYPE_FRIENDS_AND_FAMILY" => Some(Self::FriendsAndFamily),
-            "SPONSORED_TYPE_FLY_IO" => Some(Self::FlyIo),
-            "SPONSORED_TYPE_NINTENDO" => Some(Self::Nintendo),
-            "SPONSORED_TYPE_EMPLOYEE" => Some(Self::Employee),
             _ => None,
         }
     }
