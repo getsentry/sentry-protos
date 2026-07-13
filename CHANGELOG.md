@@ -1,3 +1,9 @@
+## 0.43.2
+
+### Internal Changes 🔧
+
+- (seer) Remove unused seer/v1 protos by @chromy in [#356](https://github.com/getsentry/sentry-protos/pull/356)
+
 ## 0.43.1
 
 ### Internal Changes 🔧
