@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// DEPRECATED: replaced by ClaimForManualPaymentRequest /
+// ClaimForManualPaymentResponse in endpoint_claim_for_manual_payment.proto.
+// The rename generalized the semantics -- the same column
+// (manual_payment_started_at) is now claimed by both the manual Pay Now
+// flow and the automated invoicing job, so "start_manual_payment" no longer
+// describes the shared claim.
+//
+// The messages are retained here (rather than being deleted) so buf's
+// breaking-change check stays green while consumers migrate. Remove on the
+// next major version bump.
+message StartManualPaymentRequest {
+  option deprecated = true;
+
+  uint64 invoice_id = 1;
+}
+
+message StartManualPaymentResponse {
+  option deprecated = true;
+
+  bool updated = 1;
+}

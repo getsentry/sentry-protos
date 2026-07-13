@@ -782,6 +782,26 @@ pub struct ReleaseManualPaymentClaimResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
+/// DEPRECATED: replaced by ReleaseManualPaymentClaimRequest /
+/// ReleaseManualPaymentClaimResponse in
+/// endpoint_release_manual_payment_claim.proto. The rename generalized the
+/// semantics from a "manual payment lock" (implying manual-only) to a
+/// "manual payment claim" that shares the same column
+/// (manual_payment_started_at) with the automated invoicing job.
+///
+/// The messages are retained here (rather than being deleted) so buf's
+/// breaking-change check stays green while consumers migrate. Remove on the
+/// next major version bump.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseManualPaymentLockRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseManualPaymentLockResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RetryChargeRequest {
     #[prost(string, tag = "1")]
@@ -827,4 +847,24 @@ pub struct RolloverContractResponse {
     pub amount_billed: u64,
     #[prost(uint64, tag = "4")]
     pub new_contract_id: u64,
+}
+/// DEPRECATED: replaced by ClaimForManualPaymentRequest /
+/// ClaimForManualPaymentResponse in endpoint_claim_for_manual_payment.proto.
+/// The rename generalized the semantics -- the same column
+/// (manual_payment_started_at) is now claimed by both the manual Pay Now
+/// flow and the automated invoicing job, so "start_manual_payment" no longer
+/// describes the shared claim.
+///
+/// The messages are retained here (rather than being deleted) so buf's
+/// breaking-change check stays green while consumers migrate. Remove on the
+/// next major version bump.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StartManualPaymentRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StartManualPaymentResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
 }

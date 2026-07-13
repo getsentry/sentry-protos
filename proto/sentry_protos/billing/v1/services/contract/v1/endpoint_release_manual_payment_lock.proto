@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// DEPRECATED: replaced by ReleaseManualPaymentClaimRequest /
+// ReleaseManualPaymentClaimResponse in
+// endpoint_release_manual_payment_claim.proto. The rename generalized the
+// semantics from a "manual payment lock" (implying manual-only) to a
+// "manual payment claim" that shares the same column
+// (manual_payment_started_at) with the automated invoicing job.
+//
+// The messages are retained here (rather than being deleted) so buf's
+// breaking-change check stays green while consumers migrate. Remove on the
+// next major version bump.
+message ReleaseManualPaymentLockRequest {
+  option deprecated = true;
+
+  uint64 invoice_id = 1;
+}
+
+message ReleaseManualPaymentLockResponse {
+  option deprecated = true;
+
+  bool updated = 1;
+}
