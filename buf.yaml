@@ -6,6 +6,10 @@ modules:
 breaking:
   use:
     - FILE
+  # Temporary: allows deleting the unused, published seer/v1 package.
+  # Revert this `except` in a follow-up once this PR merges (see #168/#169).
+  except:
+    - FILE_NO_DELETE
   ignore_unstable_packages: true
   ignore:
     - google/proto
