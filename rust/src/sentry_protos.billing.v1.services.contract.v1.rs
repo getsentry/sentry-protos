@@ -498,12 +498,23 @@ pub struct Contract {
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
 /// Atomically claims an unpaid PlatformInvoice for the manual Pay Now
-/// flow by stamping charge_in_progress_at. The same column is also
+/// flow by stamping manual_payment_started_at. The same column is also
 /// claimed by the automated invoicing job (get_uncharged_invoices),
 /// so this write races on the shared lock -- only one actor holds a
 /// claim at a time. Failed claims surface as updated=false, letting
 /// the endpoint distinguish "already paid" from "already queued for
 /// automatic payment" by inspecting the invoice state.
+///
+/// The column name is legacy: this stamp was originally set only on
+/// manual Pay Now clicks. It now doubles as the shared claim for the
+/// automated path too, but the DB column and Python attribute must
+/// stay as manual_payment_started_at -- a RenameField migration is
+/// blocked by django-zero-downtime-migrations (unsafe column rename),
+/// and an attribute-only rename via db_column= would still break
+/// old worker instances mid-deploy. The Python-side surface has been
+/// generalized (charge_lock_inactive predicate, CHARGE_LOCK_DURATION
+/// constant, claim_for_manual_payment / release_manual_payment_claim
+/// service methods) to reflect the shared semantics.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ClaimForManualPaymentRequest {
     #[prost(uint64, tag = "1")]
