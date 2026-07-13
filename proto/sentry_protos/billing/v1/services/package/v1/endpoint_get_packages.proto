@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.package.v1;
+
+import "sentry_protos/billing/v1/services/package/v1/package.proto";
+
+message GetPackagesRequest {
+  // The package uids to fetch. Accepts one or many.
+  repeated string package_uids = 1;
+}
+
+message GetPackagesResponse {
+  // The requested packages, in the same order as the request.
+  repeated PackageConfig package_configs = 1;
+}

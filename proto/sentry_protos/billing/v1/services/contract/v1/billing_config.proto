@@ -26,6 +26,31 @@ enum BillingChannel {
   BILLING_CHANNEL_PARTNER = 3;
 }
 
+// The type of sponsorship associated with a contract.
+enum SponsoredType {
+  SPONSORED_TYPE_UNSPECIFIED = 0;
+  SPONSORED_TYPE_EDUCATION = 1;
+  SPONSORED_TYPE_OPEN_SOURCE = 2;
+  SPONSORED_TYPE_NON_PROFIT = 3;
+  SPONSORED_TYPE_FRIENDS_AND_FAMILY = 4;
+  SPONSORED_TYPE_FLY_IO = 5;
+  SPONSORED_TYPE_NINTENDO = 6;
+  SPONSORED_TYPE_EMPLOYEE = 7;
+}
+
+// Configuration for a sponsored contract. The presence of this message on a
+// BillingConfig indicates the contract is sponsored; its absence means it is
+// not.
+message SponsorshipConfig {
+  SponsoredType sponsored_type = 1;
+
+  // Whether this sponsored Contract is eligible to start trials.
+  bool can_trial = 2;
+
+  // Whether this sponsored Contract can checkout.
+  bool can_checkout = 3;
+}
+
 // The external billing provider used to process payments for the contract.
 enum ExternalBillingProvider {
   option deprecated = true;
@@ -74,4 +99,7 @@ message BillingConfig {
   // Whether the org has a soft cap: usage past reserved volume is allowed
   // (and billed) instead of hard-stopping ingestion.
   bool has_soft_cap = 10;
+
+  // Sponsorship configuration. Absent means the contract is not sponsored.
+  optional SponsorshipConfig sponsorship_config = 11;
 }

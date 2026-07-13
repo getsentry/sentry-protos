@@ -1,3 +1,58 @@
+## 0.43.2
+
+### Internal Changes 🔧
+
+- (seer) Remove unused seer/v1 protos by @chromy in [#356](https://github.com/getsentry/sentry-protos/pull/356)
+
+## 0.43.1
+
+### Internal Changes 🔧
+
+#### Billing Platform
+
+- Add sponsored_type to CreateContractRequest by @brendanhsentry in [#360](https://github.com/getsentry/sentry-protos/pull/360)
+- Add SponsorshipConfig to Contract by @brendanhsentry in [#355](https://github.com/getsentry/sentry-protos/pull/355)
+
+#### Other
+
+- (buf) Use a workspace-local cache directory by @armenzg in [#275](https://github.com/getsentry/sentry-protos/pull/275)
+
+## 0.43.0
+
+### New Features ✨
+
+- (billing) Add PackageOption/PackageCatalog domain model by @skonves in [#350](https://github.com/getsentry/sentry-protos/pull/350)
+
+## 0.42.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Convert recurring credit dataclasses into protobufs by @brendanhsentry in [#351](https://github.com/getsentry/sentry-protos/pull/351)
+
+## 0.42.1
+
+### Internal Changes 🔧
+
+- Add reserved line item spend by @noahsmartin in [#353](https://github.com/getsentry/sentry-protos/pull/353)
+
+## 0.42.0
+
+### New Features ✨
+
+- (billing) Protos for platform Pay Now webhook loop by @armcknight in [#345](https://github.com/getsentry/sentry-protos/pull/345)
+
+## 0.41.2
+
+### Internal Changes 🔧
+
+- Add total quantity by @noahsmartin in [#349](https://github.com/getsentry/sentry-protos/pull/349)
+
+## 0.41.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Get all contracts for organization by @brendanhsentry in [#348](https://github.com/getsentry/sentry-protos/pull/348)
+
 ## 0.41.0
 
 ### New Features ✨

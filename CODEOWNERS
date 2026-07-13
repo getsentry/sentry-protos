@@ -1,3 +1,4 @@
 /proto/sentry_protos/billing    @getsentry/revenue
+/proto/sentry_protos/seer       @getsentry/machine-learning-ai
 /proto/sentry_protos/snuba      @getsentry/owners-snuba
 /proto/sentry_protos/taskbroker @getsentry/taskbroker

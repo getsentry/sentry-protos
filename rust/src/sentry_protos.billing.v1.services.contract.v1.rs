@@ -8,6 +8,20 @@ pub struct Date {
     #[prost(uint32, tag = "3")]
     pub day: u32,
 }
+/// Configuration for a sponsored contract. The presence of this message on a
+/// BillingConfig indicates the contract is sponsored; its absence means it is
+/// not.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SponsorshipConfig {
+    #[prost(enumeration = "SponsoredType", tag = "1")]
+    pub sponsored_type: i32,
+    /// Whether this sponsored Contract is eligible to start trials.
+    #[prost(bool, tag = "2")]
+    pub can_trial: bool,
+    /// Whether this sponsored Contract can checkout.
+    #[prost(bool, tag = "3")]
+    pub can_checkout: bool,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Address {
     #[prost(string, tag = "1")]
@@ -63,6 +77,9 @@ pub struct BillingConfig {
     /// (and billed) instead of hard-stopping ingestion.
     #[prost(bool, tag = "10")]
     pub has_soft_cap: bool,
+    /// Sponsorship configuration. Absent means the contract is not sponsored.
+    #[prost(message, optional, tag = "11")]
+    pub sponsorship_config: ::core::option::Option<SponsorshipConfig>,
 }
 /// Indicates how the account is billed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -126,6 +143,51 @@ impl BillingChannel {
             "BILLING_CHANNEL_SELF_SERVE" => Some(Self::SelfServe),
             "BILLING_CHANNEL_SALES" => Some(Self::Sales),
             "BILLING_CHANNEL_PARTNER" => Some(Self::Partner),
+            _ => None,
+        }
+    }
+}
+/// The type of sponsorship associated with a contract.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SponsoredType {
+    Unspecified = 0,
+    Education = 1,
+    OpenSource = 2,
+    NonProfit = 3,
+    FriendsAndFamily = 4,
+    FlyIo = 5,
+    Nintendo = 6,
+    Employee = 7,
+}
+impl SponsoredType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SPONSORED_TYPE_UNSPECIFIED",
+            Self::Education => "SPONSORED_TYPE_EDUCATION",
+            Self::OpenSource => "SPONSORED_TYPE_OPEN_SOURCE",
+            Self::NonProfit => "SPONSORED_TYPE_NON_PROFIT",
+            Self::FriendsAndFamily => "SPONSORED_TYPE_FRIENDS_AND_FAMILY",
+            Self::FlyIo => "SPONSORED_TYPE_FLY_IO",
+            Self::Nintendo => "SPONSORED_TYPE_NINTENDO",
+            Self::Employee => "SPONSORED_TYPE_EMPLOYEE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SPONSORED_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "SPONSORED_TYPE_EDUCATION" => Some(Self::Education),
+            "SPONSORED_TYPE_OPEN_SOURCE" => Some(Self::OpenSource),
+            "SPONSORED_TYPE_NON_PROFIT" => Some(Self::NonProfit),
+            "SPONSORED_TYPE_FRIENDS_AND_FAMILY" => Some(Self::FriendsAndFamily),
+            "SPONSORED_TYPE_FLY_IO" => Some(Self::FlyIo),
+            "SPONSORED_TYPE_NINTENDO" => Some(Self::Nintendo),
+            "SPONSORED_TYPE_EMPLOYEE" => Some(Self::Employee),
             _ => None,
         }
     }
@@ -556,6 +618,10 @@ pub struct CreateContractRequest {
     /// tax document was opened.
     #[prost(string, optional, tag = "9")]
     pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// The sponsored type of the contract. If unset, then this is a non-sponsored
+    /// contract.
+    #[prost(enumeration = "SponsoredType", optional, tag = "10")]
+    pub sponsored_type: ::core::option::Option<i32>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateContractResponse {
@@ -603,6 +669,16 @@ pub struct FindInvoiceByGuidResponse {
     /// Set whenever `invoice_id` is set; unset otherwise.
     #[prost(uint64, optional, tag = "2")]
     pub organization_id: ::core::option::Option<u64>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetAllContractsForOrganizationRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAllContractsForOrganizationResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub contracts: ::prost::alloc::vec::Vec<Contract>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetContractRequest {
@@ -743,11 +819,14 @@ pub struct MarkInvoicePaidRequest {
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MarkInvoicePaidResponse {
     /// True if a matching invoice was found and updated.
     #[prost(bool, tag = "1")]
     pub updated: bool,
+    /// The updated invoice; unset when updated is false.
+    #[prost(message, optional, tag = "2")]
+    pub invoice: ::core::option::Option<Invoice>,
 }
 /// Records a failed charge attempt against an invoice.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
