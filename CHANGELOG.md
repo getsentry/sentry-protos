@@ -1,3 +1,16 @@
+## 0.43.1
+
+### Internal Changes 🔧
+
+#### Billing Platform
+
+- Add sponsored_type to CreateContractRequest by @brendanhsentry in [#360](https://github.com/getsentry/sentry-protos/pull/360)
+- Add SponsorshipConfig to Contract by @brendanhsentry in [#355](https://github.com/getsentry/sentry-protos/pull/355)
+
+#### Other
+
+- (buf) Use a workspace-local cache directory by @armenzg in [#275](https://github.com/getsentry/sentry-protos/pull/275)
+
 ## 0.43.0
 
 ### New Features ✨
