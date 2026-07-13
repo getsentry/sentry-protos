@@ -32,7 +32,6 @@
       "Bash(git stash list:*)",
       "Bash(git status:*)",
       "Bash(git tag:*)",
-      "Bash(grep:*)",
       "Bash(head:*)",
       "Bash(ls:*)",
       "Bash(make build:*)",
