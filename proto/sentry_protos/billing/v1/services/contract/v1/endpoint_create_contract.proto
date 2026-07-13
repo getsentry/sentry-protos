@@ -31,6 +31,10 @@ message CreateContractRequest {
   // pending tax transaction atomically with invoice creation. Unset means no
   // tax document was opened.
   optional string tax_transaction_code = 9;
+
+  // The sponsored type of the contract. If unset, then this is a non-sponsored
+  // contract.
+  optional SponsoredType sponsored_type = 10;
 }
 
 message CreateContractResponse {
