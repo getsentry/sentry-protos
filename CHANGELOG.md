@@ -1,3 +1,13 @@
+## 0.44.0
+
+### New Features ✨
+
+- (seer) Add v2alpha SeerService with GetModels by @chromy in [#362](https://github.com/getsentry/sentry-protos/pull/362)
+
+### Internal Changes 🔧
+
+- Add team Claude Code allow list for Makefile workflows by @chromy in [#357](https://github.com/getsentry/sentry-protos/pull/357)
+
 ## 0.43.3
 
 ### Internal Changes 🔧
