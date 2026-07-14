@@ -1,3 +1,10 @@
+## 0.43.3
+
+### Internal Changes 🔧
+
+- (billing) Rename manual-payment protos to charge-lock surface semantics by @armcknight in [#347](https://github.com/getsentry/sentry-protos/pull/347)
+- (codeowners) Add Seer ownership by @sentry-junior in [#358](https://github.com/getsentry/sentry-protos/pull/358)
+
 ## 0.43.2
 
 ### Internal Changes 🔧
