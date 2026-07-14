@@ -92,6 +92,11 @@ pub mod sentry_protos {
             include!("sentry_protos.conduit.v1alpha.rs");
         }
     }
+    pub mod seer {
+        pub mod v2alpha {
+            include!("sentry_protos.seer.v2alpha.rs");
+        }
+    }
     pub mod sentry {
         pub mod v1 {
             include!("sentry_protos.sentry.v1.rs");
