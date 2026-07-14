@@ -559,31 +559,31 @@ pub struct Contract {
     #[prost(message, optional, tag = "3")]
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
-/// Atomically claims an unpaid PlatformInvoice for the manual Pay Now
-/// flow by stamping manual_payment_started_at. The same column is also
-/// claimed by the automated invoicing job (get_uncharged_invoices),
-/// so this write races on the shared lock -- only one actor holds a
-/// claim at a time. Failed claims surface as updated=false, letting
-/// the endpoint distinguish "already paid" from "already queued for
-/// automatic payment" by inspecting the invoice state.
+/// Atomically claims an unpaid PlatformInvoice for charging by stamping
+/// manual_payment_started_at. The same column is claimed by both the
+/// manual Pay Now flow (via this endpoint) and the automated invoicing
+/// job (inline in get_uncharged_invoices), so this write races on the
+/// shared lock -- only one actor holds a claim at a time. Failed claims
+/// surface as updated=false, letting the caller distinguish "already
+/// paid" from "already claimed by another actor" by inspecting the
+/// invoice state.
 ///
 /// The column name is legacy: this stamp was originally set only on
-/// manual Pay Now clicks. It now doubles as the shared claim for the
-/// automated path too, but the DB column and Python attribute must
-/// stay as manual_payment_started_at -- a RenameField migration is
-/// blocked by django-zero-downtime-migrations (unsafe column rename),
-/// and an attribute-only rename via db_column= would still break
-/// old worker instances mid-deploy. The Python-side surface has been
-/// generalized (charge_lock_inactive predicate, CHARGE_LOCK_DURATION
-/// constant, claim_for_manual_payment / release_manual_payment_claim
-/// service methods) to reflect the shared semantics.
+/// manual Pay Now clicks, hence the "manual_payment_started_at" name.
+/// It now doubles as the shared claim for the automated path too, but
+/// the DB column and Python attribute must stay as manual_payment_started_at
+/// -- a RenameField migration is blocked by django-zero-downtime-migrations
+/// (unsafe column rename), and an attribute-only rename via db_column=
+/// would still break old worker instances mid-deploy. The Python-side
+/// surface has been generalized (charge_lock_inactive predicate,
+/// CHARGE_LOCK_DURATION constant) to reflect the shared semantics.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct ClaimForManualPaymentRequest {
+pub struct ClaimChargeRequest {
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct ClaimForManualPaymentResponse {
+pub struct ClaimChargeResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
@@ -847,26 +847,28 @@ pub struct RecordFailedChargeAttemptResponse {
     #[prost(message, optional, tag = "3")]
     pub next_payment_attempt: ::core::option::Option<::prost_types::Timestamp>,
 }
-/// Clears the manual Pay Now claim on an unpaid invoice. Used by the
-/// Pay Now endpoint when the Stripe PaymentIntent.create call fails
-/// after the claim was acquired -- releasing keeps the inline-cutoff
-/// window from delaying automated retries by up to 24h.
+/// Clears the shared charge claim on an unpaid invoice by NULLing
+/// manual_payment_started_at. Used by the manual Pay Now endpoint when
+/// the Stripe PaymentIntent.create call fails after the claim was
+/// acquired -- releasing keeps the inline-cutoff window from delaying
+/// automated retries by up to 24h. See endpoint_claim_charge.proto for
+/// the paired claim endpoint and the legacy column-name context.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct ReleaseManualPaymentClaimRequest {
+pub struct ReleaseChargeClaimRequest {
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct ReleaseManualPaymentClaimResponse {
+pub struct ReleaseChargeClaimResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
-/// DEPRECATED: replaced by ReleaseManualPaymentClaimRequest /
-/// ReleaseManualPaymentClaimResponse in
-/// endpoint_release_manual_payment_claim.proto. The rename generalized the
-/// semantics from a "manual payment lock" (implying manual-only) to a
-/// "manual payment claim" that shares the same column
-/// (manual_payment_started_at) with the automated invoicing job.
+/// DEPRECATED: replaced by ReleaseChargeClaimRequest /
+/// ReleaseChargeClaimResponse in endpoint_release_charge_claim.proto.
+/// The rename generalized the semantics from a "manual payment lock"
+/// (implying manual-only) to a shared "charge claim" that both the
+/// manual Pay Now flow and the automated invoicing job write against
+/// the same column (manual_payment_started_at).
 ///
 /// The messages are retained here (rather than being deleted) so buf's
 /// breaking-change check stays green while consumers migrate. Remove on the
@@ -927,12 +929,11 @@ pub struct RolloverContractResponse {
     #[prost(uint64, tag = "4")]
     pub new_contract_id: u64,
 }
-/// DEPRECATED: replaced by ClaimForManualPaymentRequest /
-/// ClaimForManualPaymentResponse in endpoint_claim_for_manual_payment.proto.
-/// The rename generalized the semantics -- the same column
-/// (manual_payment_started_at) is now claimed by both the manual Pay Now
-/// flow and the automated invoicing job, so "start_manual_payment" no longer
-/// describes the shared claim.
+/// DEPRECATED: replaced by ClaimChargeRequest / ClaimChargeResponse in
+/// endpoint_claim_charge.proto. The rename generalized the semantics --
+/// the same column (manual_payment_started_at) is now claimed by both
+/// the manual Pay Now flow and the automated invoicing job, so
+/// "start_manual_payment" no longer describes the shared claim.
 ///
 /// The messages are retained here (rather than being deleted) so buf's
 /// breaking-change check stays green while consumers migrate. Remove on the
