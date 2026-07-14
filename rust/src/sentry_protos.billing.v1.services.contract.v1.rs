@@ -622,10 +622,18 @@ pub struct CreateContractRequest {
     /// tax document was opened.
     #[prost(string, optional, tag = "9")]
     pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
-    /// The sponsored type of the contract. If unset, then this is a non-sponsored
-    /// contract.
+    /// DEPRECATED: used sponsorship_type instead.
+    #[deprecated]
     #[prost(enumeration = "SponsoredType", optional, tag = "10")]
     pub sponsored_type: ::core::option::Option<i32>,
+    /// The sponsored type of the contract. If unset, then this is a non-sponsored
+    /// contract.
+    #[prost(
+        enumeration = "super::super::super::common::v1::SponsoredType",
+        optional,
+        tag = "11"
+    )]
+    pub sponsorship_type: ::core::option::Option<i32>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateContractResponse {
