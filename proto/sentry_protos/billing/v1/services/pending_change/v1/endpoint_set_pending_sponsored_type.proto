@@ -4,11 +4,6 @@ package sentry_protos.billing.v1.services.pending_change.v1;
 
 import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
 
-// Sets the pending sponsored_type on the org's pending change. Creates a
-// pending change if none exists, or updates the sponsored_type on the
-// existing one without modifying its other fields. Setting
-// SPONSORED_TYPE_UNSPECIFIED schedules removal of the contract's sponsorship
-// at the next rollover.
 message SetPendingSponsoredTypeRequest {
   uint64 organization_id = 1;
 
