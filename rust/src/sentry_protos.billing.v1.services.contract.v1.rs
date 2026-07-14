@@ -13,6 +13,7 @@ pub struct Date {
 /// not.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SponsorshipConfig {
+    #[deprecated]
     #[prost(enumeration = "SponsoredType", tag = "1")]
     pub sponsored_type: i32,
     /// Whether this sponsored Contract is eligible to start trials.
@@ -21,6 +22,8 @@ pub struct SponsorshipConfig {
     /// Whether this sponsored Contract can checkout.
     #[prost(bool, tag = "3")]
     pub can_checkout: bool,
+    #[prost(enumeration = "super::super::super::common::v1::SponsoredType", tag = "4")]
+    pub sponsorship_type: i32,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Address {
@@ -147,7 +150,8 @@ impl BillingChannel {
         }
     }
 }
-/// The type of sponsorship associated with a contract.
+/// Deprecated: use sentry_protos.billing.v1.common.v1.SponsoredType. Moved to
+/// common/v1 so it can be shared with the pending_change service
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum SponsoredType {
