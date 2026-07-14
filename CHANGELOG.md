@@ -1,3 +1,9 @@
+## 0.44.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add sponsored_type to pending change by @brendanhsentry in [#361](https://github.com/getsentry/sentry-protos/pull/361)
+
 ## 0.44.0
 
 ### New Features ✨
