@@ -849,10 +849,10 @@ pub struct RecordFailedChargeAttemptResponse {
 }
 /// Releases the shared charge lock on an unpaid invoice by NULLing
 /// manual_payment_started_at. Used by the manual Pay Now endpoint when
-/// the Stripe PaymentIntent.create call fails after the claim was
+/// the Stripe PaymentIntent.create call fails after the lock was
 /// acquired -- releasing keeps the inline-cutoff window from delaying
-/// automated retries by up to 24h. See endpoint_claim_charge_lock.proto for
-/// the paired claim endpoint and the legacy column-name context.
+/// automated retries by up to 24h. See endpoint_claim_charge_lock.proto
+/// for the paired claim endpoint and the legacy column-name context.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ReleaseChargeLockRequest {
     #[prost(uint64, tag = "1")]
@@ -929,11 +929,11 @@ pub struct RolloverContractResponse {
     #[prost(uint64, tag = "4")]
     pub new_contract_id: u64,
 }
-/// DEPRECATED: replaced by ClaimChargeLockRequest / ClaimChargeLockResponse in
-/// endpoint_claim_charge_lock.proto. The rename generalized the semantics --
-/// the same column (manual_payment_started_at) is now claimed by both
-/// the manual Pay Now flow and the automated invoicing job, so
-/// "start_manual_payment" no longer describes the shared lock.
+/// DEPRECATED: replaced by ClaimChargeLockRequest / ClaimChargeLockResponse
+/// in endpoint_claim_charge_lock.proto. The rename generalized the
+/// semantics -- the same column (manual_payment_started_at) is now
+/// claimed by both the manual Pay Now flow and the automated invoicing
+/// job, so "start_manual_payment" no longer describes the shared lock.
 ///
 /// The messages are retained here (rather than being deleted) so buf's
 /// breaking-change check stays green while consumers migrate. Remove on the
