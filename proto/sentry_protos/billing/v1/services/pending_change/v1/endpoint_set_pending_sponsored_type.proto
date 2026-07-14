@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.pending_change.v1;
 
-import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
+import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
 
 // Sets the pending sponsored_type on the org's pending change. Creates a
 // pending change if none exists, or updates the sponsored_type on the
@@ -14,7 +14,7 @@ message SetPendingSponsoredTypeRequest {
 
   // The contract sponsored_type the subscription will switch to at the next
   // rollover. SPONSORED_TYPE_UNSPECIFIED removes the sponsorship.
-  sentry_protos.billing.v1.services.contract.v1.SponsoredType sponsored_type = 2;
+  sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 2;
 }
 
 message SetPendingSponsoredTypeResponse {}

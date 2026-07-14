@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
+import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
+
 message Date {
   uint32 year = 1;
   uint32 month = 2;
@@ -26,8 +28,11 @@ enum BillingChannel {
   BILLING_CHANNEL_PARTNER = 3;
 }
 
-// The type of sponsorship associated with a contract.
+// Deprecated: use sentry_protos.billing.v1.common.v1.SponsoredType. Moved to
+// common/v1 so it can be shared with the pending_change service
 enum SponsoredType {
+  option deprecated = true;
+
   SPONSORED_TYPE_UNSPECIFIED = 0;
   SPONSORED_TYPE_EDUCATION = 1;
   SPONSORED_TYPE_OPEN_SOURCE = 2;
@@ -42,13 +47,15 @@ enum SponsoredType {
 // BillingConfig indicates the contract is sponsored; its absence means it is
 // not.
 message SponsorshipConfig {
-  SponsoredType sponsored_type = 1;
+  SponsoredType sponsored_type = 1 [deprecated = true];
 
   // Whether this sponsored Contract is eligible to start trials.
   bool can_trial = 2;
 
   // Whether this sponsored Contract can checkout.
   bool can_checkout = 3;
+
+  sentry_protos.billing.v1.common.v1.SponsoredType sponsorship_type = 4;
 }
 
 // The external billing provider used to process payments for the contract.
