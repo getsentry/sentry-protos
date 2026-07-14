@@ -13,17 +13,17 @@ package sentry_protos.billing.v1.services.contract.v1;
 //
 // The column name is legacy: this stamp was originally set only on
 // manual Pay Now clicks, hence the "manual_payment_started_at" name.
-// It now doubles as the shared claim for the automated path too, but
+// It now doubles as the shared lock for the automated path too, but
 // the DB column and Python attribute must stay as manual_payment_started_at
 // -- a RenameField migration is blocked by django-zero-downtime-migrations
 // (unsafe column rename), and an attribute-only rename via db_column=
 // would still break old worker instances mid-deploy. The Python-side
 // surface has been generalized (charge_lock_inactive predicate,
 // CHARGE_LOCK_DURATION constant) to reflect the shared semantics.
-message ClaimChargeRequest {
+message ClaimChargeLockRequest {
   uint64 invoice_id = 1;
 }
 
-message ClaimChargeResponse {
+message ClaimChargeLockResponse {
   bool updated = 1;
 }

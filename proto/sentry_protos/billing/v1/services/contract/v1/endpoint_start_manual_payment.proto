@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
-// DEPRECATED: replaced by ClaimChargeRequest / ClaimChargeResponse in
-// endpoint_claim_charge.proto. The rename generalized the semantics --
-// the same column (manual_payment_started_at) is now claimed by both
-// the manual Pay Now flow and the automated invoicing job, so
-// "start_manual_payment" no longer describes the shared claim.
+// DEPRECATED: replaced by ClaimChargeLockRequest / ClaimChargeLockResponse
+// in endpoint_claim_charge_lock.proto. The rename generalized the
+// semantics -- the same column (manual_payment_started_at) is now
+// claimed by both the manual Pay Now flow and the automated invoicing
+// job, so "start_manual_payment" no longer describes the shared lock.
 //
 // The messages are retained here (rather than being deleted) so buf's
 // breaking-change check stays green while consumers migrate. Remove on the

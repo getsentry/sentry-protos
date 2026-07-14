@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.v1;
 
-// DEPRECATED: replaced by ReleaseChargeClaimRequest /
-// ReleaseChargeClaimResponse in endpoint_release_charge_claim.proto.
+// DEPRECATED: replaced by ReleaseChargeLockRequest /
+// ReleaseChargeLockResponse in endpoint_release_charge_lock.proto.
 // The rename generalized the semantics from a "manual payment lock"
-// (implying manual-only) to a shared "charge claim" that both the
+// (implying manual-only) to a shared "charge lock" that both the
 // manual Pay Now flow and the automated invoicing job write against
 // the same column (manual_payment_started_at).
 //
