@@ -1,3 +1,39 @@
+## 0.44.0
+
+### New Features ✨
+
+- (seer) Add v2alpha SeerService with GetModels by @chromy in [#362](https://github.com/getsentry/sentry-protos/pull/362)
+
+### Internal Changes 🔧
+
+- Add team Claude Code allow list for Makefile workflows by @chromy in [#357](https://github.com/getsentry/sentry-protos/pull/357)
+
+## 0.43.3
+
+### Internal Changes 🔧
+
+- (billing) Rename manual-payment protos to charge-lock surface semantics by @armcknight in [#347](https://github.com/getsentry/sentry-protos/pull/347)
+- (codeowners) Add Seer ownership by @sentry-junior in [#358](https://github.com/getsentry/sentry-protos/pull/358)
+
+## 0.43.2
+
+### Internal Changes 🔧
+
+- (seer) Remove unused seer/v1 protos by @chromy in [#356](https://github.com/getsentry/sentry-protos/pull/356)
+
+## 0.43.1
+
+### Internal Changes 🔧
+
+#### Billing Platform
+
+- Add sponsored_type to CreateContractRequest by @brendanhsentry in [#360](https://github.com/getsentry/sentry-protos/pull/360)
+- Add SponsorshipConfig to Contract by @brendanhsentry in [#355](https://github.com/getsentry/sentry-protos/pull/355)
+
+#### Other
+
+- (buf) Use a workspace-local cache directory by @armenzg in [#275](https://github.com/getsentry/sentry-protos/pull/275)
+
 ## 0.43.0
 
 ### New Features ✨

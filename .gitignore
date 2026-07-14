@@ -154,3 +154,6 @@ data/
 
 # Local cache for buf CLI
 /.buf-cache/
+
+# Claude Code local (personal) settings
+.claude/settings.local.json

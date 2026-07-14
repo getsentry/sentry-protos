@@ -93,8 +93,8 @@ pub mod sentry_protos {
         }
     }
     pub mod seer {
-        pub mod v1 {
-            include!("sentry_protos.seer.v1.rs");
+        pub mod v2alpha {
+            include!("sentry_protos.seer.v2alpha.rs");
         }
     }
     pub mod sentry {
