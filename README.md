@@ -21,12 +21,19 @@ package instead of trying to ship a potentially breaking change.
 ### Unstable versions
 
 While features are in development, we occasionally need to break backwards compatibility.
-Any proto packages that end in `alpha`, `beta`, or `test` are exempt from breaking change validation.
+Proto packages whose version ends in `alpha` or `beta` are treated as unstable: they are
+exempt from `buf` breaking-change validation and are excluded from released client packages,
+which prevents in-development schemas from being used in production workloads.
 
-For example: `sentry_protos.sentry.confabulator.v1test` would not be subject to backwards compatibility.
+For example: `sentry_protos.sentry.confabulator.v1beta` would not be subject to backwards compatibility.
 
-Unstable protocols are not included in release packages in order to prevent them from being
-used in production workloads.
+Two separate mechanisms recognize slightly different suffixes, so stick to `alpha`/`beta` to
+stay covered by both:
+
+- `buf` (breaking-change checks, via `ignore_unstable_packages`) also treats a `test` suffix
+  (e.g. `v1test`) as unstable.
+- The Python and Rust build scripts (release packaging) instead recognize a `dev` suffix
+  (e.g. `v1dev`).
 
 ## Local development workflow
 
