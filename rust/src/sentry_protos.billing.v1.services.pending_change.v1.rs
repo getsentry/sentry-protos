@@ -80,3 +80,14 @@ pub struct SetPendingPackageRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingPackageResponse {}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetPendingSponsoredTypeRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The contract sponsored_type the subscription will switch to at the next
+    /// rollover. SPONSORED_TYPE_UNSPECIFIED removes the sponsorship.
+    #[prost(enumeration = "super::super::super::common::v1::SponsoredType", tag = "2")]
+    pub sponsored_type: i32,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetPendingSponsoredTypeResponse {}

@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.common.v1;
 
 import "google/protobuf/empty.proto";
+import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
 
 // A pending change is a deferred subscription change for an organization that
 // will apply at the next billing period rollover. Each org has at most one
@@ -24,6 +25,10 @@ message PendingChange {
 
   // New contract month_interval. Used for downgrades from annual to monthly
   optional uint32 month_interval = 3;
+
+  // Next contract's sponsored_type. SPONSORED_TYPE_UNSPECIFIED clears the
+  // sponsorship; an unset field leaves it unchanged.
+  optional sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 4;
 }
 
 // Pending overrides for a set of line items. payg_budget and reservation are
