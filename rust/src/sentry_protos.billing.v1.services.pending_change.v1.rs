@@ -80,11 +80,6 @@ pub struct SetPendingPackageRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingPackageResponse {}
-/// Sets the pending sponsored_type on the org's pending change. Creates a
-/// pending change if none exists, or updates the sponsored_type on the
-/// existing one without modifying its other fields. Setting
-/// SPONSORED_TYPE_UNSPECIFIED schedules removal of the contract's sponsorship
-/// at the next rollover.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingSponsoredTypeRequest {
     #[prost(uint64, tag = "1")]
