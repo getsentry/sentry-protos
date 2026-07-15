@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v1;
 
 import "sentry_protos/billing/v1/common/v1/address.proto";
+import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
 import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
@@ -32,9 +33,12 @@ message CreateContractRequest {
   // tax document was opened.
   optional string tax_transaction_code = 9;
 
+  // DEPRECATED: used sponsorship_type instead.
+  optional SponsoredType sponsored_type = 10 [deprecated = true];
+
   // The sponsored type of the contract. If unset, then this is a non-sponsored
   // contract.
-  optional SponsoredType sponsored_type = 10;
+  optional sentry_protos.billing.v1.common.v1.SponsoredType sponsorship_type = 11;
 }
 
 message CreateContractResponse {
