@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+import "sentry_protos/billing/v1/services/contract/v1/endpoint_apply_immediate_user_config.proto";
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+import "sentry_protos/billing/v1/services/pending_change/v1/endpoint_add_pending_user_config.proto";
+
+// Applies a batch of user-config changes to a contract in one call. The
+// `immediate` configs take effect on the contract now; the `pending` configs
+// are staged for the next billing period. Grouping both in a single request
+// lets the contract service apply them atomically, so a checkout change that
+// resolves to both an immediate and a pending part cannot land half-applied.
+message AddUserConfigsRequest {
+  uint64 contract_id = 1;
+
+  // Configs applied to the contract immediately.
+  repeated UserConfig immediate = 2;
+
+  // Configs staged to take effect at the next billing period. Mirrors the shape
+  // add_pending_user_config accepts so they can be forwarded without conversion.
+  repeated sentry_protos.billing.v1.common.v1.PendingUserConfig pending = 3;
+}
+
+message AddUserConfigsResponse {
+  // Per-config results, in the same order as the request's `immediate` list.
+  repeated ApplyImmediateUserConfigResponse immediate = 1;
+
+  // Per-config results, in the same order as the request's `pending` list.
+  repeated sentry_protos.billing.v1.services.pending_change.v1.AddPendingUserConfigResponse pending = 2;
+}

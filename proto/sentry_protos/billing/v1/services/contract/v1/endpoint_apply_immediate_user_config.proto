@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+
+// Applies a single user config to a contract immediately, repointing the
+// contract's live parameters. Used internally by add_user_configs (there is no
+// standalone service endpoint), mirroring how add_pending_user_config stages a
+// single pending config.
+message ApplyImmediateUserConfigRequest {
+  uint64 contract_id = 1;
+  UserConfig user_config = 2;
+}
+
+message ApplyImmediateUserConfigResponse {
+  // True when a new parameter was added for the config's scope; false when an
+  // existing parameter was repointed.
+  bool created = 1;
+}
