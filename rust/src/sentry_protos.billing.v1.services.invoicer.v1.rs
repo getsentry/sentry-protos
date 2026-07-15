@@ -156,3 +156,26 @@ pub struct MaterializePlatformChargeResponse {
     #[prost(bool, tag = "2")]
     pub created: bool,
 }
+/// Read-only preview of the invoice a contract will next be billed, without
+/// creating the invoice or charging. Mirrors the assembly the invoicer runs when
+/// it actually rolls a contract over: renewal (subscription + reserved) line
+/// items, accrued pay-as-you-go usage, applied account credit (as negative
+/// balance_change line items), and sales tax.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PreviewNextInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PreviewNextInvoiceResponse {
+    /// The line items the next invoice would carry, including negative
+    /// balance_change credit lines and a sales_tax line when applicable.
+    #[prost(message, repeated, tag = "1")]
+    pub line_items: ::prost::alloc::vec::Vec<
+        super::super::contract::v1::InvoiceLineItem,
+    >,
+    /// The amount that would be charged: the sum of line_items after applied
+    /// credit. Never negative (credit is capped at the pre-tax subtotal).
+    #[prost(uint64, tag = "2")]
+    pub amount_billed_cents: u64,
+}
