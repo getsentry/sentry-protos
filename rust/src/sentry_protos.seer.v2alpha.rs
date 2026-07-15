@@ -38,6 +38,41 @@ pub struct DeleteSandboxRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct DeleteSandboxResponse {}
+/// A shell command executed inside a sandbox, together with its result.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ShellCommand {
+    /// Name of the sandbox to run the command in.
+    #[prost(string, tag = "1")]
+    pub sandbox_name: ::prost::alloc::string::String,
+    /// The command to execute, as an argv list. Executed directly rather than
+    /// through a shell, so no quoting or expansion is applied.
+    #[prost(string, repeated, tag = "2")]
+    pub command: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// Exit code returned by the command. Set once the command has completed.
+    #[prost(int32, tag = "3")]
+    pub exit_code: i32,
+    /// Captured standard output.
+    #[prost(string, tag = "4")]
+    pub stdout: ::prost::alloc::string::String,
+    /// Captured standard error.
+    #[prost(string, tag = "5")]
+    pub stderr: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RunShellCommandRequest {
+    /// Name of the sandbox to run the command in.
+    #[prost(string, tag = "1")]
+    pub sandbox_name: ::prost::alloc::string::String,
+    /// The command to execute, as an argv list.
+    #[prost(string, repeated, tag = "2")]
+    pub command: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RunShellCommandResponse {
+    /// The command and its result.
+    #[prost(message, optional, tag = "1")]
+    pub shell_command: ::core::option::Option<ShellCommand>,
+}
 /// Generated client implementations.
 pub mod sandbox_router_service_client {
     #![allow(
@@ -191,6 +226,37 @@ pub mod sandbox_router_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// RunShellCommand runs a shell command inside a sandbox and returns its
+        /// result.
+        pub async fn run_shell_command(
+            &mut self,
+            request: impl tonic::IntoRequest<super::RunShellCommandRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::RunShellCommandResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sentry_protos.seer.v2alpha.SandboxRouterService/RunShellCommand",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "sentry_protos.seer.v2alpha.SandboxRouterService",
+                        "RunShellCommand",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -220,6 +286,15 @@ pub mod sandbox_router_service_server {
             request: tonic::Request<super::DeleteSandboxRequest>,
         ) -> std::result::Result<
             tonic::Response<super::DeleteSandboxResponse>,
+            tonic::Status,
+        >;
+        /// RunShellCommand runs a shell command inside a sandbox and returns its
+        /// result.
+        async fn run_shell_command(
+            &self,
+            request: tonic::Request<super::RunShellCommandRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::RunShellCommandResponse>,
             tonic::Status,
         >;
     }
@@ -379,6 +454,55 @@ pub mod sandbox_router_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = DeleteSandboxSvc(inner);
+                        let codec = tonic_prost::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/sentry_protos.seer.v2alpha.SandboxRouterService/RunShellCommand" => {
+                    #[allow(non_camel_case_types)]
+                    struct RunShellCommandSvc<T: SandboxRouterService>(pub Arc<T>);
+                    impl<
+                        T: SandboxRouterService,
+                    > tonic::server::UnaryService<super::RunShellCommandRequest>
+                    for RunShellCommandSvc<T> {
+                        type Response = super::RunShellCommandResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::RunShellCommandRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as SandboxRouterService>::run_shell_command(
+                                        &inner,
+                                        request,
+                                    )
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = RunShellCommandSvc(inner);
                         let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

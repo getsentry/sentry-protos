@@ -40,6 +40,38 @@ message DeleteSandboxRequest {
 
 message DeleteSandboxResponse {}
 
+// A shell command executed inside a sandbox, together with its result.
+message ShellCommand {
+  // Name of the sandbox to run the command in.
+  string sandbox_name = 1;
+
+  // The command to execute, as an argv list. Executed directly rather than
+  // through a shell, so no quoting or expansion is applied.
+  repeated string command = 2;
+
+  // Exit code returned by the command. Set once the command has completed.
+  int32 exit_code = 3;
+
+  // Captured standard output.
+  string stdout = 4;
+
+  // Captured standard error.
+  string stderr = 5;
+}
+
+message RunShellCommandRequest {
+  // Name of the sandbox to run the command in.
+  string sandbox_name = 1;
+
+  // The command to execute, as an argv list.
+  repeated string command = 2;
+}
+
+message RunShellCommandResponse {
+  // The command and its result.
+  ShellCommand shell_command = 1;
+}
+
 // SandboxRouterService orchestrates ephemeral sandbox pods that run AI coding
 // agents on customer repositories.
 service SandboxRouterService {
@@ -48,4 +80,8 @@ service SandboxRouterService {
 
   // DeleteSandbox tears down a sandbox and its resources.
   rpc DeleteSandbox(DeleteSandboxRequest) returns (DeleteSandboxResponse) {}
+
+  // RunShellCommand runs a shell command inside a sandbox and returns its
+  // result.
+  rpc RunShellCommand(RunShellCommandRequest) returns (RunShellCommandResponse) {}
 }
