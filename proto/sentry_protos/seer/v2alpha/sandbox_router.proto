@@ -4,43 +4,6 @@ package sentry_protos.seer.v2alpha;
 
 import "google/protobuf/timestamp.proto";
 
-// A file changed by a coding-agent task.
-message ChangedFile {
-  // How the file changed relative to the base branch.
-  enum ChangeType {
-    CHANGE_TYPE_UNSPECIFIED = 0;
-    CHANGE_TYPE_ADDED = 1;
-    CHANGE_TYPE_MODIFIED = 2;
-    CHANGE_TYPE_DELETED = 3;
-  }
-
-  // Repo-relative path of the file.
-  string path = 1;
-
-  // How the file changed.
-  ChangeType change_type = 2;
-
-  // Full file content. Unset for deleted files.
-  optional string content = 3;
-}
-
-// The lifecycle status of a coding-agent task.
-enum CodingTaskStatus {
-  CODING_TASK_STATUS_UNSPECIFIED = 0;
-  CODING_TASK_STATUS_PENDING = 1;
-  CODING_TASK_STATUS_RUNNING = 2;
-  CODING_TASK_STATUS_SUCCESS = 3;
-  CODING_TASK_STATUS_ERROR = 4;
-}
-
-// The phase a running coding-agent task is currently in.
-enum CodingTaskPhase {
-  CODING_TASK_PHASE_UNSPECIFIED = 0;
-  CODING_TASK_PHASE_SETUP = 1;
-  CODING_TASK_PHASE_EXECUTION = 2;
-  CODING_TASK_PHASE_COMPLETION = 3;
-}
-
 message CreateSandboxRequest {
   // SandboxTemplate to instantiate. The router's default is used when unset.
   optional string template_name = 1;
@@ -77,100 +40,6 @@ message DeleteSandboxRequest {
 
 message DeleteSandboxResponse {}
 
-message SubmitCodingTaskRequest {
-  // URL of the repository to clone.
-  string repo_url = 1;
-
-  // Branch the agent should create and push its work to.
-  string branch = 2;
-
-  // Natural-language description of the issue for the agent to work on.
-  string issue_description = 3;
-
-  // Branch to base the work on.
-  string base_branch = 4;
-
-  // Short-lived token used to clone a private repository. Unset for public repos.
-  optional string repo_access_token = 5;
-
-  // Commands to set up the environment, overriding auto-detection.
-  repeated string setup_commands = 6;
-
-  // Time-to-live in seconds for the underlying sandbox. The router's default is
-  // used when unset.
-  optional int32 ttl_seconds = 7;
-}
-
-message SubmitCodingTaskResponse {
-  // Identifier for the submitted task, used to poll for its result.
-  string task_id = 1;
-
-  // Status of the task at submission time.
-  CodingTaskStatus status = 2;
-}
-
-message GetCodingTaskRequest {
-  // Identifier of the task to fetch.
-  string task_id = 1;
-}
-
-message GetCodingTaskResponse {
-  // The current state and result of the task.
-  CodingTask task = 1;
-}
-
-// The state and result of a coding-agent task.
-message CodingTask {
-  // Identifier of the task.
-  string task_id = 1;
-
-  // Current lifecycle status of the task.
-  CodingTaskStatus status = 2;
-
-  // Phase the task is in while running.
-  CodingTaskPhase phase = 3;
-
-  // Identifier of the sandbox running the task.
-  string sandbox_id = 4;
-
-  // Agent-produced summary of the work done.
-  string summary = 5;
-
-  // Unified diff of the changes, for display and review.
-  string diff = 6;
-
-  // Full contents of the changed files, for applying via the GitHub API.
-  repeated ChangedFile files_changed = 7;
-
-  // Branch the agent pushed its work to.
-  string git_branch = 8;
-
-  // Number of commits the agent made.
-  int32 commit_count = 9;
-
-  // Error message when the task failed.
-  string error = 10;
-
-  // When the task was created.
-  google.protobuf.Timestamp created_at = 11;
-
-  // When the task finished. Unset while the task is still running.
-  google.protobuf.Timestamp completed_at = 12;
-}
-
-message CancelCodingTaskRequest {
-  // Identifier of the task to cancel.
-  string task_id = 1;
-}
-
-message CancelCodingTaskResponse {
-  // Identifier of the cancelled task.
-  string task_id = 1;
-
-  // Status of the task after cancellation.
-  CodingTaskStatus status = 2;
-}
-
 // SandboxRouterService orchestrates ephemeral sandbox pods that run AI coding
 // agents on customer repositories.
 service SandboxRouterService {
@@ -179,15 +48,4 @@ service SandboxRouterService {
 
   // DeleteSandbox tears down a sandbox and its resources.
   rpc DeleteSandbox(DeleteSandboxRequest) returns (DeleteSandboxResponse) {}
-
-  // SubmitCodingTask starts a coding-agent task and returns immediately with a
-  // task identifier to poll.
-  rpc SubmitCodingTask(SubmitCodingTaskRequest) returns (SubmitCodingTaskResponse) {}
-
-  // GetCodingTask returns the current state and result of a coding-agent task.
-  rpc GetCodingTask(GetCodingTaskRequest) returns (GetCodingTaskResponse) {}
-
-  // CancelCodingTask cancels a running coding-agent task and cleans up its
-  // sandbox.
-  rpc CancelCodingTask(CancelCodingTaskRequest) returns (CancelCodingTaskResponse) {}
 }
