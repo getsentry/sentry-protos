@@ -1,0 +1,204 @@
+syntax = "proto3";
+
+package sentry_protos.seer.v2alpha;
+
+import "google/protobuf/timestamp.proto";
+
+message CreateSandboxRequest {
+  // SandboxTemplate to instantiate. The router's default is used when unset.
+  optional string template_name = 1;
+
+  // Namespace to create the sandbox in. The router's default is used when unset.
+  optional string namespace = 2;
+
+  // Time-to-live in seconds before the sandbox is automatically deleted. The
+  // router's default is used when unset.
+  optional int32 ttl_seconds = 3;
+
+  // GitHub access token to make available inside the sandbox for cloning and
+  // interacting with repositories. When unset, no token is provisioned.
+  optional string github_key = 4;
+}
+
+message CreateSandboxResponse {
+  // Identifier for the sandbox, used to route subsequent requests to it.
+  string sandbox_id = 1;
+
+  // Namespace the sandbox was created in.
+  string namespace = 2;
+
+  // SandboxTemplate the sandbox was instantiated from.
+  string template_name = 3;
+
+  // When the sandbox will be automatically deleted.
+  google.protobuf.Timestamp expires_at = 4;
+}
+
+message DeleteSandboxRequest {
+  // Identifier of the sandbox to delete.
+  string sandbox_id = 1;
+
+  // Namespace the sandbox lives in. The router's default is used when unset.
+  optional string namespace = 2;
+}
+
+message DeleteSandboxResponse {}
+
+// A shell command executed inside a sandbox, together with its result.
+message ShellCommand {
+  // Identifier for this command, assigned on creation and used to refer to it
+  // in subsequent requests.
+  string name = 1;
+
+  // Name of the sandbox to run the command in.
+  string sandbox_name = 2;
+
+  // The command to execute, as an argv list. Executed directly rather than
+  // through a shell, so no quoting or expansion is applied.
+  repeated string command = 3;
+
+  // Exit code returned by the command. Set once the command has completed.
+  int32 exit_code = 4;
+
+  // Handle to the command's standard input, for writing.
+  File stdin = 5;
+
+  // Handle to the command's standard output, for reading.
+  File stdout = 6;
+
+  // Handle to the command's standard error, for reading.
+  File stderr = 7;
+}
+
+message StartRequest {
+  // Name of the sandbox to run the command in.
+  string sandbox_name = 1;
+
+  // The command to execute, as an argv list.
+  repeated string command = 2;
+}
+
+message StartResponse {
+  // The started command.
+  ShellCommand shell_command = 1;
+}
+
+message PollRequest {
+  // Identifier of the command to fetch the current state of.
+  string name = 1;
+}
+
+message PollResponse {
+  // The command with its current state.
+  ShellCommand shell_command = 1;
+}
+
+message SignalRequest {
+  // Identifier of the command to signal.
+  string name = 1;
+
+  // The signal to send to the running command (e.g. SIGTERM=15, SIGKILL=9).
+  int32 signal = 2;
+}
+
+message SignalResponse {}
+
+// A file opened inside a sandbox, modeled on Go's os.File. Open returns a
+// handle that the caller reads from, writes to, and finally closes.
+message File {
+  // Identifier for the open file, assigned on open and used to refer to it in
+  // subsequent reads, writes, and the close.
+  string name = 1;
+
+  // Name of the sandbox the file lives in.
+  string sandbox_name = 2;
+
+  // Path of the file within the sandbox.
+  string path = 3;
+}
+
+message OpenRequest {
+  // Name of the sandbox the file lives in.
+  string sandbox_name = 1;
+
+  // Path of the file within the sandbox.
+  string path = 2;
+
+  // Flags controlling how the file is opened, mirroring the flag argument to
+  // Go's os.OpenFile (e.g. read-only, write-only, create, append, truncate).
+  int32 flags = 3;
+
+  // Permission bits to apply when the file is created, mirroring the perm
+  // argument to Go's os.OpenFile.
+  uint32 perm = 4;
+}
+
+message OpenResponse {
+  // The opened file handle.
+  File file = 1;
+}
+
+message ReadRequest {
+  // Identifier of the open file to read from.
+  string name = 1;
+
+  // Maximum number of bytes to read. A response shorter than this indicates
+  // end of file.
+  int64 size = 2;
+}
+
+message ReadResponse {
+  // Bytes read from the file. Empty at end of file.
+  bytes data = 1;
+}
+
+message WriteRequest {
+  // Identifier of the open file to write to.
+  string name = 1;
+
+  // Bytes to write to the file.
+  bytes data = 2;
+}
+
+message WriteResponse {
+  // Number of bytes written.
+  int64 written = 1;
+}
+
+message CloseRequest {
+  // Identifier of the open file to close.
+  string name = 1;
+}
+
+message CloseResponse {}
+
+// SandboxRouterService orchestrates ephemeral sandbox pods that run AI coding
+// agents on customer repositories.
+service SandboxRouterService {
+  // CreateSandbox provisions a sandbox and waits for it to become ready.
+  rpc CreateSandbox(CreateSandboxRequest) returns (CreateSandboxResponse) {}
+
+  // DeleteSandbox tears down a sandbox and its resources.
+  rpc DeleteSandbox(DeleteSandboxRequest) returns (DeleteSandboxResponse) {}
+
+  // Start runs a shell command inside a sandbox.
+  rpc Start(StartRequest) returns (StartResponse) {}
+
+  // Poll fetches the current state of a running command.
+  rpc Poll(PollRequest) returns (PollResponse) {}
+
+  // Signal sends a signal to a running command.
+  rpc Signal(SignalRequest) returns (SignalResponse) {}
+
+  // Open opens a file inside a sandbox and returns a handle to it.
+  rpc Open(OpenRequest) returns (OpenResponse) {}
+
+  // Read reads bytes from an open file.
+  rpc Read(ReadRequest) returns (ReadResponse) {}
+
+  // Write writes bytes to an open file.
+  rpc Write(WriteRequest) returns (WriteResponse) {}
+
+  // Close closes an open file.
+  rpc Close(CloseRequest) returns (CloseResponse) {}
+}
