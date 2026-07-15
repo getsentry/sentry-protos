@@ -563,6 +563,54 @@ pub struct Contract {
     #[prost(message, optional, tag = "3")]
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
+/// Applies a single user config to a contract immediately, repointing the
+/// contract's live parameters. Used internally by add_user_configs (there is no
+/// standalone service endpoint), mirroring how add_pending_user_config stages a
+/// single pending config.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ApplyImmediateUserConfigRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub user_config: ::core::option::Option<UserConfig>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ApplyImmediateUserConfigResponse {
+    /// True when a new parameter was added for the config's scope; false when an
+    /// existing parameter was repointed.
+    #[prost(bool, tag = "1")]
+    pub created: bool,
+}
+/// Applies a batch of user-config changes to a contract in one call. The
+/// `immediate` configs take effect on the contract now; the `pending` configs
+/// are staged for the next billing period. Grouping both in a single request
+/// lets the contract service apply them atomically, so a checkout change that
+/// resolves to both an immediate and a pending part cannot land half-applied.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddUserConfigsRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    /// Configs applied to the contract immediately.
+    #[prost(message, repeated, tag = "2")]
+    pub immediate: ::prost::alloc::vec::Vec<UserConfig>,
+    /// Configs staged to take effect at the next billing period. Mirrors the shape
+    /// add_pending_user_config accepts so they can be forwarded without conversion.
+    #[prost(message, repeated, tag = "3")]
+    pub pending: ::prost::alloc::vec::Vec<
+        super::super::super::common::v1::PendingUserConfig,
+    >,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddUserConfigsResponse {
+    /// Per-config results, in the same order as the request's `immediate` list.
+    #[prost(message, repeated, tag = "1")]
+    pub immediate: ::prost::alloc::vec::Vec<ApplyImmediateUserConfigResponse>,
+    /// Per-config results, in the same order as the request's `pending` list.
+    #[prost(message, repeated, tag = "2")]
+    pub pending: ::prost::alloc::vec::Vec<
+        super::super::pending_change::v1::AddPendingUserConfigResponse,
+    >,
+}
 /// Atomically claims an unpaid PlatformInvoice for charging by stamping
 /// manual_payment_started_at. The same column is claimed by both the
 /// manual Pay Now flow (via this endpoint) and the automated invoicing
