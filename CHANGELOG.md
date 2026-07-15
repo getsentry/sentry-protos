@@ -1,3 +1,9 @@
+## 0.44.3
+
+### Internal Changes 🔧
+
+- Add endpoint for previewing next bill by @noahsmartin in [#359](https://github.com/getsentry/sentry-protos/pull/359)
+
 ## 0.44.2
 
 ### Internal Changes 🔧
