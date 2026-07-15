@@ -1,3 +1,9 @@
+## 0.45.0
+
+### New Features ✨
+
+- (billing-platform) Add contract add_user_configs endpoint by @skonves in [#365](https://github.com/getsentry/sentry-protos/pull/365)
+
 ## 0.44.3
 
 ### Internal Changes 🔧
