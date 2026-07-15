@@ -1,3 +1,9 @@
+## 0.44.2
+
+### Internal Changes 🔧
+
+- (billing-platform) CreateContractRequest sponsorship_type by @brendanhsentry in [#363](https://github.com/getsentry/sentry-protos/pull/363)
+
 ## 0.44.1
 
 ### Internal Changes 🔧
