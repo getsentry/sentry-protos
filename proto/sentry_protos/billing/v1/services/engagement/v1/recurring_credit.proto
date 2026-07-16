@@ -22,6 +22,11 @@ enum CreditSource {
   CREDIT_SOURCE_ADMIN = 2;
 }
 
+message CreditSourceConfig {
+  CreditSource source = 1;
+  optional string source_id = 2;
+}
+
 message RecurringCredit {
   // Present only when type is UNITS; null for monetary types.
   optional string line_item_uid = 1;

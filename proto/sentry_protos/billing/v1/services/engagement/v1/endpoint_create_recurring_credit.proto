@@ -13,9 +13,7 @@ message CreateRecurringCreditRequest {
   uint64 number_of_periods = 5;
   uint64 contract_id = 6;
 
-  optional CreditSource source = 7;
-  // Identifier of the record within source (ie a PromoCode id).
-  optional string source_id = 8;
+  optional CreditSourceConfig source_config = 7;
 }
 
 message CreateRecurringCreditResponse {}
