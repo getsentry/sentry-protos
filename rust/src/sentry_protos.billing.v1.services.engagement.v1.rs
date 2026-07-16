@@ -220,6 +220,38 @@ impl RecurringCreditType {
         }
     }
 }
+/// External system that granted a RecurringCredit.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum CreditSource {
+    Unspecified = 0,
+    /// A promo code redemption.
+    PromoCode = 1,
+    /// A manual admin grant.
+    Admin = 2,
+}
+impl CreditSource {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "CREDIT_SOURCE_UNSPECIFIED",
+            Self::PromoCode => "CREDIT_SOURCE_PROMO_CODE",
+            Self::Admin => "CREDIT_SOURCE_ADMIN",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "CREDIT_SOURCE_UNSPECIFIED" => Some(Self::Unspecified),
+            "CREDIT_SOURCE_PROMO_CODE" => Some(Self::PromoCode),
+            "CREDIT_SOURCE_ADMIN" => Some(Self::Admin),
+            _ => None,
+        }
+    }
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateRecurringCreditRequest {
     #[prost(uint64, tag = "1")]
@@ -235,6 +267,11 @@ pub struct CreateRecurringCreditRequest {
     pub number_of_periods: u64,
     #[prost(uint64, tag = "6")]
     pub contract_id: u64,
+    #[prost(enumeration = "CreditSource", optional, tag = "7")]
+    pub source: ::core::option::Option<i32>,
+    /// Identifier of the record within source (ie a PromoCode id).
+    #[prost(string, optional, tag = "8")]
+    pub source_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateRecurringCreditResponse {}
