@@ -13,6 +13,15 @@ enum RecurringCreditType {
   RECURRING_CREDIT_TYPE_DISCOUNT_PERCENT = 3;
 }
 
+// External system that granted a RecurringCredit.
+enum CreditSource {
+  CREDIT_SOURCE_UNSPECIFIED = 0;
+  // A promo code redemption.
+  CREDIT_SOURCE_PROMO_CODE = 1;
+  // A manual admin grant.
+  CREDIT_SOURCE_ADMIN = 2;
+}
+
 message RecurringCredit {
   // Present only when type is UNITS; null for monetary types.
   optional string line_item_uid = 1;
