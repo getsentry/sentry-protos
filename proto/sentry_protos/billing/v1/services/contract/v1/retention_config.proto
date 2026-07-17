@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/data_category.proto";
+
+// A single customer's sparse departure from the package retention defaults for
+// one billing data category.
+message RetentionOverride {
+  // The billing data category this override applies to. Package defaults and
+  // contract overrides use the same billing category identity.
+  sentry_protos.billing.v1.DataCategory category = 1;
+
+  // Standard/full-fidelity retention in calendar days. Absence means no
+  // standard override; a present value must be positive.
+  optional uint32 standard_days = 2;
+
+  // Downsampled retention in calendar days. Absence means no downsampled
+  // override; a present value must be positive. Unlike complete package
+  // settings, zero is invalid for a contract override.
+  optional uint32 downsampled_days = 3;
+}
+
+// The contract-owned retention overrides layered on top of package defaults.
+//
+// This is raw sparse input to effective-retention resolution, not the resolved
+// policy itself. Fields left unspecified fall through along their corresponding
+// package retention chain.
+message RetentionConfig {
+  // Opaque identifier of the retention policy revision this config projects.
+  // Consumers must treat it as opaque and must not parse it.
+  string revision = 1;
+
+  // Temporary legacy-compatible organization-wide retention in calendar days.
+  // Absence means the organization-wide layer does not apply; a present value
+  // must be positive. It applies to standard and to each downsampled
+  // representation already declared by the package.
+  optional uint32 organization_days = 2;
+
+  // Per-category sparse overrides. At most one entry per category.
+  repeated RetentionOverride overrides = 3;
+}
