@@ -175,6 +175,13 @@ pub struct CreateGrantResponse {
     pub created: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreditSourceConfig {
+    #[prost(enumeration = "CreditSource", tag = "1")]
+    pub source: i32,
+    #[prost(string, optional, tag = "2")]
+    pub source_id: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RecurringCredit {
     /// Present only when type is UNITS; null for monetary types.
     #[prost(string, optional, tag = "1")]
@@ -267,11 +274,8 @@ pub struct CreateRecurringCreditRequest {
     pub number_of_periods: u64,
     #[prost(uint64, tag = "6")]
     pub contract_id: u64,
-    #[prost(enumeration = "CreditSource", optional, tag = "7")]
-    pub source: ::core::option::Option<i32>,
-    /// Identifier of the record within source (ie a PromoCode id).
-    #[prost(string, optional, tag = "8")]
-    pub source_id: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "7")]
+    pub source_config: ::core::option::Option<CreditSourceConfig>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateRecurringCreditResponse {}
