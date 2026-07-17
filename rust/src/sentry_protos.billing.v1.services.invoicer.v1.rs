@@ -165,6 +165,10 @@ pub struct MaterializePlatformChargeResponse {
 pub struct PreviewNextInvoiceRequest {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
+    #[prost(bool, tag = "2")]
+    pub cancel_at_period_end: bool,
+    #[prost(bool, tag = "3")]
+    pub is_self_serve_partner: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PreviewNextInvoiceResponse {

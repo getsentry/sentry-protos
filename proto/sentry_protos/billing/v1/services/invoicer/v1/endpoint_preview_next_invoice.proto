@@ -11,6 +11,8 @@ import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 // balance_change line items), and sales tax.
 message PreviewNextInvoiceRequest {
   uint64 contract_id = 1;
+  bool cancel_at_period_end = 2;
+  bool is_self_serve_partner = 3;
 }
 
 message PreviewNextInvoiceResponse {
