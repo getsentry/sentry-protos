@@ -1,3 +1,9 @@
+## 0.45.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add source and source_id when creating RecurringCredits by @brendanhsentry in [#366](https://github.com/getsentry/sentry-protos/pull/366)
+
 ## 0.45.0
 
 ### New Features ✨
