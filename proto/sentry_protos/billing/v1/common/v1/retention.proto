@@ -4,28 +4,34 @@ package sentry_protos.billing.v1.common.v1;
 
 import "sentry_protos/billing/v1/data_category.proto";
 
-// The complete retention settings for a data category.
+// Retention settings for one data category.
 //
-// These are complete package/common settings, not sparse override semantics.
+// A package uses this message for a complete policy. Do not use this message
+// for sparse updates or overrides. Services validate categories, apply
+// precedence, preserve legacy behavior, and calculate effective retention.
 message RetentionSettings {
-  // Standard/full-fidelity retention in calendar days. Must be greater than zero.
+  // The number of calendar days to retain standard data. The value must be
+  // greater than zero.
   uint32 standard_days = 1;
 
-  // Retention for a distinct downsampled representation in calendar days.
+  // The number of calendar days to retain downsampled data.
   //
-  // Absence means the category has no distinct downsampled representation. A
-  // present zero is a package compatibility value interpreted by the retention
-  // resolver as the effective standard retention. A positive value is a
-  // concrete downsampled retention duration.
+  // If this field is absent, the category has no separate downsampled data. If
+  // the value is zero, the resolver uses the effective standard retention. This
+  // value preserves legacy behavior. A positive value is a concrete duration.
   optional uint32 downsampled_days = 2;
 }
 
-// Associates complete retention settings with a billing data category.
+// Complete retention settings for one billing data category.
+//
+// Retention is keyed by billing data category, not by line item or SKU. A line
+// item can bill more than one category. A category can be billed by more than
+// one line item. Some line items have no retention. A shared pool bills no
+// single category. Do not read a category from a line item.
 message DataCategoryRetention {
-  // The supported billing data category. DATA_CATEGORY_UNSPECIFIED and
-  // DATA_CATEGORY_UNKNOWN are invalid.
+  // Do not use DATA_CATEGORY_UNSPECIFIED or DATA_CATEGORY_UNKNOWN.
   sentry_protos.billing.v1.DataCategory category = 1;
 
-  // The category's retention settings. Required by the domain model.
+  // The category retention settings. This message is required.
   RetentionSettings settings = 2;
 }
