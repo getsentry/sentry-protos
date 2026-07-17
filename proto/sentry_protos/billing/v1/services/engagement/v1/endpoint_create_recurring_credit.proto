@@ -12,6 +12,8 @@ message CreateRecurringCreditRequest {
   uint64 amount = 4;
   uint64 number_of_periods = 5;
   uint64 contract_id = 6;
+
+  optional CreditSourceConfig source_config = 7;
 }
 
 message CreateRecurringCreditResponse {}
