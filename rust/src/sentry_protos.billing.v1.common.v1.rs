@@ -440,6 +440,34 @@ pub struct TieredPricingRate {
     #[prost(message, repeated, tag = "1")]
     pub tiers: ::prost::alloc::vec::Vec<PricingTier>,
 }
+/// The complete retention settings for a data category.
+///
+/// These are complete package/common settings, not sparse override semantics.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetentionSettings {
+    /// Standard/full-fidelity retention in calendar days. Must be greater than zero.
+    #[prost(uint32, tag = "1")]
+    pub standard_days: u32,
+    /// Retention for a distinct downsampled representation in calendar days.
+    ///
+    /// Absence means the category has no distinct downsampled representation. A
+    /// present zero is a package compatibility value interpreted by the retention
+    /// resolver as the effective standard retention. A positive value is a
+    /// concrete downsampled retention duration.
+    #[prost(uint32, optional, tag = "2")]
+    pub downsampled_days: ::core::option::Option<u32>,
+}
+/// Associates complete retention settings with a billing data category.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct DataCategoryRetention {
+    /// The supported billing data category. DATA_CATEGORY_UNSPECIFIED and
+    /// DATA_CATEGORY_UNKNOWN are invalid.
+    #[prost(enumeration = "super::super::DataCategory", tag = "1")]
+    pub category: i32,
+    /// The category's retention settings. Required by the domain model.
+    #[prost(message, optional, tag = "2")]
+    pub settings: ::core::option::Option<RetentionSettings>,
+}
 /// Card payment method details.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Card {
