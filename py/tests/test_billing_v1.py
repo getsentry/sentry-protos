@@ -59,6 +59,11 @@ from sentry_protos.billing.v1.services.contract.v1.retention_config_pb2 import (
     RetentionConfig,
     RetentionOverride,
 )
+from sentry_protos.billing.v1.services.quotas.v1.endpoint_get_retentions_pb2 import (
+    EffectiveDataCategoryRetention,
+    EffectiveRetentionSettings,
+    GetRetentionsResponse,
+)
 from sentry_protos.billing.v1.services.package.v1.package_pb2 import PackageConfig
 from sentry_protos.billing.v1.services.package.v1.endpoint_get_package_pb2 import (
     GetPackageRequest,
@@ -538,6 +543,58 @@ def test_contract_retention_config_absent_organization():
     parsed.ParseFromString(contract.SerializeToString())
     assert parsed == contract
     assert not parsed.retention_config.HasField("organization_days")
+
+
+def test_get_retentions_response_effective_settings():
+    response = GetRetentionsResponse(
+        contract_present=True,
+        retention_policy_revision="rev_abc123",
+        event_retention_days=90,
+        downsampled_event_retention_days=30,
+        retentions=[
+            # A category with a distinct downsampled representation.
+            EffectiveDataCategoryRetention(
+                category=DataCategory.DATA_CATEGORY_SPAN,
+                settings=EffectiveRetentionSettings(standard_days=90, downsampled_days=396),
+            ),
+            # A standard-only category: downsampled is absent, not zero.
+            EffectiveDataCategoryRetention(
+                category=DataCategory.DATA_CATEGORY_ERROR,
+                settings=EffectiveRetentionSettings(standard_days=90),
+            ),
+        ],
+    )
+
+    assert response.contract_present
+    assert response.retention_policy_revision == "rev_abc123"
+    assert len(response.retentions) == 2
+
+    span = response.retentions[0]
+    assert span.category == DataCategory.DATA_CATEGORY_SPAN
+    assert span.settings.standard_days == 90
+    assert span.settings.HasField("downsampled_days")
+    assert span.settings.downsampled_days == 396
+
+    error = response.retentions[1]
+    assert error.category == DataCategory.DATA_CATEGORY_ERROR
+    assert error.settings.standard_days == 90
+    assert not error.settings.HasField("downsampled_days")
+
+    parsed = GetRetentionsResponse()
+    parsed.ParseFromString(response.SerializeToString())
+    assert parsed == response
+
+
+def test_get_retentions_response_no_contract():
+    # Absent contract projects an empty response; contract_present distinguishes it
+    # from a contract that happens to resolve to zero categories.
+    response = GetRetentionsResponse(contract_present=False)
+    assert not response.contract_present
+    assert list(response.retentions) == []
+
+    parsed = GetRetentionsResponse()
+    parsed.ParseFromString(response.SerializeToString())
+    assert parsed == response
 
 
 def test_get_package_request():
