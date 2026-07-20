@@ -2326,6 +2326,7 @@ pub struct TraceItemTableRequest {
     pub order_by: ::prost::alloc::vec::Vec<trace_item_table_request::OrderBy>,
     #[prost(message, repeated, tag = "5")]
     pub group_by: ::prost::alloc::vec::Vec<AttributeKey>,
+    #[deprecated]
     #[prost(uint32, tag = "6")]
     pub limit: u32,
     /// optional, used for pagination, the next page token will be returned in the response
@@ -2342,8 +2343,7 @@ pub struct TraceItemTableRequest {
     /// ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
     #[prost(message, repeated, tag = "10")]
     pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
-    /// optional, restricts the number of returned rows per distinct combination of
-    /// the LimitBy columns (ClickHouse `LIMIT n BY ...`). See LimitBy for details.
+    /// optional, ClickHouse `LIMIT n BY ...`. See LimitBy.
     #[prost(message, optional, tag = "11")]
     pub limit_by: ::core::option::Option<trace_item_table_request::LimitBy>,
 }
@@ -2412,24 +2412,12 @@ pub mod trace_item_table_request {
             }
         }
     }
-    /// Restricts how many rows are returned per distinct combination of the given
-    /// columns, equivalent to ClickHouse's `LIMIT n BY expr, ...` clause
-    /// (<https://clickhouse.com/docs/sql-reference/statements/select/limit-by>).
-    /// LIMIT BY is applied together with ORDER BY, so within each group defined by
-    /// `columns` the top `limit` rows (as sorted by `order_by`) are kept. The
-    /// top-level `limit` field still caps the total number of rows returned.
-    ///
-    /// Example: selecting (project_id, transaction, count()) ordered by count()
-    /// descending with a LimitBy of {columns: \[project_id\], limit: 100} returns
-    /// the top 100 transactions for every project in a single query, instead of
-    /// issuing one query per project.
+    /// ClickHouse `LIMIT n BY expr, ...`: keep the top `limit` rows per distinct
+    /// combination of `columns`.
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct LimitBy {
-        /// The columns whose distinct value combinations define each group. Every
-        /// column referenced here must also be selected in `columns`.
         #[prost(message, repeated, tag = "1")]
         pub columns: ::prost::alloc::vec::Vec<super::Column>,
-        /// The maximum number of rows to keep per group. Must be greater than 0.
         #[prost(uint32, tag = "2")]
         pub limit: u32,
     }
