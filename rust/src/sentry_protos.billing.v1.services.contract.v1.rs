@@ -611,6 +611,36 @@ pub struct AddUserConfigsResponse {
         super::super::pending_change::v1::AddPendingUserConfigResponse,
     >,
 }
+/// Applies a package/interval change to a contract immediately, mutating the
+/// contract in place and charging a prorated invoice. Used internally by the
+/// checkout service for upgrades (there is no standalone service endpoint),
+/// mirroring how add_user_configs applies immediate user-config changes.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ApplyImmediateContractChangeRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    /// The package the contract switches to. If unset, the package is unchanged.
+    #[prost(string, optional, tag = "2")]
+    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
+    /// The month_interval the contract switches to. If unset, it is unchanged. A
+    /// change here (e.g. monthly -> annual) starts a fresh term now rather than
+    /// keeping the current term.
+    #[prost(uint32, optional, tag = "3")]
+    pub month_interval: ::core::option::Option<u32>,
+    /// The prorated invoice's line items (the new plan's charge plus a credit for
+    /// the unused portion of the current plan), computed by the caller.
+    #[prost(message, repeated, tag = "4")]
+    pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+    /// User configs (PAYG budgets and/or reservation overrides) to apply. If
+    /// empty, the contract's user configs are unchanged.
+    #[prost(message, repeated, tag = "5")]
+    pub user_configs: ::prost::alloc::vec::Vec<UserConfig>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ApplyImmediateContractChangeResponse {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
 /// Atomically claims an unpaid PlatformInvoice for charging by stamping
 /// manual_payment_started_at. The same column is claimed by both the
 /// manual Pay Now flow (via this endpoint) and the automated invoicing
