@@ -39,23 +39,10 @@ message TraceItemTableRequest {
     Sort sort = 3;
   }
 
-  // Restricts how many rows are returned per distinct combination of the given
-  // columns, equivalent to ClickHouse's `LIMIT n BY expr, ...` clause
-  // (https://clickhouse.com/docs/sql-reference/statements/select/limit-by).
-  // LIMIT BY is applied together with ORDER BY, so within each group defined by
-  // `columns` the top `limit` rows (as sorted by `order_by`) are kept. The
-  // top-level `limit` field still caps the total number of rows returned.
-  //
-  // Example: selecting (project_id, transaction, count()) ordered by count()
-  // descending with a LimitBy of {columns: [project_id], limit: 100} returns
-  // the top 100 transactions for every project in a single query, instead of
-  // issuing one query per project.
+  // ClickHouse `LIMIT n BY expr, ...`: keep the top `limit` rows per distinct
+  // combination of `columns`.
   message LimitBy {
-    // The columns whose distinct value combinations define each group. Every
-    // column referenced here must also be selected in `columns`.
     repeated Column columns = 1;
-
-    // The maximum number of rows to keep per group. Must be greater than 0.
     uint32 limit = 2;
   }
 
@@ -71,7 +58,7 @@ message TraceItemTableRequest {
 
   repeated AttributeKey group_by = 5;
 
-  uint32 limit = 6;
+  uint32 limit = 6 [deprecated = true];
 
   // optional, used for pagination, the next page token will be returned in the response
   PageToken page_token = 7;
@@ -87,8 +74,7 @@ message TraceItemTableRequest {
   // ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
   repeated TraceItemFilterWithType trace_filters = 10;
 
-  // optional, restricts the number of returned rows per distinct combination of
-  // the LimitBy columns (ClickHouse `LIMIT n BY ...`). See LimitBy for details.
+  // optional, ClickHouse `LIMIT n BY ...`. See LimitBy.
   LimitBy limit_by = 11;
 }
 
