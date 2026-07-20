@@ -39,10 +39,15 @@ message TraceItemTableRequest {
     Sort sort = 3;
   }
 
-  // ClickHouse `LIMIT n BY expr, ...`: keep the top `limit` rows per distinct
-  // combination of `columns`.
+  // Limits results per group rather than globally: for each distinct
+  // combination of `columns`, keep at most `limit` rows (the first `limit` per
+  // `order_by`). E.g. grouping by project and ordering by count, `limit` = 100
+  // returns the top 100 rows for every project.
   message LimitBy {
+    // The columns that define a group; rows sharing the same values for all of
+    // them count against the same per-group limit.
     repeated Column columns = 1;
+    // Maximum number of rows to keep per group.
     uint32 limit = 2;
   }
 
@@ -74,7 +79,7 @@ message TraceItemTableRequest {
   // ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
   repeated TraceItemFilterWithType trace_filters = 10;
 
-  // optional, ClickHouse `LIMIT n BY ...`. See LimitBy.
+  // optional, limits the number of returned rows per group. See LimitBy.
   LimitBy limit_by = 11;
 }
 
