@@ -44,9 +44,9 @@ message TraceItemTableRequest {
   // `order_by`). E.g. grouping by project and ordering by count, `limit` = 100
   // returns the top 100 rows for every project.
   message LimitBy {
-    // The columns that define a group; rows sharing the same values for all of
-    // them count against the same per-group limit.
-    repeated Column columns = 1;
+    // Aliases (labels) of the selected columns that define a group. Each alias
+    // must reference a selected column that also appears in `group_by`.
+    repeated string columns = 1;
     // Maximum number of rows to keep per group.
     uint32 limit = 2;
   }
