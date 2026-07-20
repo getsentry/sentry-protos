@@ -2343,7 +2343,7 @@ pub struct TraceItemTableRequest {
     /// ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
     #[prost(message, repeated, tag = "10")]
     pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
-    /// optional, ClickHouse `LIMIT n BY ...`. See LimitBy.
+    /// optional, limits the number of returned rows per group. See LimitBy.
     #[prost(message, optional, tag = "11")]
     pub limit_by: ::core::option::Option<trace_item_table_request::LimitBy>,
 }
@@ -2412,12 +2412,17 @@ pub mod trace_item_table_request {
             }
         }
     }
-    /// ClickHouse `LIMIT n BY expr, ...`: keep the top `limit` rows per distinct
-    /// combination of `columns`.
+    /// Limits results per group rather than globally: for each distinct
+    /// combination of `columns`, keep at most `limit` rows (the first `limit` per
+    /// `order_by`). E.g. grouping by project and ordering by count, `limit` = 100
+    /// returns the top 100 rows for every project.
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct LimitBy {
+        /// The columns that define a group; rows sharing the same values for all of
+        /// them count against the same per-group limit.
         #[prost(message, repeated, tag = "1")]
         pub columns: ::prost::alloc::vec::Vec<super::Column>,
+        /// Maximum number of rows to keep per group.
         #[prost(uint32, tag = "2")]
         pub limit: u32,
     }
