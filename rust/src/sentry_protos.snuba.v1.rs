@@ -2418,12 +2418,13 @@ pub mod trace_item_table_request {
     /// combination of `columns`, keep at most `limit` rows (the first `limit` per
     /// `order_by`). E.g. grouping by project and ordering by count, `limit` = 100
     /// returns the top 100 rows for every project.
-    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+    #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct LimitBy {
-        /// Aliases (labels) of the selected columns that define a group. Each alias
-        /// must reference a selected column that also appears in `group_by`.
-        #[prost(string, repeated, tag = "1")]
-        pub columns: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+        /// The columns that define a group. Each may be a column, an alias of a
+        /// selected column (a Column with only `label` set), or a non-aggregate
+        /// transformation (e.g. a formula). Aggregations are not allowed.
+        #[prost(message, repeated, tag = "1")]
+        pub columns: ::prost::alloc::vec::Vec<super::Column>,
         /// Maximum number of rows to keep per group.
         #[prost(uint32, tag = "2")]
         pub limit: u32,
