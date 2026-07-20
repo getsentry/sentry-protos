@@ -2326,7 +2326,8 @@ pub struct TraceItemTableRequest {
     pub order_by: ::prost::alloc::vec::Vec<trace_item_table_request::OrderBy>,
     #[prost(message, repeated, tag = "5")]
     pub group_by: ::prost::alloc::vec::Vec<AttributeKey>,
-    #[deprecated]
+    /// Global cap on the total number of returned rows. Cannot be set together
+    /// with `limit_by`; specify one or the other, not both.
     #[prost(uint32, tag = "6")]
     pub limit: u32,
     /// optional, used for pagination, the next page token will be returned in the response
@@ -2343,7 +2344,8 @@ pub struct TraceItemTableRequest {
     /// ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
     #[prost(message, repeated, tag = "10")]
     pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
-    /// optional, limits the number of returned rows per group. See LimitBy.
+    /// optional, limits the number of returned rows per group. Cannot be set
+    /// together with `limit`; specify one or the other, not both. See LimitBy.
     #[prost(message, optional, tag = "11")]
     pub limit_by: ::core::option::Option<trace_item_table_request::LimitBy>,
 }
