@@ -23,4 +23,9 @@ message ChangeContractRequest {
   repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_configs = 4;
 }
 
-message ChangeContractResponse {}
+message ChangeContractResponse {
+  // The invoice created for an immediate change (a prorated upgrade charge).
+  // Unset when the change is deferred to the next billing period or applies no
+  // charge (e.g. a PAYG-only change), which the caller returns as an empty 204.
+  optional uint64 invoice_id = 1;
+}
