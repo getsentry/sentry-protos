@@ -917,6 +917,62 @@ def test_example_attribute_values_request_natural_sort() -> None:
     )
 
 
+def test_example_attribute_names_request_semver_sort() -> None:
+    # Opt in to semantic-version ordering of attribute names so that version-like
+    # names are sorted by semantic version (e.g. "1.9.0" before "1.10.0") rather
+    # than lexicographically. Leaving `sort` unset (or using SORT_DEFAULT)
+    # preserves the historical lexicographic ordering.
+    request = TraceItemAttributeNamesRequest(
+        meta=COMMON_META,
+        limit=100,
+        type=AttributeKey.Type.TYPE_STRING,
+        order_by=TraceItemAttributeNamesRequest.OrderBy(
+            column=TraceItemAttributeNamesRequest.OrderBy.COLUMN_NAME,
+            sort=TraceItemAttributeNamesRequest.OrderBy.SORT_SEMVER,
+        ),
+    )
+
+    assert (
+        request.order_by.sort
+        == TraceItemAttributeNamesRequest.OrderBy.SORT_SEMVER
+    )
+    # the field round-trips through serialization
+    roundtripped = TraceItemAttributeNamesRequest()
+    roundtripped.ParseFromString(request.SerializeToString())
+    assert (
+        roundtripped.order_by.sort
+        == TraceItemAttributeNamesRequest.OrderBy.SORT_SEMVER
+    )
+
+
+def test_example_attribute_values_request_semver_sort() -> None:
+    # Opt in to semantic-version ordering of attribute values so that version-like
+    # values are sorted by semantic version (e.g. "1.9.0" before "1.10.0") rather
+    # than lexicographically. Leaving `sort` unset (or using SORT_DEFAULT)
+    # preserves the historical lexicographic ordering.
+    request = TraceItemAttributeValuesRequest(
+        meta=COMMON_META,
+        key=AttributeKey(type=AttributeKey.TYPE_STRING, name="sentry.release"),
+        limit=100,
+        order_by=TraceItemAttributeValuesRequest.OrderBy(
+            column=TraceItemAttributeValuesRequest.OrderBy.COLUMN_VALUE,
+            sort=TraceItemAttributeValuesRequest.OrderBy.SORT_SEMVER,
+        ),
+    )
+
+    assert (
+        request.order_by.sort
+        == TraceItemAttributeValuesRequest.OrderBy.SORT_SEMVER
+    )
+    # the field round-trips through serialization
+    roundtripped = TraceItemAttributeValuesRequest()
+    roundtripped.ParseFromString(request.SerializeToString())
+    assert (
+        roundtripped.order_by.sort
+        == TraceItemAttributeValuesRequest.OrderBy.SORT_SEMVER
+    )
+
+
 def test_example_time_series_cross_item_query() -> None:
     """
     Find the number of spans with http.client over time in traces containing a span with op = 'db' that also contain errors with message = 'timeout'

@@ -1651,6 +1651,10 @@ pub mod get_traces_request {
             /// Natural ordering: embedded runs of digits are compared by their
             /// numeric value, so e.g. "item2" sorts before "item10".
             Natural = 2,
+            /// Semantic-version ordering: values are parsed as semantic versions
+            /// (<https://semver.org>) and compared component by component, so e.g.
+            /// "1.9.0" sorts before "1.10.0".
+            Semver = 3,
         }
         impl Sort {
             /// String value of the enum field names used in the ProtoBuf definition.
@@ -1662,6 +1666,7 @@ pub mod get_traces_request {
                     Self::Unspecified => "SORT_UNSPECIFIED",
                     Self::Default => "SORT_DEFAULT",
                     Self::Natural => "SORT_NATURAL",
+                    Self::Semver => "SORT_SEMVER",
                 }
             }
             /// Creates an enum from field names used in the ProtoBuf definition.
@@ -1670,6 +1675,7 @@ pub mod get_traces_request {
                     "SORT_UNSPECIFIED" => Some(Self::Unspecified),
                     "SORT_DEFAULT" => Some(Self::Default),
                     "SORT_NATURAL" => Some(Self::Natural),
+                    "SORT_SEMVER" => Some(Self::Semver),
                     _ => None,
                 }
             }
@@ -1850,6 +1856,10 @@ pub mod trace_item_attribute_names_request {
             /// Natural ordering: embedded runs of digits are compared by their
             /// numeric value, so e.g. "item2" sorts before "item10".
             Natural = 2,
+            /// Semantic-version ordering: values are parsed as semantic versions
+            /// (<https://semver.org>) and compared component by component, so e.g.
+            /// "1.9.0" sorts before "1.10.0".
+            Semver = 3,
         }
         impl Sort {
             /// String value of the enum field names used in the ProtoBuf definition.
@@ -1861,6 +1871,7 @@ pub mod trace_item_attribute_names_request {
                     Self::Unspecified => "SORT_UNSPECIFIED",
                     Self::Default => "SORT_DEFAULT",
                     Self::Natural => "SORT_NATURAL",
+                    Self::Semver => "SORT_SEMVER",
                 }
             }
             /// Creates an enum from field names used in the ProtoBuf definition.
@@ -1869,6 +1880,7 @@ pub mod trace_item_attribute_names_request {
                     "SORT_UNSPECIFIED" => Some(Self::Unspecified),
                     "SORT_DEFAULT" => Some(Self::Default),
                     "SORT_NATURAL" => Some(Self::Natural),
+                    "SORT_SEMVER" => Some(Self::Semver),
                     _ => None,
                 }
             }
@@ -2084,6 +2096,10 @@ pub mod trace_item_attribute_values_request {
             /// Natural ordering: embedded runs of digits are compared by their
             /// numeric value, so e.g. "item2" sorts before "item10".
             Natural = 2,
+            /// Semantic-version ordering: values are parsed as semantic versions
+            /// (<https://semver.org>) and compared component by component, so e.g.
+            /// "1.9.0" sorts before "1.10.0".
+            Semver = 3,
         }
         impl Sort {
             /// String value of the enum field names used in the ProtoBuf definition.
@@ -2095,6 +2111,7 @@ pub mod trace_item_attribute_values_request {
                     Self::Unspecified => "SORT_UNSPECIFIED",
                     Self::Default => "SORT_DEFAULT",
                     Self::Natural => "SORT_NATURAL",
+                    Self::Semver => "SORT_SEMVER",
                 }
             }
             /// Creates an enum from field names used in the ProtoBuf definition.
@@ -2103,6 +2120,7 @@ pub mod trace_item_attribute_values_request {
                     "SORT_UNSPECIFIED" => Some(Self::Unspecified),
                     "SORT_DEFAULT" => Some(Self::Default),
                     "SORT_NATURAL" => Some(Self::Natural),
+                    "SORT_SEMVER" => Some(Self::Semver),
                     _ => None,
                 }
             }
@@ -2391,6 +2409,10 @@ pub mod trace_item_table_request {
             /// Natural ordering: embedded runs of digits are compared by their
             /// numeric value, so e.g. "item2" sorts before "item10".
             Natural = 2,
+            /// Semantic-version ordering: values are parsed as semantic versions
+            /// (<https://semver.org>) and compared component by component, so e.g.
+            /// "1.9.0" sorts before "1.10.0".
+            Semver = 3,
         }
         impl Sort {
             /// String value of the enum field names used in the ProtoBuf definition.
@@ -2402,6 +2424,7 @@ pub mod trace_item_table_request {
                     Self::Unspecified => "SORT_UNSPECIFIED",
                     Self::Default => "SORT_DEFAULT",
                     Self::Natural => "SORT_NATURAL",
+                    Self::Semver => "SORT_SEMVER",
                 }
             }
             /// Creates an enum from field names used in the ProtoBuf definition.
@@ -2410,6 +2433,7 @@ pub mod trace_item_table_request {
                     "SORT_UNSPECIFIED" => Some(Self::Unspecified),
                     "SORT_DEFAULT" => Some(Self::Default),
                     "SORT_NATURAL" => Some(Self::Natural),
+                    "SORT_SEMVER" => Some(Self::Semver),
                     _ => None,
                 }
             }
