@@ -1,3 +1,9 @@
+## 0.47.0
+
+### New Features ✨
+
+- (snuba) Add SEMVER sort option to EAP OrderBy messages by @phacops in [#375](https://github.com/getsentry/sentry-protos/pull/375)
+
 ## 0.46.0
 
 ### New Features ✨
