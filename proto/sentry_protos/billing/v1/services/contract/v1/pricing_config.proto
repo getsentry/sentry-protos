@@ -71,11 +71,6 @@ message LineItemUids {
 // For activating add-ons that do not necessarily require Reservation or PAYGBudget changes
 message Activation {}
 
-message SpendAllocation {
-  uint64 project_id = 1;
-  uint64 quantity = 2;
-}
-
 message UserConfig {
   PAYGBudget payg_budget = 1;
   Reservation reservation = 2;
