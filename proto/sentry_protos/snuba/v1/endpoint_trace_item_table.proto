@@ -44,10 +44,18 @@ message TraceItemTableRequest {
   // `order_by`). E.g. grouping by project and ordering by count, `limit` = 100
   // returns the top 100 rows for every project.
   message LimitBy {
-    // The columns that define a group. Each may be a column, an alias of a
-    // selected column (a Column with only `label` set), or a non-aggregate
-    // transformation (e.g. a formula). Aggregations are not allowed.
-    repeated Column columns = 1;
+    // A single grouping key. It is either a column (referenced by attribute key)
+    // or the label of a selected column. To group by a transformation, select it
+    // as a column and reference it here by its label. This intentionally cannot
+    // express an aggregation, which ClickHouse cannot LIMIT BY.
+    message LimitByColumn {
+      oneof column {
+        AttributeKey key = 1;
+        string label = 2;
+      }
+    }
+    // The keys that define a group.
+    repeated LimitByColumn columns = 1;
     // Maximum number of rows to keep per group.
     uint32 limit = 2;
   }
