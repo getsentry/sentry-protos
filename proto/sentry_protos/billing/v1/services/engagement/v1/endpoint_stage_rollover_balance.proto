@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+// Creates a staged balance carrying over the previous contract's remaining
+// balance (minus the amount used) and marks the previous contract's balance as
+// rolled over. The staged balance is later assigned to the new contract via
+// CommitRolloverBalance.
+message StageRolloverBalanceRequest {
+  uint64 contract_id = 1;
+
+  // Amount used in the previous contract that will be subtracted when carrying over the balance.
+  uint64 amount_used_cents = 2;
+}
+
+message StageRolloverBalanceResponse {}

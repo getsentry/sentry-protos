@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+message UpsertContractBalanceRequest {
+  uint64 contract_id = 1;
+
+  // amount to be added to current balance
+  int64 amount_cents = 2;
+
+  // There may not be a previous contract if this is the first contract for the organization.
+  optional uint64 previous_contract_id = 3;
+}
+
+message UpsertContractBalanceResponse {
+  int64 new_balance_cents = 1;
+}

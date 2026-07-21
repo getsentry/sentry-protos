@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+// Assigns a previously staged rollover balance to the new contract, completing
+// the rollover started by StageRolloverBalance.
+message CommitRolloverBalanceRequest {
+  optional uint64 previous_contract_id = 1;
+  uint64 contract_id = 2;
+}
+
+message CommitRolloverBalanceResponse {}
