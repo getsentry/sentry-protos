@@ -1,3 +1,9 @@
+## 0.46.0
+
+### New Features ✨
+
+- (snuba) Add LIMIT BY support to TraceItemTableRequest by @phacops in [#373](https://github.com/getsentry/sentry-protos/pull/373)
+
 ## 0.45.1
 
 ### Internal Changes 🔧
