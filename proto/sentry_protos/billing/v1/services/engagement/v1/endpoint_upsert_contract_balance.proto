@@ -9,7 +9,10 @@ message UpsertContractBalanceRequest {
   int64 amount_cents = 2;
 
   // There may not be a previous contract if this is the first contract for the organization.
-  optional uint64 previous_contract_id = 3;
+  oneof previous_contract {
+    uint64 previous_contract_id = 3;
+    bool previous_contract_does_not_exist = 4;
+  }
 }
 
 message UpsertContractBalanceResponse {
