@@ -72,8 +72,9 @@ message TraceItemTableRequest {
 
   repeated AttributeKey group_by = 5;
 
-  // Global cap on the total number of returned rows. Cannot be set together
-  // with `limit_by`; specify one or the other, not both.
+  // Caps the total number of returned rows. May be combined with `limit_by`,
+  // where `limit_by` bounds the rows kept per group and this bounds the overall
+  // result (e.g. the number of groups shown).
   uint32 limit = 6;
 
   // optional, used for pagination, the next page token will be returned in the response
@@ -90,8 +91,8 @@ message TraceItemTableRequest {
   // ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
   repeated TraceItemFilterWithType trace_filters = 10;
 
-  // optional, limits the number of returned rows per group. Cannot be set
-  // together with `limit`; specify one or the other, not both. See LimitBy.
+  // optional, limits the number of returned rows per group. May be combined
+  // with the top-level `limit`, which caps the overall result. See LimitBy.
   LimitBy limit_by = 11;
 }
 
