@@ -978,6 +978,7 @@ pub enum TraceItemType {
     Preprod = 11,
     UserSession = 12,
     ProcessingError = 13,
+    AiConversation = 14,
 }
 impl TraceItemType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -1000,6 +1001,7 @@ impl TraceItemType {
             Self::Preprod => "TRACE_ITEM_TYPE_PREPROD",
             Self::UserSession => "TRACE_ITEM_TYPE_USER_SESSION",
             Self::ProcessingError => "TRACE_ITEM_TYPE_PROCESSING_ERROR",
+            Self::AiConversation => "TRACE_ITEM_TYPE_AI_CONVERSATION",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -1019,6 +1021,7 @@ impl TraceItemType {
             "TRACE_ITEM_TYPE_PREPROD" => Some(Self::Preprod),
             "TRACE_ITEM_TYPE_USER_SESSION" => Some(Self::UserSession),
             "TRACE_ITEM_TYPE_PROCESSING_ERROR" => Some(Self::ProcessingError),
+            "TRACE_ITEM_TYPE_AI_CONVERSATION" => Some(Self::AiConversation),
             _ => None,
         }
     }
