@@ -44,6 +44,10 @@ message TraceItemAttributeNamesRequest {
       // Natural ordering: embedded runs of digits are compared by their
       // numeric value, so e.g. "item2" sorts before "item10".
       SORT_NATURAL = 2;
+      // Semantic-version ordering: values are parsed as semantic versions
+      // (https://semver.org) and compared component by component, so e.g.
+      // "1.9.0" sorts before "1.10.0".
+      SORT_SEMVER = 3;
     }
 
     // The column to order the returned attribute names by.
@@ -167,6 +171,10 @@ message TraceItemAttributeValuesRequest {
       // Natural ordering: embedded runs of digits are compared by their
       // numeric value, so e.g. "item2" sorts before "item10".
       SORT_NATURAL = 2;
+      // Semantic-version ordering: values are parsed as semantic versions
+      // (https://semver.org) and compared component by component, so e.g.
+      // "1.9.0" sorts before "1.10.0".
+      SORT_SEMVER = 3;
     }
 
     // The column to order the returned values by.
