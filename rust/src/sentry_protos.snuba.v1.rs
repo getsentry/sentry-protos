@@ -2420,14 +2420,34 @@ pub mod trace_item_table_request {
     /// returns the top 100 rows for every project.
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct LimitBy {
-        /// The columns that define a group. Each may be a column, an alias of a
-        /// selected column (a Column with only `label` set), or a non-aggregate
-        /// transformation (e.g. a formula). Aggregations are not allowed.
+        /// The keys that define a group.
         #[prost(message, repeated, tag = "1")]
-        pub columns: ::prost::alloc::vec::Vec<super::Column>,
+        pub columns: ::prost::alloc::vec::Vec<limit_by::LimitByColumn>,
         /// Maximum number of rows to keep per group.
         #[prost(uint32, tag = "2")]
         pub limit: u32,
+    }
+    /// Nested message and enum types in `LimitBy`.
+    pub mod limit_by {
+        /// A single grouping key. It is either a column (referenced by attribute key)
+        /// or the label of a selected column. To group by a transformation, select it
+        /// as a column and reference it here by its label. This intentionally cannot
+        /// express an aggregation, which ClickHouse cannot LIMIT BY.
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+        pub struct LimitByColumn {
+            #[prost(oneof = "limit_by_column::Column", tags = "1, 2")]
+            pub column: ::core::option::Option<limit_by_column::Column>,
+        }
+        /// Nested message and enum types in `LimitByColumn`.
+        pub mod limit_by_column {
+            #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+            pub enum Column {
+                #[prost(message, tag = "1")]
+                Key(super::super::super::AttributeKey),
+                #[prost(string, tag = "2")]
+                Label(::prost::alloc::string::String),
+            }
+        }
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
