@@ -2326,8 +2326,9 @@ pub struct TraceItemTableRequest {
     pub order_by: ::prost::alloc::vec::Vec<trace_item_table_request::OrderBy>,
     #[prost(message, repeated, tag = "5")]
     pub group_by: ::prost::alloc::vec::Vec<AttributeKey>,
-    /// Global cap on the total number of returned rows. Cannot be set together
-    /// with `limit_by`; specify one or the other, not both.
+    /// Caps the total number of returned rows. May be combined with `limit_by`,
+    /// where `limit_by` bounds the rows kept per group and this bounds the overall
+    /// result (e.g. the number of groups shown).
     #[prost(uint32, tag = "6")]
     pub limit: u32,
     /// optional, used for pagination, the next page token will be returned in the response
@@ -2344,8 +2345,8 @@ pub struct TraceItemTableRequest {
     /// ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
     #[prost(message, repeated, tag = "10")]
     pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
-    /// optional, limits the number of returned rows per group. Cannot be set
-    /// together with `limit`; specify one or the other, not both. See LimitBy.
+    /// optional, limits the number of returned rows per group. May be combined
+    /// with the top-level `limit`, which caps the overall result. See LimitBy.
     #[prost(message, optional, tag = "11")]
     pub limit_by: ::core::option::Option<trace_item_table_request::LimitBy>,
 }
@@ -2422,7 +2423,7 @@ pub mod trace_item_table_request {
     pub struct LimitBy {
         /// The keys that define a group.
         #[prost(message, repeated, tag = "1")]
-        pub columns: ::prost::alloc::vec::Vec<limit_by::LimitByColumn>,
+        pub columns: ::prost::alloc::vec::Vec<limit_by::Column>,
         /// Maximum number of rows to keep per group.
         #[prost(uint32, tag = "2")]
         pub limit: u32,
@@ -2434,12 +2435,12 @@ pub mod trace_item_table_request {
         /// as a column and reference it here by its label. This intentionally cannot
         /// express an aggregation, which ClickHouse cannot LIMIT BY.
         #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-        pub struct LimitByColumn {
-            #[prost(oneof = "limit_by_column::Column", tags = "1, 2")]
-            pub column: ::core::option::Option<limit_by_column::Column>,
+        pub struct Column {
+            #[prost(oneof = "column::Column", tags = "1, 2")]
+            pub column: ::core::option::Option<column::Column>,
         }
-        /// Nested message and enum types in `LimitByColumn`.
-        pub mod limit_by_column {
+        /// Nested message and enum types in `Column`.
+        pub mod column {
             #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
             pub enum Column {
                 #[prost(message, tag = "1")]
