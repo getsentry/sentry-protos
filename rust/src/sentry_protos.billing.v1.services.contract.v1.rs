@@ -389,13 +389,6 @@ pub struct LineItemUids {
 /// For activating add-ons that do not necessarily require Reservation or PAYGBudget changes
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Activation {}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct SpendAllocation {
-    #[prost(uint64, tag = "1")]
-    pub project_id: u64,
-    #[prost(uint64, tag = "2")]
-    pub quantity: u64,
-}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UserConfig {
     #[prost(message, optional, tag = "1")]
