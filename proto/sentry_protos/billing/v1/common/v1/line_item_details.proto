@@ -5,6 +5,16 @@ package sentry_protos.billing.v1.common.v1;
 import "sentry_protos/billing/v1/common/v1/billable_metric.proto";
 import "sentry_protos/billing/v1/common/v1/unit_info.proto";
 
+// The invoice line item type strings used when charging for a line item,
+// distinguished by how the charge was incurred.
+message InvoiceMetadataTags {
+  // Type string for a reserved charge.
+  string reserved = 1;
+
+  // Type string for an pay-as-you-go charge.
+  string ondemand = 2;
+}
+
 // Details of a SKU line item in the billing system.
 message LineItemDetails {
   // Unique identifier for the line item.
@@ -29,4 +39,7 @@ message LineItemDetails {
   // New line items must be addable, and new consumers written, without anyone
   // hardcoding or reading a category off the line item.
   int32 line_item_category = 7 [deprecated = true];
+
+  // The invoice line item type strings for this line item.
+  InvoiceMetadataTags invoice_data = 8;
 }
