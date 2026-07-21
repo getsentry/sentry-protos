@@ -48,14 +48,14 @@ message TraceItemTableRequest {
     // or the label of a selected column. To group by a transformation, select it
     // as a column and reference it here by its label. This intentionally cannot
     // express an aggregation, which ClickHouse cannot LIMIT BY.
-    message LimitByColumn {
+    message Column {
       oneof column {
         AttributeKey key = 1;
         string label = 2;
       }
     }
     // The keys that define a group.
-    repeated LimitByColumn columns = 1;
+    repeated Column columns = 1;
     // Maximum number of rows to keep per group.
     uint32 limit = 2;
   }
