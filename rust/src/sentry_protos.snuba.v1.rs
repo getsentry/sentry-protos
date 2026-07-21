@@ -2326,6 +2326,9 @@ pub struct TraceItemTableRequest {
     pub order_by: ::prost::alloc::vec::Vec<trace_item_table_request::OrderBy>,
     #[prost(message, repeated, tag = "5")]
     pub group_by: ::prost::alloc::vec::Vec<AttributeKey>,
+    /// Caps the total number of returned rows. May be combined with `limit_by`,
+    /// where `limit_by` bounds the rows kept per group and this bounds the overall
+    /// result (e.g. the number of groups shown).
     #[prost(uint32, tag = "6")]
     pub limit: u32,
     /// optional, used for pagination, the next page token will be returned in the response
@@ -2342,6 +2345,10 @@ pub struct TraceItemTableRequest {
     /// ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
     #[prost(message, repeated, tag = "10")]
     pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
+    /// optional, limits the number of returned rows per group. May be combined
+    /// with the top-level `limit`, which caps the overall result. See LimitBy.
+    #[prost(message, optional, tag = "11")]
+    pub limit_by: ::core::option::Option<trace_item_table_request::LimitBy>,
 }
 /// Nested message and enum types in `TraceItemTableRequest`.
 pub mod trace_item_table_request {
@@ -2405,6 +2412,41 @@ pub mod trace_item_table_request {
                     "SORT_NATURAL" => Some(Self::Natural),
                     _ => None,
                 }
+            }
+        }
+    }
+    /// Limits results per group rather than globally: for each distinct
+    /// combination of `columns`, keep at most `limit` rows (the first `limit` per
+    /// `order_by`). E.g. grouping by project and ordering by count, `limit` = 100
+    /// returns the top 100 rows for every project.
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct LimitBy {
+        /// The keys that define a group.
+        #[prost(message, repeated, tag = "1")]
+        pub columns: ::prost::alloc::vec::Vec<limit_by::Column>,
+        /// Maximum number of rows to keep per group.
+        #[prost(uint32, tag = "2")]
+        pub limit: u32,
+    }
+    /// Nested message and enum types in `LimitBy`.
+    pub mod limit_by {
+        /// A single grouping key. It is either a column (referenced by attribute key)
+        /// or the label of a selected column. To group by a transformation, select it
+        /// as a column and reference it here by its label. This intentionally cannot
+        /// express an aggregation, which ClickHouse cannot LIMIT BY.
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+        pub struct Column {
+            #[prost(oneof = "column::Column", tags = "1, 2")]
+            pub column: ::core::option::Option<column::Column>,
+        }
+        /// Nested message and enum types in `Column`.
+        pub mod column {
+            #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+            pub enum Column {
+                #[prost(message, tag = "1")]
+                Key(super::super::super::AttributeKey),
+                #[prost(string, tag = "2")]
+                Label(::prost::alloc::string::String),
             }
         }
     }

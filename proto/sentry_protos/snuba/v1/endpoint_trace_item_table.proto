@@ -39,6 +39,27 @@ message TraceItemTableRequest {
     Sort sort = 3;
   }
 
+  // Limits results per group rather than globally: for each distinct
+  // combination of `columns`, keep at most `limit` rows (the first `limit` per
+  // `order_by`). E.g. grouping by project and ordering by count, `limit` = 100
+  // returns the top 100 rows for every project.
+  message LimitBy {
+    // A single grouping key. It is either a column (referenced by attribute key)
+    // or the label of a selected column. To group by a transformation, select it
+    // as a column and reference it here by its label. This intentionally cannot
+    // express an aggregation, which ClickHouse cannot LIMIT BY.
+    message Column {
+      oneof column {
+        AttributeKey key = 1;
+        string label = 2;
+      }
+    }
+    // The keys that define a group.
+    repeated Column columns = 1;
+    // Maximum number of rows to keep per group.
+    uint32 limit = 2;
+  }
+
   RequestMeta meta = 1;
 
   // the columns or aggregations you want to get
@@ -51,6 +72,9 @@ message TraceItemTableRequest {
 
   repeated AttributeKey group_by = 5;
 
+  // Caps the total number of returned rows. May be combined with `limit_by`,
+  // where `limit_by` bounds the rows kept per group and this bounds the overall
+  // result (e.g. the number of groups shown).
   uint32 limit = 6;
 
   // optional, used for pagination, the next page token will be returned in the response
@@ -66,6 +90,10 @@ message TraceItemTableRequest {
   // If specified, the endpoint will only consider traces that match all the filters.
   // ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
   repeated TraceItemFilterWithType trace_filters = 10;
+
+  // optional, limits the number of returned rows per group. May be combined
+  // with the top-level `limit`, which caps the overall result. See LimitBy.
+  LimitBy limit_by = 11;
 }
 
 message AggregationAndFilter {
