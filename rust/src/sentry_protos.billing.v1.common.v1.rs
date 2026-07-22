@@ -440,6 +440,40 @@ pub struct TieredPricingRate {
     #[prost(message, repeated, tag = "1")]
     pub tiers: ::prost::alloc::vec::Vec<PricingTier>,
 }
+/// Retention settings for one data category.
+///
+/// A package uses this message for a complete policy. Do not use this message
+/// for sparse updates or overrides. Services validate categories, apply
+/// precedence, preserve legacy behavior, and calculate effective retention.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetentionSettings {
+    /// The number of calendar days to retain standard data. The value must be
+    /// greater than zero.
+    #[prost(uint32, tag = "1")]
+    pub standard_days: u32,
+    /// The number of calendar days to retain downsampled data.
+    ///
+    /// If this field is absent, the category has no separate downsampled data. If
+    /// the value is zero, the resolver uses the effective standard retention. This
+    /// value preserves legacy behavior. A positive value is a concrete duration.
+    #[prost(uint32, optional, tag = "2")]
+    pub downsampled_days: ::core::option::Option<u32>,
+}
+/// Complete retention settings for one billing data category.
+///
+/// Retention is keyed by billing data category, not by line item or SKU. A line
+/// item can bill more than one category. A category can be billed by more than
+/// one line item. Some line items have no retention. A shared pool bills no
+/// single category. Do not read a category from a line item.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct DataCategoryRetention {
+    /// Do not use DATA_CATEGORY_UNSPECIFIED or DATA_CATEGORY_UNKNOWN.
+    #[prost(enumeration = "super::super::DataCategory", tag = "1")]
+    pub category: i32,
+    /// The category retention settings. This message is required.
+    #[prost(message, optional, tag = "2")]
+    pub settings: ::core::option::Option<RetentionSettings>,
+}
 /// Card payment method details.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Card {
