@@ -18,6 +18,7 @@ use sentry_protos::billing::v1::Date;
 use sentry_protos::billing::v1::SeatCategory;
 use sentry_protos::billing::v1::UsageData;
 use sentry_protos::billing::v1::services::contract::v1::{Contract, GetContractRequest};
+use sentry_protos::billing::v1::services::package::v1::PackageConfig;
 use sentry_protos::billing::v1::services::usage::v1::{
     CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage, GetUsageRequest,
     GetUsageResponse,
@@ -138,5 +139,36 @@ fn roundtrip_retention_without_downsampled_representation() {
             standard_days: 90,
             downsampled_days: None,
         }),
+    });
+}
+
+#[test]
+fn roundtrip_package_config_with_retention_defaults() {
+    assert_roundtrip(&PackageConfig {
+        uid: "business".into(),
+        retention_defaults: vec![
+            DataCategoryRetention {
+                category: DataCategory::Span as i32,
+                settings: Some(RetentionSettings {
+                    standard_days: 30,
+                    downsampled_days: Some(396),
+                }),
+            },
+            DataCategoryRetention {
+                category: DataCategory::Transaction as i32,
+                settings: Some(RetentionSettings {
+                    standard_days: 30,
+                    downsampled_days: Some(0),
+                }),
+            },
+            DataCategoryRetention {
+                category: DataCategory::Error as i32,
+                settings: Some(RetentionSettings {
+                    standard_days: 90,
+                    downsampled_days: None,
+                }),
+            },
+        ],
+        ..Default::default()
     });
 }

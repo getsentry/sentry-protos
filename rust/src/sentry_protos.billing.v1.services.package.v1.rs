@@ -155,6 +155,13 @@ pub struct PackageConfig {
     /// Whether the package has pay-as-you-go (PAYG) modes.
     #[prost(bool, tag = "12")]
     pub has_payg_modes: bool,
+    /// Default retention settings for this package.
+    /// Each entry uses a billing data category.
+    /// A category can occur only once.
+    #[prost(message, repeated, tag = "14")]
+    pub retention_defaults: ::prost::alloc::vec::Vec<
+        super::super::super::common::v1::DataCategoryRetention,
+    >,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {

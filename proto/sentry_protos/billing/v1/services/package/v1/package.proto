@@ -6,6 +6,7 @@ import "sentry_protos/billing/v1/common/v1/billing_interval.proto";
 import "sentry_protos/billing/v1/common/v1/flexible_price.proto";
 import "sentry_protos/billing/v1/common/v1/line_item_details.proto";
 import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
+import "sentry_protos/billing/v1/common/v1/retention.proto";
 
 message LineItemConfig {
   // Base price for the line item (upgraded reserved volumes or add-on activation fees)
@@ -94,4 +95,9 @@ message PackageConfig {
 
   // Whether the package has pay-as-you-go (PAYG) modes.
   bool has_payg_modes = 12;
+
+  // Default retention settings for this package.
+  // Each entry uses a billing data category.
+  // A category can occur only once.
+  repeated sentry_protos.billing.v1.common.v1.DataCategoryRetention retention_defaults = 14;
 }
