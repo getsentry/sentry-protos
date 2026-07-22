@@ -1,3 +1,9 @@
+## 0.49.1
+
+### Internal Changes 🔧
+
+- Add line item types for invoice analytics by @noahsmartin in [#377](https://github.com/getsentry/sentry-protos/pull/377)
+
 ## 0.49.0
 
 ### New Features ✨
