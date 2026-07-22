@@ -1,3 +1,9 @@
+## 0.48.0
+
+### New Features ✨
+
+- (billing) Add common retention policy types by @dashed in [#368](https://github.com/getsentry/sentry-protos/pull/368)
+
 ## 0.47.0
 
 ### New Features ✨
