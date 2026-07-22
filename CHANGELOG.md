@@ -1,3 +1,13 @@
+## 0.49.0
+
+### New Features ✨
+
+- (billing) Add retention to pricing package by @dashed in [#369](https://github.com/getsentry/sentry-protos/pull/369)
+
+### Internal Changes 🔧
+
+- (billing-platform) BalanceService protobufs by @brendanhsentry in [#376](https://github.com/getsentry/sentry-protos/pull/376)
+
 ## 0.48.0
 
 ### New Features ✨
