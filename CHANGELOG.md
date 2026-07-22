@@ -1,3 +1,9 @@
+## 0.48.1
+
+### Internal Changes 🔧
+
+- (billing-platform) BalanceService protobufs by @brendanhsentry in [#376](https://github.com/getsentry/sentry-protos/pull/376)
+
 ## 0.48.0
 
 ### New Features ✨
