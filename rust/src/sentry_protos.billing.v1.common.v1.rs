@@ -218,6 +218,17 @@ impl BaseUnit {
         }
     }
 }
+/// The invoice line item type strings used when charging for a line item,
+/// distinguished by how the charge was incurred.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct InvoiceMetadataTags {
+    /// Type string for a reserved charge.
+    #[prost(string, tag = "1")]
+    pub reserved: ::prost::alloc::string::String,
+    /// Type string for an pay-as-you-go charge.
+    #[prost(string, tag = "2")]
+    pub ondemand: ::prost::alloc::string::String,
+}
 /// Details of a SKU line item in the billing system.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LineItemDetails {
@@ -245,6 +256,9 @@ pub struct LineItemDetails {
     #[deprecated]
     #[prost(int32, tag = "7")]
     pub line_item_category: i32,
+    /// The invoice line item type strings for this line item.
+    #[prost(message, optional, tag = "8")]
+    pub invoice_data: ::core::option::Option<InvoiceMetadataTags>,
 }
 /// Stripe-specific payment information for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
