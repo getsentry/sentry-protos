@@ -554,6 +554,48 @@ pub struct ContractMetadata {
     #[prost(message, optional, tag = "5")]
     pub features: ::core::option::Option<FeatureOptions>,
 }
+/// A sparse override of the package retention defaults for one customer and one
+/// billing data category.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetentionOverride {
+    /// The billing data category this override applies to. Package defaults and
+    /// contract overrides use the same billing category identity.
+    #[prost(enumeration = "super::super::super::DataCategory", tag = "1")]
+    pub category: i32,
+    /// The standard retention in calendar days. This is the full-fidelity
+    /// retention. If this field is absent, there is no standard override. A present
+    /// value must be positive.
+    #[prost(uint32, optional, tag = "2")]
+    pub standard_days: ::core::option::Option<u32>,
+    /// The downsampled retention in calendar days. If this field is absent, there
+    /// is no downsampled override. A present value must be positive. A complete
+    /// package setting can use zero, but a contract override cannot.
+    #[prost(uint32, optional, tag = "3")]
+    pub downsampled_days: ::core::option::Option<u32>,
+}
+/// The contract-owned retention overrides. A service layers these overrides on
+/// top of the package defaults.
+///
+/// This message is raw sparse input to effective-retention resolution. It is not
+/// the resolved policy. If a field is absent, that field falls through to its
+/// package retention chain.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RetentionConfig {
+    /// The identifier of the retention policy revision this config projects. This
+    /// identifier is opaque. Do not parse it.
+    #[prost(string, tag = "1")]
+    pub revision: ::prost::alloc::string::String,
+    /// The organization-wide retention in calendar days. This field is a temporary
+    /// legacy-compatible value. If this field is absent, the organization-wide
+    /// layer does not apply. A present value must be positive. This value applies
+    /// to the standard retention and to each downsampled representation the package
+    /// declares.
+    #[prost(uint32, optional, tag = "2")]
+    pub organization_days: ::core::option::Option<u32>,
+    /// The per-category sparse overrides. Each category has one entry at most.
+    #[prost(message, repeated, tag = "3")]
+    pub overrides: ::prost::alloc::vec::Vec<RetentionOverride>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Contract {
     #[prost(message, optional, tag = "1")]
@@ -562,6 +604,8 @@ pub struct Contract {
     pub billing_config: ::core::option::Option<BillingConfig>,
     #[prost(message, optional, tag = "3")]
     pub pricing_config: ::core::option::Option<PricingConfig>,
+    #[prost(message, optional, tag = "4")]
+    pub retention_config: ::core::option::Option<RetentionConfig>,
 }
 /// Applies a single user config to a contract immediately, repointing the
 /// contract's live parameters. Used internally by add_user_configs (there is no

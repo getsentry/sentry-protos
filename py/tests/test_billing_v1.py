@@ -55,6 +55,10 @@ from sentry_protos.billing.v1.common.v1.retention_pb2 import (
     DataCategoryRetention,
     RetentionSettings,
 )
+from sentry_protos.billing.v1.services.contract.v1.retention_config_pb2 import (
+    RetentionConfig,
+    RetentionOverride,
+)
 from sentry_protos.billing.v1.services.package.v1.package_pb2 import PackageConfig
 from sentry_protos.billing.v1.services.package.v1.endpoint_get_package_pb2 import (
     GetPackageRequest,
@@ -453,6 +457,87 @@ def test_package_config_with_retention_defaults():
 
     assert parsed == package
     assert len(parsed.retention_defaults) == 3
+
+
+def test_contract_retention_config_sparse_overrides():
+    contract = Contract(
+        retention_config=RetentionConfig(
+            revision="rev_abc123",
+            # Organization-wide scalar applies to every category, above the
+            # per-category overrides.
+            organization_days=180,
+            overrides=[
+                # Standard-only override: downsampled uses the package default.
+                RetentionOverride(
+                    category=DataCategory.DATA_CATEGORY_SPAN,
+                    standard_days=90,
+                ),
+                # Downsampled-only override: standard uses the package default.
+                RetentionOverride(
+                    category=DataCategory.DATA_CATEGORY_TRANSACTION,
+                    downsampled_days=396,
+                ),
+                # Both sparse values may be set explicitly.
+                RetentionOverride(
+                    category=DataCategory.DATA_CATEGORY_ERROR,
+                    standard_days=90,
+                    downsampled_days=90,
+                ),
+            ],
+        ),
+    )
+
+    config = contract.retention_config
+    assert config.revision == "rev_abc123"
+    assert config.HasField("organization_days")
+    assert config.organization_days == 180
+    assert len(config.overrides) == 3
+
+    span_override = config.overrides[0]
+    assert span_override.category == DataCategory.DATA_CATEGORY_SPAN
+    assert span_override.HasField("standard_days")
+    assert span_override.standard_days == 90
+    assert not span_override.HasField("downsampled_days")
+
+    transaction_override = config.overrides[1]
+    assert transaction_override.category == DataCategory.DATA_CATEGORY_TRANSACTION
+    assert not transaction_override.HasField("standard_days")
+    assert transaction_override.HasField("downsampled_days")
+    assert transaction_override.downsampled_days == 396
+
+    error_override = config.overrides[2]
+    assert error_override.category == DataCategory.DATA_CATEGORY_ERROR
+    assert error_override.standard_days == 90
+    assert error_override.downsampled_days == 90
+
+    parsed = Contract()
+    parsed.ParseFromString(contract.SerializeToString())
+
+    assert parsed == contract
+    assert len(parsed.retention_config.overrides) == 3
+
+
+def test_contract_retention_config_absent_organization():
+    # An override set with no organization-wide scalar must be distinguishable
+    # from one that sets it, so resolution knows whether the org layer applies.
+    contract = Contract(
+        retention_config=RetentionConfig(
+            revision="rev_no_org",
+            overrides=[
+                RetentionOverride(
+                    category=DataCategory.DATA_CATEGORY_ERROR,
+                    standard_days=30,
+                ),
+            ],
+        ),
+    )
+
+    assert not contract.retention_config.HasField("organization_days")
+
+    parsed = Contract()
+    parsed.ParseFromString(contract.SerializeToString())
+    assert parsed == contract
+    assert not parsed.retention_config.HasField("organization_days")
 
 
 def test_get_package_request():
