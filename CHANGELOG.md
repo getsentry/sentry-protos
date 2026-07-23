@@ -1,3 +1,9 @@
+## 0.50.2
+
+### Internal Changes 🔧
+
+- (snuba) HAS_ANY/HAS_ALL for array attribute key type comparisons by @MeredithAnya in [#378](https://github.com/getsentry/sentry-protos/pull/378)
+
 ## 0.50.1
 
 ### Internal Changes 🔧
