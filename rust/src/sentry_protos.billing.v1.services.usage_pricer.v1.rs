@@ -60,12 +60,18 @@ pub struct UsagePricerRequest {
     #[prost(message, optional, tag = "3")]
     pub end: ::core::option::Option<::prost_types::Timestamp>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetPriceForContractRequest {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
     #[prost(message, optional, tag = "2")]
     pub usage_start_watermark_ts: ::core::option::Option<::prost_types::Timestamp>,
+    /// Instead of getting the usage for the contract at query time, pass in
+    /// pre-constructed usage data to simulate what the priced usage would be
+    #[prost(message, optional, tag = "3")]
+    pub simulated_usage: ::core::option::Option<
+        super::super::usage::v1::GetUsageResponse,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SkuUsageSummary {
