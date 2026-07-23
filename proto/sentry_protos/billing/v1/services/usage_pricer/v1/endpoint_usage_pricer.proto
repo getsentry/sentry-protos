@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.usage_pricer.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
 import "sentry_protos/billing/v1/sku.proto";
 
 message UsagePricerRequest {
@@ -14,6 +15,9 @@ message UsagePricerRequest {
 message GetPriceForContractRequest {
   uint64 contract_id = 1;
   google.protobuf.Timestamp usage_start_watermark_ts = 2;
+  // Instead of getting the usage for the contract at query time, pass in
+  // pre-constructed usage data to simulate what the priced usage would be
+  optional sentry_protos.billing.v1.services.usage.v1.GetUsageResponse simulated_usage = 3;
 }
 
 message SKUUsageSummary {
