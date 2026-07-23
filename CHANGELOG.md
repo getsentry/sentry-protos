@@ -1,3 +1,7 @@
+## 0.50.3
+
+- add interface to simulate usage pricer with different usage data by @volokluev in [#381](https://github.com/getsentry/sentry-protos/pull/381)
+
 ## 0.50.2
 
 ### Internal Changes 🔧
