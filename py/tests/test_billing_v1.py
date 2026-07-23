@@ -60,8 +60,6 @@ from sentry_protos.billing.v1.services.contract.v1.retention_config_pb2 import (
     RetentionOverride,
 )
 from sentry_protos.billing.v1.services.quotas.v1.endpoint_get_retentions_pb2 import (
-    EffectiveDataCategoryRetention,
-    EffectiveRetentionSettings,
     GetRetentionsResponse,
 )
 from sentry_protos.billing.v1.services.package.v1.package_pb2 import PackageConfig
@@ -553,14 +551,14 @@ def test_get_retentions_response_effective_settings():
         downsampled_event_retention_days=30,
         retentions=[
             # A category with a distinct downsampled representation.
-            EffectiveDataCategoryRetention(
+            DataCategoryRetention(
                 category=DataCategory.DATA_CATEGORY_SPAN,
-                settings=EffectiveRetentionSettings(standard_days=90, downsampled_days=396),
+                settings=RetentionSettings(standard_days=90, downsampled_days=396),
             ),
             # A standard-only category: downsampled is absent, not zero.
-            EffectiveDataCategoryRetention(
+            DataCategoryRetention(
                 category=DataCategory.DATA_CATEGORY_ERROR,
-                settings=EffectiveRetentionSettings(standard_days=90),
+                settings=RetentionSettings(standard_days=90),
             ),
         ],
     )

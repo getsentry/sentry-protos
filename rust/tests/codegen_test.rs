@@ -21,9 +21,7 @@ use sentry_protos::billing::v1::services::contract::v1::{
     Contract, GetContractRequest, RetentionConfig, RetentionOverride,
 };
 use sentry_protos::billing::v1::services::package::v1::PackageConfig;
-use sentry_protos::billing::v1::services::quotas::v1::{
-    EffectiveDataCategoryRetention, EffectiveRetentionSettings, GetRetentionsResponse,
-};
+use sentry_protos::billing::v1::services::quotas::v1::GetRetentionsResponse;
 use sentry_protos::billing::v1::services::usage::v1::{
     CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage, GetUsageRequest,
     GetUsageResponse,
@@ -186,17 +184,17 @@ fn roundtrip_get_retentions_response() {
         event_retention_days: 90,
         downsampled_event_retention_days: 30,
         retentions: vec![
-            EffectiveDataCategoryRetention {
+            DataCategoryRetention {
                 category: DataCategory::Span as i32,
-                settings: Some(EffectiveRetentionSettings {
+                settings: Some(RetentionSettings {
                     standard_days: 90,
                     downsampled_days: Some(396),
                 }),
             },
             // Standard-only category: downsampled absent, not zero.
-            EffectiveDataCategoryRetention {
+            DataCategoryRetention {
                 category: DataCategory::Error as i32,
-                settings: Some(EffectiveRetentionSettings {
+                settings: Some(RetentionSettings {
                     standard_days: 90,
                     downsampled_days: None,
                 }),
