@@ -409,6 +409,8 @@ pub struct Trial {
     pub start_date: ::core::option::Option<super::super::super::Date>,
     #[prost(message, optional, tag = "3")]
     pub end_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(string, optional, tag = "4")]
+    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetActiveTrialsRequest {
