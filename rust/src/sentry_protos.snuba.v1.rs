@@ -474,6 +474,10 @@ pub mod comparison_filter {
         In = 9,
         /// array only
         NotIn = 10,
+        /// array attribute_key type only
+        HasAny = 11,
+        /// array attribute_key type only
+        HasAll = 12,
     }
     impl Op {
         /// String value of the enum field names used in the ProtoBuf definition.
@@ -493,6 +497,8 @@ pub mod comparison_filter {
                 Self::NotLike => "OP_NOT_LIKE",
                 Self::In => "OP_IN",
                 Self::NotIn => "OP_NOT_IN",
+                Self::HasAny => "OP_HAS_ANY",
+                Self::HasAll => "OP_HAS_ALL",
             }
         }
         /// Creates an enum from field names used in the ProtoBuf definition.
@@ -509,6 +515,8 @@ pub mod comparison_filter {
                 "OP_NOT_LIKE" => Some(Self::NotLike),
                 "OP_IN" => Some(Self::In),
                 "OP_NOT_IN" => Some(Self::NotIn),
+                "OP_HAS_ANY" => Some(Self::HasAny),
+                "OP_HAS_ALL" => Some(Self::HasAll),
                 _ => None,
             }
         }
