@@ -1,3 +1,9 @@
+## 0.50.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add package_uid to Trial proto by @brendanhsentry in [#380](https://github.com/getsentry/sentry-protos/pull/380)
+
 ## 0.50.0
 
 ### New Features ✨
