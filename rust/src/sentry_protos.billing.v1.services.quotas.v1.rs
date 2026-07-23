@@ -13,3 +13,39 @@ pub struct GetQuotasResponse {
     #[prost(bool, tag = "2")]
     pub contract_present: bool,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetRetentionsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+/// An organization's resolved effective retention: the package defaults with the
+/// contract's organization-wide and per-category overrides applied. Effective
+/// values are computed on read and never persisted.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetRetentionsResponse {
+    /// The per-category resolved retention. There is one entry for each category
+    /// the organization's package publishes a default for. Each entry is fully
+    /// resolved to concrete days: the resolver has already applied the package
+    /// defaults, the sparse contract overrides, and the inherit-standard sentinel.
+    /// A resolved entry never carries the sentinel value.
+    #[prost(message, repeated, tag = "1")]
+    pub retentions: ::prost::alloc::vec::Vec<
+        super::super::super::common::v1::DataCategoryRetention,
+    >,
+    /// False when the organization has no platform contract, in which case consumers
+    /// fall back to legacy and the remaining fields are unset.
+    #[prost(bool, tag = "2")]
+    pub contract_present: bool,
+    /// Opaque identifier of the retention policy revision the overrides came from;
+    /// empty when the contract carries no override.
+    #[prost(string, tag = "3")]
+    pub retention_policy_revision: ::prost::alloc::string::String,
+    /// Category-less standard retention, preserving the legacy organization-level
+    /// retention call. Positive when a contract is present.
+    #[prost(uint32, tag = "4")]
+    pub event_retention_days: u32,
+    /// Category-less downsampled retention, preserving the legacy organization-level
+    /// downsampled call. Positive when a contract is present.
+    #[prost(uint32, tag = "5")]
+    pub downsampled_event_retention_days: u32,
+}
