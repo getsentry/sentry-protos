@@ -1,3 +1,9 @@
+## 0.50.0
+
+### New Features ✨
+
+- (billing) Add BustQuotasCache endpoint protos by @armenzg in [#379](https://github.com/getsentry/sentry-protos/pull/379)
+
 ## 0.49.1
 
 ### Internal Changes 🔧
