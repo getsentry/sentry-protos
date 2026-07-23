@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+
+// Applies a package/interval change to a contract immediately, mutating the
+// contract in place and charging a prorated invoice. Used internally by the
+// checkout service for upgrades (there is no standalone service endpoint),
+// mirroring how add_user_configs applies immediate user-config changes.
+message ApplyImmediateContractChangeRequest {
+  uint64 contract_id = 1;
+
+  // The package the contract switches to. If unset, the package is unchanged.
+  optional string package_uid = 2;
+
+  // The month_interval the contract switches to. If unset, it is unchanged. A
+  // change here (e.g. monthly -> annual) starts a fresh term now rather than
+  // keeping the current term.
+  optional uint32 month_interval = 3;
+
+  // The prorated invoice's line items (the new plan's charge plus a credit for
+  // the unused portion of the current plan), computed by the caller.
+  repeated InvoiceLineItem line_items = 4;
+
+  // User configs (PAYG budgets and/or reservation overrides) to apply. If
+  // empty, the contract's user configs are unchanged.
+  repeated UserConfig user_configs = 5;
+}
+
+message ApplyImmediateContractChangeResponse {
+  uint64 invoice_id = 1;
+}

@@ -18,6 +18,9 @@ message GetPriceForContractRequest {
   // Instead of getting the usage for the contract at query time, pass in
   // pre-constructed usage data to simulate what the priced usage would be
   optional sentry_protos.billing.v1.services.usage.v1.GetUsageResponse simulated_usage = 3;
+  // When set, price the contract's usage against this package's rate card instead
+  // of the contract's own.
+  optional string override_package_uid = 4;
 }
 
 message SKUUsageSummary {

@@ -72,6 +72,10 @@ pub struct GetPriceForContractRequest {
     pub simulated_usage: ::core::option::Option<
         super::super::usage::v1::GetUsageResponse,
     >,
+    /// When set, price the contract's usage against this package's rate card instead
+    /// of the contract's own.
+    #[prost(string, optional, tag = "4")]
+    pub override_package_uid: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SkuUsageSummary {
