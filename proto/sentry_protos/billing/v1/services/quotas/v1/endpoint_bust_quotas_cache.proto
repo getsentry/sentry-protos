@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.quotas.v1;
+
+// Invalidates the contract-scoped Django cache entry used by GetQuotas for the
+// organization's current contract. Best-effort: a missing contract or lookup
+// failure is a no-op so callers can still schedule Relay project-config
+// refresh.
+message BustQuotasCacheRequest {
+  uint64 organization_id = 1;
+}
+
+message BustQuotasCacheResponse {}
