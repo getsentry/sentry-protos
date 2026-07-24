@@ -26,6 +26,9 @@ pub struct LineItemConfig {
     pub uncapped_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
     >,
+    /// Whether this LineItem is eligible for a product trial.
+    #[prost(bool, tag = "12")]
+    pub can_product_trial: bool,
     /// how many of this lineitem are included in the package, the customer can reserve more on their contract
     #[prost(oneof = "line_item_config::IncludedReservedUnits", tags = "5, 6")]
     pub included_reserved_units: ::core::option::Option<
@@ -99,6 +102,9 @@ pub struct SharedLineItemPool {
     pub reserved_tier: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
     >,
+    /// Whether this LineItem is eligible for a product trial.
+    #[prost(bool, tag = "11")]
+    pub can_product_trial: bool,
     /// How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
     /// this field will be unset for all line items.
     #[prost(oneof = "shared_line_item_pool::TrialUnits", tags = "9, 10")]
