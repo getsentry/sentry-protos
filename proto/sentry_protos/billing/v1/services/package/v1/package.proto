@@ -34,6 +34,9 @@ message LineItemConfig {
     bool is_unlimited_trial = 10;
     uint64 num_trial_units = 11;
   }
+
+  // Whether this LineItem is eligible for a product trial.
+  bool can_product_trial = 12;
 }
 
 // Represents a budget included in a package that is collectively used by one or more line items,
@@ -66,6 +69,9 @@ message SharedLineItemPool {
     bool is_unlimited_trial = 9;
     uint64 num_trial_units = 10;
   }
+
+  // Whether this LineItem is eligible for a product trial.
+  bool can_product_trial = 11;
 }
 
 message PackageConfig {
