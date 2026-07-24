@@ -1,3 +1,9 @@
+## 0.50.4
+
+### Internal Changes 🔧
+
+- (billing-platform) Add can_product_trial to line items by @brendanhsentry in [#383](https://github.com/getsentry/sentry-protos/pull/383)
+
 ## 0.50.3
 
 - add interface to simulate usage pricer with different usage data by @volokluev in [#381](https://github.com/getsentry/sentry-protos/pull/381)
