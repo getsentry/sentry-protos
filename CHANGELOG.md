@@ -1,3 +1,9 @@
+## 0.51.0
+
+### New Features ✨
+
+- (billing-platform) Immediate contract-change protos for checkout by @skonves in [#374](https://github.com/getsentry/sentry-protos/pull/374)
+
 ## 0.50.4
 
 ### Internal Changes 🔧
