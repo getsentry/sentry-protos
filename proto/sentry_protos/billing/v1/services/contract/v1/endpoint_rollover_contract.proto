@@ -24,6 +24,15 @@ message RolloverContractRequest {
   // tax transaction atomically with invoice creation, so the document can later
   // be committed or voided. Unset means no tax document was opened.
   optional string tax_transaction_code = 7;
+
+  // Roll the contract over as of now instead of at its period end: the current
+  // contract is closed immediately and the new contract starts now. Used for
+  // contract changes that take effect immediately (e.g. checkout upgrades).
+  // The request's pending_change is applied to the new contract regardless of
+  // whether the term was due to renew; a change that keeps the billing
+  // interval stays co-terminous with the current term, while an interval
+  // change (or an already-ended term) starts a fresh term now.
+  bool immediate = 8;
 }
 
 message RolloverContractResponse {

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
+// Invoices an immediate mid-term contract change and rolls the contract over
+// now. The caller supplies the change to apply (target package/interval and the
+// caps taking effect now) plus the plan-change line items (the prorated
+// new-plan charge and the credit for unused time on the current plan). The
+// invoicer settles accrued pay-as-you-go usage at the current contract's rates,
+// applies monetary grants and sales tax, closes the current contract
+// immediately, and opens the new contract with the supplied change applied.
+message BillContractChangeRequest {
+  uint64 contract_id = 1;
+  // The plan-change line items billed alongside accrued usage; they take the
+  // place of the term's subscription renewal billing on the closing invoice.
+  repeated sentry_protos.billing.v1.services.contract.v1.InvoiceLineItem line_items = 2;
+  // The change applied to the new contract: the target package/interval and the
+  // PAYG caps taking effect now. Reuses the PendingChange shape the rollover
+  // consumes, but here it applies immediately rather than at a period boundary,
+  // so the caller does not stage it in the pending-change store.
+  sentry_protos.billing.v1.common.v1.PendingChange change = 3;
+}
+
+message BillContractChangeResponse {
+  // The invoice that settles the change (and closes the previous contract).
+  uint64 invoice_id = 1;
+}
