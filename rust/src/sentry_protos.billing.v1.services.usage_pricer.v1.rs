@@ -126,6 +126,12 @@ pub struct LineItemUsageSummary {
     /// 0 for line items without a reserved budget.
     #[prost(uint64, tag = "7")]
     pub reserved_spend_cents: u64,
+    /// True when Engagement unit grants/trials for this line item (or its shared
+    /// pool) still have remaining units/cents after draining priced usage.
+    /// Unlimited active grants are true. Independent of reserved/PAYG exhaustion;
+    /// used by quota enforcement to unblock ingest after mid-period trials/grants.
+    #[prost(bool, tag = "8")]
+    pub has_remaining_free_capacity: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
@@ -141,6 +147,11 @@ pub struct SharedLineItemUsageSummary {
     /// false when this pool still has reserved quantity left.
     #[prost(bool, tag = "4")]
     pub reserved_budget_exhausted: bool,
+    /// Pool-level mirror of member has_remaining_free_capacity (true if any grant
+    /// pool remainder > 0). Not read by ContractBudgetEnforcer; members carry the
+    /// flag used for enforcement.
+    #[prost(bool, tag = "5")]
+    pub has_remaining_free_capacity: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsagePricerResponse {
