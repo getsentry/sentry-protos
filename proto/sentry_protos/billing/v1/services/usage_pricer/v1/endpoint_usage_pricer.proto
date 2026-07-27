@@ -71,6 +71,12 @@ message LineItemUsageSummary {
   // period. Only set for members of a shared reserved-budget pool (e.g. Seer);
   // 0 for line items without a reserved budget.
   uint64 reserved_spend_cents = 7;
+
+  // True when Engagement unit grants/trials for this line item (or its shared
+  // pool) still have remaining units/cents after draining priced usage.
+  // Unlimited active grants are true. Independent of reserved/PAYG exhaustion;
+  // used by quota enforcement to unblock ingest after mid-period trials/grants.
+  bool has_remaining_free_capacity = 8;
 }
 
 message SharedLineItemUsageSummary {
@@ -85,6 +91,11 @@ message SharedLineItemUsageSummary {
 
   // false when this pool still has reserved quantity left.
   bool reserved_budget_exhausted = 4;
+
+  // Pool-level mirror of member has_remaining_free_capacity (true if any grant
+  // pool remainder > 0). Not read by ContractBudgetEnforcer; members carry the
+  // flag used for enforcement.
+  bool has_remaining_free_capacity = 5;
 }
 
 message UsagePricerResponse {
