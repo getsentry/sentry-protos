@@ -131,7 +131,7 @@ pub struct LineItemUsageSummary {
     /// Unlimited active grants are true. Independent of reserved/PAYG exhaustion;
     /// used by quota enforcement to unblock ingest after mid-period trials/grants.
     #[prost(bool, tag = "8")]
-    pub has_remaining_free_capacity: bool,
+    pub has_remaining_granted_capacity: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
@@ -147,11 +147,11 @@ pub struct SharedLineItemUsageSummary {
     /// false when this pool still has reserved quantity left.
     #[prost(bool, tag = "4")]
     pub reserved_budget_exhausted: bool,
-    /// Pool-level mirror of member has_remaining_free_capacity (true if any grant
+    /// Pool-level mirror of member has_remaining_granted_capacity (true if any grant
     /// pool remainder > 0). Not read by ContractBudgetEnforcer; members carry the
     /// flag used for enforcement.
     #[prost(bool, tag = "5")]
-    pub has_remaining_free_capacity: bool,
+    pub has_remaining_granted_capacity: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsagePricerResponse {
