@@ -72,10 +72,10 @@ message LineItemUsageSummary {
   // 0 for line items without a reserved budget.
   uint64 reserved_spend_cents = 7;
 
-  // True when Engagement unit grants/trials for this line item (or its shared
-  // pool) still have remaining units/cents after draining priced usage.
-  // Unlimited active grants are true. Independent of reserved/PAYG exhaustion;
-  // used by quota enforcement to unblock ingest after mid-period trials/grants.
+  // True when Engagement unit grants (including trial-sourced grants) for this
+  // line item or its shared pool still have remaining units/cents after draining
+  // priced usage. Unlimited active grants are true. Independent of reserved/PAYG
+  // exhaustion; used by quota enforcement to unblock ingest after mid-period grants.
   bool has_remaining_granted_capacity = 8;
 }
 

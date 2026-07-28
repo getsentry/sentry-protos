@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.engagement.v1;
 
+import "sentry_protos/billing/v1/date.proto";
+
 // Denomination of a RecurringCredit.
 enum RecurringCreditType {
   RECURRING_CREDIT_TYPE_UNSPECIFIED = 0;
@@ -32,4 +34,8 @@ message RecurringCredit {
   optional string line_item_uid = 1;
   RecurringCreditType type = 2;
   uint64 amount = 3;
+  // UTC calendar day the credit row was created. Unit-grant consumers use
+  // max(ondemand_period_start, date_added) so mid-period grants only drain
+  // against usage on/after the grant day (forward headroom).
+  optional sentry_protos.billing.v1.Date date_added = 4;
 }
