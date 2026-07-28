@@ -6,6 +6,13 @@ import "sentry_protos/billing/v1/services/rate_card/v1/rate_card.proto";
 
 message GetRateCardRequest {
   uint64 contract_id = 1;
+  // Price the contract under this package instead of its own, keeping the
+  // contract's overrides (e.g. reserved volumes, which stay fixed across a
+  // package change). Unset means use the contract's current package.
+  optional string override_package_uid = 2;
+  // Price the contract at this billing interval instead of its own. Unset means
+  // use the contract's current interval.
+  optional uint32 override_month_interval = 3;
 }
 
 message GetRateCardResponse {
