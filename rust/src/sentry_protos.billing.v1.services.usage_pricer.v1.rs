@@ -126,10 +126,10 @@ pub struct LineItemUsageSummary {
     /// 0 for line items without a reserved budget.
     #[prost(uint64, tag = "7")]
     pub reserved_spend_cents: u64,
-    /// True when Engagement unit grants/trials for this line item (or its shared
-    /// pool) still have remaining units/cents after draining priced usage.
-    /// Unlimited active grants are true. Independent of reserved/PAYG exhaustion;
-    /// used by quota enforcement to unblock ingest after mid-period trials/grants.
+    /// True when Engagement unit grants (including trial-sourced grants) for this
+    /// line item or its shared pool still have remaining units/cents after draining
+    /// priced usage. Unlimited active grants are true. Independent of reserved/PAYG
+    /// exhaustion; used by quota enforcement to unblock ingest after mid-period grants.
     #[prost(bool, tag = "8")]
     pub has_remaining_granted_capacity: bool,
 }
