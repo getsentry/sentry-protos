@@ -1,3 +1,9 @@
+## 0.52.0
+
+### New Features ✨
+
+- (taskbroker) Mark Callback URL Field as Deprecated by @george-sentry in [#385](https://github.com/getsentry/sentry-protos/pull/385)
+
 ## 0.51.0
 
 ### New Features ✨
