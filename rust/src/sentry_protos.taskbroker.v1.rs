@@ -137,6 +137,9 @@ pub struct SetBatchActivationStatusResponse {}
 pub struct PushTaskRequest {
     #[prost(message, optional, tag = "1")]
     pub task: ::core::option::Option<TaskActivation>,
+    #[deprecated]
+    #[prost(string, tag = "2")]
+    pub callback_url: ::prost::alloc::string::String,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PushTaskResponse {}
