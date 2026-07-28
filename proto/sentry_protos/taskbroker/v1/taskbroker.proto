@@ -159,9 +159,6 @@ service WorkerService {
 }
 
 message PushTaskRequest {
-  reserved 2;
-  reserved "callback_url";
-
   TaskActivation task = 1;
 }
 
