@@ -21,9 +21,6 @@ message GetRetentionsResponse {
   // False when the organization has no platform contract, in which case consumers
   // fall back to legacy and the remaining fields are unset.
   bool contract_present = 2;
-  // Opaque identifier of the retention policy revision the overrides came from;
-  // empty when the contract carries no override.
-  string retention_policy_revision = 3;
   // Category-less standard retention, preserving the legacy organization-level
   // retention call. Positive when a contract is present.
   uint32 event_retention_days = 4;
