@@ -72,6 +72,16 @@ pub struct GetPriceForContractRequest {
     pub simulated_usage: ::core::option::Option<
         super::super::usage::v1::GetUsageResponse,
     >,
+    /// When set, price the contract's usage against this package's rate card instead
+    /// of the contract's own -- "what would this usage cost under package X". Used by
+    /// checkout to freeze a PAYG cap against usage re-priced under an upgrade's target
+    /// package. The contract's overrides (e.g. reserved volumes) still apply.
+    #[prost(string, optional, tag = "4")]
+    pub override_package_uid: ::core::option::Option<::prost::alloc::string::String>,
+    /// Paired with override_package_uid: price at this billing interval instead of the
+    /// contract's own, for an upgrade that also changes the interval.
+    #[prost(uint32, optional, tag = "5")]
+    pub override_month_interval: ::core::option::Option<u32>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SkuUsageSummary {

@@ -68,10 +68,19 @@ pub struct RateCard {
     #[prost(message, repeated, tag = "2")]
     pub shared_line_items: ::prost::alloc::vec::Vec<SharedRateCardLineItem>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetRateCardRequest {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
+    /// Price the contract under this package instead of its own, keeping the
+    /// contract's overrides (e.g. reserved volumes, which stay fixed across a
+    /// package change). Unset means use the contract's current package.
+    #[prost(string, optional, tag = "2")]
+    pub override_package_uid: ::core::option::Option<::prost::alloc::string::String>,
+    /// Price the contract at this billing interval instead of its own. Unset means
+    /// use the contract's current interval.
+    #[prost(uint32, optional, tag = "3")]
+    pub override_month_interval: ::core::option::Option<u32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetRateCardResponse {
