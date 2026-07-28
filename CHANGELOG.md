@@ -1,3 +1,9 @@
+## 0.53.0
+
+### New Features ✨
+
+- (billing-platform) Add override_package_uid to usage pricer GetPriceForContractRequest by @skonves in [#382](https://github.com/getsentry/sentry-protos/pull/382)
+
 ## 0.52.0
 
 ### New Features ✨
