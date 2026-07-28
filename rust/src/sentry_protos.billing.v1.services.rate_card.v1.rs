@@ -17,6 +17,9 @@ pub struct RateCardLineItem {
     pub uncapped_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
     >,
+    /// Whether this line item is currently enabled
+    #[prost(bool, tag = "7")]
+    pub is_enabled: bool,
     /// The following values are the effective values *after* contract overrides have been resolved. If there are no
     /// contract overrides, the default package values are used.
     #[prost(oneof = "rate_card_line_item::ReservedUnits", tags = "2, 3")]
@@ -42,6 +45,9 @@ pub struct SharedRateCardLineItem {
     pub shared_line_item_detail: ::core::option::Option<
         super::super::super::common::v1::LineItemDetails,
     >,
+    /// Whether this line item is currently enabled
+    #[prost(bool, tag = "5")]
+    pub is_enabled: bool,
     /// Effective reserved_pool_cents after contract overrides have been resolved. If there are no
     /// contract overrides, the default package values are used.
     #[prost(oneof = "shared_rate_card_line_item::ReservedPoolCents", tags = "2, 3")]
