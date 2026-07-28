@@ -29,10 +29,6 @@ message RetentionOverride {
 // the resolved policy. If a field is absent, that field falls through to its
 // package retention chain.
 message RetentionConfig {
-  // The identifier of the retention policy revision this config projects. This
-  // identifier is opaque. Do not parse it.
-  string revision = 1;
-
   // The organization-wide retention in calendar days. This field is a temporary
   // legacy-compatible value. If this field is absent, the organization-wide
   // layer does not apply. A present value must be positive. This value applies
