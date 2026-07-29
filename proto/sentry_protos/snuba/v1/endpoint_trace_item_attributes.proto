@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.snuba.v1;
 
+import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
@@ -121,6 +122,12 @@ message TraceItemAttributeNamesResponse {
     // (order_by.column = COLUMN_COUNT); unset otherwise. The presence of this
     // field distinguishes "not computed" from a genuine count of zero.
     optional uint64 count = 3;
+
+    // optional, the most recent time this attribute was seen across the
+    // matched trace items, within the request's time range. Unset when the
+    // endpoint does not compute it, which distinguishes "not computed" from a
+    // genuine timestamp.
+    google.protobuf.Timestamp last_seen = 4;
   }
   // all attributes that matched the filters in the request
   repeated Attribute attributes = 1;

@@ -1967,6 +1967,12 @@ pub mod trace_item_attribute_names_response {
         /// field distinguishes "not computed" from a genuine count of zero.
         #[prost(uint64, optional, tag = "3")]
         pub count: ::core::option::Option<u64>,
+        /// optional, the most recent time this attribute was seen across the
+        /// matched trace items, within the request's time range. Unset when the
+        /// endpoint does not compute it, which distinguishes "not computed" from a
+        /// genuine timestamp.
+        #[prost(message, optional, tag = "4")]
+        pub last_seen: ::core::option::Option<::prost_types::Timestamp>,
     }
 }
 /// TraceItemAttributeValuesRequest is a request to the TraceItemAttributeValues endpoint,
