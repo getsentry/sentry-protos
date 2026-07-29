@@ -34,8 +34,8 @@ message RetentionConfig {
   // layer does not apply. A present value must be positive. This value applies
   // to the standard retention and to each downsampled representation the package
   // declares.
-  optional uint32 organization_days = 2;
+  optional uint32 organization_days = 1;
 
   // The per-category sparse overrides. Each category has one entry at most.
-  repeated RetentionOverride overrides = 3;
+  repeated RetentionOverride overrides = 2;
 }
