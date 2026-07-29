@@ -630,10 +630,10 @@ pub struct RetentionConfig {
     /// layer does not apply. A present value must be positive. This value applies
     /// to the standard retention and to each downsampled representation the package
     /// declares.
-    #[prost(uint32, optional, tag = "2")]
+    #[prost(uint32, optional, tag = "1")]
     pub organization_days: ::core::option::Option<u32>,
     /// The per-category sparse overrides. Each category has one entry at most.
-    #[prost(message, repeated, tag = "3")]
+    #[prost(message, repeated, tag = "2")]
     pub overrides: ::prost::alloc::vec::Vec<RetentionOverride>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
