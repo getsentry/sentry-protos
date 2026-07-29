@@ -1,3 +1,9 @@
+## 0.54.0
+
+### New Features ✨
+
+- (snuba) Add last_seen to EAP attribute names, readable and sortable by @phacops in [#387](https://github.com/getsentry/sentry-protos/pull/387)
+
 ## 0.53.1
 
 ### Internal Changes 🔧
