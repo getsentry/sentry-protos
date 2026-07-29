@@ -1788,7 +1788,8 @@ pub mod trace_item_attribute_names_request {
         /// The sort order to apply when ordering by a textual column (COLUMN_NAME).
         /// Defaults to SORT_DEFAULT (lexicographic) when unset, preserving the
         /// historical behaviour. Set to SORT_NATURAL to order alphanumeric names
-        /// naturally (e.g. "item2" before "item10"). Ignored for COLUMN_COUNT.
+        /// naturally (e.g. "item2" before "item10"). Ignored for COLUMN_COUNT and
+        /// COLUMN_LAST_SEEN.
         #[prost(enumeration = "order_by::Sort", tag = "3")]
         pub sort: i32,
     }
@@ -1816,6 +1817,10 @@ pub mod trace_item_attribute_names_request {
             /// Order by how frequently the attribute occurs across the matched trace
             /// items (its count).
             Count = 2,
+            /// Order by when the attribute was most recently seen across the matched
+            /// trace items (its last_seen timestamp). Combine with
+            /// `descending = true` for most-recently-used first.
+            LastSeen = 3,
         }
         impl Column {
             /// String value of the enum field names used in the ProtoBuf definition.
@@ -1827,6 +1832,7 @@ pub mod trace_item_attribute_names_request {
                     Self::Unspecified => "COLUMN_UNSPECIFIED",
                     Self::Name => "COLUMN_NAME",
                     Self::Count => "COLUMN_COUNT",
+                    Self::LastSeen => "COLUMN_LAST_SEEN",
                 }
             }
             /// Creates an enum from field names used in the ProtoBuf definition.
@@ -1835,13 +1841,14 @@ pub mod trace_item_attribute_names_request {
                     "COLUMN_UNSPECIFIED" => Some(Self::Unspecified),
                     "COLUMN_NAME" => Some(Self::Name),
                     "COLUMN_COUNT" => Some(Self::Count),
+                    "COLUMN_LAST_SEEN" => Some(Self::LastSeen),
                     _ => None,
                 }
             }
         }
         /// Sort selects which sort order is applied when ordering by a textual
-        /// column (i.e. COLUMN_NAME). It has no effect when ordering by a numeric
-        /// column such as COLUMN_COUNT.
+        /// column (i.e. COLUMN_NAME). It has no effect when ordering by a
+        /// non-textual column such as COLUMN_COUNT or COLUMN_LAST_SEEN.
         #[derive(
             Clone,
             Copy,
@@ -1968,9 +1975,15 @@ pub mod trace_item_attribute_names_response {
         #[prost(uint64, optional, tag = "3")]
         pub count: ::core::option::Option<u64>,
         /// optional, the most recent time this attribute was seen across the
-        /// matched trace items, within the request's time range. Unset when the
-        /// endpoint does not compute it, which distinguishes "not computed" from a
-        /// genuine timestamp.
+        /// matched trace items, within the request's time range. Only populated
+        /// when the request opts into an ordering that aggregates the attributes
+        /// (order_by.column = COLUMN_COUNT or COLUMN_LAST_SEEN); unset otherwise.
+        /// Being unset therefore means "not computed" rather than "never seen".
+        ///
+        /// This is a best-effort, approximate value: it is derived from a periodic
+        /// roll-up rather than the trace items themselves, so it can lag by a
+        /// small number of seconds. Use it for recency ranking, not as an exact
+        /// event timestamp.
         #[prost(message, optional, tag = "4")]
         pub last_seen: ::core::option::Option<::prost_types::Timestamp>,
     }
