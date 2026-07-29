@@ -23,8 +23,8 @@ message GetRetentionsResponse {
   bool contract_present = 2;
   // Category-less standard retention, preserving the legacy organization-level
   // retention call. Positive when a contract is present.
-  uint32 event_retention_days = 4;
+  uint32 event_retention_days = 3;
   // Category-less downsampled retention, preserving the legacy organization-level
   // downsampled call. Positive when a contract is present.
-  uint32 downsampled_event_retention_days = 5;
+  uint32 downsampled_event_retention_days = 4;
 }
