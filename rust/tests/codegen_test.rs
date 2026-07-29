@@ -179,7 +179,6 @@ fn roundtrip_package_config_with_retention_defaults() {
 fn roundtrip_contract_retention_config() {
     assert_roundtrip(&Contract {
         retention_config: Some(RetentionConfig {
-            revision: "rev_abc123".into(),
             organization_days: Some(180),
             overrides: vec![
                 // Standard-only override: downsampled uses the package default.
