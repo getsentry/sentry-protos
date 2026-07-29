@@ -462,7 +462,6 @@ def test_package_config_with_retention_defaults():
 def test_contract_retention_config_sparse_overrides():
     contract = Contract(
         retention_config=RetentionConfig(
-            revision="rev_abc123",
             # Organization-wide scalar applies to every category, above the
             # per-category overrides.
             organization_days=180,
@@ -488,7 +487,6 @@ def test_contract_retention_config_sparse_overrides():
     )
 
     config = contract.retention_config
-    assert config.revision == "rev_abc123"
     assert config.HasField("organization_days")
     assert config.organization_days == 180
     assert len(config.overrides) == 3
@@ -522,7 +520,6 @@ def test_contract_retention_config_absent_organization():
     # from one that sets it, so resolution knows whether the org layer applies.
     contract = Contract(
         retention_config=RetentionConfig(
-            revision="rev_no_org",
             overrides=[
                 RetentionOverride(
                     category=DataCategory.DATA_CATEGORY_ERROR,
