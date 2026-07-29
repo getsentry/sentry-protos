@@ -180,7 +180,6 @@ fn roundtrip_package_config_with_retention_defaults() {
 fn roundtrip_get_retentions_response() {
     assert_roundtrip(&GetRetentionsResponse {
         contract_present: true,
-        retention_policy_revision: "rev_abc123".into(),
         event_retention_days: 90,
         downsampled_event_retention_days: 30,
         retentions: vec![

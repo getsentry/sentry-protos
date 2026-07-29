@@ -543,7 +543,6 @@ def test_contract_retention_config_absent_organization():
 def test_get_retentions_response_effective_settings():
     response = GetRetentionsResponse(
         contract_present=True,
-        retention_policy_revision="rev_abc123",
         event_retention_days=90,
         downsampled_event_retention_days=30,
         retentions=[
@@ -561,7 +560,6 @@ def test_get_retentions_response_effective_settings():
     )
 
     assert response.contract_present
-    assert response.retention_policy_revision == "rev_abc123"
     assert len(response.retentions) == 2
 
     span = response.retentions[0]
