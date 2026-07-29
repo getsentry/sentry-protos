@@ -49,10 +49,10 @@ pub struct GetRetentionsResponse {
     pub contract_present: bool,
     /// Category-less standard retention, preserving the legacy organization-level
     /// retention call. Positive when a contract is present.
-    #[prost(uint32, tag = "4")]
+    #[prost(uint32, tag = "3")]
     pub event_retention_days: u32,
     /// Category-less downsampled retention, preserving the legacy organization-level
     /// downsampled call. Positive when a contract is present.
-    #[prost(uint32, tag = "5")]
+    #[prost(uint32, tag = "4")]
     pub downsampled_event_retention_days: u32,
 }
