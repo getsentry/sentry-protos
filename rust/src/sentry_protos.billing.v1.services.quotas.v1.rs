@@ -47,10 +47,6 @@ pub struct GetRetentionsResponse {
     /// fall back to legacy and the remaining fields are unset.
     #[prost(bool, tag = "2")]
     pub contract_present: bool,
-    /// Opaque identifier of the retention policy revision the overrides came from;
-    /// empty when the contract carries no override.
-    #[prost(string, tag = "3")]
-    pub retention_policy_revision: ::prost::alloc::string::String,
     /// Category-less standard retention, preserving the legacy organization-level
     /// retention call. Positive when a contract is present.
     #[prost(uint32, tag = "4")]
