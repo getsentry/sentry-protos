@@ -1,3 +1,9 @@
+## 0.53.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add is_enabled to RateCard by @brendanhsentry in [#386](https://github.com/getsentry/sentry-protos/pull/386)
+
 ## 0.53.0
 
 ### New Features ✨
