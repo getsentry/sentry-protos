@@ -625,10 +625,6 @@ pub struct RetentionOverride {
 /// package retention chain.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RetentionConfig {
-    /// The identifier of the retention policy revision this config projects. This
-    /// identifier is opaque. Do not parse it.
-    #[prost(string, tag = "1")]
-    pub revision: ::prost::alloc::string::String,
     /// The organization-wide retention in calendar days. This field is a temporary
     /// legacy-compatible value. If this field is absent, the organization-wide
     /// layer does not apply. A present value must be positive. This value applies
