@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+message GetTrialsForOrganizationRequest {
+  uint64 organization_id = 1;
+}
+
+message UsedTrial {
+  optional string package_uid = 1;
+  repeated string line_item_uids = 2;
+}
+
+message GetTrialsForOrganizationResponse {
+  repeated UsedTrial trials = 1;
+}
