@@ -388,7 +388,51 @@ pub struct LineItemUids {
 }
 /// For activating add-ons that do not necessarily require Reservation or PAYGBudget changes
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct Activation {}
+pub struct Activation {
+    #[prost(enumeration = "activation::Change", tag = "1")]
+    pub change: i32,
+}
+/// Nested message and enum types in `Activation`.
+pub mod activation {
+    /// A checkout operation on the activation. The default adds the activation. A
+    /// contract never stores CHANGE_REMOVE. It is a request to delete the activation.
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
+    #[repr(i32)]
+    pub enum Change {
+        Unspecified = 0,
+        Remove = 1,
+    }
+    impl Change {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Self::Unspecified => "CHANGE_UNSPECIFIED",
+                Self::Remove => "CHANGE_REMOVE",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "CHANGE_UNSPECIFIED" => Some(Self::Unspecified),
+                "CHANGE_REMOVE" => Some(Self::Remove),
+                _ => None,
+            }
+        }
+    }
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UserConfig {
     #[prost(message, optional, tag = "1")]
