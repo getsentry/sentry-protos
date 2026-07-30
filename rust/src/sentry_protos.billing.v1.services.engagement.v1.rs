@@ -292,6 +292,81 @@ pub struct CreateRecurringCreditRequest {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateRecurringCreditResponse {}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct TrialConfig {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    #[prost(oneof = "trial_config::Amount", tags = "2, 3")]
+    pub amount: ::core::option::Option<trial_config::Amount>,
+}
+/// Nested message and enum types in `TrialConfig`.
+pub mod trial_config {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Amount {
+        /// this should be expressed line item's billable metric prior to unit
+        /// conversion (ie milliseconds, bytes, etc.)
+        #[prost(uint64, tag = "2")]
+        Total(u64),
+        #[prost(bool, tag = "3")]
+        IsUnlimited(bool),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Trial {
+    #[prost(message, repeated, tag = "1")]
+    pub config: ::prost::alloc::vec::Vec<TrialConfig>,
+    #[prost(message, optional, tag = "2")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "3")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(string, optional, tag = "4")]
+    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetActiveTrialsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// returns all trials active between \[start_date, end_date\] inclusive
+    #[prost(message, optional, tag = "3")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "4")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetActiveTrialsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub trials: ::prost::alloc::vec::Vec<Trial>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateTrialRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Defines what is granted with this trial
+    #[prost(message, repeated, tag = "4")]
+    pub configs: ::prost::alloc::vec::Vec<TrialConfig>,
+    /// if dates are not provided, we'll create a Trial that starts immediately and lasts 14 days.
+    #[prost(message, optional, tag = "5")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "6")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(oneof = "create_trial_request::Scope", tags = "2, 3")]
+    pub scope: ::core::option::Option<create_trial_request::Scope>,
+}
+/// Nested message and enum types in `CreateTrialRequest`.
+pub mod create_trial_request {
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Scope {
+        #[prost(string, tag = "2")]
+        LineItemUid(::prost::alloc::string::String),
+        #[prost(string, tag = "3")]
+        PackageUid(::prost::alloc::string::String),
+    }
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateTrialResponse {
+    #[prost(bool, tag = "1")]
+    pub created: bool,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UnitGrant {
     #[prost(string, tag = "1")]
     pub line_item_uid: ::prost::alloc::string::String,
@@ -381,51 +456,6 @@ impl MonetaryType {
             _ => None,
         }
     }
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct TrialConfig {
-    #[prost(string, tag = "1")]
-    pub line_item_uid: ::prost::alloc::string::String,
-    #[prost(oneof = "trial_config::Amount", tags = "2, 3")]
-    pub amount: ::core::option::Option<trial_config::Amount>,
-}
-/// Nested message and enum types in `TrialConfig`.
-pub mod trial_config {
-    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum Amount {
-        /// this should be expressed line item's billable metric prior to unit
-        /// conversion (ie milliseconds, bytes, etc.)
-        #[prost(uint64, tag = "2")]
-        Total(u64),
-        #[prost(bool, tag = "3")]
-        IsUnlimited(bool),
-    }
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Trial {
-    #[prost(message, repeated, tag = "1")]
-    pub config: ::prost::alloc::vec::Vec<TrialConfig>,
-    #[prost(message, optional, tag = "2")]
-    pub start_date: ::core::option::Option<super::super::super::Date>,
-    #[prost(message, optional, tag = "3")]
-    pub end_date: ::core::option::Option<super::super::super::Date>,
-    #[prost(string, optional, tag = "4")]
-    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct GetActiveTrialsRequest {
-    #[prost(uint64, tag = "1")]
-    pub organization_id: u64,
-    /// returns all trials active between \[start_date, end_date\] inclusive
-    #[prost(message, optional, tag = "3")]
-    pub start_date: ::core::option::Option<super::super::super::Date>,
-    #[prost(message, optional, tag = "4")]
-    pub end_date: ::core::option::Option<super::super::super::Date>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GetActiveTrialsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub trials: ::prost::alloc::vec::Vec<Trial>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetContractBalanceRequest {
@@ -576,6 +606,23 @@ pub struct GetRecurringCreditsRequest {
 pub struct GetRecurringCreditsResponse {
     #[prost(message, repeated, tag = "1")]
     pub recurring_credits: ::prost::alloc::vec::Vec<RecurringCredit>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetTrialsForOrganizationRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UsedTrial {
+    #[prost(string, optional, tag = "1")]
+    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag = "2")]
+    pub line_item_uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetTrialsForOrganizationResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub trials: ::prost::alloc::vec::Vec<UsedTrial>,
 }
 /// Fetches Balances that were staged, but not commited to any contract.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
