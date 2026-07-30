@@ -17,6 +17,9 @@ message RateCardLineItem {
   sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 4;
   sentry_protos.billing.v1.common.v1.TieredPricingRate reserved_rate = 5;
   sentry_protos.billing.v1.common.v1.TieredPricingRate uncapped_rate = 6;
+
+  // Whether this line item is currently enabled
+  bool is_enabled = 7;
 }
 
 message SharedRateCardLineItem {
@@ -30,6 +33,9 @@ message SharedRateCardLineItem {
   }
 
   sentry_protos.billing.v1.common.v1.LineItemDetails shared_line_item_detail = 4;
+
+  // Whether this line item is currently enabled
+  bool is_enabled = 5;
 }
 
 message RateCard {

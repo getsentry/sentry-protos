@@ -1,3 +1,27 @@
+## 0.54.0
+
+### New Features ✨
+
+- (snuba) Add last_seen to EAP attribute names, readable and sortable by @phacops in [#387](https://github.com/getsentry/sentry-protos/pull/387)
+
+## 0.53.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add is_enabled to RateCard by @brendanhsentry in [#386](https://github.com/getsentry/sentry-protos/pull/386)
+
+## 0.53.0
+
+### New Features ✨
+
+- (billing-platform) Add override_package_uid to usage pricer GetPriceForContractRequest by @skonves in [#382](https://github.com/getsentry/sentry-protos/pull/382)
+
+## 0.52.0
+
+### New Features ✨
+
+- (taskbroker) Mark Callback URL Field as Deprecated by @george-sentry in [#385](https://github.com/getsentry/sentry-protos/pull/385)
+
 ## 0.51.0
 
 ### New Features ✨
