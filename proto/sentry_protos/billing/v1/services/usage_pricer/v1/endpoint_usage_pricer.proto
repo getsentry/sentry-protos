@@ -79,6 +79,10 @@ message LineItemUsageSummary {
   // period. Only set for members of a shared reserved-budget pool (e.g. Seer);
   // 0 for line items without a reserved budget.
   uint64 reserved_spend_cents = 7;
+
+  // True when this line item can continue accepting usage from any capacity
+  // source, including reserved, PAYG, or granted capacity.
+  bool has_remaining_capacity = 8;
 }
 
 message SharedLineItemUsageSummary {
@@ -93,6 +97,9 @@ message SharedLineItemUsageSummary {
 
   // false when this pool still has reserved quantity left.
   bool reserved_budget_exhausted = 4;
+
+  // True when any member of this pool can continue accepting usage.
+  bool has_remaining_capacity = 5;
 }
 
 message UsagePricerResponse {
