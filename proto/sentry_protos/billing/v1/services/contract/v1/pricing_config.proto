@@ -69,7 +69,15 @@ message LineItemUids {
 }
 
 // For activating add-ons that do not necessarily require Reservation or PAYGBudget changes
-message Activation {}
+message Activation {
+  // A checkout operation on the activation. The default adds the activation. A
+  // contract never stores CHANGE_REMOVE. It is a request to delete the activation.
+  enum Change {
+    CHANGE_UNSPECIFIED = 0;
+    CHANGE_REMOVE = 1;
+  }
+  Change change = 1;
+}
 
 message UserConfig {
   PAYGBudget payg_budget = 1;
