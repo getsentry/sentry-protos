@@ -202,11 +202,6 @@ pub struct RecurringCredit {
     pub r#type: i32,
     #[prost(uint64, tag = "3")]
     pub amount: u64,
-    /// UTC calendar day the credit row was created. Unit-grant consumers use
-    /// max(ondemand_period_start, date_added) so mid-period grants only drain
-    /// against usage on/after the grant day (forward headroom).
-    #[prost(message, optional, tag = "4")]
-    pub date_added: ::core::option::Option<super::super::super::Date>,
 }
 /// Denomination of a RecurringCredit.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
