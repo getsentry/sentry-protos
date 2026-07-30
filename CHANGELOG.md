@@ -1,3 +1,9 @@
+## 0.55.0
+
+### New Features ✨
+
+- (billing) Add has_remaining_capacity by @armenzg in [#384](https://github.com/getsentry/sentry-protos/pull/384)
+
 ## 0.54.0
 
 ### New Features ✨
