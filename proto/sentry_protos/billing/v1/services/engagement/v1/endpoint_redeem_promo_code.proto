@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+message RedeemPromoCodeRequest {
+  string code = 1;
+  uint64 user_id = 2;
+  uint64 organization_id = 3;
+}
+
+message RedeemPromoCodeResponse {
+  bool claimed = 1;
+  optional uint64 trial_days = 2;
+  optional uint64 amount = 3;
+  optional uint64 duration = 4;
+  optional string code = 5;
+  optional string campaign = 6;
+}

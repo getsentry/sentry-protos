@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/services/engagement/v1/recurring_credit.proto";
+
+message AddMonetaryGrantRequest {
+  uint64 organization_id = 1;
+  optional uint64 previous_contract_id = 2;
+  uint64 contract_id = 3;
+  uint64 amount = 4;
+
+  // Set for recurring monetary credits (CENTS or DISCOUNT_PERCENT). Omit for
+  // a one-time balance top-up.
+  optional RecurringCreditType type = 5;
+
+  // Omit for a one-time balance top-up. When set, creates a recurring credit
+  // for this many billing periods.
+  optional uint64 number_of_periods = 6;
+}
+
+message AddMonetaryGrantResponse {}
