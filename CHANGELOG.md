@@ -1,3 +1,9 @@
+## 0.56.0
+
+### New Features ✨
+
+- (billing-platform) Add Activation.Change enum to pricing config by @skonves in [#388](https://github.com/getsentry/sentry-protos/pull/388)
+
 ## 0.55.0
 
 ### New Features ✨
