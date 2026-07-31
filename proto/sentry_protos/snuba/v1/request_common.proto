@@ -41,13 +41,13 @@ message RequestMeta {
   // how to query the downsampled storages
   DownsampledStorageConfig downsampled_storage_config = 12;
 
-  // Customer's standard retention window in days for this request.
+  // Standard retention window in days for this request.
   // When set, Snuba may keep queries within this window on tier 1 storage
   // instead of applying long-term retention downsampling. When unset,
   // Snuba falls back to its default lower retention (typically 30 days).
   // This is independent of DownsampledStorageConfig, which controls sampling
   // mode rather than the age threshold for full-fidelity data.
-  optional uint32 customer_standard_retention_days_config = 13;
+  optional uint32 standard_retention_days = 13;
 }
 
 message ResponseMeta {
