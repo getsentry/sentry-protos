@@ -12,13 +12,16 @@ use prost::Message;
 // These `use` statements are compile-time tests. If a module path is
 // wrong or a type doesn't exist, the test file won't compile.
 
+use sentry_protos::billing::v1::common::v1::{DataCategoryRetention, RetentionSettings};
 use sentry_protos::billing::v1::DataCategory;
 use sentry_protos::billing::v1::Date;
 use sentry_protos::billing::v1::SeatCategory;
 use sentry_protos::billing::v1::UsageData;
 use sentry_protos::billing::v1::services::contract::v1::{Contract, GetContractRequest};
+use sentry_protos::billing::v1::services::package::v1::PackageConfig;
 use sentry_protos::billing::v1::services::usage::v1::{
-    CategorySeatUsage, CategoryUsage, DailyUsage, GetUsageRequest, GetUsageResponse,
+    CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage, GetUsageRequest,
+    GetUsageResponse,
 };
 use sentry_protos::sentry::v1::RetryState;
 
@@ -64,10 +67,18 @@ fn roundtrip_get_usage_response() {
                 }),
             }],
         }],
-        seats: vec![CategorySeatUsage {
-            category: SeatCategory::Monitor as i32,
-            count: 5,
+        seat_days: vec![DailySeatUsage {
+            date: Some(Date {
+                year: 2026,
+                month: 1,
+                day: 15,
+            }),
+            seats: vec![CategorySeatUsage {
+                category: SeatCategory::Monitor as i32,
+                count: 5,
+            }],
         }],
+        ..Default::default()
     });
 }
 
@@ -96,4 +107,68 @@ fn default_messages_roundtrip() {
     assert_roundtrip(&GetUsageRequest::default());
     assert_roundtrip(&GetUsageResponse::default());
     assert_roundtrip(&Contract::default());
+}
+
+#[test]
+fn roundtrip_retention_with_downsampled_days() {
+    assert_roundtrip(&DataCategoryRetention {
+        category: DataCategory::Span as i32,
+        settings: Some(RetentionSettings {
+            standard_days: 30,
+            downsampled_days: Some(90),
+        }),
+    });
+}
+
+#[test]
+fn roundtrip_retention_with_downsampled_compatibility_value() {
+    assert_roundtrip(&DataCategoryRetention {
+        category: DataCategory::Transaction as i32,
+        settings: Some(RetentionSettings {
+            standard_days: 30,
+            downsampled_days: Some(0),
+        }),
+    });
+}
+
+#[test]
+fn roundtrip_retention_without_downsampled_representation() {
+    assert_roundtrip(&DataCategoryRetention {
+        category: DataCategory::Error as i32,
+        settings: Some(RetentionSettings {
+            standard_days: 90,
+            downsampled_days: None,
+        }),
+    });
+}
+
+#[test]
+fn roundtrip_package_config_with_retention_defaults() {
+    assert_roundtrip(&PackageConfig {
+        uid: "business".into(),
+        retention_defaults: vec![
+            DataCategoryRetention {
+                category: DataCategory::Span as i32,
+                settings: Some(RetentionSettings {
+                    standard_days: 30,
+                    downsampled_days: Some(396),
+                }),
+            },
+            DataCategoryRetention {
+                category: DataCategory::Transaction as i32,
+                settings: Some(RetentionSettings {
+                    standard_days: 30,
+                    downsampled_days: Some(0),
+                }),
+            },
+            DataCategoryRetention {
+                category: DataCategory::Error as i32,
+                settings: Some(RetentionSettings {
+                    standard_days: 90,
+                    downsampled_days: None,
+                }),
+            },
+        ],
+        ..Default::default()
+    });
 }

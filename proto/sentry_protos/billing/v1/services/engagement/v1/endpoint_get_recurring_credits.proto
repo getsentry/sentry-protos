@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/services/engagement/v1/recurring_credit.proto";
+
+message GetRecurringCreditsRequest {
+  uint64 organization_id = 1;
+  // The contract we're getting active credits for.
+  uint64 contract_id = 2;
+  // All contract IDs for this organization. Caller should provide them in ascending order.
+  repeated uint64 contract_ids = 3;
+}
+
+message GetRecurringCreditsResponse {
+  repeated RecurringCredit recurring_credits = 1;
+}

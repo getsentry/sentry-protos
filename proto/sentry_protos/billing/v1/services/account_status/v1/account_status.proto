@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.account_status.v1;
+
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  STATUS_ACTIVE = 1;
+  STATUS_CLOSED = 2;
+  STATUS_PAST_DUE = 3;
+  STATUS_SUSPENDED = 4;
+}
+
+enum OnDemandStatus {
+  ON_DEMAND_STATUS_UNSPECIFIED = 0;
+  ON_DEMAND_STATUS_ENABLED = 1;
+  ON_DEMAND_STATUS_DISABLED = 2;
+}
+
+message AccountStatus {
+  // The organization this status belongs to. Each org has one AccountStatus.
+  uint64 organization_id = 1;
+  // Current account status (active, closed, past-due, suspended).
+  Status status = 2;
+  // Free-form reason when status is STATUS_SUSPENDED (e.g., "fraud", "tos_violation").
+  optional string suspension_reason = 3;
+  // PAYG on-demand spending status.
+  OnDemandStatus ondemand_status = 4;
+}

@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.usage_pricer.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
 import "sentry_protos/billing/v1/sku.proto";
 
 message UsagePricerRequest {
@@ -14,6 +15,17 @@ message UsagePricerRequest {
 message GetPriceForContractRequest {
   uint64 contract_id = 1;
   google.protobuf.Timestamp usage_start_watermark_ts = 2;
+  // Instead of getting the usage for the contract at query time, pass in
+  // pre-constructed usage data to simulate what the priced usage would be
+  optional sentry_protos.billing.v1.services.usage.v1.GetUsageResponse simulated_usage = 3;
+  // When set, price the contract's usage against this package's rate card instead
+  // of the contract's own -- "what would this usage cost under package X". Used by
+  // checkout to freeze a PAYG cap against usage re-priced under an upgrade's target
+  // package. The contract's overrides (e.g. reserved volumes) still apply.
+  optional string override_package_uid = 4;
+  // Paired with override_package_uid: price at this billing interval instead of the
+  // contract's own, for an upgrade that also changes the interval.
+  optional uint32 override_month_interval = 5;
 }
 
 message SKUUsageSummary {
@@ -44,6 +56,33 @@ message LineItemUsageSummary {
 
   // Net cents consumed by this line item in the billing period (after credits/trials applied).
   uint64 payg_spend_cents = 2;
+
+  // How much of the line item was consumed by PAYG (in the line item's units)
+  uint64 quantity = 3;
+
+  // Whether the usage pricer had to cap the spend based on the budget set by the contract
+  bool payg_budget_exhausted = 4;
+
+  // false when this line item still has reserved quantity left.
+  // It's possible that PAYG is exhausted whereas reserved is not.
+  // Example: there's an overall PAYG budget of $10, a customer sends $10 worth of errors
+  // the payg_budget_exhausted field is true for all line items
+  // however, the plan still includes 5GB of free logs, so reserved_budget_exhausted is false for logs.
+  bool reserved_budget_exhausted = 5;
+
+  // Total units consumed by this line item in the billing period, including
+  // both reserved and PAYG usage (in the line item's units). Unlike `quantity`,
+  // this is not reduced by the reserved amount.
+  uint64 total_quantity = 6;
+
+  // Cents this line item drew from its shared reserved budget in the billing
+  // period. Only set for members of a shared reserved-budget pool (e.g. Seer);
+  // 0 for line items without a reserved budget.
+  uint64 reserved_spend_cents = 7;
+
+  // True when this line item can continue accepting usage from any capacity
+  // source, including reserved, PAYG, or granted capacity.
+  bool has_remaining_capacity = 8;
 }
 
 message SharedLineItemUsageSummary {
@@ -52,6 +91,15 @@ message SharedLineItemUsageSummary {
 
   // Line item breakdown within shared budget
   repeated LineItemUsageSummary line_item_summaries = 2;
+
+  // Whether the usage pricer had to cap the spend based on the budget set by the contract
+  bool payg_budget_exhausted = 3;
+
+  // false when this pool still has reserved quantity left.
+  bool reserved_budget_exhausted = 4;
+
+  // True when any member of this pool can continue accepting usage.
+  bool has_remaining_capacity = 5;
 }
 
 message UsagePricerResponse {

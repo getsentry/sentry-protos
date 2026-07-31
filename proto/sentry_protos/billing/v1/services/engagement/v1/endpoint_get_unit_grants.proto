@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+
+message EffectiveUnitGrant {
+  string line_item_uid = 1;
+  oneof amount {
+    bool is_unlimited = 2;
+    // this should be expressed line item's billable metric prior to unit conversion (ie milliseconds, bytes, etc.)
+    uint64 units = 3;
+  }
+  // Grants only apply to days between [start_date, end_date] (inclusive)
+  // For units, this means Grants apply to usage that was accrued during the active period.
+  // For monetary, Grants are applied to invoices created during the active period.
+  sentry_protos.billing.v1.Date start_date = 4;
+  sentry_protos.billing.v1.Date end_date = 5;
+}
+
+message GetUnitGrantsRequest {
+  uint64 contract_id = 1;
+}
+
+message GetUnitGrantsResponse {
+  repeated EffectiveUnitGrant grants = 1;
+}

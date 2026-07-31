@@ -54,6 +54,11 @@ message TraceItem {
   double client_sample_rate = 8;
   double server_sample_rate = 9;
 
+  // The ID of the conversation this item belongs to, if any.
+  string conversation_id = 10;
+  // The ID of the session this item belongs to, if any.
+  string session_id = 11;
+
   // Internal fields
   uint32 retention_days = 100;
   google.protobuf.Timestamp received = 101;

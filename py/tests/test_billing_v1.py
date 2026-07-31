@@ -51,12 +51,30 @@ from sentry_protos.billing.v1.common.v1.billable_metric_pb2 import (
     Operator,
 )
 from sentry_protos.billing.v1.common.v1.billing_interval_pb2 import BillingInterval
+from sentry_protos.billing.v1.common.v1.retention_pb2 import (
+    DataCategoryRetention,
+    RetentionSettings,
+)
 from sentry_protos.billing.v1.services.package.v1.package_pb2 import PackageConfig
 from sentry_protos.billing.v1.services.package.v1.endpoint_get_package_pb2 import (
     GetPackageRequest,
     GetPackageResponse,
 )
+from sentry_protos.billing.v1.services.account_status.v1.account_status_pb2 import (
+    AccountStatus,
+    OnDemandStatus,
+    Status,
+)
+from sentry_protos.billing.v1.services.account_status.v1.endpoint_get_account_status_pb2 import (
+    GetAccountStatusRequest,
+    GetAccountStatusResponse,
+)
+from sentry_protos.billing.v1.services.account_status.v1.endpoint_upsert_account_status_pb2 import (
+    UpsertAccountStatusRequest,
+    UpsertAccountStatusResponse,
+)
 from sentry_protos.billing.v1.data_category_pb2 import DataCategory
+from sentry_protos.billing.v1.quota_config_pb2 import QuotaConfig, QuotaScope
 
 
 def test_contract_with_all_sub_messages():
@@ -391,6 +409,52 @@ def test_package_config_with_billing_interval():
     assert annual_package.billing_interval == BillingInterval.BILLING_INTERVAL_ANNUAL_BASE_MONTHLY_PAYG
 
 
+def test_package_config_with_retention_defaults():
+    package = PackageConfig(
+        uid="business",
+        retention_defaults=[
+            DataCategoryRetention(
+                category=DataCategory.DATA_CATEGORY_SPAN,
+                settings=RetentionSettings(standard_days=30, downsampled_days=396),
+            ),
+            DataCategoryRetention(
+                category=DataCategory.DATA_CATEGORY_TRANSACTION,
+                settings=RetentionSettings(standard_days=30, downsampled_days=0),
+            ),
+            DataCategoryRetention(
+                category=DataCategory.DATA_CATEGORY_ERROR,
+                settings=RetentionSettings(standard_days=90),
+            ),
+        ],
+    )
+
+    assert len(package.retention_defaults) == 3
+
+    spans = package.retention_defaults[0]
+    assert spans.category == DataCategory.DATA_CATEGORY_SPAN
+    assert spans.HasField("settings")
+    assert spans.settings.standard_days == 30
+    assert spans.settings.HasField("downsampled_days")
+    assert spans.settings.downsampled_days == 396
+
+    transactions = package.retention_defaults[1]
+    assert transactions.category == DataCategory.DATA_CATEGORY_TRANSACTION
+    assert transactions.settings.standard_days == 30
+    assert transactions.settings.HasField("downsampled_days")
+    assert transactions.settings.downsampled_days == 0
+
+    errors = package.retention_defaults[2]
+    assert errors.category == DataCategory.DATA_CATEGORY_ERROR
+    assert errors.settings.standard_days == 90
+    assert not errors.settings.HasField("downsampled_days")
+
+    parsed = PackageConfig()
+    parsed.ParseFromString(package.SerializeToString())
+
+    assert parsed == package
+    assert len(parsed.retention_defaults) == 3
+
+
 def test_get_package_request():
     request = GetPackageRequest(package_uid="pkg_monthly_123")
     assert request.package_uid == "pkg_monthly_123"
@@ -507,3 +571,206 @@ def test_create_contract():
     assert pricing.user_config[1].reservation.is_unlimited is True
     assert pricing.user_config[2].WhichOneof("line_items") == "all_items"
     assert pricing.user_config[2].HasField("all_items")
+
+
+def test_quota_config_basic():
+    quota = QuotaConfig(
+        id="pae",
+        categories=[DataCategory.DATA_CATEGORY_ERROR],
+        scope=QuotaScope.QUOTA_SCOPE_PROJECT,
+        scope_id="42",
+        limit=1000,
+        window=3600,
+        reason_code="project_abuse_limit",
+    )
+    assert quota.id == "pae"
+    assert list(quota.categories) == [DataCategory.DATA_CATEGORY_ERROR]
+    assert quota.scope == QuotaScope.QUOTA_SCOPE_PROJECT
+    assert quota.scope_id == "42"
+    assert quota.limit == 1000
+    assert quota.window == 3600
+    assert quota.reason_code == "project_abuse_limit"
+
+    serialized = quota.SerializeToString()
+    parsed = QuotaConfig()
+    parsed.ParseFromString(serialized)
+    assert parsed.id == quota.id
+    assert list(parsed.categories) == list(quota.categories)
+    assert parsed.scope == quota.scope
+    assert parsed.scope_id == quota.scope_id
+    assert parsed.limit == quota.limit
+    assert parsed.window == quota.window
+    assert parsed.reason_code == quota.reason_code
+
+
+def test_quota_config_unlimited_multiple_categories():
+    quota = QuotaConfig(
+        id="unlimited_multi",
+        categories=[
+            DataCategory.DATA_CATEGORY_ERROR,
+            DataCategory.DATA_CATEGORY_TRANSACTION,
+            DataCategory.DATA_CATEGORY_SPAN,
+        ],
+        scope=QuotaScope.QUOTA_SCOPE_ORGANIZATION,
+        window=3600,
+    )
+    assert not quota.HasField("limit")
+    assert quota.HasField("window")
+    assert quota.window == 3600
+    assert len(quota.categories) == 3
+    assert DataCategory.DATA_CATEGORY_ERROR in quota.categories
+    assert DataCategory.DATA_CATEGORY_TRANSACTION in quota.categories
+    assert DataCategory.DATA_CATEGORY_SPAN in quota.categories
+
+
+def test_quota_config_reject_all():
+    quota = QuotaConfig(
+        id="reject_all",
+        limit=0,
+        scope=QuotaScope.QUOTA_SCOPE_PROJECT,
+        categories=[DataCategory.DATA_CATEGORY_ATTACHMENT],
+        reason_code="attachments_disabled",
+    )
+    assert quota.HasField("limit")
+    assert quota.limit == 0
+    assert not quota.HasField("window")
+    assert quota.id == "reject_all"
+    assert quota.reason_code == "attachments_disabled"
+
+
+def test_quota_config_empty_categories():
+    quota = QuotaConfig(
+        id="org_all",
+        scope=QuotaScope.QUOTA_SCOPE_ORGANIZATION,
+        limit=50000,
+        window=3600,
+        reason_code="usage_exceeded",
+    )
+    assert len(quota.categories) == 0
+
+
+def test_get_account_status_request():
+    request = GetAccountStatusRequest(organization_id=12345)
+    assert request.organization_id == 12345
+
+    serialized = request.SerializeToString()
+    parsed = GetAccountStatusRequest()
+    parsed.ParseFromString(serialized)
+    assert parsed.organization_id == 12345
+
+
+def test_get_account_status_response():
+    account_status = AccountStatus(
+        organization_id=99,
+        status=Status.STATUS_SUSPENDED,
+        suspension_reason="tos_violation",
+        ondemand_status=OnDemandStatus.ON_DEMAND_STATUS_DISABLED,
+    )
+    response = GetAccountStatusResponse(account_status=account_status)
+    assert response.account_status.organization_id == 99
+    assert response.account_status.status == Status.STATUS_SUSPENDED
+    assert response.account_status.suspension_reason == "tos_violation"
+    assert response.account_status.ondemand_status == OnDemandStatus.ON_DEMAND_STATUS_DISABLED
+
+
+def test_get_account_status_response_empty():
+    response = GetAccountStatusResponse()
+    assert not response.HasField("account_status")
+
+
+def test_upsert_account_status_request():
+    request = UpsertAccountStatusRequest(
+        organization_id=12345,
+        status=Status.STATUS_ACTIVE,
+        ondemand_status=OnDemandStatus.ON_DEMAND_STATUS_ENABLED,
+    )
+    assert request.organization_id == 12345
+    assert request.HasField("status")
+    assert request.status == Status.STATUS_ACTIVE
+    assert not request.HasField("suspension_reason")
+    assert request.HasField("ondemand_status")
+    assert request.ondemand_status == OnDemandStatus.ON_DEMAND_STATUS_ENABLED
+
+    serialized = request.SerializeToString()
+    parsed = UpsertAccountStatusRequest()
+    parsed.ParseFromString(serialized)
+    assert parsed.organization_id == 12345
+    assert parsed.status == Status.STATUS_ACTIVE
+    assert parsed.ondemand_status == OnDemandStatus.ON_DEMAND_STATUS_ENABLED
+
+    partial_request = UpsertAccountStatusRequest(organization_id=99)
+    assert not partial_request.HasField("status")
+    assert not partial_request.HasField("suspension_reason")
+    assert not partial_request.HasField("ondemand_status")
+
+
+def test_upsert_account_status_request_with_suspension():
+    request = UpsertAccountStatusRequest(
+        organization_id=99,
+        status=Status.STATUS_SUSPENDED,
+        suspension_reason="tos_violation",
+        ondemand_status=OnDemandStatus.ON_DEMAND_STATUS_DISABLED,
+    )
+    assert request.status == Status.STATUS_SUSPENDED
+    assert request.HasField("suspension_reason")
+    assert request.suspension_reason == "tos_violation"
+    assert request.ondemand_status == OnDemandStatus.ON_DEMAND_STATUS_DISABLED
+
+
+def test_upsert_account_status_response():
+    updated_response = UpsertAccountStatusResponse(updated=True)
+    assert updated_response.updated is True
+
+    not_updated_response = UpsertAccountStatusResponse(updated=False)
+    assert not_updated_response.updated is False
+
+    default_response = UpsertAccountStatusResponse()
+    assert default_response.updated is False
+
+
+def test_retention_settings_without_downsampled_representation():
+    settings = RetentionSettings(standard_days=30)
+
+    assert settings.standard_days == 30
+    assert not settings.HasField("downsampled_days")
+
+
+def test_retention_settings_downsampled_days_presence():
+    unset = RetentionSettings(standard_days=30)
+    assert not unset.HasField("downsampled_days")
+
+    configured = RetentionSettings(standard_days=30, downsampled_days=90)
+    assert configured.HasField("downsampled_days")
+    assert configured.downsampled_days == 90
+
+    # Complete package settings preserve the legacy compatibility value: a
+    # present zero means the distinct downsampled representation uses effective
+    # standard retention. The resolver interprets it; effective output never
+    # exposes zero.
+    compatibility = RetentionSettings(standard_days=30, downsampled_days=0)
+    assert compatibility.HasField("downsampled_days")
+    assert compatibility.downsampled_days == 0
+
+
+def test_data_category_retention_roundtrip():
+    retention = DataCategoryRetention(
+        category=DataCategory.DATA_CATEGORY_SPAN,
+        settings=RetentionSettings(standard_days=30, downsampled_days=0),
+    )
+
+    assert retention.category == DataCategory.DATA_CATEGORY_SPAN
+    assert retention.HasField("settings")
+    assert retention.settings.standard_days == 30
+    assert retention.settings.HasField("downsampled_days")
+    assert retention.settings.downsampled_days == 0
+
+    parsed = DataCategoryRetention()
+    parsed.ParseFromString(retention.SerializeToString())
+
+    assert parsed == retention
+    assert parsed.HasField("settings")
+    assert parsed.settings.standard_days == 30
+    assert parsed.settings.HasField("downsampled_days")
+    assert parsed.settings.downsampled_days == 0
+
+

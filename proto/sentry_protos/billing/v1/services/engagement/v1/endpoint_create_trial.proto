@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/engagement/v1/endpoint_get_active_trials.proto";
+
+message CreateTrialRequest {
+  uint64 organization_id = 1;
+
+  oneof scope {
+    string line_item_uid = 2;
+    string package_uid = 3;
+  }
+
+  // Defines what is granted with this trial
+  repeated TrialConfig configs = 4;
+
+  // if dates are not provided, we'll create a Trial that starts immediately and lasts 14 days.
+  optional sentry_protos.billing.v1.Date start_date = 5;
+  optional sentry_protos.billing.v1.Date end_date = 6;
+}
+
+message CreateTrialResponse {
+  bool created = 1;
+}

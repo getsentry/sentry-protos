@@ -68,6 +68,17 @@ message LineItemUids {
   repeated string uids = 1;
 }
 
+// For activating add-ons that do not necessarily require Reservation or PAYGBudget changes
+message Activation {
+  // A checkout operation on the activation. The default adds the activation. A
+  // contract never stores CHANGE_REMOVE. It is a request to delete the activation.
+  enum Change {
+    CHANGE_UNSPECIFIED = 0;
+    CHANGE_REMOVE = 1;
+  }
+  Change change = 1;
+}
+
 message UserConfig {
   PAYGBudget payg_budget = 1;
   Reservation reservation = 2;
@@ -75,6 +86,7 @@ message UserConfig {
     LineItemUids specific_items = 3;
     google.protobuf.Empty all_items = 4;
   }
+  Activation activation = 5;
 }
 
 message PricingConfig {

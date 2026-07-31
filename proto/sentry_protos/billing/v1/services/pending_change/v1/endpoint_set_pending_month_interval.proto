@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.pending_change.v1;
+
+// Sets the pending month_interval on the org's pending change. Creates a
+// pending change if none exists, or updates the month_interval on the
+// existing one without modifying its other fields. Used to schedule a
+// downgrade from annual to monthly billing at the next rollover.
+message SetPendingMonthIntervalRequest {
+  uint64 organization_id = 1;
+
+  // The contract month_interval the subscription will switch to at the next
+  // rollover.
+  uint32 month_interval = 2;
+}
+
+message SetPendingMonthIntervalResponse {}

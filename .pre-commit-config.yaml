@@ -2,7 +2,7 @@ default_stages: [commit]
 
 repos:
   - repo: https://github.com/bufbuild/buf
-    rev: 2f39a052323cccef705d7d81bdf8893bdf42952e
+    rev: v1.69.0
     hooks:
       - id: buf-lint
       - id: buf-format

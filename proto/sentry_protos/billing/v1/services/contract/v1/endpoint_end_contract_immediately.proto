@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Ends a contract immediately, regardless of its scheduled end date.
+message EndContractImmediatelyRequest {
+  uint64 contract_id = 1;
+}
+
+message EndContractImmediatelyResponse {
+  // True if a matching contract was found and updated.
+  bool updated = 1;
+}

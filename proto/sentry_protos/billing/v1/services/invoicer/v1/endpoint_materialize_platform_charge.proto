@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
+
+// Backfills a PlatformCharge row for a Stripe charge that doesn't have one
+// yet, by resolving the invoice guid via ContractService.find_invoice_by_guid
+// and asking ChargeService.create_platform_charge_for_invoice to upsert the
+// row atomically. Presentation-layer orchestrator -- the data services
+// themselves stay decoupled.
+//
+// Used by the ``charge.succeeded`` webhook to materialise the missing row
+// after the manual Pay Now flow, where the endpoint only created a Stripe
+// PaymentIntent and no local PlatformCharge yet exists.
+message MaterializePlatformChargeRequest {
+  sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 1;
+  string invoice_guid = 2;
+}
+
+message MaterializePlatformChargeResponse {
+  // Unset when no PlatformInvoice matches the guid -- caller falls
+  // through to legacy handling (the charge belongs to the legacy Invoice
+  // flow).
+  optional uint64 charge_id = 1;
+  // True when this call inserted a new row; false on idempotent re-runs
+  // or when no matching invoice was found.
+  bool created = 2;
+}

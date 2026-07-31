@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
+// Read-only preview of the invoice a contract will next be billed, without
+// creating the invoice or charging. Mirrors the assembly the invoicer runs when
+// it actually rolls a contract over: renewal (subscription + reserved) line
+// items, accrued pay-as-you-go usage, applied account credit (as negative
+// balance_change line items), and sales tax.
+message PreviewNextInvoiceRequest {
+  uint64 contract_id = 1;
+}
+
+message PreviewNextInvoiceResponse {
+  // The line items the next invoice would carry, including negative
+  // balance_change credit lines and a sales_tax line when applicable.
+  repeated sentry_protos.billing.v1.services.contract.v1.InvoiceLineItem line_items = 1;
+  // The amount that would be charged: the sum of line_items after applied
+  // credit. Never negative (credit is capped at the pre-tax subtotal).
+  uint64 amount_billed_cents = 2;
+}

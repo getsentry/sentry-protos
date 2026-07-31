@@ -13,6 +13,13 @@ pub struct RateCardLineItem {
     pub reserved_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
     >,
+    #[prost(message, optional, tag = "6")]
+    pub uncapped_rate: ::core::option::Option<
+        super::super::super::common::v1::TieredPricingRate,
+    >,
+    /// Whether this line item is currently enabled
+    #[prost(bool, tag = "7")]
+    pub is_enabled: bool,
     /// The following values are the effective values *after* contract overrides have been resolved. If there are no
     /// contract overrides, the default package values are used.
     #[prost(oneof = "rate_card_line_item::ReservedUnits", tags = "2, 3")]
@@ -34,6 +41,13 @@ pub mod rate_card_line_item {
 pub struct SharedRateCardLineItem {
     #[prost(message, repeated, tag = "1")]
     pub rate_card_line_items: ::prost::alloc::vec::Vec<RateCardLineItem>,
+    #[prost(message, optional, tag = "4")]
+    pub shared_line_item_detail: ::core::option::Option<
+        super::super::super::common::v1::LineItemDetails,
+    >,
+    /// Whether this line item is currently enabled
+    #[prost(bool, tag = "5")]
+    pub is_enabled: bool,
     /// Effective reserved_pool_cents after contract overrides have been resolved. If there are no
     /// contract overrides, the default package values are used.
     #[prost(oneof = "shared_rate_card_line_item::ReservedPoolCents", tags = "2, 3")]
@@ -60,13 +74,37 @@ pub struct RateCard {
     #[prost(message, repeated, tag = "2")]
     pub shared_line_items: ::prost::alloc::vec::Vec<SharedRateCardLineItem>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetRateCardRequest {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
+    /// Price the contract under this package instead of its own, keeping the
+    /// contract's overrides (e.g. reserved volumes, which stay fixed across a
+    /// package change). Unset means use the contract's current package.
+    #[prost(string, optional, tag = "2")]
+    pub override_package_uid: ::core::option::Option<::prost::alloc::string::String>,
+    /// Price the contract at this billing interval instead of its own. Unset means
+    /// use the contract's current interval.
+    #[prost(uint32, optional, tag = "3")]
+    pub override_month_interval: ::core::option::Option<u32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetRateCardResponse {
+    #[prost(message, optional, tag = "1")]
+    pub rate_card: ::core::option::Option<RateCard>,
+}
+/// Build a package's list-price rate card at a billing interval, without a
+/// contract. Kept separate from GetRateCardRequest so a request can never mix a
+/// contract with an unrelated package — each request is a single valid mode.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetRateCardForPackageRequest {
+    #[prost(string, tag = "1")]
+    pub package_uid: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "2")]
+    pub month_interval: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetRateCardForPackageResponse {
     #[prost(message, optional, tag = "1")]
     pub rate_card: ::core::option::Option<RateCard>,
 }

@@ -59,13 +59,31 @@ pub struct CategorySeatUsage {
     #[prost(uint64, tag = "2")]
     pub count: u64,
 }
+/// Seat usage data for a single day.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DailySeatUsage {
+    #[prost(message, optional, tag = "1")]
+    pub date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, repeated, tag = "2")]
+    pub seats: ::prost::alloc::vec::Vec<CategorySeatUsage>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUsageResponse {
     /// Usage broken down by day, each containing per-category usage.
     #[prost(message, repeated, tag = "1")]
     pub days: ::prost::alloc::vec::Vec<DailyUsage>,
+    #[prost(message, repeated, tag = "3")]
+    pub seat_days: ::prost::alloc::vec::Vec<DailySeatUsage>,
+    /// DEPRECATED: use seat_days
+    #[deprecated]
     #[prost(message, repeated, tag = "2")]
     pub seats: ::prost::alloc::vec::Vec<CategorySeatUsage>,
+    /// The latest timestamp of usage data included in this response (inclusive
+    /// — there is at least one row at exactly this timestamp). Callers persist
+    /// this as the contract's watermark; subsequent queries should resume
+    /// strictly after this timestamp to avoid double-counting the boundary.
+    #[prost(message, optional, tag = "4")]
+    pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUsageRequest {

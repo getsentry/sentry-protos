@@ -32,7 +32,7 @@ def build_protos():
 
             result = subprocess.run(
                 [
-                    "python",
+                    sys.executable,
                     "-m",
                     "grpc_tools.protoc",
                     f"-I{root_dir}/proto",

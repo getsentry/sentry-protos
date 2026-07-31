@@ -2,10 +2,13 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.common.v1;
 
+import "sentry_protos/billing/v1/common/v1/flexible_price.proto";
+
 message PricingTier {
   int64 start = 1;
-  int64 end = 2;
-  int64 rate_per_unit_cpe = 3;
+  int64 end = 2 [deprecated = true];
+  int64 rate_per_unit_cpe = 3 [deprecated = true];
+  FlexiblePrice price = 4;
 }
 
 message TieredPricingRate {

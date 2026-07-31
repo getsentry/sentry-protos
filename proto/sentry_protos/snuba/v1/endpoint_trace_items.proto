@@ -3,11 +3,14 @@ package sentry_protos.snuba.v1;
 
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item.proto";
+import "sentry_protos/snuba/v1/trace_item_filter.proto";
 
 message ExportTraceItemsRequest {
   RequestMeta meta = 1;
   PageToken page_token = 2;
   uint32 limit = 3;
+  // filter out trace items you dont want
+  TraceItemFilter filter = 4;
 }
 
 message ExportTraceItemsResponse {

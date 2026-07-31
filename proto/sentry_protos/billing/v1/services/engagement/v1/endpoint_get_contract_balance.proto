@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+message GetContractBalanceRequest {
+  uint64 contract_id = 1;
+}
+
+message GetContractBalanceResponse {
+  uint64 balance_cents = 1;
+}

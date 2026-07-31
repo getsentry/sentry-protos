@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+// Request to react to a Stripe `charge.dispute.created` webhook event for a
+// charge created by the billing platform.
+message HandleChargeDisputedRequest {
+  // Stripe id of the disputed charge (e.g. "ch_xxx").
+  string stripe_charge_id = 1;
+  // Stripe id of the dispute itself (e.g. "dp_xxx"). Used for logging and
+  // correlation; not required to process the event.
+  optional string stripe_dispute_id = 2;
+  // Stripe-supplied reason for the dispute (e.g. "fraudulent",
+  // "product_not_received"). Used for logging and correlation.
+  optional string reason = 3;
+}
+
+message HandleChargeDisputedResponse {
+  // True when the charge was created by the billing platform and the
+  // service has finished its handling.
+  bool handled = 1;
+}

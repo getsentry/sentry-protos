@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Releases the shared charge lock on an unpaid invoice by NULLing
+// manual_payment_started_at. Used by the manual Pay Now endpoint when
+// the Stripe PaymentIntent.create call fails after the lock was
+// acquired -- releasing keeps the inline-cutoff window from delaying
+// automated retries by up to 24h. See endpoint_claim_charge_lock.proto
+// for the paired claim endpoint and the legacy column-name context.
+message ReleaseChargeLockRequest {
+  uint64 invoice_id = 1;
+}
+
+message ReleaseChargeLockResponse {
+  bool updated = 1;
+}

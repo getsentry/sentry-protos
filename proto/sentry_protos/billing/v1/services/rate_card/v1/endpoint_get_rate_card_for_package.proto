@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.rate_card.v1;
+
+import "sentry_protos/billing/v1/services/rate_card/v1/rate_card.proto";
+
+// Build a package's list-price rate card at a billing interval, without a
+// contract. Kept separate from GetRateCardRequest so a request can never mix a
+// contract with an unrelated package — each request is a single valid mode.
+message GetRateCardForPackageRequest {
+  string package_uid = 1;
+  uint32 month_interval = 2;
+}
+
+message GetRateCardForPackageResponse {
+  RateCard rate_card = 1;
+}

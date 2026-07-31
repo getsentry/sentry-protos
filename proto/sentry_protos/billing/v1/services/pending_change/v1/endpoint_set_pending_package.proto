@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.pending_change.v1;
+
+// Sets the pending package_id on the org's pending change. Creates a pending
+// change if none exists, or updates the package_id on the existing one
+// without modifying its user_configs.
+message SetPendingPackageRequest {
+  uint64 organization_id = 1;
+
+  // The package the subscription will switch to at the next rollover.
+  string package_id = 2;
+}
+
+message SetPendingPackageResponse {}

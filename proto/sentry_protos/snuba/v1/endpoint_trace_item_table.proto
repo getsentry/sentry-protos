@@ -15,8 +15,53 @@ import "sentry_protos/snuba/v1/trace_item_filter.proto";
 // it can also be used for aggregations
 message TraceItemTableRequest {
   message OrderBy {
+    // Sort selects which sort order is applied when ordering by a textual
+    // column. It has no effect when ordering by a numeric column.
+    enum Sort {
+      // Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+      // backwards compatible when `sort` is left unset.
+      SORT_UNSPECIFIED = 0;
+      // Default lexicographic ordering: values are compared by their Unicode
+      // code points, so e.g. "item10" sorts before "item2".
+      SORT_DEFAULT = 1;
+      // Natural ordering: embedded runs of digits are compared by their
+      // numeric value, so e.g. "item2" sorts before "item10".
+      SORT_NATURAL = 2;
+      // Semantic-version ordering: values are parsed as semantic versions
+      // (https://semver.org) and compared component by component, so e.g.
+      // "1.9.0" sorts before "1.10.0".
+      SORT_SEMVER = 3;
+    }
+
     Column column = 1;
     bool descending = 2;
+
+    // The sort order to apply when ordering by a textual column. Defaults to
+    // SORT_DEFAULT (lexicographic) when unset, preserving the historical
+    // behaviour. Set to SORT_NATURAL to order alphanumeric values naturally
+    // (e.g. "item2" before "item10"). Ignored for numeric columns.
+    Sort sort = 3;
+  }
+
+  // Limits results per group rather than globally: for each distinct
+  // combination of `columns`, keep at most `limit` rows (the first `limit` per
+  // `order_by`). E.g. grouping by project and ordering by count, `limit` = 100
+  // returns the top 100 rows for every project.
+  message LimitBy {
+    // A single grouping key. It is either a column (referenced by attribute key)
+    // or the label of a selected column. To group by a transformation, select it
+    // as a column and reference it here by its label. This intentionally cannot
+    // express an aggregation, which ClickHouse cannot LIMIT BY.
+    message Column {
+      oneof column {
+        AttributeKey key = 1;
+        string label = 2;
+      }
+    }
+    // The keys that define a group.
+    repeated Column columns = 1;
+    // Maximum number of rows to keep per group.
+    uint32 limit = 2;
   }
 
   RequestMeta meta = 1;
@@ -31,6 +76,9 @@ message TraceItemTableRequest {
 
   repeated AttributeKey group_by = 5;
 
+  // Caps the total number of returned rows. May be combined with `limit_by`,
+  // where `limit_by` bounds the rows kept per group and this bounds the overall
+  // result (e.g. the number of groups shown).
   uint32 limit = 6;
 
   // optional, used for pagination, the next page token will be returned in the response
@@ -46,6 +94,10 @@ message TraceItemTableRequest {
   // If specified, the endpoint will only consider traces that match all the filters.
   // ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
   repeated TraceItemFilterWithType trace_filters = 10;
+
+  // optional, limits the number of returned rows per group. May be combined
+  // with the top-level `limit`, which caps the overall result. See LimitBy.
+  LimitBy limit_by = 11;
 }
 
 message AggregationAndFilter {

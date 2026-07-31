@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
+
+// Reads the stored platform charge for a given Stripe charge id. Returns an
+// unset `charge` when no platform charge exists for the id; callers can use
+// this to distinguish charges owned by the billing platform from charges
+// owned by the legacy billing path.
+message GetChargeByStripeIdRequest {
+  string stripe_id = 1;
+}
+
+message GetChargeByStripeIdResponse {
+  // Unset when no platform charge with the given stripe_id exists.
+  optional PlatformCharge charge = 1;
+}

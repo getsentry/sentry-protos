@@ -9,6 +9,11 @@ pub mod sentry_protos {
                 }
             }
             pub mod services {
+                pub mod account_status {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.account_status.v1.rs");
+                    }
+                }
                 pub mod billing_details {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.billing_details.v1.rs");
@@ -19,9 +24,24 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.charge.v1.rs");
                     }
                 }
+                pub mod checkout {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.checkout.v1.rs");
+                    }
+                }
                 pub mod contract {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.contract.v1.rs");
+                    }
+                }
+                pub mod contract_budget_enforcer {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.contract_budget_enforcer.v1.rs");
+                    }
+                }
+                pub mod engagement {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.engagement.v1.rs");
                     }
                 }
                 pub mod invoicer {
@@ -32,6 +52,16 @@ pub mod sentry_protos {
                 pub mod package {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.package.v1.rs");
+                    }
+                }
+                pub mod pending_change {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.pending_change.v1.rs");
+                    }
+                }
+                pub mod quotas {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.quotas.v1.rs");
                     }
                 }
                 pub mod rate_card {
@@ -63,8 +93,8 @@ pub mod sentry_protos {
         }
     }
     pub mod seer {
-        pub mod v1 {
-            include!("sentry_protos.seer.v1.rs");
+        pub mod v2alpha {
+            include!("sentry_protos.seer.v2alpha.rs");
         }
     }
     pub mod sentry {

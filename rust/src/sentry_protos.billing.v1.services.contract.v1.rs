@@ -8,6 +8,23 @@ pub struct Date {
     #[prost(uint32, tag = "3")]
     pub day: u32,
 }
+/// Configuration for a sponsored contract. The presence of this message on a
+/// BillingConfig indicates the contract is sponsored; its absence means it is
+/// not.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SponsorshipConfig {
+    #[deprecated]
+    #[prost(enumeration = "SponsoredType", tag = "1")]
+    pub sponsored_type: i32,
+    /// Whether this sponsored Contract is eligible to start trials.
+    #[prost(bool, tag = "2")]
+    pub can_trial: bool,
+    /// Whether this sponsored Contract can checkout.
+    #[prost(bool, tag = "3")]
+    pub can_checkout: bool,
+    #[prost(enumeration = "super::super::super::common::v1::SponsoredType", tag = "4")]
+    pub sponsorship_type: i32,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Address {
     #[prost(string, tag = "1")]
@@ -46,6 +63,26 @@ pub struct BillingConfig {
     #[deprecated]
     #[prost(message, optional, tag = "6")]
     pub contract_end_date: ::core::option::Option<Date>,
+    /// The number-of-months interval the contract was signed under
+    /// (1 = monthly, 12 = annual). Frozen for the life of the contract.
+    #[prost(uint32, tag = "7")]
+    pub month_interval: u32,
+    /// Whether the org is allowed to incur pay-as-you-go usage.
+    /// Credit-card orgs always support payg; invoiced orgs that should
+    /// support it are an explicit override.
+    #[prost(bool, tag = "8")]
+    pub supports_payg: bool,
+    /// Whether this is a managed (sales-assisted) subscription rather than
+    /// self-serve.
+    #[prost(bool, tag = "9")]
+    pub is_managed: bool,
+    /// Whether the org has a soft cap: usage past reserved volume is allowed
+    /// (and billed) instead of hard-stopping ingestion.
+    #[prost(bool, tag = "10")]
+    pub has_soft_cap: bool,
+    /// Sponsorship configuration. Absent means the contract is not sponsored.
+    #[prost(message, optional, tag = "11")]
+    pub sponsorship_config: ::core::option::Option<SponsorshipConfig>,
 }
 /// Indicates how the account is billed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -113,6 +150,52 @@ impl BillingChannel {
         }
     }
 }
+/// Deprecated: use sentry_protos.billing.v1.common.v1.SponsoredType. Moved to
+/// common/v1 so it can be shared with the pending_change service
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SponsoredType {
+    Unspecified = 0,
+    Education = 1,
+    OpenSource = 2,
+    NonProfit = 3,
+    FriendsAndFamily = 4,
+    FlyIo = 5,
+    Nintendo = 6,
+    Employee = 7,
+}
+impl SponsoredType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SPONSORED_TYPE_UNSPECIFIED",
+            Self::Education => "SPONSORED_TYPE_EDUCATION",
+            Self::OpenSource => "SPONSORED_TYPE_OPEN_SOURCE",
+            Self::NonProfit => "SPONSORED_TYPE_NON_PROFIT",
+            Self::FriendsAndFamily => "SPONSORED_TYPE_FRIENDS_AND_FAMILY",
+            Self::FlyIo => "SPONSORED_TYPE_FLY_IO",
+            Self::Nintendo => "SPONSORED_TYPE_NINTENDO",
+            Self::Employee => "SPONSORED_TYPE_EMPLOYEE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SPONSORED_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "SPONSORED_TYPE_EDUCATION" => Some(Self::Education),
+            "SPONSORED_TYPE_OPEN_SOURCE" => Some(Self::OpenSource),
+            "SPONSORED_TYPE_NON_PROFIT" => Some(Self::NonProfit),
+            "SPONSORED_TYPE_FRIENDS_AND_FAMILY" => Some(Self::FriendsAndFamily),
+            "SPONSORED_TYPE_FLY_IO" => Some(Self::FlyIo),
+            "SPONSORED_TYPE_NINTENDO" => Some(Self::Nintendo),
+            "SPONSORED_TYPE_EMPLOYEE" => Some(Self::Employee),
+            _ => None,
+        }
+    }
+}
 /// The external billing provider used to process payments for the contract.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -142,77 +225,6 @@ impl ExternalBillingProvider {
             _ => None,
         }
     }
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct OptionValue {
-    #[prost(oneof = "option_value::Value", tags = "1, 2, 3")]
-    pub value: ::core::option::Option<option_value::Value>,
-}
-/// Nested message and enum types in `OptionValue`.
-pub mod option_value {
-    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum Value {
-        #[prost(string, tag = "1")]
-        StringValue(::prost::alloc::string::String),
-        #[prost(int64, tag = "2")]
-        IntValue(i64),
-        #[prost(bool, tag = "3")]
-        BoolValue(bool),
-    }
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct FeatureOption {
-    #[prost(string, tag = "1")]
-    pub key: ::prost::alloc::string::String,
-    #[prost(bool, tag = "2")]
-    pub enabled: bool,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FeatureOptions {
-    #[prost(message, repeated, tag = "1")]
-    pub options: ::prost::alloc::vec::Vec<FeatureOption>,
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct MetadataOption {
-    #[prost(string, tag = "1")]
-    pub key: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub value: ::core::option::Option<OptionValue>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MetadataOptions {
-    #[prost(message, repeated, tag = "1")]
-    pub options: ::prost::alloc::vec::Vec<MetadataOption>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct ContractMetadata {
-    #[prost(uint64, tag = "1")]
-    pub id: u64,
-    #[prost(uint64, tag = "2")]
-    pub organization_id: u64,
-    /// The set of BillingRules that the BillingRulesEngine has to execute for this contract.
-    #[prost(string, tag = "3")]
-    pub ruleset_version: ::prost::alloc::string::String,
-    /// Catch-all for overrides and information not covered above.
-    #[prost(message, optional, tag = "6")]
-    pub custom_options: ::core::option::Option<MetadataOptions>,
-    #[prost(message, optional, tag = "7")]
-    pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
-    #[prost(string, tag = "9")]
-    pub package_uid: ::prost::alloc::string::String,
-    #[deprecated]
-    #[prost(uint64, tag = "8")]
-    pub package_id: u64,
-    /// Includes information like plan ID, tier, etc.
-    #[deprecated]
-    #[prost(message, optional, tag = "4")]
-    pub package_metadata: ::core::option::Option<MetadataOptions>,
-    /// Entitlements, used in frontend features or gating access to certain features.
-    ///
-    /// DEPRECATED: use billing_features instead
-    #[deprecated]
-    #[prost(message, optional, tag = "5")]
-    pub features: ::core::option::Option<FeatureOptions>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -374,12 +386,61 @@ pub struct LineItemUids {
     #[prost(string, repeated, tag = "1")]
     pub uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+/// For activating add-ons that do not necessarily require Reservation or PAYGBudget changes
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Activation {
+    #[prost(enumeration = "activation::Change", tag = "1")]
+    pub change: i32,
+}
+/// Nested message and enum types in `Activation`.
+pub mod activation {
+    /// A checkout operation on the activation. The default adds the activation. A
+    /// contract never stores CHANGE_REMOVE. It is a request to delete the activation.
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
+    #[repr(i32)]
+    pub enum Change {
+        Unspecified = 0,
+        Remove = 1,
+    }
+    impl Change {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Self::Unspecified => "CHANGE_UNSPECIFIED",
+                Self::Remove => "CHANGE_REMOVE",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "CHANGE_UNSPECIFIED" => Some(Self::Unspecified),
+                "CHANGE_REMOVE" => Some(Self::Remove),
+                _ => None,
+            }
+        }
+    }
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UserConfig {
     #[prost(message, optional, tag = "1")]
     pub payg_budget: ::core::option::Option<PaygBudget>,
     #[prost(message, optional, tag = "2")]
     pub reservation: ::core::option::Option<Reservation>,
+    #[prost(message, optional, tag = "5")]
+    pub activation: ::core::option::Option<Activation>,
     #[prost(oneof = "user_config::LineItems", tags = "3, 4")]
     pub line_items: ::core::option::Option<user_config::LineItems>,
 }
@@ -426,6 +487,117 @@ pub struct PricingConfig {
     #[prost(uint64, tag = "5")]
     pub max_spend_cents: u64,
 }
+/// This is not the same as LineItemDetails, it includes
+/// items not related to the package such as tax. Each line item may carry an
+/// optional type that classifies it (e.g. "tax") so consumers can treat it
+/// specially without inspecting the description.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct InvoiceLineItem {
+    /// Intentionally not a uint (some line items could be discounts)
+    #[prost(int64, tag = "1")]
+    pub amount_cents: i64,
+    #[prost(string, optional, tag = "2")]
+    pub description: ::core::option::Option<::prost::alloc::string::String>,
+    /// Optional classifier for the line item, e.g. "tax". Unset for ordinary
+    /// priced line items.
+    #[prost(string, optional, tag = "3")]
+    pub r#type: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Invoice {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(message, repeated, tag = "2")]
+    pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+    /// Not just a sum of line items since there may be credit applied
+    #[prost(uint64, tag = "3")]
+    pub amount_billed: u64,
+    #[prost(uint64, tag = "4")]
+    pub organization_id: u64,
+    #[prost(bool, tag = "5")]
+    pub paid: bool,
+    #[prost(message, optional, tag = "6")]
+    pub date_added: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(string, tag = "7")]
+    pub guid: ::prost::alloc::string::String,
+    #[prost(bool, tag = "8")]
+    pub needs_charged: bool,
+    #[prost(message, optional, tag = "9")]
+    pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct OptionValue {
+    #[prost(oneof = "option_value::Value", tags = "1, 2, 3")]
+    pub value: ::core::option::Option<option_value::Value>,
+}
+/// Nested message and enum types in `OptionValue`.
+pub mod option_value {
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Value {
+        #[prost(string, tag = "1")]
+        StringValue(::prost::alloc::string::String),
+        #[prost(int64, tag = "2")]
+        IntValue(i64),
+        #[prost(bool, tag = "3")]
+        BoolValue(bool),
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FeatureOption {
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(bool, tag = "2")]
+    pub enabled: bool,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FeatureOptions {
+    #[prost(message, repeated, tag = "1")]
+    pub options: ::prost::alloc::vec::Vec<FeatureOption>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MetadataOption {
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub value: ::core::option::Option<OptionValue>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MetadataOptions {
+    #[prost(message, repeated, tag = "1")]
+    pub options: ::prost::alloc::vec::Vec<MetadataOption>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ContractMetadata {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    #[prost(uint64, tag = "2")]
+    pub organization_id: u64,
+    /// The set of BillingRules that the BillingRulesEngine has to execute for this contract.
+    #[prost(string, tag = "3")]
+    pub ruleset_version: ::prost::alloc::string::String,
+    /// Catch-all for overrides and information not covered above.
+    #[prost(message, optional, tag = "6")]
+    pub custom_options: ::core::option::Option<MetadataOptions>,
+    #[prost(message, optional, tag = "7")]
+    pub billing_features: ::core::option::Option<super::super::super::FeatureOptions>,
+    #[prost(string, tag = "9")]
+    pub package_uid: ::prost::alloc::string::String,
+    #[prost(uint64, optional, tag = "10")]
+    pub previous_id: ::core::option::Option<u64>,
+    #[deprecated]
+    #[prost(uint64, tag = "8")]
+    pub package_id: u64,
+    /// Includes information like plan ID, tier, etc.
+    #[deprecated]
+    #[prost(message, optional, tag = "4")]
+    pub package_metadata: ::core::option::Option<MetadataOptions>,
+    /// Entitlements, used in frontend features or gating access to certain features.
+    ///
+    /// DEPRECATED: use billing_features instead
+    #[deprecated]
+    #[prost(message, optional, tag = "5")]
+    pub features: ::core::option::Option<FeatureOptions>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Contract {
     #[prost(message, optional, tag = "1")]
@@ -435,6 +607,82 @@ pub struct Contract {
     #[prost(message, optional, tag = "3")]
     pub pricing_config: ::core::option::Option<PricingConfig>,
 }
+/// Applies a single user config to a contract immediately, repointing the
+/// contract's live parameters. Used internally by add_user_configs (there is no
+/// standalone service endpoint), mirroring how add_pending_user_config stages a
+/// single pending config.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ApplyImmediateUserConfigRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub user_config: ::core::option::Option<UserConfig>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ApplyImmediateUserConfigResponse {
+    /// True when a new parameter was added for the config's scope; false when an
+    /// existing parameter was repointed.
+    #[prost(bool, tag = "1")]
+    pub created: bool,
+}
+/// Applies a batch of user-config changes to a contract in one call. The
+/// `immediate` configs take effect on the contract now; the `pending` configs
+/// are staged for the next billing period. Grouping both in a single request
+/// lets the contract service apply them atomically, so a checkout change that
+/// resolves to both an immediate and a pending part cannot land half-applied.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddUserConfigsRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    /// Configs applied to the contract immediately.
+    #[prost(message, repeated, tag = "2")]
+    pub immediate: ::prost::alloc::vec::Vec<UserConfig>,
+    /// Configs staged to take effect at the next billing period. Mirrors the shape
+    /// add_pending_user_config accepts so they can be forwarded without conversion.
+    #[prost(message, repeated, tag = "3")]
+    pub pending: ::prost::alloc::vec::Vec<
+        super::super::super::common::v1::PendingUserConfig,
+    >,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AddUserConfigsResponse {
+    /// Per-config results, in the same order as the request's `immediate` list.
+    #[prost(message, repeated, tag = "1")]
+    pub immediate: ::prost::alloc::vec::Vec<ApplyImmediateUserConfigResponse>,
+    /// Per-config results, in the same order as the request's `pending` list.
+    #[prost(message, repeated, tag = "2")]
+    pub pending: ::prost::alloc::vec::Vec<
+        super::super::pending_change::v1::AddPendingUserConfigResponse,
+    >,
+}
+/// Atomically claims an unpaid PlatformInvoice for charging by stamping
+/// manual_payment_started_at. The same column is claimed by both the
+/// manual Pay Now flow (via this endpoint) and the automated invoicing
+/// job (inline in get_uncharged_invoices), so this write races on the
+/// shared lock -- only one actor holds a claim at a time. Failed claims
+/// surface as updated=false, letting the caller distinguish "already
+/// paid" from "already claimed by another actor" by inspecting the
+/// invoice state.
+///
+/// The column name is legacy: this stamp was originally set only on
+/// manual Pay Now clicks, hence the "manual_payment_started_at" name.
+/// It now doubles as the shared lock for the automated path too, but
+/// the DB column and Python attribute must stay as manual_payment_started_at
+/// -- a RenameField migration is blocked by django-zero-downtime-migrations
+/// (unsafe column rename), and an attribute-only rename via db_column=
+/// would still break old worker instances mid-deploy. The Python-side
+/// surface has been generalized (charge_lock_inactive predicate,
+/// CHARGE_LOCK_DURATION constant) to reflect the shared semantics.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ClaimChargeLockRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ClaimChargeLockResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateContractRequest {
     #[prost(uint64, tag = "1")]
@@ -443,11 +691,98 @@ pub struct CreateContractRequest {
     pub package_uid: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "3")]
     pub user_configs: ::prost::alloc::vec::Vec<UserConfig>,
+    #[prost(message, repeated, tag = "4")]
+    pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+    #[prost(message, optional, tag = "5")]
+    pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+    /// The customer's chosen cadence. Must be one of the package's
+    /// supported_month_intervals. If unset, defaults to the package's first
+    /// supported interval.
+    #[prost(uint32, tag = "6")]
+    pub month_interval: u32,
+    /// How the contract is billed. If unset (BILLING_TYPE_UNSPECIFIED), the
+    /// contract defaults to credit-card.
+    #[prost(enumeration = "BillingType", tag = "7")]
+    pub billing_type: i32,
+    /// Whether usage past reserved volume is allowed (and billed) instead of
+    /// hard-stopping ingestion.
+    #[prost(bool, tag = "8")]
+    pub has_soft_cap: bool,
+    /// The tax provider's reference for the tax document opened for this invoice.
+    /// When set, the contract service records it on the created invoice as a
+    /// pending tax transaction atomically with invoice creation. Unset means no
+    /// tax document was opened.
+    #[prost(string, optional, tag = "9")]
+    pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// DEPRECATED: used sponsorship_type instead.
+    #[deprecated]
+    #[prost(enumeration = "SponsoredType", optional, tag = "10")]
+    pub sponsored_type: ::core::option::Option<i32>,
+    /// The sponsored type of the contract. If unset, then this is a non-sponsored
+    /// contract.
+    #[prost(
+        enumeration = "super::super::super::common::v1::SponsoredType",
+        optional,
+        tag = "11"
+    )]
+    pub sponsorship_type: ::core::option::Option<i32>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateContractResponse {
     #[prost(uint64, tag = "1")]
     pub id: u64,
+    #[prost(uint64, tag = "2")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "3")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(bool, tag = "4")]
+    pub needs_charge: bool,
+    #[prost(uint64, tag = "5")]
+    pub amount_billed: u64,
+}
+/// Ends a contract immediately, regardless of its scheduled end date.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EndContractImmediatelyRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EndContractImmediatelyResponse {
+    /// True if a matching contract was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
+/// Locates a PlatformInvoice by guid alone. Used by webhook handlers that have
+/// the invoice guid in a Stripe event's metadata but haven't resolved the
+/// parent organization yet -- the org-scoped GetInvoice isn't a fit. Returns
+/// just identifying fields so callers don't need to handle the full Invoice
+/// proto when all they want is to thread invoice_id / organization_id into
+/// another service call.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FindInvoiceByGuidRequest {
+    #[prost(string, tag = "1")]
+    pub invoice_guid: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FindInvoiceByGuidResponse {
+    /// Unset when no PlatformInvoice matches the guid. Callers should treat
+    /// that as "this Stripe charge belongs to legacy billing, not platform"
+    /// and fall through accordingly.
+    #[prost(uint64, optional, tag = "1")]
+    pub invoice_id: ::core::option::Option<u64>,
+    /// Set whenever `invoice_id` is set; unset otherwise.
+    #[prost(uint64, optional, tag = "2")]
+    pub organization_id: ::core::option::Option<u64>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetAllContractsForOrganizationRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAllContractsForOrganizationResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub contracts: ::prost::alloc::vec::Vec<Contract>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetContractRequest {
@@ -467,35 +802,35 @@ pub struct GetContractResponse {
     #[prost(message, optional, tag = "1")]
     pub contract: ::core::option::Option<Contract>,
 }
-/// This is not the same as LineItemDetails, it includes
-/// items not related to the package such as tax.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct InvoiceLineItem {
-    /// Intentionally not a uint (some line items could be discounts)
-    #[prost(int64, tag = "1")]
-    pub amount_cents: i64,
-    #[prost(string, optional, tag = "2")]
-    pub description: ::core::option::Option<::prost::alloc::string::String>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Invoice {
-    #[prost(uint64, tag = "1")]
-    pub invoice_id: u64,
-    #[prost(message, repeated, tag = "2")]
-    pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
-    /// Not just a sum of line items since there may be credit applied
-    #[prost(uint64, tag = "3")]
-    pub amount_billed: u64,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetInvoiceRequest {
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub organization_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetInvoiceResponse {
     #[prost(message, optional, tag = "1")]
     pub invoice: ::core::option::Option<Invoice>,
+}
+/// Batch-resolves PlatformInvoice ids to their guids. Caller is responsible
+/// for passing only ids it has the right to see; this endpoint does not
+/// filter by organization. Missing ids are silently omitted from the
+/// response.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetInvoiceGuidsForIdsRequest {
+    #[prost(uint64, repeated, tag = "1")]
+    pub invoice_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetInvoiceGuidsForIdsResponse {
+    /// Mapping from invoice id to guid for every invoice that was found.
+    /// Empty when the request supplied no ids or none of them matched.
+    #[prost(map = "uint64, string", tag = "1")]
+    pub invoice_guids: ::std::collections::HashMap<u64, ::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUnchargedInvoicesRequest {
@@ -547,6 +882,121 @@ pub struct GetUninvoicedContractsResponse {
     #[prost(uint64, repeated, tag = "3")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListInvoicesRequest {
+    /// Only invoices owned by this organization are returned.
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Maximum number of invoices to return in the response. If more invoices
+    /// match the request than this limit, the response will have truncated set
+    /// to true and next_offset populated for the following page.
+    #[prost(uint32, tag = "2")]
+    pub max_items: u32,
+    /// Zero-based offset into the result set. Pair with max_items to page
+    /// through results.
+    #[prost(uint32, optional, tag = "3")]
+    pub offset: ::core::option::Option<u32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListInvoicesResponse {
+    /// Invoices for the requested organization, ordered newest-first by
+    /// date_added.
+    #[prost(message, repeated, tag = "1")]
+    pub invoices: ::prost::alloc::vec::Vec<Invoice>,
+    /// True if additional matching invoices existed beyond max_items and were
+    /// not included in this response.
+    #[prost(bool, tag = "2")]
+    pub truncated: bool,
+    /// Offset to use in a subsequent ListInvoicesRequest to fetch the next
+    /// page. Only set when truncated is true.
+    #[prost(uint32, optional, tag = "3")]
+    pub next_offset: ::core::option::Option<u32>,
+    /// Total number of invoices matching the request, ignoring offset and
+    /// max_items.
+    #[prost(uint32, tag = "4")]
+    pub total: u32,
+}
+/// Marks an invoice as paid and clears its needs_charged flag so it is no longer
+/// returned by GetUnchargedInvoices.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MarkInvoicePaidRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MarkInvoicePaidResponse {
+    /// True if a matching invoice was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+    /// The updated invoice; unset when updated is false.
+    #[prost(message, optional, tag = "2")]
+    pub invoice: ::core::option::Option<Invoice>,
+}
+/// Records a failed charge attempt against an invoice.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordFailedChargeAttemptRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordFailedChargeAttemptResponse {
+    /// True if a matching invoice was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+    /// Post-update attempt_count on the invoice.
+    #[prost(uint32, tag = "2")]
+    pub attempt_count: u32,
+    /// Post-update next_payment_attempt on the invoice. Unset if the retry
+    /// schedule has been exhausted and no further automatic retries will run.
+    #[prost(message, optional, tag = "3")]
+    pub next_payment_attempt: ::core::option::Option<::prost_types::Timestamp>,
+}
+/// Releases the shared charge lock on an unpaid invoice by NULLing
+/// manual_payment_started_at. Used by the manual Pay Now endpoint when
+/// the Stripe PaymentIntent.create call fails after the lock was
+/// acquired -- releasing keeps the inline-cutoff window from delaying
+/// automated retries by up to 24h. See endpoint_claim_charge_lock.proto
+/// for the paired claim endpoint and the legacy column-name context.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseChargeLockRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseChargeLockResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
+/// DEPRECATED: replaced by ReleaseChargeLockRequest /
+/// ReleaseChargeLockResponse in endpoint_release_charge_lock.proto.
+/// The rename generalized the semantics from a "manual payment lock"
+/// (implying manual-only) to a shared "charge lock" that both the
+/// manual Pay Now flow and the automated invoicing job write against
+/// the same column (manual_payment_started_at).
+///
+/// The messages are retained here (rather than being deleted) so buf's
+/// breaking-change check stays green while consumers migrate. Remove on the
+/// next major version bump.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseManualPaymentLockRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseManualPaymentLockResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetryChargeRequest {
+    #[prost(string, tag = "1")]
+    pub invoice_guid: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetryChargeResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
 /// Creates a new contract for a new billing period. Closes out the current contract by
 /// creating an invoice and setting the last usage date
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -557,6 +1007,29 @@ pub struct RolloverContractRequest {
     pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, repeated, tag = "3")]
     pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+    #[prost(message, optional, tag = "4")]
+    pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+    /// The pending change to apply to the new contract, if any. Unset means no
+    /// pending change is being applied during this rollover.
+    #[prost(message, optional, tag = "5")]
+    pub pending_change: ::core::option::Option<
+        super::super::super::common::v1::PendingChange,
+    >,
+    /// The tax provider's reference for the tax document opened for this invoice.
+    /// When set, the contract service records it on the new invoice as a pending
+    /// tax transaction atomically with invoice creation, so the document can later
+    /// be committed or voided. Unset means no tax document was opened.
+    #[prost(string, optional, tag = "7")]
+    pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// Roll the contract over as of now instead of at its period end: the current
+    /// contract is closed immediately and the new contract starts now. Used for
+    /// contract changes that take effect immediately (e.g. checkout upgrades).
+    /// The request's pending_change is applied to the new contract regardless of
+    /// whether the term was due to renew; a change that keeps the billing
+    /// interval stays co-terminous with the current term, while an interval
+    /// change (or an already-ended term) starts a fresh term now.
+    #[prost(bool, tag = "8")]
+    pub immediate: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
@@ -566,4 +1039,25 @@ pub struct RolloverContractResponse {
     pub needs_charge: bool,
     #[prost(uint64, tag = "3")]
     pub amount_billed: u64,
+    #[prost(uint64, tag = "4")]
+    pub new_contract_id: u64,
+}
+/// DEPRECATED: replaced by ClaimChargeLockRequest / ClaimChargeLockResponse
+/// in endpoint_claim_charge_lock.proto. The rename generalized the
+/// semantics -- the same column (manual_payment_started_at) is now
+/// claimed by both the manual Pay Now flow and the automated invoicing
+/// job, so "start_manual_payment" no longer describes the shared lock.
+///
+/// The messages are retained here (rather than being deleted) so buf's
+/// breaking-change check stays green while consumers migrate. Remove on the
+/// next major version bump.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StartManualPaymentRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StartManualPaymentResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
 }

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
+
+message HandleChargeSucceededRequest {
+  sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 1;
+  optional uint64 invoice_id = 2;
+  optional uint64 organization_id = 3;
+}
+
+message HandleChargeSucceededResponse {
+  bool handled = 1;
+}

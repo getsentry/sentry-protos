@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.snuba.v1;
 
+import "google/protobuf/timestamp.proto";
 import "sentry_protos/snuba/v1/request_common.proto";
 import "sentry_protos/snuba/v1/trace_item_attribute.proto";
 import "sentry_protos/snuba/v1/trace_item_filter.proto";
@@ -13,6 +14,72 @@ import "sentry_protos/snuba/v1/trace_item_filter.proto";
 // TraceItem are things like: span, error, log, replay
 // TraceItemAttributes could be things like: sentry.duration,user_id cart_total, etc.
 message TraceItemAttributeNamesRequest {
+  // OrderBy controls how the returned attribute names are ordered.
+  //
+  // When `order_by` is not set on the request, attribute names are returned
+  // in alphabetical (ascending by name) order. This is the historical default
+  // and is preserved for callers that predate this field.
+  message OrderBy {
+    // Column identifies which property of an attribute to order by.
+    enum Column {
+      // Defaults to ordering by COLUMN_NAME (alphabetical). This keeps the
+      // behaviour backwards compatible when `order_by` is left unset.
+      COLUMN_UNSPECIFIED = 0;
+      // Order by the attribute name (alphabetical).
+      COLUMN_NAME = 1;
+      // Order by how frequently the attribute occurs across the matched trace
+      // items (its count).
+      COLUMN_COUNT = 2;
+      // Order by when the attribute was most recently seen across the matched
+      // trace items (its last_seen timestamp). Combine with
+      // `descending = true` for most-recently-used first.
+      COLUMN_LAST_SEEN = 3;
+    }
+
+    // Sort selects which sort order is applied when ordering by a textual
+    // column (i.e. COLUMN_NAME). It has no effect when ordering by a
+    // non-textual column such as COLUMN_COUNT or COLUMN_LAST_SEEN.
+    enum Sort {
+      // Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+      // backwards compatible when `sort` is left unset.
+      SORT_UNSPECIFIED = 0;
+      // Default lexicographic ordering: names are compared by their Unicode
+      // code points, so e.g. "item10" sorts before "item2".
+      SORT_DEFAULT = 1;
+      // Natural ordering: embedded runs of digits are compared by their
+      // numeric value, so e.g. "item2" sorts before "item10".
+      SORT_NATURAL = 2;
+      // Semantic-version ordering: values are parsed as semantic versions
+      // (https://semver.org) and compared component by component, so e.g.
+      // "1.9.0" sorts before "1.10.0".
+      SORT_SEMVER = 3;
+    }
+
+    // The column to order the returned attribute names by.
+    Column column = 1;
+
+    // When true, results are returned in descending order. Defaults to
+    // ascending. For example, to order by frequency with the most common
+    // attributes first, set `column = COLUMN_COUNT` and `descending = true`.
+    bool descending = 2;
+
+    // The sort order to apply when ordering by a textual column (COLUMN_NAME).
+    // Defaults to SORT_DEFAULT (lexicographic) when unset, preserving the
+    // historical behaviour. Set to SORT_NATURAL to order alphanumeric names
+    // naturally (e.g. "item2" before "item10"). Ignored for COLUMN_COUNT and
+    // COLUMN_LAST_SEEN.
+    Sort sort = 3;
+  }
+
+  enum MatchMode {
+    // Defaults to match all which is the current behaviour
+    MATCH_MODE_UNSPECIFIED = 0;
+    // All attributes in the filter must be matched when searching for results
+    MATCH_MODE_ALL = 1;
+    // At least one attribute in the filter should be matched when searching
+    MATCH_MODE_ANY = 2;
+  }
+
   // metadata about the request
   // this is where you specify organization, project, time range etc.
   RequestMeta meta = 1;
@@ -38,6 +105,14 @@ message TraceItemAttributeNamesRequest {
   // This is a BEST-EFFORT operation. If no co-occurring keys are found within
   // 1 second, the endpoint returns without taking the intersecing attributes into account
   TraceItemFilter intersecting_attributes_filter = 8;
+
+  // optional, controls how the returned attribute names are ordered.
+  // When unset, names are returned alphabetically (ascending), which preserves
+  // the historical default for existing callers. Set this to opt in to a
+  // different ordering, e.g. by attribute frequency.
+  OrderBy order_by = 9;
+
+  MatchMode match_mode = 10;
 }
 
 // TraceItemAttributeNamesResponse is the response returned by the TraceItemAttributeNames endpoint.
@@ -46,6 +121,24 @@ message TraceItemAttributeNamesResponse {
   message Attribute {
     string name = 1;
     AttributeKey.Type type = 2;
+
+    // optional, how frequently this attribute occurs across the matched trace
+    // items. Only populated when the request opts in to count ordering
+    // (order_by.column = COLUMN_COUNT); unset otherwise. The presence of this
+    // field distinguishes "not computed" from a genuine count of zero.
+    optional uint64 count = 3;
+
+    // optional, the most recent time this attribute was seen across the
+    // matched trace items, within the request's time range. Only populated
+    // when the request opts into an ordering that aggregates the attributes
+    // (order_by.column = COLUMN_COUNT or COLUMN_LAST_SEEN); unset otherwise.
+    // Being unset therefore means "not computed" rather than "never seen".
+    //
+    // This is a best-effort, approximate value: it is derived from a periodic
+    // roll-up rather than the trace items themselves, so it can lag by a
+    // small number of seconds. Use it for recency ranking, not as an exact
+    // event timestamp.
+    google.protobuf.Timestamp last_seen = 4;
   }
   // all attributes that matched the filters in the request
   repeated Attribute attributes = 1;
@@ -64,6 +157,59 @@ message TraceItemAttributeNamesResponse {
 // This endpoint only supports string values, it does not make sense
 // to get all the possible values of a numerical attribute
 message TraceItemAttributeValuesRequest {
+  // OrderBy controls how the returned values are ordered.
+  //
+  // When `order_by` is not set on the request, values are returned in
+  // alphabetical (ascending) order. This is the historical default and is
+  // preserved for callers that predate this field.
+  message OrderBy {
+    // Column identifies which property of a value to order by.
+    enum Column {
+      // Defaults to ordering by COLUMN_VALUE (alphabetical). This keeps the
+      // behaviour backwards compatible when `order_by` is left unset.
+      COLUMN_UNSPECIFIED = 0;
+      // Order by the value itself (alphabetical).
+      COLUMN_VALUE = 1;
+      // Order by how frequently the value occurs across the matched trace
+      // items (its count). The counts are returned in the response's `counts`
+      // field.
+      COLUMN_COUNT = 2;
+    }
+
+    // Sort selects which sort order is applied when ordering by a textual
+    // column (i.e. COLUMN_VALUE). It has no effect when ordering by a numeric
+    // column such as COLUMN_COUNT.
+    enum Sort {
+      // Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+      // backwards compatible when `sort` is left unset.
+      SORT_UNSPECIFIED = 0;
+      // Default lexicographic ordering: values are compared by their Unicode
+      // code points, so e.g. "item10" sorts before "item2".
+      SORT_DEFAULT = 1;
+      // Natural ordering: embedded runs of digits are compared by their
+      // numeric value, so e.g. "item2" sorts before "item10".
+      SORT_NATURAL = 2;
+      // Semantic-version ordering: values are parsed as semantic versions
+      // (https://semver.org) and compared component by component, so e.g.
+      // "1.9.0" sorts before "1.10.0".
+      SORT_SEMVER = 3;
+    }
+
+    // The column to order the returned values by.
+    Column column = 1;
+
+    // When true, results are returned in descending order. Defaults to
+    // ascending. For example, to order by frequency with the most common
+    // values first, set `column = COLUMN_COUNT` and `descending = true`.
+    bool descending = 2;
+
+    // The sort order to apply when ordering by a textual column (COLUMN_VALUE).
+    // Defaults to SORT_DEFAULT (lexicographic) when unset, preserving the
+    // historical behaviour. Set to SORT_NATURAL to order alphanumeric values
+    // naturally (e.g. "item2" before "item10"). Ignored for COLUMN_COUNT.
+    Sort sort = 3;
+  }
+
   // metadata about the request
   // this is where you specify organization, project, time range etc.
   RequestMeta meta = 1;
@@ -84,6 +230,13 @@ message TraceItemAttributeValuesRequest {
 
   // optional, used for pagination, the next page token will be returned in the response
   PageToken page_token = 6;
+
+  // optional, controls how the returned values are ordered.
+  // When unset, values are returned alphabetically (ascending), which
+  // preserves the historical default for existing callers. Set this to opt in
+  // to a different ordering, e.g. by value frequency (the response already
+  // returns the corresponding `counts`).
+  OrderBy order_by = 7;
 }
 
 // TraceItemAttributeValuesResponse is a response from the TraceItemAttributeValues endpoint
@@ -91,6 +244,7 @@ message TraceItemAttributeValuesRequest {
 message TraceItemAttributeValuesResponse {
   // all the values that matched the criteria specified in the request
   repeated string values = 1;
+  repeated int64 counts = 3;
 
   // page token for the next page of results
   PageToken page_token = 6;

@@ -3,18 +3,41 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/address.proto";
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 
 // Creates a new contract for a new billing period. Closes out the current contract by
 // creating an invoice and setting the last usage date
 message RolloverContractRequest {
-    uint64 contract_id = 1;
-    google.protobuf.Timestamp last_usage_ts = 2;
-    repeated InvoiceLineItem line_items = 3;
+  uint64 contract_id = 1;
+  google.protobuf.Timestamp last_usage_ts = 2;
+  repeated InvoiceLineItem line_items = 3;
+  sentry_protos.billing.v1.common.v1.Address address = 4;
+
+  // The pending change to apply to the new contract, if any. Unset means no
+  // pending change is being applied during this rollover.
+  optional sentry_protos.billing.v1.common.v1.PendingChange pending_change = 5;
+
+  // The tax provider's reference for the tax document opened for this invoice.
+  // When set, the contract service records it on the new invoice as a pending
+  // tax transaction atomically with invoice creation, so the document can later
+  // be committed or voided. Unset means no tax document was opened.
+  optional string tax_transaction_code = 7;
+
+  // Roll the contract over as of now instead of at its period end: the current
+  // contract is closed immediately and the new contract starts now. Used for
+  // contract changes that take effect immediately (e.g. checkout upgrades).
+  // The request's pending_change is applied to the new contract regardless of
+  // whether the term was due to renew; a change that keeps the billing
+  // interval stays co-terminous with the current term, while an interval
+  // change (or an already-ended term) starts a fresh term now.
+  bool immediate = 8;
 }
 
 message RolloverContractResponse {
-    uint64 invoice_id = 1;
-    bool needs_charge = 2;
-    uint64 amount_billed = 3;
+  uint64 invoice_id = 1;
+  bool needs_charge = 2;
+  uint64 amount_billed = 3;
+  uint64 new_contract_id = 4;
 }

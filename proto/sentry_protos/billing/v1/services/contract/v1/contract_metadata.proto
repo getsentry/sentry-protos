@@ -44,6 +44,8 @@ message ContractMetadata {
   sentry_protos.billing.v1.FeatureOptions billing_features = 7;
   string package_uid = 9;
 
+  optional uint64 previous_id = 10;
+
   uint64 package_id = 8 [deprecated = true];
   // Includes information like plan ID, tier, etc.
   MetadataOptions package_metadata = 4 [deprecated = true];

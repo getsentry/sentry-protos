@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "Generated python code for sentry-protos"
 readme = "README.md"
 license = {file = "LICENSE.md"}
-requires-python = ">3.10"
+requires-python = ">=3.11"
 dependencies = [
     "protobuf>=5.27.3,<6",
     "grpcio>=1.59,<2",

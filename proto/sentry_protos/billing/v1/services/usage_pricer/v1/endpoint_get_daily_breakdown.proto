@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.usage_pricer.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/usage_data.proto";
+
+// Compiles per-day, per-line-item usage breakdowns spanning one or more
+// contracts. UsagePricer evaluates each contract's package
+// ``BillableMetric.expression`` once per outcome field of the raw
+// usage, so callers receive the package-projected ``UsageData`` view
+// rather than the raw outcomes returned by ``BillingUsageService``.
+//
+// This is the "non-pricing" derived view UsagePricer exposes -- the
+// projection step pricing already performs internally, lifted out so
+// other presentation services (e.g. ChargeService for CSV / UI) can
+// consume it without re-implementing evaluation.
+message GetDailyBreakdownRequest {
+  // The contracts whose daily breakdowns should be returned.
+  repeated string contract_ids = 1;
+}
+
+// One line item's projected per-outcome quantities on a given date.
+message LineItemDailyOutcomes {
+  // Package line item uid (UsagePricer's native vocabulary).
+  string line_item_uid = 1;
+
+  // The seven outcome fields, each populated by evaluating the line
+  // item's ``BillableMetric.expression`` against that outcome's raw
+  // counts in the day's usage.
+  sentry_protos.billing.v1.UsageData outcomes = 2;
+}
+
+// One row per calendar date spanning the union of the requested
+// contracts' on-demand periods.
+message DailyLineItemOutcomes {
+  sentry_protos.billing.v1.Date date = 1;
+
+  // Per-line-item outcomes on this date. Every metered line item from
+  // the union of the requested contracts' packages is emitted,
+  // including line items with zero usage, so consumers can render
+  // zero-rows without a separate zero-fill pass.
+  repeated LineItemDailyOutcomes line_items = 2;
+}
+
+message GetDailyBreakdownResponse {
+  // Days in ascending date order. A given calendar date appears at
+  // most once regardless of how many of the requested contracts
+  // overlap it (BillingUsageService reports usage at calendar-day
+  // granularity, so a day straddling a mid-day rollover is still one
+  // row carrying the day's full outcomes). Contract ids from the
+  // request that do not resolve contribute no rows.
+  repeated DailyLineItemOutcomes days = 1;
+}

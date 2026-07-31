@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_details.v1;
+
+// Fetches the location facts cached from the organization's default card on
+// file. Reads only the webhook-synced payment method row — never Stripe — so
+// callers on the invoicing path don't block on a vendor round-trip.
+message GetCardLocationRequest {
+  uint64 organization_id = 1;
+}
+
+message GetCardLocationResponse {
+  // Postal code recorded for the default card on file. Unset when there is no
+  // card, or the card has no postal code.
+  optional string postal_code = 1;
+  // Country where the card was issued (not the customer's billing country).
+  // Unset when there is no card on file.
+  optional string country_code = 2;
+}

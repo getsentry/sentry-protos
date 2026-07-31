@@ -18,8 +18,23 @@ pub struct Address {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillingDetails {
+    #[deprecated]
     #[prost(message, optional, tag = "1")]
     pub address: ::core::option::Option<Address>,
+    #[prost(string, tag = "2")]
+    pub display_address: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "3")]
+    pub company_name: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "4")]
+    pub billing_email: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "5")]
+    pub billing_address: ::core::option::Option<
+        super::super::super::common::v1::Address,
+    >,
+    /// The customer's tax registration number (e.g. VAT ID) on file, used when
+    /// determining tax treatment for the customer. Unset if none is on file.
+    #[prost(string, optional, tag = "6")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetBillingDetailsRequest {
@@ -30,4 +45,60 @@ pub struct GetBillingDetailsRequest {
 pub struct GetBillingDetailsResponse {
     #[prost(message, optional, tag = "1")]
     pub billing_details: ::core::option::Option<BillingDetails>,
+}
+/// Fetches the location facts cached from the organization's default card on
+/// file. Reads only the webhook-synced payment method row — never Stripe — so
+/// callers on the invoicing path don't block on a vendor round-trip.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetCardLocationRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetCardLocationResponse {
+    /// Postal code recorded for the default card on file. Unset when there is no
+    /// card, or the card has no postal code.
+    #[prost(string, optional, tag = "1")]
+    pub postal_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// Country where the card was issued (not the customer's billing country).
+    /// Unset when there is no card on file.
+    #[prost(string, optional, tag = "2")]
+    pub country_code: ::core::option::Option<::prost::alloc::string::String>,
+}
+/// Fetches lightweight identity fields for an organization. Used by callers
+/// that need slug/name/default_user_id without pulling the full Organization
+/// record across service boundaries.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrganizationMetadataRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrganizationMetadataResponse {
+    #[prost(string, tag = "1")]
+    pub slug: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub name: ::prost::alloc::string::String,
+    /// Unset when the organization has no default owner.
+    #[prost(uint64, optional, tag = "3")]
+    pub default_user_id: ::core::option::Option<u64>,
+    /// Email of the default owner.
+    #[prost(string, optional, tag = "4")]
+    pub default_owner_email: ::core::option::Option<::prost::alloc::string::String>,
+    /// Emails of every active org member whose role grants the "org:billing"
+    /// scope (e.g. owner, manager, billing).
+    #[prost(string, repeated, tag = "5")]
+    pub billing_role_emails: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetStripePaymentDataRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetStripePaymentDataResponse {
+    #[prost(message, optional, tag = "1")]
+    pub stripe_payment_data: ::core::option::Option<
+        super::super::super::common::v1::StripePaymentData,
+    >,
 }

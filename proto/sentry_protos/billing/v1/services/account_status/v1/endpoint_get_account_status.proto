@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.account_status.v1;
+
+import "sentry_protos/billing/v1/services/account_status/v1/account_status.proto";
+
+message GetAccountStatusRequest {
+  uint64 organization_id = 1;
+}
+
+message GetAccountStatusResponse {
+  AccountStatus account_status = 1;
+}

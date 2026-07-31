@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+import "sentry_protos/billing/v1/services/charge/v1/charge.proto";
+
+// Lists every recorded refund associated with the charges for a single
+// platform invoice. Callers in the presentation layer use this to render
+// invoice-level refund state without crossing the charge service boundary.
+message ListRefundsByInvoiceRequest {
+  uint64 invoice_id = 1;
+}
+
+message ListRefundsByInvoiceResponse {
+  // Refunds ordered by ``date_added_st`` ascending. Empty when the invoice
+  // has no refunds.
+  repeated PlatformRefund refunds = 1;
+}

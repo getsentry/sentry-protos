@@ -3,9 +3,12 @@ from google.protobuf.timestamp_pb2 import Timestamp
 from sentry_protos.billing.v1.data_category_pb2 import DataCategory
 from sentry_protos.billing.v1.date_pb2 import Date
 from sentry_protos.billing.v1.usage_data_pb2 import UsageData
+from sentry_protos.billing.v1.seat_category_pb2 import SeatCategory
 from sentry_protos.billing.v1.services.usage.v1.endpoint_usage_pb2 import (
+    CategorySeatUsage,
     CategoryUsage,
     DailyUsage,
+    DailySeatUsage,
     GetUsageRequest,
     GetUsageResponse,
 )
@@ -102,6 +105,28 @@ def test_get_usage_request_has_field():
     assert request_with_times.HasField("end")
 
 
+def test_daily_seat_usage():
+    day = Date(year=2024, month=1, day=1)
+    monitor_seats = CategorySeatUsage(
+        category=SeatCategory.SEAT_CATEGORY_MONITOR,
+        count=5,
+    )
+    uptime_seats = CategorySeatUsage(
+        category=SeatCategory.SEAT_CATEGORY_UPTIME,
+        count=3,
+    )
+    daily = DailySeatUsage(date=day, seats=[monitor_seats, uptime_seats])
+
+    assert daily.date.year == 2024
+    assert daily.date.month == 1
+    assert daily.date.day == 1
+    assert len(daily.seats) == 2
+    assert daily.seats[0].category == SeatCategory.SEAT_CATEGORY_MONITOR
+    assert daily.seats[0].count == 5
+    assert daily.seats[1].category == SeatCategory.SEAT_CATEGORY_UPTIME
+    assert daily.seats[1].count == 3
+
+
 def test_get_usage_response():
     day1 = DailyUsage(
         date=Date(year=2024, month=1, day=1),
@@ -125,7 +150,32 @@ def test_get_usage_response():
             ),
         ],
     )
-    response = GetUsageResponse(days=[day1, day2])
+    seat_day1 = DailySeatUsage(
+        date=Date(year=2024, month=1, day=1),
+        seats=[
+            CategorySeatUsage(
+                category=SeatCategory.SEAT_CATEGORY_MONITOR,
+                count=5,
+            ),
+        ],
+    )
+    seat_day2 = DailySeatUsage(
+        date=Date(year=2024, month=1, day=2),
+        seats=[
+            CategorySeatUsage(
+                category=SeatCategory.SEAT_CATEGORY_MONITOR,
+                count=7,
+            ),
+            CategorySeatUsage(
+                category=SeatCategory.SEAT_CATEGORY_UPTIME,
+                count=3,
+            ),
+        ],
+    )
+    response = GetUsageResponse(
+        days=[day1, day2],
+        seat_days=[seat_day1, seat_day2],
+    )
 
     assert len(response.days) == 2
     assert len(response.days[0].usage) == 1
@@ -134,10 +184,18 @@ def test_get_usage_response():
     assert response.days[1].usage[1].category == DataCategory.DATA_CATEGORY_TRANSACTION
     assert response.days[1].usage[1].data.over_quota == 200
 
+    assert len(response.seat_days) == 2
+    assert response.seat_days[0].date.year == 2024
+    assert len(response.seat_days[0].seats) == 1
+    assert response.seat_days[0].seats[0].count == 5
+    assert len(response.seat_days[1].seats) == 2
+    assert response.seat_days[1].seats[1].category == SeatCategory.SEAT_CATEGORY_UPTIME
+
 
 def test_get_usage_response_empty():
     response = GetUsageResponse()
     assert len(response.days) == 0
+    assert len(response.seat_days) == 0
 
 
 def test_get_usage_response_serialization_roundtrip():
@@ -149,6 +207,17 @@ def test_get_usage_response_serialization_roundtrip():
                     CategoryUsage(
                         category=DataCategory.DATA_CATEGORY_SPAN,
                         data=UsageData(total=10000, accepted=9500, dynamic_sampling=500),
+                    ),
+                ],
+            ),
+        ],
+        seat_days=[
+            DailySeatUsage(
+                date=Date(year=2024, month=1, day=1),
+                seats=[
+                    CategorySeatUsage(
+                        category=SeatCategory.SEAT_CATEGORY_MONITOR,
+                        count=10,
                     ),
                 ],
             ),
@@ -165,3 +234,8 @@ def test_get_usage_response_serialization_roundtrip():
     assert deserialized.days[0].usage[0].category == DataCategory.DATA_CATEGORY_SPAN
     assert deserialized.days[0].usage[0].data.total == 10000
     assert deserialized.days[0].usage[0].data.dynamic_sampling == 500
+
+    assert len(deserialized.seat_days) == 1
+    assert deserialized.seat_days[0].date.year == 2024
+    assert deserialized.seat_days[0].seats[0].category == SeatCategory.SEAT_CATEGORY_MONITOR
+    assert deserialized.seat_days[0].seats[0].count == 10

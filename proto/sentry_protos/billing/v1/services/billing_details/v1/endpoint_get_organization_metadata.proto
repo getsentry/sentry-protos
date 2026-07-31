@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_details.v1;
+
+// Fetches lightweight identity fields for an organization. Used by callers
+// that need slug/name/default_user_id without pulling the full Organization
+// record across service boundaries.
+message GetOrganizationMetadataRequest {
+  uint64 organization_id = 1;
+}
+
+message GetOrganizationMetadataResponse {
+  string slug = 1;
+  string name = 2;
+  // Unset when the organization has no default owner.
+  optional uint64 default_user_id = 3;
+  // Email of the default owner.
+  optional string default_owner_email = 4;
+  // Emails of every active org member whose role grants the "org:billing"
+  // scope (e.g. owner, manager, billing).
+  repeated string billing_role_emails = 5;
+}

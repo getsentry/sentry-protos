@@ -35,7 +35,13 @@ pub mod attribute_key {
         /// note: all numbers are stored as float64, so massive integers can be rounded. USE STRING FOR IDS.
         Int = 4,
         Double = 5,
+        /// deprecated, use TYPE_ARRAY_INT/DOUBLE/BOOL/STRING instead
+        #[deprecated]
         Array = 6,
+        ArrayInt = 7,
+        ArrayDouble = 8,
+        ArrayBool = 9,
+        ArrayString = 10,
     }
     impl Type {
         /// String value of the enum field names used in the ProtoBuf definition.
@@ -51,7 +57,12 @@ pub mod attribute_key {
                 Self::Float => "TYPE_FLOAT",
                 Self::Int => "TYPE_INT",
                 Self::Double => "TYPE_DOUBLE",
+                #[allow(deprecated)]
                 Self::Array => "TYPE_ARRAY",
+                Self::ArrayInt => "TYPE_ARRAY_INT",
+                Self::ArrayDouble => "TYPE_ARRAY_DOUBLE",
+                Self::ArrayBool => "TYPE_ARRAY_BOOL",
+                Self::ArrayString => "TYPE_ARRAY_STRING",
             }
         }
         /// Creates an enum from field names used in the ProtoBuf definition.
@@ -63,7 +74,11 @@ pub mod attribute_key {
                 "TYPE_FLOAT" => Some(#[allow(deprecated)] Self::Float),
                 "TYPE_INT" => Some(Self::Int),
                 "TYPE_DOUBLE" => Some(Self::Double),
-                "TYPE_ARRAY" => Some(Self::Array),
+                "TYPE_ARRAY" => Some(#[allow(deprecated)] Self::Array),
+                "TYPE_ARRAY_INT" => Some(Self::ArrayInt),
+                "TYPE_ARRAY_DOUBLE" => Some(Self::ArrayDouble),
+                "TYPE_ARRAY_BOOL" => Some(Self::ArrayBool),
+                "TYPE_ARRAY_STRING" => Some(Self::ArrayString),
                 _ => None,
             }
         }
@@ -459,6 +474,10 @@ pub mod comparison_filter {
         In = 9,
         /// array only
         NotIn = 10,
+        /// array attribute_key type only
+        HasAny = 11,
+        /// array attribute_key type only
+        HasAll = 12,
     }
     impl Op {
         /// String value of the enum field names used in the ProtoBuf definition.
@@ -478,6 +497,8 @@ pub mod comparison_filter {
                 Self::NotLike => "OP_NOT_LIKE",
                 Self::In => "OP_IN",
                 Self::NotIn => "OP_NOT_IN",
+                Self::HasAny => "OP_HAS_ANY",
+                Self::HasAll => "OP_HAS_ALL",
             }
         }
         /// Creates an enum from field names used in the ProtoBuf definition.
@@ -494,6 +515,8 @@ pub mod comparison_filter {
                 "OP_NOT_LIKE" => Some(Self::NotLike),
                 "OP_IN" => Some(Self::In),
                 "OP_NOT_IN" => Some(Self::NotIn),
+                "OP_HAS_ANY" => Some(Self::HasAny),
+                "OP_HAS_ALL" => Some(Self::HasAll),
                 _ => None,
             }
         }
@@ -1610,6 +1633,69 @@ pub mod get_traces_request {
         pub key: i32,
         #[prost(bool, tag = "2")]
         pub descending: bool,
+        /// The sort order to apply when ordering by a textual attribute. Defaults
+        /// to SORT_DEFAULT (lexicographic) when unset, preserving the historical
+        /// behaviour. Set to SORT_NATURAL to order alphanumeric values naturally
+        /// (e.g. "item2" before "item10"). Ignored for numeric attributes.
+        #[prost(enumeration = "order_by::Sort", tag = "3")]
+        pub sort: i32,
+    }
+    /// Nested message and enum types in `OrderBy`.
+    pub mod order_by {
+        /// Sort selects which sort order is applied when ordering by a textual
+        /// attribute (e.g. KEY_ROOT_SPAN_NAME). It has no effect when ordering by
+        /// a numeric attribute such as KEY_ROOT_SPAN_DURATION_MS.
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            PartialOrd,
+            Ord,
+            ::prost::Enumeration
+        )]
+        #[repr(i32)]
+        pub enum Sort {
+            /// Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+            /// backwards compatible when `sort` is left unset.
+            Unspecified = 0,
+            /// Default lexicographic ordering: values are compared by their Unicode
+            /// code points, so e.g. "item10" sorts before "item2".
+            Default = 1,
+            /// Natural ordering: embedded runs of digits are compared by their
+            /// numeric value, so e.g. "item2" sorts before "item10".
+            Natural = 2,
+            /// Semantic-version ordering: values are parsed as semantic versions
+            /// (<https://semver.org>) and compared component by component, so e.g.
+            /// "1.9.0" sorts before "1.10.0".
+            Semver = 3,
+        }
+        impl Sort {
+            /// String value of the enum field names used in the ProtoBuf definition.
+            ///
+            /// The values are not transformed in any way and thus are considered stable
+            /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+            pub fn as_str_name(&self) -> &'static str {
+                match self {
+                    Self::Unspecified => "SORT_UNSPECIFIED",
+                    Self::Default => "SORT_DEFAULT",
+                    Self::Natural => "SORT_NATURAL",
+                    Self::Semver => "SORT_SEMVER",
+                }
+            }
+            /// Creates an enum from field names used in the ProtoBuf definition.
+            pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+                match value {
+                    "SORT_UNSPECIFIED" => Some(Self::Unspecified),
+                    "SORT_DEFAULT" => Some(Self::Default),
+                    "SORT_NATURAL" => Some(Self::Natural),
+                    "SORT_SEMVER" => Some(Self::Semver),
+                    _ => None,
+                }
+            }
+        }
     }
     /// TraceFilter specifies conditions to apply on the items contained in a trace.
     #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1681,6 +1767,190 @@ pub struct TraceItemAttributeNamesRequest {
     /// 1 second, the endpoint returns without taking the intersecing attributes into account
     #[prost(message, optional, tag = "8")]
     pub intersecting_attributes_filter: ::core::option::Option<TraceItemFilter>,
+    /// optional, controls how the returned attribute names are ordered.
+    /// When unset, names are returned alphabetically (ascending), which preserves
+    /// the historical default for existing callers. Set this to opt in to a
+    /// different ordering, e.g. by attribute frequency.
+    #[prost(message, optional, tag = "9")]
+    pub order_by: ::core::option::Option<trace_item_attribute_names_request::OrderBy>,
+    #[prost(enumeration = "trace_item_attribute_names_request::MatchMode", tag = "10")]
+    pub match_mode: i32,
+}
+/// Nested message and enum types in `TraceItemAttributeNamesRequest`.
+pub mod trace_item_attribute_names_request {
+    /// OrderBy controls how the returned attribute names are ordered.
+    ///
+    /// When `order_by` is not set on the request, attribute names are returned
+    /// in alphabetical (ascending by name) order. This is the historical default
+    /// and is preserved for callers that predate this field.
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+    pub struct OrderBy {
+        /// The column to order the returned attribute names by.
+        #[prost(enumeration = "order_by::Column", tag = "1")]
+        pub column: i32,
+        /// When true, results are returned in descending order. Defaults to
+        /// ascending. For example, to order by frequency with the most common
+        /// attributes first, set `column = COLUMN_COUNT` and `descending = true`.
+        #[prost(bool, tag = "2")]
+        pub descending: bool,
+        /// The sort order to apply when ordering by a textual column (COLUMN_NAME).
+        /// Defaults to SORT_DEFAULT (lexicographic) when unset, preserving the
+        /// historical behaviour. Set to SORT_NATURAL to order alphanumeric names
+        /// naturally (e.g. "item2" before "item10"). Ignored for COLUMN_COUNT and
+        /// COLUMN_LAST_SEEN.
+        #[prost(enumeration = "order_by::Sort", tag = "3")]
+        pub sort: i32,
+    }
+    /// Nested message and enum types in `OrderBy`.
+    pub mod order_by {
+        /// Column identifies which property of an attribute to order by.
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            PartialOrd,
+            Ord,
+            ::prost::Enumeration
+        )]
+        #[repr(i32)]
+        pub enum Column {
+            /// Defaults to ordering by COLUMN_NAME (alphabetical). This keeps the
+            /// behaviour backwards compatible when `order_by` is left unset.
+            Unspecified = 0,
+            /// Order by the attribute name (alphabetical).
+            Name = 1,
+            /// Order by how frequently the attribute occurs across the matched trace
+            /// items (its count).
+            Count = 2,
+            /// Order by when the attribute was most recently seen across the matched
+            /// trace items (its last_seen timestamp). Combine with
+            /// `descending = true` for most-recently-used first.
+            LastSeen = 3,
+        }
+        impl Column {
+            /// String value of the enum field names used in the ProtoBuf definition.
+            ///
+            /// The values are not transformed in any way and thus are considered stable
+            /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+            pub fn as_str_name(&self) -> &'static str {
+                match self {
+                    Self::Unspecified => "COLUMN_UNSPECIFIED",
+                    Self::Name => "COLUMN_NAME",
+                    Self::Count => "COLUMN_COUNT",
+                    Self::LastSeen => "COLUMN_LAST_SEEN",
+                }
+            }
+            /// Creates an enum from field names used in the ProtoBuf definition.
+            pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+                match value {
+                    "COLUMN_UNSPECIFIED" => Some(Self::Unspecified),
+                    "COLUMN_NAME" => Some(Self::Name),
+                    "COLUMN_COUNT" => Some(Self::Count),
+                    "COLUMN_LAST_SEEN" => Some(Self::LastSeen),
+                    _ => None,
+                }
+            }
+        }
+        /// Sort selects which sort order is applied when ordering by a textual
+        /// column (i.e. COLUMN_NAME). It has no effect when ordering by a
+        /// non-textual column such as COLUMN_COUNT or COLUMN_LAST_SEEN.
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            PartialOrd,
+            Ord,
+            ::prost::Enumeration
+        )]
+        #[repr(i32)]
+        pub enum Sort {
+            /// Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+            /// backwards compatible when `sort` is left unset.
+            Unspecified = 0,
+            /// Default lexicographic ordering: names are compared by their Unicode
+            /// code points, so e.g. "item10" sorts before "item2".
+            Default = 1,
+            /// Natural ordering: embedded runs of digits are compared by their
+            /// numeric value, so e.g. "item2" sorts before "item10".
+            Natural = 2,
+            /// Semantic-version ordering: values are parsed as semantic versions
+            /// (<https://semver.org>) and compared component by component, so e.g.
+            /// "1.9.0" sorts before "1.10.0".
+            Semver = 3,
+        }
+        impl Sort {
+            /// String value of the enum field names used in the ProtoBuf definition.
+            ///
+            /// The values are not transformed in any way and thus are considered stable
+            /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+            pub fn as_str_name(&self) -> &'static str {
+                match self {
+                    Self::Unspecified => "SORT_UNSPECIFIED",
+                    Self::Default => "SORT_DEFAULT",
+                    Self::Natural => "SORT_NATURAL",
+                    Self::Semver => "SORT_SEMVER",
+                }
+            }
+            /// Creates an enum from field names used in the ProtoBuf definition.
+            pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+                match value {
+                    "SORT_UNSPECIFIED" => Some(Self::Unspecified),
+                    "SORT_DEFAULT" => Some(Self::Default),
+                    "SORT_NATURAL" => Some(Self::Natural),
+                    "SORT_SEMVER" => Some(Self::Semver),
+                    _ => None,
+                }
+            }
+        }
+    }
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
+    #[repr(i32)]
+    pub enum MatchMode {
+        /// Defaults to match all which is the current behaviour
+        Unspecified = 0,
+        /// All attributes in the filter must be matched when searching for results
+        All = 1,
+        /// At least one attribute in the filter should be matched when searching
+        Any = 2,
+    }
+    impl MatchMode {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Self::Unspecified => "MATCH_MODE_UNSPECIFIED",
+                Self::All => "MATCH_MODE_ALL",
+                Self::Any => "MATCH_MODE_ANY",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "MATCH_MODE_UNSPECIFIED" => Some(Self::Unspecified),
+                "MATCH_MODE_ALL" => Some(Self::All),
+                "MATCH_MODE_ANY" => Some(Self::Any),
+                _ => None,
+            }
+        }
+    }
 }
 /// TraceItemAttributeNamesResponse is the response returned by the TraceItemAttributeNames endpoint.
 /// It is the counterpart to TraceItemAttributeNamesRequest.
@@ -1706,6 +1976,24 @@ pub mod trace_item_attribute_names_response {
         pub name: ::prost::alloc::string::String,
         #[prost(enumeration = "super::attribute_key::Type", tag = "2")]
         pub r#type: i32,
+        /// optional, how frequently this attribute occurs across the matched trace
+        /// items. Only populated when the request opts in to count ordering
+        /// (order_by.column = COLUMN_COUNT); unset otherwise. The presence of this
+        /// field distinguishes "not computed" from a genuine count of zero.
+        #[prost(uint64, optional, tag = "3")]
+        pub count: ::core::option::Option<u64>,
+        /// optional, the most recent time this attribute was seen across the
+        /// matched trace items, within the request's time range. Only populated
+        /// when the request opts into an ordering that aggregates the attributes
+        /// (order_by.column = COLUMN_COUNT or COLUMN_LAST_SEEN); unset otherwise.
+        /// Being unset therefore means "not computed" rather than "never seen".
+        ///
+        /// This is a best-effort, approximate value: it is derived from a periodic
+        /// roll-up rather than the trace items themselves, so it can lag by a
+        /// small number of seconds. Use it for recency ranking, not as an exact
+        /// event timestamp.
+        #[prost(message, optional, tag = "4")]
+        pub last_seen: ::core::option::Option<::prost_types::Timestamp>,
     }
 }
 /// TraceItemAttributeValuesRequest is a request to the TraceItemAttributeValues endpoint,
@@ -1738,6 +2026,141 @@ pub struct TraceItemAttributeValuesRequest {
     /// optional, used for pagination, the next page token will be returned in the response
     #[prost(message, optional, tag = "6")]
     pub page_token: ::core::option::Option<PageToken>,
+    /// optional, controls how the returned values are ordered.
+    /// When unset, values are returned alphabetically (ascending), which
+    /// preserves the historical default for existing callers. Set this to opt in
+    /// to a different ordering, e.g. by value frequency (the response already
+    /// returns the corresponding `counts`).
+    #[prost(message, optional, tag = "7")]
+    pub order_by: ::core::option::Option<trace_item_attribute_values_request::OrderBy>,
+}
+/// Nested message and enum types in `TraceItemAttributeValuesRequest`.
+pub mod trace_item_attribute_values_request {
+    /// OrderBy controls how the returned values are ordered.
+    ///
+    /// When `order_by` is not set on the request, values are returned in
+    /// alphabetical (ascending) order. This is the historical default and is
+    /// preserved for callers that predate this field.
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+    pub struct OrderBy {
+        /// The column to order the returned values by.
+        #[prost(enumeration = "order_by::Column", tag = "1")]
+        pub column: i32,
+        /// When true, results are returned in descending order. Defaults to
+        /// ascending. For example, to order by frequency with the most common
+        /// values first, set `column = COLUMN_COUNT` and `descending = true`.
+        #[prost(bool, tag = "2")]
+        pub descending: bool,
+        /// The sort order to apply when ordering by a textual column (COLUMN_VALUE).
+        /// Defaults to SORT_DEFAULT (lexicographic) when unset, preserving the
+        /// historical behaviour. Set to SORT_NATURAL to order alphanumeric values
+        /// naturally (e.g. "item2" before "item10"). Ignored for COLUMN_COUNT.
+        #[prost(enumeration = "order_by::Sort", tag = "3")]
+        pub sort: i32,
+    }
+    /// Nested message and enum types in `OrderBy`.
+    pub mod order_by {
+        /// Column identifies which property of a value to order by.
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            PartialOrd,
+            Ord,
+            ::prost::Enumeration
+        )]
+        #[repr(i32)]
+        pub enum Column {
+            /// Defaults to ordering by COLUMN_VALUE (alphabetical). This keeps the
+            /// behaviour backwards compatible when `order_by` is left unset.
+            Unspecified = 0,
+            /// Order by the value itself (alphabetical).
+            Value = 1,
+            /// Order by how frequently the value occurs across the matched trace
+            /// items (its count). The counts are returned in the response's `counts`
+            /// field.
+            Count = 2,
+        }
+        impl Column {
+            /// String value of the enum field names used in the ProtoBuf definition.
+            ///
+            /// The values are not transformed in any way and thus are considered stable
+            /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+            pub fn as_str_name(&self) -> &'static str {
+                match self {
+                    Self::Unspecified => "COLUMN_UNSPECIFIED",
+                    Self::Value => "COLUMN_VALUE",
+                    Self::Count => "COLUMN_COUNT",
+                }
+            }
+            /// Creates an enum from field names used in the ProtoBuf definition.
+            pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+                match value {
+                    "COLUMN_UNSPECIFIED" => Some(Self::Unspecified),
+                    "COLUMN_VALUE" => Some(Self::Value),
+                    "COLUMN_COUNT" => Some(Self::Count),
+                    _ => None,
+                }
+            }
+        }
+        /// Sort selects which sort order is applied when ordering by a textual
+        /// column (i.e. COLUMN_VALUE). It has no effect when ordering by a numeric
+        /// column such as COLUMN_COUNT.
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            PartialOrd,
+            Ord,
+            ::prost::Enumeration
+        )]
+        #[repr(i32)]
+        pub enum Sort {
+            /// Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+            /// backwards compatible when `sort` is left unset.
+            Unspecified = 0,
+            /// Default lexicographic ordering: values are compared by their Unicode
+            /// code points, so e.g. "item10" sorts before "item2".
+            Default = 1,
+            /// Natural ordering: embedded runs of digits are compared by their
+            /// numeric value, so e.g. "item2" sorts before "item10".
+            Natural = 2,
+            /// Semantic-version ordering: values are parsed as semantic versions
+            /// (<https://semver.org>) and compared component by component, so e.g.
+            /// "1.9.0" sorts before "1.10.0".
+            Semver = 3,
+        }
+        impl Sort {
+            /// String value of the enum field names used in the ProtoBuf definition.
+            ///
+            /// The values are not transformed in any way and thus are considered stable
+            /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+            pub fn as_str_name(&self) -> &'static str {
+                match self {
+                    Self::Unspecified => "SORT_UNSPECIFIED",
+                    Self::Default => "SORT_DEFAULT",
+                    Self::Natural => "SORT_NATURAL",
+                    Self::Semver => "SORT_SEMVER",
+                }
+            }
+            /// Creates an enum from field names used in the ProtoBuf definition.
+            pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+                match value {
+                    "SORT_UNSPECIFIED" => Some(Self::Unspecified),
+                    "SORT_DEFAULT" => Some(Self::Default),
+                    "SORT_NATURAL" => Some(Self::Natural),
+                    "SORT_SEMVER" => Some(Self::Semver),
+                    _ => None,
+                }
+            }
+        }
+    }
 }
 /// TraceItemAttributeValuesResponse is a response from the TraceItemAttributeValues endpoint
 /// it is the counterpart to TraceItemAttributesRequest
@@ -1746,6 +2169,8 @@ pub struct TraceItemAttributeValuesResponse {
     /// all the values that matched the criteria specified in the request
     #[prost(string, repeated, tag = "1")]
     pub values: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(int64, repeated, tag = "3")]
+    pub counts: ::prost::alloc::vec::Vec<i64>,
     /// page token for the next page of results
     #[prost(message, optional, tag = "6")]
     pub page_token: ::core::option::Option<PageToken>,
@@ -1954,6 +2379,9 @@ pub struct TraceItemTableRequest {
     pub order_by: ::prost::alloc::vec::Vec<trace_item_table_request::OrderBy>,
     #[prost(message, repeated, tag = "5")]
     pub group_by: ::prost::alloc::vec::Vec<AttributeKey>,
+    /// Caps the total number of returned rows. May be combined with `limit_by`,
+    /// where `limit_by` bounds the rows kept per group and this bounds the overall
+    /// result (e.g. the number of groups shown).
     #[prost(uint32, tag = "6")]
     pub limit: u32,
     /// optional, used for pagination, the next page token will be returned in the response
@@ -1970,6 +2398,10 @@ pub struct TraceItemTableRequest {
     /// ex: Find spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
     #[prost(message, repeated, tag = "10")]
     pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
+    /// optional, limits the number of returned rows per group. May be combined
+    /// with the top-level `limit`, which caps the overall result. See LimitBy.
+    #[prost(message, optional, tag = "11")]
+    pub limit_by: ::core::option::Option<trace_item_table_request::LimitBy>,
 }
 /// Nested message and enum types in `TraceItemTableRequest`.
 pub mod trace_item_table_request {
@@ -1979,6 +2411,103 @@ pub mod trace_item_table_request {
         pub column: ::core::option::Option<super::Column>,
         #[prost(bool, tag = "2")]
         pub descending: bool,
+        /// The sort order to apply when ordering by a textual column. Defaults to
+        /// SORT_DEFAULT (lexicographic) when unset, preserving the historical
+        /// behaviour. Set to SORT_NATURAL to order alphanumeric values naturally
+        /// (e.g. "item2" before "item10"). Ignored for numeric columns.
+        #[prost(enumeration = "order_by::Sort", tag = "3")]
+        pub sort: i32,
+    }
+    /// Nested message and enum types in `OrderBy`.
+    pub mod order_by {
+        /// Sort selects which sort order is applied when ordering by a textual
+        /// column. It has no effect when ordering by a numeric column.
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            PartialOrd,
+            Ord,
+            ::prost::Enumeration
+        )]
+        #[repr(i32)]
+        pub enum Sort {
+            /// Defaults to SORT_DEFAULT (lexicographic). This keeps the behaviour
+            /// backwards compatible when `sort` is left unset.
+            Unspecified = 0,
+            /// Default lexicographic ordering: values are compared by their Unicode
+            /// code points, so e.g. "item10" sorts before "item2".
+            Default = 1,
+            /// Natural ordering: embedded runs of digits are compared by their
+            /// numeric value, so e.g. "item2" sorts before "item10".
+            Natural = 2,
+            /// Semantic-version ordering: values are parsed as semantic versions
+            /// (<https://semver.org>) and compared component by component, so e.g.
+            /// "1.9.0" sorts before "1.10.0".
+            Semver = 3,
+        }
+        impl Sort {
+            /// String value of the enum field names used in the ProtoBuf definition.
+            ///
+            /// The values are not transformed in any way and thus are considered stable
+            /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+            pub fn as_str_name(&self) -> &'static str {
+                match self {
+                    Self::Unspecified => "SORT_UNSPECIFIED",
+                    Self::Default => "SORT_DEFAULT",
+                    Self::Natural => "SORT_NATURAL",
+                    Self::Semver => "SORT_SEMVER",
+                }
+            }
+            /// Creates an enum from field names used in the ProtoBuf definition.
+            pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+                match value {
+                    "SORT_UNSPECIFIED" => Some(Self::Unspecified),
+                    "SORT_DEFAULT" => Some(Self::Default),
+                    "SORT_NATURAL" => Some(Self::Natural),
+                    "SORT_SEMVER" => Some(Self::Semver),
+                    _ => None,
+                }
+            }
+        }
+    }
+    /// Limits results per group rather than globally: for each distinct
+    /// combination of `columns`, keep at most `limit` rows (the first `limit` per
+    /// `order_by`). E.g. grouping by project and ordering by count, `limit` = 100
+    /// returns the top 100 rows for every project.
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct LimitBy {
+        /// The keys that define a group.
+        #[prost(message, repeated, tag = "1")]
+        pub columns: ::prost::alloc::vec::Vec<limit_by::Column>,
+        /// Maximum number of rows to keep per group.
+        #[prost(uint32, tag = "2")]
+        pub limit: u32,
+    }
+    /// Nested message and enum types in `LimitBy`.
+    pub mod limit_by {
+        /// A single grouping key. It is either a column (referenced by attribute key)
+        /// or the label of a selected column. To group by a transformation, select it
+        /// as a column and reference it here by its label. This intentionally cannot
+        /// express an aggregation, which ClickHouse cannot LIMIT BY.
+        #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+        pub struct Column {
+            #[prost(oneof = "column::Column", tags = "1, 2")]
+            pub column: ::core::option::Option<column::Column>,
+        }
+        /// Nested message and enum types in `Column`.
+        pub mod column {
+            #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+            pub enum Column {
+                #[prost(message, tag = "1")]
+                Key(super::super::super::AttributeKey),
+                #[prost(string, tag = "2")]
+                Label(::prost::alloc::string::String),
+            }
+        }
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2372,6 +2901,12 @@ pub struct TraceItem {
     pub client_sample_rate: f64,
     #[prost(double, tag = "9")]
     pub server_sample_rate: f64,
+    /// The ID of the conversation this item belongs to, if any.
+    #[prost(string, tag = "10")]
+    pub conversation_id: ::prost::alloc::string::String,
+    /// The ID of the session this item belongs to, if any.
+    #[prost(string, tag = "11")]
+    pub session_id: ::prost::alloc::string::String,
     /// Internal fields
     #[prost(uint32, tag = "100")]
     pub retention_days: u32,
@@ -2390,6 +2925,9 @@ pub struct ExportTraceItemsRequest {
     pub page_token: ::core::option::Option<PageToken>,
     #[prost(uint32, tag = "3")]
     pub limit: u32,
+    /// filter out trace items you dont want
+    #[prost(message, optional, tag = "4")]
+    pub filter: ::core::option::Option<TraceItemFilter>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExportTraceItemsResponse {

@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.checkout.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+import "sentry_protos/billing/v1/services/checkout/v1/endpoint_change_contract.proto";
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
+// Previews the effect of a contract change without committing it.
+message PreviewChangeContractRequest {
+  // The change to preview. The exact same request can be passed to
+  // change_contract to commit the previewed change.
+  ChangeContractRequest change = 1;
+}
+
+// Mirrors the legacy subscription-preview web API response so the endpoint can
+// be serialized into the same shape. Amounts are in cents and signed, since
+// downgrades and credits can produce negative values.
+message PreviewChangeContractResponse {
+  // The line items that make up the previewed invoice, including non-package
+  // items such as tax and credits. When at_period_end is true these preview
+  // the upcoming recurring invoice rather than an immediate charge.
+  repeated sentry_protos.billing.v1.services.contract.v1.InvoiceLineItem line_items = 1;
+
+  // Net subtotal of line_items before account balance is applied.
+  int64 prorated_amount_cents = 2;
+
+  // Amount that would actually be billed after applying account balance.
+  int64 billed_amount_cents = 3;
+
+  // Account credit applied to this invoice, as a positive number of cents.
+  int64 credit_applied_cents = 4;
+
+  // Signed change to the customer's account balance from this change.
+  int64 balance_change_cents = 5;
+
+  // Resulting account balance after the change.
+  int64 new_balance_cents = 6;
+
+  // Whether the change takes effect at the next billing period rollover rather
+  // than immediately.
+  bool at_period_end = 7;
+
+  // When the change would take effect.
+  google.protobuf.Timestamp effective_at = 8;
+
+  // The pending change that would be staged when at_period_end is true (e.g.
+  // downgrades, reservation reductions, annual-to-monthly cadence changes).
+  // Unset when the entire change applies immediately.
+  optional sentry_protos.billing.v1.common.v1.PendingChange pending_change = 9;
+}

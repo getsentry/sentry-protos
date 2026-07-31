@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1;
+
+import "sentry_protos/billing/v1/data_category.proto";
+
+// The scope at which a quota is enforced. Each scope instance maintains
+// independent counters (e.g. each project has its own counter for
+// PROJECT-scoped quotas).
+enum QuotaScope {
+  QUOTA_SCOPE_UNSPECIFIED = 0;
+  QUOTA_SCOPE_ORGANIZATION = 1;
+  QUOTA_SCOPE_PROJECT = 2;
+  QUOTA_SCOPE_KEY = 3;
+}
+
+// Configuration for a single quota rule. Quotas limit the number of events
+// (or bytes, depending on category) accepted within a time window.
+//
+// Three limit states:
+//   - absent:   unlimited (counted but never rejected)
+//   - 0:        reject-all (statically enforced, no window needed)
+//   - positive: enforcement threshold within the given window
+message QuotaConfig {
+  string id = 1;
+  repeated DataCategory categories = 2;
+  QuotaScope scope = 3;
+  optional string scope_id = 4;
+  optional uint64 limit = 5;
+  optional uint64 window = 6;
+  // Machine-readable reason returned when this quota is exceeded.
+  // Defined and extended in sentry/getsentry, not in this proto.
+  // Common formats:
+  //   "{category}_usage_exceeded"         — org-level usage exceeded (e.g. "error_usage_exceeded")
+  //   "{category}s_disabled"              — category disabled (e.g. "transactions_disabled")
+  //   "project_quota_{category}_usage_exceeded" — project-level quota exceeded
+  //   "project_abuse_limit"               — per-project abuse quota
+  //   "org_abuse_limit"                   — per-org abuse quota
+  //   "smart_rate_limit"                  — spike protection
+  //   "Sampled:..."                       — dynamic sampling
+  optional string reason_code = 7;
+}

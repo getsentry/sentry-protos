@@ -2,6 +2,7 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LineItemConfig {
     /// Base price for the line item (upgraded reserved volumes or add-on activation fees)
+    #[deprecated]
     #[prost(uint64, tag = "1")]
     pub base_price_cents: u64,
     #[prost(message, optional, tag = "3")]
@@ -17,11 +18,26 @@ pub struct LineItemConfig {
     pub line_item: ::core::option::Option<
         super::super::super::common::v1::LineItemDetails,
     >,
+    /// Whether this LineItem is included in the base package or not (ie Seer)
+    #[prost(bool, tag = "8")]
+    pub is_optional_add_on: bool,
+    /// Used for calculating spend that should not apply towards an organization's PAYG budget (ie Seer seats)
+    #[prost(message, optional, tag = "9")]
+    pub uncapped_rate: ::core::option::Option<
+        super::super::super::common::v1::TieredPricingRate,
+    >,
+    /// Whether this LineItem is eligible for a product trial.
+    #[prost(bool, tag = "12")]
+    pub can_product_trial: bool,
     /// how many of this lineitem are included in the package, the customer can reserve more on their contract
     #[prost(oneof = "line_item_config::IncludedReservedUnits", tags = "5, 6")]
     pub included_reserved_units: ::core::option::Option<
         line_item_config::IncludedReservedUnits,
     >,
+    /// How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
+    /// this field will be unset for all line items.
+    #[prost(oneof = "line_item_config::TrialUnits", tags = "10, 11")]
+    pub trial_units: ::core::option::Option<line_item_config::TrialUnits>,
 }
 /// Nested message and enum types in `LineItemConfig`.
 pub mod line_item_config {
@@ -34,6 +50,15 @@ pub mod line_item_config {
         #[prost(uint64, tag = "6")]
         NumReservedUnits(u64),
     }
+    /// How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
+    /// this field will be unset for all line items.
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum TrialUnits {
+        #[prost(bool, tag = "10")]
+        IsUnlimitedTrial(bool),
+        #[prost(uint64, tag = "11")]
+        NumTrialUnits(u64),
+    }
 }
 /// Represents a budget included in a package that is collectively used by one or more line items,
 /// allowing multiple line items to draw from the same reserved budget.
@@ -42,12 +67,60 @@ pub struct SharedLineItemPool {
     /// how much money this shared pool has. For example, if logs costs $1.00 per GB and metrics
     /// costs $1.00 per GB and we wanted to give metrics and logs a shared 5GB pool, the reserved_pool_cents
     /// would be 500 ($5)
+    ///
+    /// DEPRECATED: Use reserved_tier
+    #[deprecated]
     #[prost(uint64, tag = "1")]
     pub reserved_pool_cents: u64,
     #[prost(message, repeated, tag = "3")]
     pub line_items: ::prost::alloc::vec::Vec<
         super::super::super::common::v1::LineItemDetails,
     >,
+    /// Whether this LineItem is included in the base package or not (ie Seer)
+    #[prost(bool, tag = "4")]
+    pub is_optional_add_on: bool,
+    /// The unique line item details used when invoicing this shared pool.
+    #[prost(message, optional, tag = "5")]
+    pub shared_line_item: ::core::option::Option<
+        super::super::super::common::v1::LineItemDetails,
+    >,
+    /// Cost of the shared line item pool, in cents(a customer can pay $X and get $Y of credit, where X!=Y).
+    ///
+    /// DEPRECATED: Use reserved_tier
+    #[deprecated]
+    #[prost(uint64, tag = "6")]
+    pub base_price_cents: u64,
+    /// DEPRECATED: Use reserved_tier
+    #[deprecated]
+    #[prost(message, optional, tag = "7")]
+    pub flexible_base_price_cents: ::core::option::Option<
+        super::super::super::common::v1::FlexiblePrice,
+    >,
+    /// Similar to LineItemConfig.reserved_rate, this field will hold the list of available reserved tiers for this line item
+    /// as well as the prices for each respective tier.
+    #[prost(message, optional, tag = "8")]
+    pub reserved_tier: ::core::option::Option<
+        super::super::super::common::v1::TieredPricingRate,
+    >,
+    /// Whether this LineItem is eligible for a product trial.
+    #[prost(bool, tag = "11")]
+    pub can_product_trial: bool,
+    /// How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
+    /// this field will be unset for all line items.
+    #[prost(oneof = "shared_line_item_pool::TrialUnits", tags = "9, 10")]
+    pub trial_units: ::core::option::Option<shared_line_item_pool::TrialUnits>,
+}
+/// Nested message and enum types in `SharedLineItemPool`.
+pub mod shared_line_item_pool {
+    /// How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
+    /// this field will be unset for all line items.
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum TrialUnits {
+        #[prost(bool, tag = "9")]
+        IsUnlimitedTrial(bool),
+        #[prost(uint64, tag = "10")]
+        NumTrialUnits(u64),
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PackageConfig {
@@ -58,11 +131,43 @@ pub struct PackageConfig {
     #[prost(message, repeated, tag = "3")]
     pub shared_line_item_pools: ::prost::alloc::vec::Vec<SharedLineItemPool>,
     /// Base price for the package.
+    #[deprecated]
     #[prost(uint64, tag = "4")]
     pub base_price_cents: u64,
-    /// Billing interval for this package.
+    #[prost(message, optional, tag = "8")]
+    pub flexible_base_price_cents: ::core::option::Option<
+        super::super::super::common::v1::FlexiblePrice,
+    >,
+    /// Deprecated. Use supported_month_intervals.
+    #[deprecated]
     #[prost(enumeration = "super::super::super::common::v1::BillingInterval", tag = "5")]
     pub billing_interval: i32,
+    #[prost(string, tag = "6")]
+    pub title: ::prost::alloc::string::String,
+    /// Number-of-months billing intervals this package offers.
+    /// \[1\] = monthly only, \[1, 12\] = monthly or annual, \[12\] = annual only.
+    #[prost(uint32, repeated, tag = "7")]
+    pub supported_month_intervals: ::prost::alloc::vec::Vec<u32>,
+    /// Title shown in admin interfaces, not customer-facing.
+    #[prost(string, tag = "9")]
+    pub admin_title: ::prost::alloc::string::String,
+    /// Whether the package is treated as enterprise in the UI (display name,
+    /// upsell suppression).
+    #[prost(bool, tag = "10")]
+    pub is_enterprise: bool,
+    /// Whether the package can be chosen in the self-serve checkout flow.
+    #[prost(bool, tag = "11")]
+    pub user_selectable: bool,
+    /// Whether the package has pay-as-you-go (PAYG) modes.
+    #[prost(bool, tag = "12")]
+    pub has_payg_modes: bool,
+    /// Default retention settings for this package.
+    /// Each entry uses a billing data category.
+    /// A category can occur only once.
+    #[prost(message, repeated, tag = "14")]
+    pub retention_defaults: ::prost::alloc::vec::Vec<
+        super::super::super::common::v1::DataCategoryRetention,
+    >,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
@@ -73,4 +178,89 @@ pub struct GetPackageRequest {
 pub struct GetPackageResponse {
     #[prost(message, optional, tag = "1")]
     pub package_config: ::core::option::Option<PackageConfig>,
+}
+/// A package a customer can subscribe to, such as the Team or Business package.
+/// Carries only what a catalog needs beyond a bare reference; fetch full details
+/// (title, pricing, supported intervals) with GetPackage / GetPackages.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PackageOption {
+    /// Unique identifier for this package. Resolve it to full details via
+    /// GetPackage / GetPackages.
+    #[prost(string, tag = "1")]
+    pub uid: ::prost::alloc::string::String,
+    #[prost(enumeration = "AcquisitionMode", tag = "2")]
+    pub acquisition: i32,
+}
+/// The set of packages a customer can choose from — the answer to "what can I
+/// move to?". Returned relative to the customer's current package, or, when no
+/// current package is given, the catalog for the latest upsell.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PackageCatalog {
+    /// Every package option in the catalog, in the order they should be shown.
+    /// Includes the free option, the package the customer is currently on (so it
+    /// can be highlighted in context), and enterprise options (which require
+    /// talking to sales, flagged via AcquisitionMode).
+    #[prost(message, repeated, tag = "1")]
+    pub packages: ::prost::alloc::vec::Vec<PackageOption>,
+    /// uid of the free option within `packages`. Being on it means having no paid
+    /// subscription — a distinct state — so it is called out for consumers that
+    /// treat it specially.
+    #[prost(string, tag = "2")]
+    pub free_package_uid: ::prost::alloc::string::String,
+    /// uid of the default option within `packages`: the one checkout pre-selects.
+    #[prost(string, tag = "3")]
+    pub default_package_uid: ::prost::alloc::string::String,
+}
+/// How a customer can start on a package.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum AcquisitionMode {
+    Unspecified = 0,
+    /// customer can sign up on their own
+    SelfServe = 1,
+}
+impl AcquisitionMode {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "ACQUISITION_MODE_UNSPECIFIED",
+            Self::SelfServe => "ACQUISITION_MODE_SELF_SERVE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ACQUISITION_MODE_UNSPECIFIED" => Some(Self::Unspecified),
+            "ACQUISITION_MODE_SELF_SERVE" => Some(Self::SelfServe),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetPackageCatalogRequest {
+    /// The package the customer is currently on; the catalog is returned relative
+    /// to it. Leave unset for a customer who has not signed up yet, in which case
+    /// the catalog for the latest upsell is returned.
+    #[prost(string, optional, tag = "1")]
+    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPackageCatalogResponse {
+    #[prost(message, optional, tag = "1")]
+    pub catalog: ::core::option::Option<PackageCatalog>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetPackagesRequest {
+    /// The package uids to fetch. Accepts one or many.
+    #[prost(string, repeated, tag = "1")]
+    pub package_uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetPackagesResponse {
+    /// The requested packages, in the same order as the request.
+    #[prost(message, repeated, tag = "1")]
+    pub package_configs: ::prost::alloc::vec::Vec<PackageConfig>,
 }
