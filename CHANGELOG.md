@@ -1,3 +1,13 @@
+## 0.57.0
+
+### New Features ✨
+
+- (snuba) Add RequestMeta.standard_retention_days by @MeredithAnya in [#226](https://github.com/getsentry/sentry-protos/pull/226)
+
+### Internal Changes 🔧
+
+- (billing-platform) Define trial dataclasses as protobufs by @brendanhsentry in [#389](https://github.com/getsentry/sentry-protos/pull/389)
+
 ## 0.56.0
 
 ### New Features ✨
