@@ -817,8 +817,10 @@ pub struct RequestMeta {
     /// how to query the downsampled storages
     #[prost(message, optional, tag = "12")]
     pub downsampled_storage_config: ::core::option::Option<DownsampledStorageConfig>,
-    /// full fidelity retention setting. allows for querying data that
-    /// differs from the standard retention_days
+    /// optional full-fidelity retention window in days for this request.
+    /// when set, snuba may keep queries within this window on tier 1 storage
+    /// instead of applying long-term retention downsampling. when unset,
+    /// snuba falls back to its default lower retention (typically 30 days).
     #[prost(uint32, optional, tag = "13")]
     pub retention_days: ::core::option::Option<u32>,
 }

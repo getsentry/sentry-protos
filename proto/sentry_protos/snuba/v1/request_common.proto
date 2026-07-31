@@ -41,8 +41,10 @@ message RequestMeta {
   // how to query the downsampled storages
   DownsampledStorageConfig downsampled_storage_config = 12;
 
-  // full fidelity retention setting. allows for querying data that
-  // differs from the standard retention_days
+  // optional full-fidelity retention window in days for this request.
+  // when set, snuba may keep queries within this window on tier 1 storage
+  // instead of applying long-term retention downsampling. when unset,
+  // snuba falls back to its default lower retention (typically 30 days).
   optional uint32 retention_days = 13;
 }
 
