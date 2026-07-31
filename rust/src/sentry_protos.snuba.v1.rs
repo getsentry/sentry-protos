@@ -840,6 +840,14 @@ pub struct RequestMeta {
     /// how to query the downsampled storages
     #[prost(message, optional, tag = "12")]
     pub downsampled_storage_config: ::core::option::Option<DownsampledStorageConfig>,
+    /// Standard retention window in days for this request.
+    /// When set, Snuba may keep queries within this window on tier 1 storage
+    /// instead of applying long-term retention downsampling. When unset,
+    /// Snuba falls back to its default lower retention (typically 30 days).
+    /// This is independent of DownsampledStorageConfig, which controls sampling
+    /// mode rather than the age threshold for full-fidelity data.
+    #[prost(uint32, optional, tag = "13")]
+    pub standard_retention_days: ::core::option::Option<u32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ResponseMeta {
