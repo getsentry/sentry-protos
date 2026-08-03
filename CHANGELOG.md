@@ -1,3 +1,9 @@
+## 0.57.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Add start_new_term to from checkout service to rollover by @brendanhsentry in [#392](https://github.com/getsentry/sentry-protos/pull/392)
+
 ## 0.57.1
 
 ### Internal Changes 🔧
