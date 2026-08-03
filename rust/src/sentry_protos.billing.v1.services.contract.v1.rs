@@ -1030,6 +1030,9 @@ pub struct RolloverContractRequest {
     /// change (or an already-ended term) starts a fresh term now.
     #[prost(bool, tag = "8")]
     pub immediate: bool,
+    /// Whether the requested change should result in a new billing period.
+    #[prost(bool, tag = "9")]
+    pub start_new_term: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
