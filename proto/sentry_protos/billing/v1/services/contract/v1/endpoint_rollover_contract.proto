@@ -33,6 +33,9 @@ message RolloverContractRequest {
   // interval stays co-terminous with the current term, while an interval
   // change (or an already-ended term) starts a fresh term now.
   bool immediate = 8;
+
+  // Whether the requested change should result in a new billing period.
+  bool start_new_term = 9;
 }
 
 message RolloverContractResponse {

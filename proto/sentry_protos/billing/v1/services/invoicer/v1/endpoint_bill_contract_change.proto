@@ -22,6 +22,9 @@ message BillContractChangeRequest {
   // consumes, but here it applies immediately rather than at a period boundary,
   // so the caller does not stage it in the pending-change store.
   sentry_protos.billing.v1.common.v1.PendingChange change = 3;
+
+  // Whether the requested change should result in a new billing period.
+  bool start_new_term = 4;
 }
 
 message BillContractChangeResponse {
