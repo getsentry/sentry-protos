@@ -22,6 +22,9 @@ pub struct BillContractChangeRequest {
     /// so the caller does not stage it in the pending-change store.
     #[prost(message, optional, tag = "3")]
     pub change: ::core::option::Option<super::super::super::common::v1::PendingChange>,
+    /// Whether the requested change should result in a new billing period.
+    #[prost(bool, tag = "4")]
+    pub start_new_term: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillContractChangeResponse {

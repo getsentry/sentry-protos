@@ -1022,14 +1022,12 @@ pub struct RolloverContractRequest {
     #[prost(string, optional, tag = "7")]
     pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
     /// Roll the contract over as of now instead of at its period end: the current
-    /// contract is closed immediately and the new contract starts now. Used for
-    /// contract changes that take effect immediately (e.g. checkout upgrades).
-    /// The request's pending_change is applied to the new contract regardless of
-    /// whether the term was due to renew; a change that keeps the billing
-    /// interval stays co-terminous with the current term, while an interval
-    /// change (or an already-ended term) starts a fresh term now.
+    /// contract is closed immediately and the new contract starts now.
     #[prost(bool, tag = "8")]
     pub immediate: bool,
+    /// Whether the requested change should result in a new billing period.
+    #[prost(bool, tag = "9")]
+    pub start_new_term: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
