@@ -1,3 +1,9 @@
+## 0.57.1
+
+### Internal Changes 🔧
+
+- (billing-platform) More EngagementService protobufs by @brendanhsentry in [#390](https://github.com/getsentry/sentry-protos/pull/390)
+
 ## 0.57.0
 
 ### New Features ✨
