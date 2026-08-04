@@ -1,3 +1,13 @@
+## 0.58.0
+
+### New Features ✨
+
+- (billing) Add contract-owned retention override config by @dashed in [#370](https://github.com/getsentry/sentry-protos/pull/370)
+
+### Internal Changes 🔧
+
+- (billing-platform) Add custom_payg_rate to PAYGBudget by @brendanhsentry in [#394](https://github.com/getsentry/sentry-protos/pull/394)
+
 ## 0.57.2
 
 ### Internal Changes 🔧
