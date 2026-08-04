@@ -359,10 +359,15 @@ pub struct SharedSkuBudget {
     #[prost(enumeration = "super::super::super::Sku", repeated, tag = "4")]
     pub billing_skus: ::prost::alloc::vec::Vec<i32>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PaygBudget {
     #[prost(uint64, tag = "1")]
     pub budget_cents: u64,
+    /// Overrides package's PAYG rates; only enterprise customers can set custom PAYG rates
+    #[prost(message, optional, tag = "2")]
+    pub custom_payg_rate: ::core::option::Option<
+        super::super::super::common::v1::TieredPricingRate,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Reservation {
@@ -433,7 +438,7 @@ pub mod activation {
         }
     }
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UserConfig {
     #[prost(message, optional, tag = "1")]
     pub payg_budget: ::core::option::Option<PaygBudget>,
@@ -651,7 +656,7 @@ pub struct Contract {
 /// contract's live parameters. Used internally by add_user_configs (there is no
 /// standalone service endpoint), mirroring how add_pending_user_config stages a
 /// single pending config.
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ApplyImmediateUserConfigRequest {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
