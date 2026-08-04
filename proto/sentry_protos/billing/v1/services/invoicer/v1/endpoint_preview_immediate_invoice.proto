@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
+// Read-only preview of the invoice a contract would be billed if a change took
+// effect immediately (a mid-term plan change), without creating the invoice or
+// charging. Parallel to PreviewNextInvoiceRequest, but prices the change as an
+// immediate proration: the prorated new-plan charge, the credit for unused time
+// on the current plan, accrued pay-as-you-go usage, applied account credit, and
+// sales tax.
+message PreviewImmediateInvoiceRequest {
+  uint64 contract_id = 1;
+  // The change taking effect now. An immediate invoice is defined by the change
+  // it applies, so this is required. Reuses the PendingChange shape the rollover
+  // consumes; here it applies immediately rather than at a period boundary.
+  sentry_protos.billing.v1.common.v1.PendingChange change = 2;
+}
+
+message PreviewImmediateInvoiceResponse {
+  // The line items the immediate invoice would carry, including the unused-time
+  // credit, negative balance_change credit lines, and a sales_tax line when
+  // applicable.
+  repeated sentry_protos.billing.v1.services.contract.v1.InvoiceLineItem line_items = 1;
+  // The amount that would be charged: the sum of line_items after applied
+  // credit. Never negative (credit is capped at the pre-tax subtotal).
+  uint64 amount_billed_cents = 2;
+}
