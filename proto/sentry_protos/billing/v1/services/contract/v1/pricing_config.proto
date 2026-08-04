@@ -4,6 +4,7 @@ package sentry_protos.billing.v1.services.contract.v1;
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
 import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
 import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
 import "sentry_protos/billing/v1/sku.proto";
@@ -54,6 +55,9 @@ message SharedSKUBudget {
 
 message PAYGBudget {
   uint64 budget_cents = 1;
+
+  // Overrides package's PAYG rates; only enterprise customers can set custom PAYG rates
+  optional sentry_protos.billing.v1.common.v1.TieredPricingRate custom_payg_rate = 2;
 }
 
 message Reservation {
