@@ -1,3 +1,9 @@
+## 0.59.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add ChargeConfig to BillingConfig by @brendanhsentry in [#396](https://github.com/getsentry/sentry-protos/pull/396)
+
 ## 0.59.0
 
 ### New Features ✨
