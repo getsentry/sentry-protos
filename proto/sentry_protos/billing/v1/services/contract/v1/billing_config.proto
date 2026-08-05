@@ -16,6 +16,7 @@ enum BillingType {
   BILLING_TYPE_INVOICED = 1;
   BILLING_TYPE_CREDIT_CARD = 2;
   BILLING_TYPE_PARTNER = 3;
+  BILLING_TYPE_PAYG_INVOICED = 4;
 }
 
 // The channel through which the contract is billed.
@@ -58,6 +59,18 @@ message SponsorshipConfig {
   sentry_protos.billing.v1.common.v1.SponsoredType sponsorship_type = 4;
 }
 
+// Configuration for what a contract will be charged for.
+message ChargeConfig {
+  BillingType billing_type = 1;
+
+  // Whether this billing mode charges subscription fees. When true, subscription
+  // fees are charged only when they are due for renewal.
+  bool charges_subscription = 2;
+
+  // Whether we should charge for PAYG spend.
+  bool charges_payg = 3;
+}
+
 // The external billing provider used to process payments for the contract.
 enum ExternalBillingProvider {
   option deprecated = true;
@@ -80,16 +93,6 @@ message Address {
 }
 
 message BillingConfig {
-  BillingType billing_type = 1;
-
-  // Remaining fields are deprecated
-  BillingChannel channel = 2 [deprecated = true];
-  ExternalBillingProvider external_billing_provider = 3 [deprecated = true];
-  Address address = 4 [deprecated = true];
-  // Use PricingConfig.billing_period_start_date and PricingConfig.billing_period_end_date
-  Date contract_start_date = 5 [deprecated = true];
-  Date contract_end_date = 6 [deprecated = true];
-
   // The number-of-months interval the contract was signed under
   // (1 = monthly, 12 = annual). Frozen for the life of the contract.
   uint32 month_interval = 7;
@@ -109,4 +112,15 @@ message BillingConfig {
 
   // Sponsorship configuration. Absent means the contract is not sponsored.
   optional SponsorshipConfig sponsorship_config = 11;
+
+  ChargeConfig charge_config = 12;
+
+  // Remaining fields are deprecated
+  BillingType billing_type = 1 [deprecated = true]; // Use charge_config
+  BillingChannel channel = 2 [deprecated = true];
+  ExternalBillingProvider external_billing_provider = 3 [deprecated = true];
+  Address address = 4 [deprecated = true];
+  // Use PricingConfig.billing_period_start_date and PricingConfig.billing_period_end_date
+  Date contract_start_date = 5 [deprecated = true];
+  Date contract_end_date = 6 [deprecated = true];
 }
