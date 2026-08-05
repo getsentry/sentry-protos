@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.invoicer.v1;
 
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 
 // Read-only preview of the invoice a contract will next be billed, without
@@ -11,6 +12,11 @@ import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 // balance_change line items), and sales tax.
 message PreviewNextInvoiceRequest {
   uint64 contract_id = 1;
+  // Overlay this pending change on the contract before pricing the next
+  // invoice, as if it were the staged pending change. Used to preview a
+  // deferred change (e.g. a downgrade) before it is committed. Unset means
+  // price against whatever change is currently staged for the contract.
+  optional sentry_protos.billing.v1.common.v1.PendingChange change = 2;
 }
 
 message PreviewNextInvoiceResponse {
