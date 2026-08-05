@@ -1,3 +1,9 @@
+## 0.59.0
+
+### New Features ✨
+
+- (billing-platform) Let the invoicer price contract changes by @skonves in [#395](https://github.com/getsentry/sentry-protos/pull/395)
+
 ## 0.58.1
 
 ### Internal Changes 🔧
