@@ -25,6 +25,19 @@ pub struct SponsorshipConfig {
     #[prost(enumeration = "super::super::super::common::v1::SponsoredType", tag = "4")]
     pub sponsorship_type: i32,
 }
+/// Configuration for what a contract will be charged for.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ChargeConfig {
+    #[prost(enumeration = "BillingType", tag = "1")]
+    pub billing_type: i32,
+    /// Whether this billing mode charges subscription fees. When true, subscription
+    /// fees are charged only when they are due for renewal.
+    #[prost(bool, tag = "2")]
+    pub charges_subscription: bool,
+    /// Whether we should charge for PAYG spend.
+    #[prost(bool, tag = "3")]
+    pub charges_payg: bool,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Address {
     #[prost(string, tag = "1")]
@@ -44,25 +57,6 @@ pub struct Address {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillingConfig {
-    #[prost(enumeration = "BillingType", tag = "1")]
-    pub billing_type: i32,
-    /// Remaining fields are deprecated
-    #[deprecated]
-    #[prost(enumeration = "BillingChannel", tag = "2")]
-    pub channel: i32,
-    #[deprecated]
-    #[prost(enumeration = "ExternalBillingProvider", tag = "3")]
-    pub external_billing_provider: i32,
-    #[deprecated]
-    #[prost(message, optional, tag = "4")]
-    pub address: ::core::option::Option<Address>,
-    /// Use PricingConfig.billing_period_start_date and PricingConfig.billing_period_end_date
-    #[deprecated]
-    #[prost(message, optional, tag = "5")]
-    pub contract_start_date: ::core::option::Option<Date>,
-    #[deprecated]
-    #[prost(message, optional, tag = "6")]
-    pub contract_end_date: ::core::option::Option<Date>,
     /// The number-of-months interval the contract was signed under
     /// (1 = monthly, 12 = annual). Frozen for the life of the contract.
     #[prost(uint32, tag = "7")]
@@ -83,6 +77,30 @@ pub struct BillingConfig {
     /// Sponsorship configuration. Absent means the contract is not sponsored.
     #[prost(message, optional, tag = "11")]
     pub sponsorship_config: ::core::option::Option<SponsorshipConfig>,
+    #[prost(message, optional, tag = "12")]
+    pub charge_config: ::core::option::Option<ChargeConfig>,
+    /// Remaining fields are deprecated
+    ///
+    /// Use charge_config
+    #[deprecated]
+    #[prost(enumeration = "BillingType", tag = "1")]
+    pub billing_type: i32,
+    #[deprecated]
+    #[prost(enumeration = "BillingChannel", tag = "2")]
+    pub channel: i32,
+    #[deprecated]
+    #[prost(enumeration = "ExternalBillingProvider", tag = "3")]
+    pub external_billing_provider: i32,
+    #[deprecated]
+    #[prost(message, optional, tag = "4")]
+    pub address: ::core::option::Option<Address>,
+    /// Use PricingConfig.billing_period_start_date and PricingConfig.billing_period_end_date
+    #[deprecated]
+    #[prost(message, optional, tag = "5")]
+    pub contract_start_date: ::core::option::Option<Date>,
+    #[deprecated]
+    #[prost(message, optional, tag = "6")]
+    pub contract_end_date: ::core::option::Option<Date>,
 }
 /// Indicates how the account is billed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -92,6 +110,7 @@ pub enum BillingType {
     Invoiced = 1,
     CreditCard = 2,
     Partner = 3,
+    PaygInvoiced = 4,
 }
 impl BillingType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -104,6 +123,7 @@ impl BillingType {
             Self::Invoiced => "BILLING_TYPE_INVOICED",
             Self::CreditCard => "BILLING_TYPE_CREDIT_CARD",
             Self::Partner => "BILLING_TYPE_PARTNER",
+            Self::PaygInvoiced => "BILLING_TYPE_PAYG_INVOICED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -113,6 +133,7 @@ impl BillingType {
             "BILLING_TYPE_INVOICED" => Some(Self::Invoiced),
             "BILLING_TYPE_CREDIT_CARD" => Some(Self::CreditCard),
             "BILLING_TYPE_PARTNER" => Some(Self::Partner),
+            "BILLING_TYPE_PAYG_INVOICED" => Some(Self::PaygInvoiced),
             _ => None,
         }
     }
