@@ -25,6 +25,12 @@ clean-py:
 	rm -rf ./py/sentry_protos
 	rm -rf ./py/sentry_protos.egg-info
 
+# Prefer this over bare `pip install -e ./py`. Lenient editable mode
+# (setuptools MetaPathFinder) breaks mypy package resolution.
+.PHONY: install-py-editable
+install-py-editable:
+	pip install -e ./py --config-settings editable_mode=strict
+
 # Rust client targets
 .PHONY: build-rust
 build-rust:
@@ -74,5 +80,5 @@ docs: ensure-protoc
 
 .PHONY: test-py
 test-py:
-	cd py && pip install -e .
+	cd py && pip install -e . --config-settings editable_mode=strict
 	pytest py/tests/

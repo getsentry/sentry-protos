@@ -50,11 +50,24 @@ From the root of `sentry-protos` run:
 make build-py
 ```
 
-Then in your application install the python bindings with pip.
+Then install the python bindings into your application venv. Prefer this
+from the **application** checkout (so direnv keeps that venv active):
 
 ```shell
-# CWD is in your python application
 pip install -e ../sentry-protos/py --config-settings editable_mode=strict
+```
+
+Always use `editable_mode=strict`. Bare `pip install -e` uses setuptools'
+lenient MetaPathFinder mode: Python imports still work, but **mypy** cannot
+resolve packages and reports mass `import-not-found` errors for
+`sentry_protos.*`. Fix by reinstalling with `strict`, or by installing a
+built wheel instead of an editable install.
+
+Optional helper from the sentry-protos root (only when `pip` is already the
+application env — this repo's direnv activates its own `.venv` on enter):
+
+```shell
+make install-py-editable
 ```
 
 As you make changes to proto files, you will need to regenerate bindings with `make build-py`.
