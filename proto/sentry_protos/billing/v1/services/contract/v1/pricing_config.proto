@@ -5,6 +5,7 @@ package sentry_protos.billing.v1.services.contract.v1;
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
+import "sentry_protos/billing/v1/common/v1/soft_cap_type.proto";
 import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
 import "sentry_protos/billing/v1/services/contract/v1/sku.proto";
 import "sentry_protos/billing/v1/sku.proto";
@@ -68,6 +69,11 @@ message Reservation {
   }
 }
 
+// Allows usage beyond a reservation without PAYG charges.
+message SoftCap {
+  sentry_protos.billing.v1.common.v1.SoftCapType type = 1;
+}
+
 message LineItemUids {
   repeated string uids = 1;
 }
@@ -91,6 +97,7 @@ message UserConfig {
     google.protobuf.Empty all_items = 4;
   }
   Activation activation = 5;
+  SoftCap soft_cap = 6;
 }
 
 message PricingConfig {

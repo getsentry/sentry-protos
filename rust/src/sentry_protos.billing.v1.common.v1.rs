@@ -299,6 +299,36 @@ pub mod payment_config {
         Stripe(super::StripePaymentData),
     }
 }
+/// Soft-cap behavior.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SoftCapType {
+    Unspecified = 0,
+    OnDemand = 1,
+    TrueForward = 2,
+}
+impl SoftCapType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SOFT_CAP_TYPE_UNSPECIFIED",
+            Self::OnDemand => "SOFT_CAP_TYPE_ON_DEMAND",
+            Self::TrueForward => "SOFT_CAP_TYPE_TRUE_FORWARD",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SOFT_CAP_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "SOFT_CAP_TYPE_ON_DEMAND" => Some(Self::OnDemand),
+            "SOFT_CAP_TYPE_TRUE_FORWARD" => Some(Self::TrueForward),
+            _ => None,
+        }
+    }
+}
 /// The type of sponsorship associated with a contract.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -384,6 +414,9 @@ pub struct PendingUserConfig {
     /// Unset means the reservation is not changing.
     #[prost(message, optional, tag = "2")]
     pub reservation: ::core::option::Option<Reservation>,
+    /// Pending soft-cap override.
+    #[prost(message, optional, tag = "5")]
+    pub soft_cap: ::core::option::Option<SoftCap>,
     /// The line items this config applies to.
     #[prost(oneof = "pending_user_config::LineItems", tags = "3, 4")]
     pub line_items: ::core::option::Option<pending_user_config::LineItems>,
@@ -430,6 +463,14 @@ pub mod reservation {
         #[prost(uint64, tag = "3")]
         NumReservedUnits(u64),
     }
+}
+/// A pending soft-cap override.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SoftCap {
+    #[prost(enumeration = "SoftCapType", tag = "1")]
+    pub r#type: i32,
+    #[prost(bool, tag = "2")]
+    pub clear_user_parameter: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct LineItemUids {
