@@ -407,6 +407,12 @@ pub mod reservation {
         NumReservedUnits(u64),
     }
 }
+/// Allows usage beyond a reservation without PAYG charges.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SoftCap {
+    #[prost(enumeration = "super::super::super::common::v1::SoftCapType", tag = "1")]
+    pub r#type: i32,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct LineItemUids {
     #[prost(string, repeated, tag = "1")]
@@ -467,6 +473,8 @@ pub struct UserConfig {
     pub reservation: ::core::option::Option<Reservation>,
     #[prost(message, optional, tag = "5")]
     pub activation: ::core::option::Option<Activation>,
+    #[prost(message, optional, tag = "6")]
+    pub soft_cap: ::core::option::Option<SoftCap>,
     #[prost(oneof = "user_config::LineItems", tags = "3, 4")]
     pub line_items: ::core::option::Option<user_config::LineItems>,
 }
