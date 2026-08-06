@@ -139,6 +139,7 @@ enum Function {
   FUNCTION_UNIQ = 11;
   FUNCTION_ANY = 13;
   FUNCTION_COLLECT_UNIQUE = 14;
+  FUNCTION_FIRST = 15;
 }
 
 enum ExtrapolationMode {
@@ -147,6 +148,39 @@ enum ExtrapolationMode {
   EXTRAPOLATION_MODE_SAMPLE_WEIGHTED = 2;
   EXTRAPOLATION_MODE_CLIENT_ONLY = 3;
   EXTRAPOLATION_MODE_SERVER_ONLY = 4;
+}
+
+// Ranking key for order-dependent aggregates. FUNCTION_FIRST returns the value
+// of the aggregate's `key` from the row that ranks first by this key (ClickHouse
+// argMin), so it must be set for FUNCTION_FIRST. Ignored by aggregates that are
+// not order-dependent. Referenced by both AttributeAggregation.ranked_by and
+// AttributeConditionalAggregation.ranked_by. Mirrors TraceItemTableRequest.OrderBy.
+message RankedBy {
+  // Sort selects which sort order is applied when sorting by a textual
+  // attribute. It has no effect when sorting by a numeric attribute.
+  enum Sort {
+    // Defaults to SORT_DEFAULT (lexicographic).
+    SORT_UNSPECIFIED = 0;
+    // Default lexicographic ordering: values are compared by their Unicode
+    // code points, so e.g. "item10" sorts before "item2".
+    SORT_DEFAULT = 1;
+    // Natural ordering: embedded runs of digits are compared by their
+    // numeric value, so e.g. "item2" sorts before "item10".
+    SORT_NATURAL = 2;
+    // Semantic-version ordering: values are parsed as semantic versions
+    // (https://semver.org) and compared component by component, so e.g.
+    // "1.9.0" sorts before "1.10.0".
+    SORT_SEMVER = 3;
+  }
+
+  // The attribute to sort by (e.g. sentry.timestamp).
+  AttributeKey key = 1;
+  // When true, sorts in descending order (FUNCTION_FIRST then returns the last
+  // row by `key`). Defaults to ascending.
+  bool descending = 2;
+  // The sort order to apply when sorting by a textual attribute. Ignored for
+  // numeric attributes.
+  Sort sort = 3;
 }
 
 message AttributeAggregation {
@@ -158,6 +192,7 @@ message AttributeAggregation {
     double default_value_double = 5;
     int64 default_value_int64 = 6;
   }
+  RankedBy ranked_by = 7;
 }
 
 enum Reliability {
