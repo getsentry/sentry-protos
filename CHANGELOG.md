@@ -1,3 +1,10 @@
+## 0.59.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Add soft cap types by @brendanhsentry in [#397](https://github.com/getsentry/sentry-protos/pull/397)
+- (py) Document strict editable installs for mypy by @armenzg in [#391](https://github.com/getsentry/sentry-protos/pull/391)
+
 ## 0.59.1
 
 ### Internal Changes 🔧
