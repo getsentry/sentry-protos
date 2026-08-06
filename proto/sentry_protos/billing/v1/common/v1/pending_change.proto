@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.common.v1;
 
 import "google/protobuf/empty.proto";
+import "sentry_protos/billing/v1/common/v1/soft_cap_type.proto";
 import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
 
 // A pending change is a deferred subscription change for an organization that
@@ -53,6 +54,9 @@ message PendingUserConfig {
     // shared PAYG budgets.
     google.protobuf.Empty all_items = 4;
   }
+
+  // Pending soft-cap override.
+  optional SoftCap soft_cap = 5;
 }
 
 message PAYGBudget {
@@ -69,6 +73,12 @@ message Reservation {
   }
   // Whether the next billing cycle should clear the Contract's existing UserParameter
   bool clear_user_parameter = 4;
+}
+
+// A pending soft-cap override.
+message SoftCap {
+  SoftCapType type = 1;
+  bool clear_user_parameter = 2;
 }
 
 message LineItemUids {

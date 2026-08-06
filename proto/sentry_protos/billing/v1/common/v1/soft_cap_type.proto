@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+// Soft-cap behavior.
+enum SoftCapType {
+  SOFT_CAP_TYPE_UNSPECIFIED = 0;
+  SOFT_CAP_TYPE_ON_DEMAND = 1;
+  SOFT_CAP_TYPE_TRUE_FORWARD = 2;
+}
