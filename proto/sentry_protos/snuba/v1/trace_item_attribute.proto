@@ -138,6 +138,7 @@ enum Function {
   FUNCTION_MIN = 10;
   FUNCTION_UNIQ = 11;
   FUNCTION_ANY = 13;
+  FUNCTION_COLLECT_UNIQUE = 14;
 }
 
 enum ExtrapolationMode {
