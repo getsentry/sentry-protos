@@ -69,6 +69,12 @@ message Reservation {
   }
 }
 
+message SpendAllocation {
+  string line_item_uid = 1;
+  uint32 quantity = 2;
+  uint64 project_id = 3;
+}
+
 // Allows usage beyond a reservation without PAYG charges.
 message SoftCap {
   sentry_protos.billing.v1.common.v1.SoftCapType type = 1;
@@ -98,6 +104,7 @@ message UserConfig {
   }
   Activation activation = 5;
   SoftCap soft_cap = 6;
+  SpendAllocation spend_allocation = 7;
 }
 
 message PricingConfig {
