@@ -307,6 +307,7 @@ pub enum Function {
     Min = 10,
     Uniq = 11,
     Any = 13,
+    CollectUnique = 14,
 }
 impl Function {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -330,6 +331,7 @@ impl Function {
             Self::Min => "FUNCTION_MIN",
             Self::Uniq => "FUNCTION_UNIQ",
             Self::Any => "FUNCTION_ANY",
+            Self::CollectUnique => "FUNCTION_COLLECT_UNIQUE",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -349,6 +351,7 @@ impl Function {
             "FUNCTION_MIN" => Some(Self::Min),
             "FUNCTION_UNIQ" => Some(Self::Uniq),
             "FUNCTION_ANY" => Some(Self::Any),
+            "FUNCTION_COLLECT_UNIQUE" => Some(Self::CollectUnique),
             _ => None,
         }
     }
