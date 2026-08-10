@@ -1,3 +1,9 @@
+## 0.60.0
+
+### New Features ✨
+
+- (snuba) Add FUNCTION_COLLECT_UNIQUE for array-returning aggregations by @pbhandari in [#393](https://github.com/getsentry/sentry-protos/pull/393)
+
 ## 0.59.2
 
 ### Internal Changes 🔧
