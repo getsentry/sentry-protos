@@ -69,6 +69,13 @@ message Reservation {
   }
 }
 
+// Represents how much of the total reserved amount is allocated to a specific project
+// for a given line item.
+message SpendAllocation {
+  uint64 quantity = 1;
+  uint64 project_id = 2;
+}
+
 // Allows usage beyond a reservation without PAYG charges.
 message SoftCap {
   sentry_protos.billing.v1.common.v1.SoftCapType type = 1;
@@ -98,6 +105,7 @@ message UserConfig {
   }
   Activation activation = 5;
   SoftCap soft_cap = 6;
+  SpendAllocation spend_allocation = 7;
 }
 
 message PricingConfig {

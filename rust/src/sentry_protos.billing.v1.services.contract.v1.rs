@@ -407,6 +407,15 @@ pub mod reservation {
         NumReservedUnits(u64),
     }
 }
+/// Represents how much of the total reserved amount is allocated to a specific project
+/// for a given line item.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SpendAllocation {
+    #[prost(uint64, tag = "1")]
+    pub quantity: u64,
+    #[prost(uint64, tag = "2")]
+    pub project_id: u64,
+}
 /// Allows usage beyond a reservation without PAYG charges.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SoftCap {
@@ -475,6 +484,8 @@ pub struct UserConfig {
     pub activation: ::core::option::Option<Activation>,
     #[prost(message, optional, tag = "6")]
     pub soft_cap: ::core::option::Option<SoftCap>,
+    #[prost(message, optional, tag = "7")]
+    pub spend_allocation: ::core::option::Option<SpendAllocation>,
     #[prost(oneof = "user_config::LineItems", tags = "3, 4")]
     pub line_items: ::core::option::Option<user_config::LineItems>,
 }
