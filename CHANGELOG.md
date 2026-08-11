@@ -1,3 +1,9 @@
+## 0.61.0
+
+### New Features ✨
+
+- (billing) Add source to EffectiveUnitGrant by @armenzg in [#399](https://github.com/getsentry/sentry-protos/pull/399)
+
 ## 0.60.1
 
 ### Internal Changes 🔧
