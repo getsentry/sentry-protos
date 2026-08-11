@@ -1,3 +1,9 @@
+## 0.60.1
+
+### Internal Changes 🔧
+
+- (billing-platform) SpendAllocation user config by @brendanhsentry in [#398](https://github.com/getsentry/sentry-protos/pull/398)
+
 ## 0.60.0
 
 ### New Features ✨
