@@ -407,13 +407,13 @@ pub mod reservation {
         NumReservedUnits(u64),
     }
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+/// Represents how much of the total reserved amount is allocated to a specific project
+/// for a given line item.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SpendAllocation {
-    #[prost(string, tag = "1")]
-    pub line_item_uid: ::prost::alloc::string::String,
-    #[prost(uint32, tag = "2")]
+    #[prost(uint32, tag = "1")]
     pub quantity: u32,
-    #[prost(uint64, tag = "3")]
+    #[prost(uint64, tag = "2")]
     pub project_id: u64,
 }
 /// Allows usage beyond a reservation without PAYG charges.
