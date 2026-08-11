@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.usage.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/data_category.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+
+message GetProjectUsageRequest {
+  uint64 organization_id = 1;
+  // Exact inclusive boundary for the queried usage interval.
+  google.protobuf.Timestamp start = 2;
+  // Exact exclusive boundary for the queried usage interval.
+  google.protobuf.Timestamp end = 3;
+  // The service batches this list into ClickHouse queries of at most 100 projects.
+  repeated uint64 project_ids = 4;
+  repeated DataCategory categories = 5;
+}
+
+message ProjectUsage {
+  uint64 project_id = 1;
+  repeated DailyUsage days = 2;
+}
+
+message GetProjectUsageResponse {
+  repeated ProjectUsage project_usage = 1;
+}

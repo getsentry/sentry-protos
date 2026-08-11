@@ -5,6 +5,12 @@ package sentry_protos.billing.v1.services.rate_card.v1;
 import "sentry_protos/billing/v1/common/v1/line_item_details.proto";
 import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
 
+// A project's allocation for the rate card's billing period.
+message SpendAllocationSegment {
+  uint64 project_id = 1;
+  uint64 quantity = 2;
+}
+
 message RateCardLineItem {
   sentry_protos.billing.v1.common.v1.LineItemDetails line_item_detail = 1;
 
@@ -20,6 +26,10 @@ message RateCardLineItem {
 
   // Whether this line item is currently enabled
   bool is_enabled = 7;
+
+  // The full reservation remains in num_reserved_units. These allocations apply
+  // to the entire billing period represented by this rate card.
+  repeated SpendAllocationSegment spend_allocation_segments = 8;
 }
 
 message SharedRateCardLineItem {

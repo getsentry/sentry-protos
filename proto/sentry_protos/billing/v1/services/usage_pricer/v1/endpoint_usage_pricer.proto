@@ -102,6 +102,15 @@ message SharedLineItemUsageSummary {
   bool has_remaining_capacity = 5;
 }
 
+message ProjectSpendAllocationSummary {
+  uint64 project_id = 1;
+  string line_item_uid = 2;
+  uint64 allocated_quantity = 3;
+  uint64 consumed_quantity = 4;
+  uint64 remaining_quantity = 5;
+  bool has_remaining_allocation = 6;
+}
+
 message UsagePricerResponse {
   // use line_item_summaries
   repeated SKUUsageSummary sku_summaries = 1 [deprecated = true];
@@ -114,4 +123,7 @@ message UsagePricerResponse {
   repeated SharedLineItemUsageSummary shared_line_item_summaries = 4;
 
   google.protobuf.Timestamp last_usage_ts = 5;
+
+  // Current project allocations, flattened across line items.
+  repeated ProjectSpendAllocationSummary project_spend_allocation_summaries = 6;
 }
