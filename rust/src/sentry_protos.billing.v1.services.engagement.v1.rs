@@ -691,6 +691,8 @@ pub struct EffectiveUnitGrant {
     pub start_date: ::core::option::Option<super::super::super::Date>,
     #[prost(message, optional, tag = "5")]
     pub end_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(enumeration = "EffectiveUnitSource", tag = "6")]
+    pub source: i32,
     #[prost(oneof = "effective_unit_grant::Amount", tags = "2, 3")]
     pub amount: ::core::option::Option<effective_unit_grant::Amount>,
 }
@@ -714,6 +716,35 @@ pub struct GetUnitGrantsRequest {
 pub struct GetUnitGrantsResponse {
     #[prost(message, repeated, tag = "1")]
     pub grants: ::prost::alloc::vec::Vec<EffectiveUnitGrant>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum EffectiveUnitSource {
+    Unspecified = 0,
+    Trial = 1,
+    RecurringCredit = 2,
+}
+impl EffectiveUnitSource {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "EFFECTIVE_UNIT_SOURCE_UNSPECIFIED",
+            Self::Trial => "EFFECTIVE_UNIT_SOURCE_TRIAL",
+            Self::RecurringCredit => "EFFECTIVE_UNIT_SOURCE_RECURRING_CREDIT",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "EFFECTIVE_UNIT_SOURCE_UNSPECIFIED" => Some(Self::Unspecified),
+            "EFFECTIVE_UNIT_SOURCE_TRIAL" => Some(Self::Trial),
+            "EFFECTIVE_UNIT_SOURCE_RECURRING_CREDIT" => Some(Self::RecurringCredit),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RedeemPromoCodeRequest {

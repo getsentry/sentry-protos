@@ -4,6 +4,12 @@ package sentry_protos.billing.v1.services.engagement.v1;
 
 import "sentry_protos/billing/v1/date.proto";
 
+enum EffectiveUnitSource {
+  EFFECTIVE_UNIT_SOURCE_UNSPECIFIED = 0;
+  EFFECTIVE_UNIT_SOURCE_TRIAL = 1;
+  EFFECTIVE_UNIT_SOURCE_RECURRING_CREDIT = 2;
+}
+
 message EffectiveUnitGrant {
   string line_item_uid = 1;
   oneof amount {
@@ -16,6 +22,7 @@ message EffectiveUnitGrant {
   // For monetary, Grants are applied to invoices created during the active period.
   sentry_protos.billing.v1.Date start_date = 4;
   sentry_protos.billing.v1.Date end_date = 5;
+  EffectiveUnitSource source = 6;
 }
 
 message GetUnitGrantsRequest {
