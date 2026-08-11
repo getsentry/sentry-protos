@@ -8,20 +8,29 @@ import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
 
 message GetProjectUsageRequest {
   uint64 organization_id = 1;
-  // Exact inclusive boundary for the queried usage interval.
   google.protobuf.Timestamp start = 2;
-  // Exact exclusive boundary for the queried usage interval.
   google.protobuf.Timestamp end = 3;
-  // The service batches this list into ClickHouse queries of at most 100 projects.
-  repeated uint64 project_ids = 4;
-  repeated DataCategory categories = 5;
+
+  // Optional filter for specific data categories.
+  // When empty, usage for all categories is returned.
+  repeated DataCategory categories = 4;
 }
 
 message ProjectUsage {
-  uint64 project_id = 1;
-  repeated DailyUsage days = 2;
+  // Usage broken down by day, each containing per-category usage.
+  repeated DailyUsage days = 1;
+  repeated DailySeatUsage seat_days = 2;
+
+  // The latest timestamp of usage data included in this response (inclusive
+  // — there is at least one row at exactly this timestamp). Callers persist
+  // this as the contract's watermark; subsequent queries should resume
+  // strictly after this timestamp to avoid double-counting the boundary.
+  optional google.protobuf.Timestamp last_usage_ts = 3;
+
+  uint64 project_id = 4;
 }
 
 message GetProjectUsageResponse {
-  repeated ProjectUsage project_usage = 1;
+  // Project usage broken down by day and category.
+  repeated ProjectUsage daily_project_usage = 1;
 }
