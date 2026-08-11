@@ -411,8 +411,8 @@ pub mod reservation {
 /// for a given line item.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SpendAllocation {
-    #[prost(uint32, tag = "1")]
-    pub quantity: u32,
+    #[prost(uint64, tag = "1")]
+    pub quantity: u64,
     #[prost(uint64, tag = "2")]
     pub project_id: u64,
 }
