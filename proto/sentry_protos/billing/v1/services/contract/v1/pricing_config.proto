@@ -72,7 +72,7 @@ message Reservation {
 // Represents how much of the total reserved amount is allocated to a specific project
 // for a given line item.
 message SpendAllocation {
-  uint32 quantity = 1;
+  uint64 quantity = 1;
   uint64 project_id = 2;
 }
 
