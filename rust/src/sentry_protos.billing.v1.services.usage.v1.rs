@@ -64,29 +64,36 @@ pub struct GetUsageRequest {
 pub struct GetProjectUsageRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
-    /// Exact inclusive boundary for the queried usage interval.
     #[prost(message, optional, tag = "2")]
     pub start: ::core::option::Option<::prost_types::Timestamp>,
-    /// Exact exclusive boundary for the queried usage interval.
     #[prost(message, optional, tag = "3")]
     pub end: ::core::option::Option<::prost_types::Timestamp>,
-    /// The service batches this list into ClickHouse queries of at most 100 projects.
-    #[prost(uint64, repeated, tag = "4")]
-    pub project_ids: ::prost::alloc::vec::Vec<u64>,
-    #[prost(enumeration = "super::super::super::DataCategory", repeated, tag = "5")]
+    /// Optional filter for specific data categories.
+    /// When empty, usage for all categories is returned.
+    #[prost(enumeration = "super::super::super::DataCategory", repeated, tag = "4")]
     pub categories: ::prost::alloc::vec::Vec<i32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProjectUsage {
-    #[prost(uint64, tag = "1")]
-    pub project_id: u64,
-    #[prost(message, repeated, tag = "2")]
+    /// Usage broken down by day, each containing per-category usage.
+    #[prost(message, repeated, tag = "1")]
     pub days: ::prost::alloc::vec::Vec<DailyUsage>,
+    #[prost(message, repeated, tag = "2")]
+    pub seat_days: ::prost::alloc::vec::Vec<DailySeatUsage>,
+    /// The latest timestamp of usage data included in this response (inclusive
+    /// — there is at least one row at exactly this timestamp). Callers persist
+    /// this as the contract's watermark; subsequent queries should resume
+    /// strictly after this timestamp to avoid double-counting the boundary.
+    #[prost(message, optional, tag = "3")]
+    pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(uint64, tag = "4")]
+    pub project_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectUsageResponse {
+    /// Project usage broken down by day and category.
     #[prost(message, repeated, tag = "1")]
-    pub project_usage: ::prost::alloc::vec::Vec<ProjectUsage>,
+    pub daily_project_usage: ::prost::alloc::vec::Vec<ProjectUsage>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PageToken {
