@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.usage.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/data_category.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+
+message GetProjectUsageRequest {
+  uint64 organization_id = 1;
+  google.protobuf.Timestamp start = 2;
+  google.protobuf.Timestamp end = 3;
+
+  // Optional filter for specific data categories.
+  // When empty, usage for all categories is returned.
+  repeated DataCategory categories = 4;
+}
+
+message ProjectUsage {
+  // Usage broken down by day, each containing per-category usage.
+  repeated DailyUsage days = 1;
+  repeated DailySeatUsage seat_days = 2;
+
+  // The latest timestamp of usage data included in this response (inclusive
+  // — there is at least one row at exactly this timestamp). Callers persist
+  // this as the contract's watermark; subsequent queries should resume
+  // strictly after this timestamp to avoid double-counting the boundary.
+  optional google.protobuf.Timestamp last_usage_ts = 3;
+
+  uint64 project_id = 4;
+}
+
+message GetProjectUsageResponse {
+  // Project usage broken down by day and category.
+  repeated ProjectUsage daily_project_usage = 1;
+}

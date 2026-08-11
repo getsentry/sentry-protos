@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.usage_pricer.v1;
+
+// Returns the allocation-aware capacity used for project quota enforcement.
+message GetAllocationCapacityForContractRequest {
+  uint64 contract_id = 1;
+}
+
+message ProjectAllocationCapacity {
+  uint64 project_id = 1;
+  uint64 allocated_quantity = 2;
+  uint64 consumed_quantity = 3;
+  uint64 remaining_quantity = 4;
+  bool has_remaining_allocation = 5;
+}
+
+message LineItemAllocationCapacity {
+  string line_item_uid = 1;
+
+  // Capacity available to every project from the shared organization root,
+  // including reserved units, grants, and PAYG.
+  bool has_remaining_shared_capacity = 2;
+
+  repeated ProjectAllocationCapacity project_allocations = 3;
+}
+
+message GetAllocationCapacityForContractResponse {
+  repeated LineItemAllocationCapacity line_item_capacities = 1;
+}
