@@ -69,10 +69,11 @@ message Reservation {
   }
 }
 
+// Represents how much of the total reserved amount is allocated to a specific project
+// for a given line item.
 message SpendAllocation {
-  string line_item_uid = 1;
-  uint32 quantity = 2;
-  uint64 project_id = 3;
+  uint32 quantity = 1;
+  uint64 project_id = 2;
 }
 
 // Allows usage beyond a reservation without PAYG charges.
