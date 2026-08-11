@@ -3,6 +3,8 @@
 pub struct CalculateContractBudgetQuotasRequest {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub project_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CalculateContractBudgetQuotasResponse {
