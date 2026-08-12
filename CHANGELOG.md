@@ -1,3 +1,9 @@
+## 0.62.1
+
+### Internal Changes 🔧
+
+- Add tax fields to invoice and contract protos by @noahsmartin in [#404](https://github.com/getsentry/sentry-protos/pull/404)
+
 ## 0.62.0
 
 ### New Features ✨
