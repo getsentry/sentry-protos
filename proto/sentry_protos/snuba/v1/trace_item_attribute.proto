@@ -139,6 +139,7 @@ enum Function {
   FUNCTION_UNIQ = 11;
   FUNCTION_ANY = 13;
   FUNCTION_COLLECT_UNIQUE = 14;
+  FUNCTION_FIRST = 15;
   FUNCTION_LAST = 16;
 }
 
@@ -165,10 +166,8 @@ message RankedBy {
 
   // The attribute to sort by (e.g. sentry.timestamp).
   AttributeKey key = 1;
-  // When true, reverses the sort order.
-  bool descending = 2;
   // The sort order to apply when sorting by a textual attribute
-  Sort sort = 3;
+  Sort sort = 2;
 }
 
 message AttributeAggregation {
