@@ -22,8 +22,8 @@ use sentry_protos::billing::v1::services::contract::v1::{
 };
 use sentry_protos::billing::v1::services::package::v1::PackageConfig;
 use sentry_protos::billing::v1::services::usage::v1::{
-    CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage, GetUsageRequest,
-    GetUsageResponse,
+    CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage, GetUsageByProjectRequest,
+    GetUsageByProjectResponse, GetUsageRequest, GetUsageResponse, ProjectUsage,
 };
 use sentry_protos::sentry::v1::RetryState;
 
@@ -85,6 +85,45 @@ fn roundtrip_get_usage_response() {
 }
 
 #[test]
+fn roundtrip_get_usage_by_project_response() {
+    assert_roundtrip(&GetUsageByProjectResponse {
+        projects: vec![ProjectUsage {
+            project_id: 42,
+            days: vec![DailyUsage {
+                date: Some(Date {
+                    year: 2026,
+                    month: 1,
+                    day: 15,
+                }),
+                usage: vec![CategoryUsage {
+                    category: DataCategory::Error as i32,
+                    data: Some(UsageData {
+                        accepted: 500,
+                        dropped: 10,
+                        ..Default::default()
+                    }),
+                }],
+            }],
+            seat_days: vec![DailySeatUsage {
+                date: Some(Date {
+                    year: 2026,
+                    month: 1,
+                    day: 15,
+                }),
+                seats: vec![CategorySeatUsage {
+                    category: SeatCategory::Monitor as i32,
+                    count: 5,
+                }],
+            }],
+        }],
+        last_usage_ts: Some(prost_types::Timestamp {
+            seconds: 1_768_435_200,
+            nanos: 0,
+        }),
+    });
+}
+
+#[test]
 fn roundtrip_get_contract_request() {
     assert_roundtrip(&GetContractRequest {
         organization_id: 42,
@@ -108,6 +147,8 @@ fn default_messages_roundtrip() {
     assert_roundtrip(&CategoryUsage::default());
     assert_roundtrip(&GetUsageRequest::default());
     assert_roundtrip(&GetUsageResponse::default());
+    assert_roundtrip(&GetUsageByProjectRequest::default());
+    assert_roundtrip(&GetUsageByProjectResponse::default());
     assert_roundtrip(&Contract::default());
 }
 

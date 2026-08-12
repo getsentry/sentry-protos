@@ -98,3 +98,37 @@ pub struct GetUsageRequest {
     #[prost(enumeration = "super::super::super::DataCategory", repeated, tag = "4")]
     pub categories: ::prost::alloc::vec::Vec<i32>,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetUsageByProjectRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub start: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "3")]
+    pub end: ::core::option::Option<::prost_types::Timestamp>,
+    /// Optional filter for specific data categories.
+    /// When empty, usage for all categories is returned.
+    #[prost(enumeration = "super::super::super::DataCategory", repeated, tag = "4")]
+    pub categories: ::prost::alloc::vec::Vec<i32>,
+}
+/// Usage for a single project, broken down by day and category.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ProjectUsage {
+    #[prost(uint64, tag = "1")]
+    pub project_id: u64,
+    #[prost(message, repeated, tag = "2")]
+    pub days: ::prost::alloc::vec::Vec<DailyUsage>,
+    #[prost(message, repeated, tag = "3")]
+    pub seat_days: ::prost::alloc::vec::Vec<DailySeatUsage>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetUsageByProjectResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub projects: ::prost::alloc::vec::Vec<ProjectUsage>,
+    /// The latest timestamp of usage data included in this response (inclusive
+    /// — there is at least one row at exactly this timestamp). Callers persist
+    /// this as the contract's watermark; subsequent queries should resume
+    /// strictly after this timestamp to avoid double-counting the boundary.
+    #[prost(message, optional, tag = "2")]
+    pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
+}
