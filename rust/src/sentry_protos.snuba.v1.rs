@@ -265,6 +265,65 @@ pub mod attribute_value {
         ValNull(bool),
     }
 }
+/// Ranking key for order-dependent aggregates (e.g. FUNCTION_FIRST).
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RankedBy {
+    /// The attribute to sort by (e.g. sentry.timestamp).
+    #[prost(message, optional, tag = "1")]
+    pub key: ::core::option::Option<AttributeKey>,
+    /// The sort order to apply when sorting by a textual attribute
+    #[prost(enumeration = "ranked_by::Sort", tag = "2")]
+    pub sort: i32,
+}
+/// Nested message and enum types in `RankedBy`.
+pub mod ranked_by {
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
+    #[repr(i32)]
+    pub enum Sort {
+        /// Defaults to SORT_DEFAULT (lexicographic).
+        Unspecified = 0,
+        /// Default lexicographic ordering.
+        Default = 1,
+        /// embedded runs of digits are compared by their numeric value
+        Natural = 2,
+        /// Semantic-version ordering: "1.9.0" sorts before "1.10.0".
+        Semver = 3,
+    }
+    impl Sort {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Self::Unspecified => "SORT_UNSPECIFIED",
+                Self::Default => "SORT_DEFAULT",
+                Self::Natural => "SORT_NATURAL",
+                Self::Semver => "SORT_SEMVER",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "SORT_UNSPECIFIED" => Some(Self::Unspecified),
+                "SORT_DEFAULT" => Some(Self::Default),
+                "SORT_NATURAL" => Some(Self::Natural),
+                "SORT_SEMVER" => Some(Self::Semver),
+                _ => None,
+            }
+        }
+    }
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AttributeAggregation {
     #[prost(enumeration = "Function", tag = "1")]
@@ -275,6 +334,8 @@ pub struct AttributeAggregation {
     pub label: ::prost::alloc::string::String,
     #[prost(enumeration = "ExtrapolationMode", tag = "4")]
     pub extrapolation_mode: i32,
+    #[prost(message, optional, tag = "7")]
+    pub ranked_by: ::core::option::Option<RankedBy>,
     #[prost(oneof = "attribute_aggregation::DefaultValue", tags = "5, 6")]
     pub default_value: ::core::option::Option<attribute_aggregation::DefaultValue>,
 }
@@ -308,6 +369,8 @@ pub enum Function {
     Uniq = 11,
     Any = 13,
     CollectUnique = 14,
+    First = 15,
+    Last = 16,
 }
 impl Function {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -332,6 +395,8 @@ impl Function {
             Self::Uniq => "FUNCTION_UNIQ",
             Self::Any => "FUNCTION_ANY",
             Self::CollectUnique => "FUNCTION_COLLECT_UNIQUE",
+            Self::First => "FUNCTION_FIRST",
+            Self::Last => "FUNCTION_LAST",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -352,6 +417,8 @@ impl Function {
             "FUNCTION_UNIQ" => Some(Self::Uniq),
             "FUNCTION_ANY" => Some(Self::Any),
             "FUNCTION_COLLECT_UNIQUE" => Some(Self::CollectUnique),
+            "FUNCTION_FIRST" => Some(Self::First),
+            "FUNCTION_LAST" => Some(Self::Last),
             _ => None,
         }
     }
@@ -647,6 +714,8 @@ pub struct AttributeConditionalAggregation {
     pub extrapolation_mode: i32,
     #[prost(message, optional, tag = "5")]
     pub filter: ::core::option::Option<TraceItemFilter>,
+    #[prost(message, optional, tag = "9")]
+    pub ranked_by: ::core::option::Option<RankedBy>,
     #[prost(oneof = "attribute_conditional_aggregation::DefaultValue", tags = "7, 8")]
     pub default_value: ::core::option::Option<
         attribute_conditional_aggregation::DefaultValue,

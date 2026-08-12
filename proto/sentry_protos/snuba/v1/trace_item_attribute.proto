@@ -139,6 +139,8 @@ enum Function {
   FUNCTION_UNIQ = 11;
   FUNCTION_ANY = 13;
   FUNCTION_COLLECT_UNIQUE = 14;
+  FUNCTION_FIRST = 15;
+  FUNCTION_LAST = 16;
 }
 
 enum ExtrapolationMode {
@@ -147,6 +149,25 @@ enum ExtrapolationMode {
   EXTRAPOLATION_MODE_SAMPLE_WEIGHTED = 2;
   EXTRAPOLATION_MODE_CLIENT_ONLY = 3;
   EXTRAPOLATION_MODE_SERVER_ONLY = 4;
+}
+
+// Ranking key for order-dependent aggregates (e.g. FUNCTION_FIRST).
+message RankedBy {
+  enum Sort {
+    // Defaults to SORT_DEFAULT (lexicographic).
+    SORT_UNSPECIFIED = 0;
+    // Default lexicographic ordering.
+    SORT_DEFAULT = 1;
+    // embedded runs of digits are compared by their numeric value
+    SORT_NATURAL = 2;
+    // Semantic-version ordering: "1.9.0" sorts before "1.10.0".
+    SORT_SEMVER = 3;
+  }
+
+  // The attribute to sort by (e.g. sentry.timestamp).
+  AttributeKey key = 1;
+  // The sort order to apply when sorting by a textual attribute
+  Sort sort = 2;
 }
 
 message AttributeAggregation {
@@ -158,6 +179,7 @@ message AttributeAggregation {
     double default_value_double = 5;
     int64 default_value_int64 = 6;
   }
+  RankedBy ranked_by = 7;
 }
 
 enum Reliability {
