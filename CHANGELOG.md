@@ -1,3 +1,9 @@
+## 0.61.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Define GetUsageByProject endpoint by @brendanhsentry in [#403](https://github.com/getsentry/sentry-protos/pull/403)
+
 ## 0.61.0
 
 ### New Features ✨
