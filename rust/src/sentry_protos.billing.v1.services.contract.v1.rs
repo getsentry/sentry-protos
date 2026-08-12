@@ -569,6 +569,12 @@ pub struct Invoice {
     pub needs_charged: bool,
     #[prost(message, optional, tag = "9")]
     pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+    /// The customer's tax registration number (e.g. VAT ID)
+    #[prost(string, optional, tag = "10")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
+    /// Whether the tax provider placed the invoice under reverse charge.
+    #[prost(bool, tag = "11")]
+    pub is_reverse_charge: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
@@ -811,6 +817,12 @@ pub struct CreateContractRequest {
         tag = "11"
     )]
     pub sponsorship_type: ::core::option::Option<i32>,
+    /// The customer's tax registration number (e.g. VAT ID) on file.
+    #[prost(string, optional, tag = "12")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
+    /// Whether the tax provider placed this invoice under reverse charge.
+    #[prost(bool, tag = "13")]
+    pub is_reverse_charge: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateContractResponse {
@@ -1113,6 +1125,12 @@ pub struct RolloverContractRequest {
     /// Whether the requested change should result in a new billing period.
     #[prost(bool, tag = "9")]
     pub start_new_term: bool,
+    /// The customer's tax registration number (e.g. VAT ID) on file.
+    #[prost(string, optional, tag = "10")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
+    /// Whether the tax provider placed this invoice under reverse charge.
+    #[prost(bool, tag = "11")]
+    pub is_reverse_charge: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
