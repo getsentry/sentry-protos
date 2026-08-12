@@ -16,7 +16,5 @@ message AttributeConditionalAggregation {
     double default_value_double = 7;
     int64 default_value_int64 = 8;
   }
-  // Ranking key for order-dependent aggregates (e.g. FUNCTION_FIRST -> argMin).
-  // Must be set for FUNCTION_FIRST.
   RankedBy ranked_by = 9;
 }
