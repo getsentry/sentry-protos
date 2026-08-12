@@ -42,4 +42,7 @@ message LineItemDetails {
 
   // The invoice line item type strings for this line item.
   InvoiceMetadataTags invoice_data = 8;
+
+  // Invoice line item order. Lower values print first, unset last.
+  int32 display_order = 9;
 }

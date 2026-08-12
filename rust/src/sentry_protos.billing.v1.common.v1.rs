@@ -259,6 +259,9 @@ pub struct LineItemDetails {
     /// The invoice line item type strings for this line item.
     #[prost(message, optional, tag = "8")]
     pub invoice_data: ::core::option::Option<InvoiceMetadataTags>,
+    /// Invoice line item order. Lower values print first, unset last.
+    #[prost(int32, tag = "9")]
+    pub display_order: i32,
 }
 /// Stripe-specific payment information for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
