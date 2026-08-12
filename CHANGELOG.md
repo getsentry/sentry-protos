@@ -1,3 +1,9 @@
+## 0.62.0
+
+### New Features ✨
+
+- (snuba) Add FUNCTION_FIRST, FUNCTION_LAST, and the RankedBy ranking key by @pbhandari in [#402](https://github.com/getsentry/sentry-protos/pull/402)
+
 ## 0.61.1
 
 ### Internal Changes 🔧
