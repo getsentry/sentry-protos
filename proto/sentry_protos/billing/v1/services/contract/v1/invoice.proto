@@ -29,4 +29,10 @@ message Invoice {
   string guid = 7;
   bool needs_charged = 8;
   sentry_protos.billing.v1.common.v1.Address address = 9;
+
+  // The customer's tax registration number (e.g. VAT ID)
+  optional string tax_number = 10;
+
+  // Whether the tax provider placed the invoice under reverse charge.
+  bool is_reverse_charge = 11;
 }

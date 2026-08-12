@@ -31,6 +31,12 @@ message RolloverContractRequest {
 
   // Whether the requested change should result in a new billing period.
   bool start_new_term = 9;
+
+  // The customer's tax registration number (e.g. VAT ID) on file.
+  optional string tax_number = 10;
+
+  // Whether the tax provider placed this invoice under reverse charge.
+  bool is_reverse_charge = 11;
 }
 
 message RolloverContractResponse {

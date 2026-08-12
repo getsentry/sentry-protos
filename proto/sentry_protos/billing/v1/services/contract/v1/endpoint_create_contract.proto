@@ -39,6 +39,12 @@ message CreateContractRequest {
   // The sponsored type of the contract. If unset, then this is a non-sponsored
   // contract.
   optional sentry_protos.billing.v1.common.v1.SponsoredType sponsorship_type = 11;
+
+  // The customer's tax registration number (e.g. VAT ID) on file.
+  optional string tax_number = 12;
+
+  // Whether the tax provider placed this invoice under reverse charge.
+  bool is_reverse_charge = 13;
 }
 
 message CreateContractResponse {
