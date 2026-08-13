@@ -5,6 +5,13 @@ package sentry_protos.billing.v1.services.rate_card.v1;
 import "sentry_protos/billing/v1/common/v1/line_item_details.proto";
 import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
 
+message ProjectSpendAllocation {
+  uint64 project_id = 1;
+
+  // Reserved line-item units assigned exclusively to this project
+  uint64 quantity = 2;
+}
+
 message RateCardLineItem {
   sentry_protos.billing.v1.common.v1.LineItemDetails line_item_detail = 1;
 
@@ -20,6 +27,8 @@ message RateCardLineItem {
 
   // Whether this line item is currently enabled
   bool is_enabled = 7;
+
+  repeated ProjectSpendAllocation project_spend_allocations = 8;
 }
 
 message SharedRateCardLineItem {
