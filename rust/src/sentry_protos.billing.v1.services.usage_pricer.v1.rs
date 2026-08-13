@@ -141,6 +141,28 @@ pub struct LineItemUsageSummary {
     #[prost(bool, tag = "8")]
     pub has_remaining_capacity: bool,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ProjectSpendAllocationSummary {
+    /// The project receiving reserved capacity.
+    #[prost(uint64, tag = "1")]
+    pub project_id: u64,
+    /// Refers to the uid in
+    /// sentry_protos.billing.v1.common.v1.LineItemDetails.
+    #[prost(string, tag = "2")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    /// Reserved units assigned exclusively to this project for the billing period.
+    #[prost(uint64, tag = "3")]
+    pub allocated_quantity: u64,
+    /// Project usage protected by the allocation. This is capped at
+    /// allocated_quantity; project usage above the allocation remains shared-root
+    /// usage and is not included here.
+    #[prost(uint64, tag = "4")]
+    pub consumed_quantity: u64,
+    /// Unused allocated capacity. This equals
+    /// allocated_quantity - consumed_quantity.
+    #[prost(uint64, tag = "5")]
+    pub remaining_quantity: u64,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
     /// Net cents consumed across all SKUs in this shared budget (after credits/trials applied).
@@ -175,4 +197,8 @@ pub struct UsagePricerResponse {
     pub shared_line_item_summaries: ::prost::alloc::vec::Vec<SharedLineItemUsageSummary>,
     #[prost(message, optional, tag = "5")]
     pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, repeated, tag = "6")]
+    pub project_spend_allocation_summaries: ::prost::alloc::vec::Vec<
+        ProjectSpendAllocationSummary,
+    >,
 }
