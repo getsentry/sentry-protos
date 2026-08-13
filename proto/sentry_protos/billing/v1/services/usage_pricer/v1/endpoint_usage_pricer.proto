@@ -86,24 +86,14 @@ message LineItemUsageSummary {
 }
 
 message ProjectSpendAllocationSummary {
-  // The project receiving reserved capacity.
   uint64 project_id = 1;
-
-  // Refers to the uid in
-  // sentry_protos.billing.v1.common.v1.LineItemDetails.
   string line_item_uid = 2;
 
-  // Reserved units assigned exclusively to this project for the billing period.
+  // Reserved units assigned exclusively to this project
   uint64 allocated_quantity = 3;
 
-  // Project usage protected by the allocation. This is capped at
-  // allocated_quantity; project usage above the allocation remains shared-root
-  // usage and is not included here.
+  // Amount of allocated quantity consumed by this project
   uint64 consumed_quantity = 4;
-
-  // Unused allocated capacity. This equals
-  // allocated_quantity - consumed_quantity.
-  uint64 remaining_quantity = 5;
 }
 
 message SharedLineItemUsageSummary {
