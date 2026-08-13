@@ -85,6 +85,17 @@ message LineItemUsageSummary {
   bool has_remaining_capacity = 8;
 }
 
+message ProjectSpendAllocationSummary {
+  uint64 project_id = 1;
+  string line_item_uid = 2;
+
+  // Reserved units assigned exclusively to this project
+  uint64 allocated_quantity = 3;
+
+  // Amount of allocated quantity consumed by this project
+  uint64 consumed_quantity = 4;
+}
+
 message SharedLineItemUsageSummary {
   // Net cents consumed across all SKUs in this shared budget (after credits/trials applied).
   uint64 payg_spend_cents = 1;
@@ -114,4 +125,6 @@ message UsagePricerResponse {
   repeated SharedLineItemUsageSummary shared_line_item_summaries = 4;
 
   google.protobuf.Timestamp last_usage_ts = 5;
+
+  repeated ProjectSpendAllocationSummary project_spend_allocation_summaries = 6;
 }

@@ -141,6 +141,19 @@ pub struct LineItemUsageSummary {
     #[prost(bool, tag = "8")]
     pub has_remaining_capacity: bool,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ProjectSpendAllocationSummary {
+    #[prost(uint64, tag = "1")]
+    pub project_id: u64,
+    #[prost(string, tag = "2")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    /// Reserved units assigned exclusively to this project
+    #[prost(uint64, tag = "3")]
+    pub allocated_quantity: u64,
+    /// Amount of allocated quantity consumed by this project
+    #[prost(uint64, tag = "4")]
+    pub consumed_quantity: u64,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
     /// Net cents consumed across all SKUs in this shared budget (after credits/trials applied).
@@ -175,4 +188,8 @@ pub struct UsagePricerResponse {
     pub shared_line_item_summaries: ::prost::alloc::vec::Vec<SharedLineItemUsageSummary>,
     #[prost(message, optional, tag = "5")]
     pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, repeated, tag = "6")]
+    pub project_spend_allocation_summaries: ::prost::alloc::vec::Vec<
+        ProjectSpendAllocationSummary,
+    >,
 }
