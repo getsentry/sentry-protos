@@ -143,25 +143,16 @@ pub struct LineItemUsageSummary {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ProjectSpendAllocationSummary {
-    /// The project receiving reserved capacity.
     #[prost(uint64, tag = "1")]
     pub project_id: u64,
-    /// Refers to the uid in
-    /// sentry_protos.billing.v1.common.v1.LineItemDetails.
     #[prost(string, tag = "2")]
     pub line_item_uid: ::prost::alloc::string::String,
-    /// Reserved units assigned exclusively to this project for the billing period.
+    /// Reserved units assigned exclusively to this project
     #[prost(uint64, tag = "3")]
     pub allocated_quantity: u64,
-    /// Project usage protected by the allocation. This is capped at
-    /// allocated_quantity; project usage above the allocation remains shared-root
-    /// usage and is not included here.
+    /// Amount of allocated quantity consumed by this project
     #[prost(uint64, tag = "4")]
     pub consumed_quantity: u64,
-    /// Unused allocated capacity. This equals
-    /// allocated_quantity - consumed_quantity.
-    #[prost(uint64, tag = "5")]
-    pub remaining_quantity: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
