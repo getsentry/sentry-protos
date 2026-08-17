@@ -575,6 +575,11 @@ pub struct Invoice {
     /// Whether the tax provider placed the invoice under reverse charge.
     #[prost(bool, tag = "11")]
     pub is_reverse_charge: bool,
+    /// Reference to the tax document the provider filed for this invoice.
+    /// Unset until the invoice's tax transaction is persisted with the
+    /// provider; reversals are recorded against it.
+    #[prost(string, optional, tag = "12")]
+    pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
