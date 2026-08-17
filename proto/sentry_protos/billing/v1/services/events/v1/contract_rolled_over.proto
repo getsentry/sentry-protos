@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.events.v1;
+
+message ContractRolledOver {
+  // Future: uint64 old_contract_id = 1;
+  // Future: uint64 new_contract_id = 2;
+}
