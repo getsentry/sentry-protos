@@ -1,3 +1,9 @@
+## 0.62.2
+
+### Internal Changes 🔧
+
+- Invoicer refund endpoint by @noahsmartin in [#406](https://github.com/getsentry/sentry-protos/pull/406)
+
 ## 0.62.1
 
 ### Internal Changes 🔧
