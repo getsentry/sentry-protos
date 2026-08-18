@@ -35,4 +35,9 @@ message Invoice {
 
   // Whether the tax provider placed the invoice under reverse charge.
   bool is_reverse_charge = 11;
+
+  // Reference to the tax document the provider filed for this invoice.
+  // Unset until the invoice's tax transaction is persisted with the
+  // provider; reversals are recorded against it.
+  optional string tax_transaction_code = 12;
 }
