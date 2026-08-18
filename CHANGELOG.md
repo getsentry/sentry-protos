@@ -1,3 +1,9 @@
+## 0.62.3
+
+### Internal Changes 🔧
+
+- Add new refunds to response by @noahsmartin in [#408](https://github.com/getsentry/sentry-protos/pull/408)
+
 ## 0.62.2
 
 ### Internal Changes 🔧
