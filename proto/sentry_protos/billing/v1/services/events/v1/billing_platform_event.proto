@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.events.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/events/v1/contract_rolled_over.proto";
+import "sentry_protos/billing/v1/services/events/v1/organization_over_usage.proto";
+import "sentry_protos/billing/v1/services/events/v1/organization_payg_changed.proto";
+import "sentry_protos/billing/v1/services/events/v1/organization_trial_started.proto";
+import "sentry_protos/billing/v1/services/events/v1/organization_unit_grant_added.proto";
+
+message EventMeta {
+  uint64 organization_id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+message EventPayload {
+  oneof payload {
+    sentry_protos.billing.v1.services.events.v1.OrganizationOverUsage organization_over_usage = 1;
+    sentry_protos.billing.v1.services.events.v1.OrganizationPaygChanged organization_payg_changed = 2;
+    sentry_protos.billing.v1.services.events.v1.OrganizationUnitGrantAdded organization_unit_grant_added = 3;
+    sentry_protos.billing.v1.services.events.v1.OrganizationTrialStarted organization_trial_started = 4;
+    sentry_protos.billing.v1.services.events.v1.ContractRolledOver contract_rolled_over = 5;
+  }
+}
+
+message BillingPlatformEvent {
+  EventMeta meta = 1;
+  EventPayload payload = 2;
+}

@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.events.v1;
+
+message OrganizationUnitGrantAdded {}
