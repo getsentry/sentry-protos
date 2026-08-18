@@ -1,3 +1,13 @@
+## 0.63.0
+
+### New Features ✨
+
+- (events) Define BillingPlatformEvent proto messages by @volokluev in [#407](https://github.com/getsentry/sentry-protos/pull/407)
+
+### Internal Changes 🔧
+
+- Add new refunds to response by @noahsmartin in [#408](https://github.com/getsentry/sentry-protos/pull/408)
+
 ## 0.62.2
 
 ### Internal Changes 🔧
