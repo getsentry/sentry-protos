@@ -271,6 +271,13 @@ pub struct RecordChargeRefundsResponse {
     /// or already existed, ordered by `date_added_st` ascending.
     #[prost(message, optional, tag = "1")]
     pub charge: ::core::option::Option<PlatformCharge>,
+    /// Only the refunds this call actually inserted -- those Stripe reported that
+    /// were not already stored. Stripe re-sends a charge's entire refund list on
+    /// every `charge.refunded` event, so a caller that must act exactly once per
+    /// refund (reversing its share of sales tax, for instance) reads this rather
+    /// than `charge.refunds`. Empty when the payload carried nothing new.
+    #[prost(message, repeated, tag = "2")]
+    pub new_refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
 }
 /// Synchronizes a stored platform charge with the latest snapshot from
 /// Stripe. The charge is identified by `stripe_charge.id`. Fields like
