@@ -106,4 +106,8 @@ message PackageConfig {
   // Each entry uses a billing data category.
   // A category can occur only once.
   repeated sentry_protos.billing.v1.common.v1.DataCategoryRetention retention_defaults = 14;
+
+  // Identifier for the matching plan in Vercel's marketplace. Set only on
+  // packages that can be bought through Vercel; unset otherwise.
+  optional string vercel_id = 15;
 }
