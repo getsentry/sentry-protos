@@ -168,6 +168,10 @@ pub struct PackageConfig {
     pub retention_defaults: ::prost::alloc::vec::Vec<
         super::super::super::common::v1::DataCategoryRetention,
     >,
+    /// Identifier for the matching plan in Vercel's marketplace. Set only on
+    /// packages that can be bought through Vercel; unset otherwise.
+    #[prost(string, optional, tag = "15")]
+    pub vercel_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
@@ -261,6 +265,15 @@ pub struct GetPackagesRequest {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetPackagesResponse {
     /// The requested packages, in the same order as the request.
+    #[prost(message, repeated, tag = "1")]
+    pub package_configs: ::prost::alloc::vec::Vec<PackageConfig>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetVercelPackagesRequest {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetVercelPackagesResponse {
+    /// Every package that can be bought through Vercel, that is, every package
+    /// with vercel_id set.
     #[prost(message, repeated, tag = "1")]
     pub package_configs: ::prost::alloc::vec::Vec<PackageConfig>,
 }
