@@ -1,3 +1,10 @@
+## 0.63.1
+
+### New Features ✨
+
+- (billing-platform) Add vercel_id and GetVercelPackages endpoint by @noahsmartin in [#410](https://github.com/getsentry/sentry-protos/pull/410)
+- (events) Define BillingPlatformEvent proto messages by @volokluev in [#407](https://github.com/getsentry/sentry-protos/pull/407)
+
 ## 0.62.3
 
 ### Internal Changes 🔧
