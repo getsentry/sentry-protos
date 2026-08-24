@@ -1,3 +1,9 @@
+## 0.64.0
+
+### New Features ✨
+
+- (billing-platform) Add checkout cancel_contract protos by @skonves in [#409](https://github.com/getsentry/sentry-protos/pull/409)
+
 ## 0.63.1
 
 ### New Features ✨
