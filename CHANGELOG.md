@@ -1,3 +1,9 @@
+## 0.64.1
+
+### Internal Changes 🔧
+
+- (AttributeValues) Add arrays to response by @MeredithAnya in [#412](https://github.com/getsentry/sentry-protos/pull/412)
+
 ## 0.64.0
 
 ### New Features ✨
