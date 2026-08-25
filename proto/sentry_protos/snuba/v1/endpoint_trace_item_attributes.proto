@@ -242,25 +242,17 @@ message TraceItemAttributeValuesRequest {
 // TraceItemAttributeValuesResponse is a response from the TraceItemAttributeValues endpoint
 // it is the counterpart to TraceItemAttributesRequest
 message TraceItemAttributeValuesResponse {
-  message StringValues {
-    repeated string values = 1;
+  message ValueData {
+    AttributeValue value = 1;
+    int64 count = 2;
+    google.protobuf.Timestamp last_seen = 3;
   }
-
-  message ArrayStringValues {
-    repeated StringValues values = 1;
-  }
-
-  message ValueSet {
-    oneof type {
-      StringValues string_values = 1;
-      ArrayStringValues array_string_values = 2;
-    }
-  }
+  // deprecated, returns ValueData instead
+  repeated string values = 1 [deprecated = true];
+  repeated int64 counts = 3 [deprecated = true];
 
   // all the values that matched the criteria specified in the request
-  repeated string values = 1; // to be deprecated when switched to ValueSet
-  ValueSet attr_values = 2;
-  repeated int64 counts = 3;
+  repeated ValueData value_data = 4;
 
   // page token for the next page of results
   PageToken page_token = 6;
