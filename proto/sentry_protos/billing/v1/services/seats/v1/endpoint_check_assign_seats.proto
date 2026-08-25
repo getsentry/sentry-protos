@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/services/seat_activity/v1/seat_activity.proto";
+import "sentry_protos/billing/v1/services/seats/v1/seats.proto";
+
+message CheckAssignSeatsRequest {
+  repeated sentry_protos.billing.v1.services.seat_activity.v1.SeatObject seat_objects = 1;
+  optional uint64 contract_id = 2;
+}
+
+message CheckAssignSeatsResponse {
+  SeatAssignmentOutcome outcome = 1;
+  string reason = 2;
+}

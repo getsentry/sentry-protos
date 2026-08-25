@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seat_activity.v1;
+
+message GetSeatContractStateRequest {
+  uint64 contract_id = 1;
+}
+
+message GetSeatContractStateResponse {
+  bool exists = 1;
+  bool is_active = 2;
+}

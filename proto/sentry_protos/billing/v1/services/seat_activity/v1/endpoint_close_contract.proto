@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seat_activity.v1;
+
+message CloseContractRequest {
+  uint64 contract_id = 1;
+}
+
+message CloseContractResponse {}

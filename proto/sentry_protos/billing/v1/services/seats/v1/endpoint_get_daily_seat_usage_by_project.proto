@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/services/seats/v1/seats.proto";
+
+message GetDailySeatUsageByProjectResponse {
+  repeated ProjectSeatUsage projects = 1;
+}

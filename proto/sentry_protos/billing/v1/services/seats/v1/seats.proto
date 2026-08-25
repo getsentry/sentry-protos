@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+
+enum ExternalProductSeatStatus {
+  EXTERNAL_PRODUCT_SEAT_STATUS_UNSPECIFIED = 0;
+  EXTERNAL_PRODUCT_SEAT_STATUS_DNE = 1;
+  EXTERNAL_PRODUCT_SEAT_STATUS_ACTIVE = 2;
+  EXTERNAL_PRODUCT_SEAT_STATUS_DISABLED = 3;
+}
+
+enum SeatAssignmentOutcome {
+  SEAT_ASSIGNMENT_OUTCOME_UNSPECIFIED = 0;
+  SEAT_ASSIGNMENT_OUTCOME_ACCEPTED = 1;
+  SEAT_ASSIGNMENT_OUTCOME_RATE_LIMITED = 2;
+  SEAT_ASSIGNMENT_OUTCOME_INVALID = 3;
+}
+
+message ProjectSeatUsage {
+  uint64 project_id = 1;
+  repeated sentry_protos.billing.v1.services.usage.v1.DailySeatUsage seat_days = 2;
+}

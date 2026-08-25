@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seat_activity.v1;
+
+import "sentry_protos/billing/v1/seat_category.proto";
+import "sentry_protos/billing/v1/services/seat_activity/v1/seat_activity.proto";
+
+message GetOriginalSeatDatesRequest {
+  uint64 organization_id = 1;
+  sentry_protos.billing.v1.SeatCategory seat_category = 2;
+  repeated string external_product_identifiers = 3;
+}
+
+message GetOriginalSeatDatesResponse {
+  repeated OriginalSeatDate original_seat_dates = 1;
+}
