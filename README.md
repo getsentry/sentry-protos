@@ -4,6 +4,7 @@ Protocol buffers and gRPC schema for cross-process communication. Contains tooli
 
 📗 [Notion documentation](https://www.notion.so/sentry/Protobuf-gRPC-schema-registry-7325ddca05dc49a5b05aa317c5dd1641)
 
+blahalahlksdfhadls;kfh
 ## Defining schemas
 
 Message schemas are defined in the `protos` directory. Messages and services are
