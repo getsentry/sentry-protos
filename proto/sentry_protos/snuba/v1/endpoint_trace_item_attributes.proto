@@ -239,8 +239,19 @@ message TraceItemAttributeValuesRequest {
   OrderBy order_by = 7;
 }
 
-message AttributeArrayValue {
+message StringValues {
   repeated string values = 1;
+}
+
+message ArrayStringValues {
+  repeated StringValues values = 1;
+}
+
+message Values {
+  oneof type {
+    StringValues values = 1;
+    ArrayStringValues arr_values = 2;
+  }
 }
 
 // TraceItemAttributeValuesResponse is a response from the TraceItemAttributeValues endpoint
@@ -248,7 +259,7 @@ message AttributeArrayValue {
 message TraceItemAttributeValuesResponse {
   // all the values that matched the criteria specified in the request
   repeated string values = 1;
-  repeated AttributeArrayValue array_values = 2;
+  Values attr_values = 2;
   repeated int64 counts = 3;
 
   // page token for the next page of results
