@@ -2238,17 +2238,36 @@ pub mod trace_item_attribute_values_request {
 /// it is the counterpart to TraceItemAttributesRequest
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TraceItemAttributeValuesResponse {
-    /// all the values that matched the criteria specified in the request
+    /// deprecated, returns ValueData instead
+    #[deprecated]
     #[prost(string, repeated, tag = "1")]
     pub values: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(int64, repeated, tag = "3")]
+    #[deprecated]
+    #[prost(int64, repeated, packed = "false", tag = "3")]
     pub counts: ::prost::alloc::vec::Vec<i64>,
+    /// all the values that matched the criteria specified in the request
+    #[prost(message, repeated, tag = "4")]
+    pub value_data: ::prost::alloc::vec::Vec<
+        trace_item_attribute_values_response::ValueData,
+    >,
     /// page token for the next page of results
     #[prost(message, optional, tag = "6")]
     pub page_token: ::core::option::Option<PageToken>,
     /// metadata about the response
     #[prost(message, optional, tag = "7")]
     pub meta: ::core::option::Option<ResponseMeta>,
+}
+/// Nested message and enum types in `TraceItemAttributeValuesResponse`.
+pub mod trace_item_attribute_values_response {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct ValueData {
+        #[prost(message, optional, tag = "1")]
+        pub value: ::core::option::Option<super::AttributeValue>,
+        #[prost(int64, tag = "2")]
+        pub count: i64,
+        #[prost(message, optional, tag = "3")]
+        pub last_seen: ::core::option::Option<::prost_types::Timestamp>,
+    }
 }
 /// This is a request to the TraceItemDetails endpoint,
 /// it is used to query for TraceItems (ex. spans or logs)
