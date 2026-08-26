@@ -3,15 +3,8 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.seat_activity.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/seat_status.proto";
 import "sentry_protos/billing/v1/seat_category.proto";
-
-enum SeatStatus {
-  SEAT_STATUS_UNSPECIFIED = 0;
-  SEAT_STATUS_ACTIVE = 1;
-  SEAT_STATUS_DISABLED = 2;
-  SEAT_STATUS_OVER_QUOTA = 3;
-  SEAT_STATUS_DNE = 4;
-}
 
 message SeatObject {
   uint64 organization_id = 1;
@@ -23,7 +16,7 @@ message SeatObject {
 
 message SeatState {
   string external_product_identifier = 1;
-  SeatStatus current_status = 2;
+  sentry_protos.billing.v1.common.v1.SeatStatus current_status = 2;
   optional google.protobuf.Timestamp created_ts = 3;
   optional google.protobuf.Timestamp last_action_ts = 4;
   google.protobuf.Timestamp read_ts = 5;
@@ -34,7 +27,7 @@ message SeatActionRecord {
   uint64 organization_id = 2;
   uint64 project_id = 3;
   google.protobuf.Timestamp timestamp = 4;
-  SeatStatus status = 5;
+  sentry_protos.billing.v1.common.v1.SeatStatus status = 5;
   uint32 seat_category = 6;
   string external_product_identifier = 7;
   string external_product_display_name = 8;

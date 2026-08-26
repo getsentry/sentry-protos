@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+enum SeatStatus {
+  SEAT_STATUS_UNSPECIFIED = 0;
+  SEAT_STATUS_ACTIVE = 1;
+  SEAT_STATUS_DISABLED = 2;
+  SEAT_STATUS_OVER_QUOTA = 3;
+  SEAT_STATUS_DNE = 4;
+}
