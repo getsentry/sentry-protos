@@ -8,38 +8,6 @@ pub struct ProjectSeatUsage {
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum ExternalProductSeatStatus {
-    Unspecified = 0,
-    Dne = 1,
-    Active = 2,
-    Disabled = 3,
-}
-impl ExternalProductSeatStatus {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "EXTERNAL_PRODUCT_SEAT_STATUS_UNSPECIFIED",
-            Self::Dne => "EXTERNAL_PRODUCT_SEAT_STATUS_DNE",
-            Self::Active => "EXTERNAL_PRODUCT_SEAT_STATUS_ACTIVE",
-            Self::Disabled => "EXTERNAL_PRODUCT_SEAT_STATUS_DISABLED",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "EXTERNAL_PRODUCT_SEAT_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
-            "EXTERNAL_PRODUCT_SEAT_STATUS_DNE" => Some(Self::Dne),
-            "EXTERNAL_PRODUCT_SEAT_STATUS_ACTIVE" => Some(Self::Active),
-            "EXTERNAL_PRODUCT_SEAT_STATUS_DISABLED" => Some(Self::Disabled),
-            _ => None,
-        }
-    }
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
 pub enum SeatAssignmentOutcome {
     Unspecified = 0,
     Accepted = 1,
@@ -122,7 +90,7 @@ pub struct GetSeatStatusForExternalProductRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetSeatStatusForExternalProductResponse {
-    #[prost(enumeration = "ExternalProductSeatStatus", tag = "1")]
+    #[prost(enumeration = "super::super::super::common::v1::SeatStatus", tag = "1")]
     pub status: i32,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]

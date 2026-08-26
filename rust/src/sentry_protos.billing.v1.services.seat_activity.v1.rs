@@ -23,7 +23,7 @@ pub struct SeatObject {
 pub struct SeatState {
     #[prost(string, tag = "1")]
     pub external_product_identifier: ::prost::alloc::string::String,
-    #[prost(enumeration = "SeatStatus", tag = "2")]
+    #[prost(enumeration = "super::super::super::common::v1::SeatStatus", tag = "2")]
     pub current_status: i32,
     #[prost(message, optional, tag = "3")]
     pub created_ts: ::core::option::Option<::prost_types::Timestamp>,
@@ -42,7 +42,7 @@ pub struct SeatActionRecord {
     pub project_id: u64,
     #[prost(message, optional, tag = "4")]
     pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(enumeration = "SeatStatus", tag = "5")]
+    #[prost(enumeration = "super::super::super::common::v1::SeatStatus", tag = "5")]
     pub status: i32,
     #[prost(uint32, tag = "6")]
     pub seat_category: u32,
@@ -71,41 +71,6 @@ pub struct OriginalSeatDate {
     pub external_product_identifier: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
     pub created_ts: ::core::option::Option<::prost_types::Timestamp>,
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum SeatStatus {
-    Unspecified = 0,
-    Active = 1,
-    Disabled = 2,
-    OverQuota = 3,
-    Dne = 4,
-}
-impl SeatStatus {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "SEAT_STATUS_UNSPECIFIED",
-            Self::Active => "SEAT_STATUS_ACTIVE",
-            Self::Disabled => "SEAT_STATUS_DISABLED",
-            Self::OverQuota => "SEAT_STATUS_OVER_QUOTA",
-            Self::Dne => "SEAT_STATUS_DNE",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "SEAT_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
-            "SEAT_STATUS_ACTIVE" => Some(Self::Active),
-            "SEAT_STATUS_DISABLED" => Some(Self::Disabled),
-            "SEAT_STATUS_OVER_QUOTA" => Some(Self::OverQuota),
-            "SEAT_STATUS_DNE" => Some(Self::Dne),
-            _ => None,
-        }
-    }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetOriginalSeatDatesRequest {
