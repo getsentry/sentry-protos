@@ -2,6 +2,11 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.seats.v1;
 
+// Recreates carry-over seats when a contract rolls over. Closes the old
+// contract's tracker, collects seats that ended ACTIVE or OVER_QUOTA, orders
+// them by seniority, and splits against the new contract's capacity (fits ->
+// ACTIVE, overflow -> OVER_QUOTA). No-ops if the new contract already has
+// seat state (idempotent on retry).
 message RolloverSeatsToNewContractRequest {
   uint64 prev_contract_id = 1;
   uint64 new_contract_id = 2;

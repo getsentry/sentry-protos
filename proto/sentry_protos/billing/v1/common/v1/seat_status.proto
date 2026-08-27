@@ -2,10 +2,18 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.common.v1;
 
+// Lifecycle status of a billing seat. Shared by both the seat_activity and
+// seats services.
 enum SeatStatus {
   SEAT_STATUS_UNSPECIFIED = 0;
+  // Seat is active and counting toward the billing period.
   SEAT_STATUS_ACTIVE = 1;
+  // Seat is disabled; it still counts toward the period total but new
+  // activity (e.g. check-ins) is dropped.
   SEAT_STATUS_DISABLED = 2;
+  // Seat was created but exceeds reserved+PAYG capacity. Treated as
+  // DISABLED by external consumers (the distinction is internal only).
   SEAT_STATUS_OVER_QUOTA = 3;
+  // Seat does not exist (removed or never created).
   SEAT_STATUS_DNE = 4;
 }

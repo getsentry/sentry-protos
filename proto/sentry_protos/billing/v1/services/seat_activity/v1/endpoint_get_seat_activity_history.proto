@@ -5,6 +5,9 @@ package sentry_protos.billing.v1.services.seat_activity.v1;
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/services/seat_activity/v1/seat_activity.proto";
 
+// Returns every seat action recorded for a contract, grouped by product
+// identifier and ordered chronologically. This is the raw audit log of all
+// state transitions during a billing period.
 message GetSeatActivityHistoryRequest {
   uint64 contract_id = 1;
 }

@@ -2,6 +2,9 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.seat_activity.v1;
 
+// Checks whether a contract has a seat tracking record and whether it is
+// ACTIVE. Used by the seats service to decide whether to bootstrap a new
+// tracker or trigger a rollover from a previous contract.
 message GetSeatContractStateRequest {
   uint64 contract_id = 1;
 }

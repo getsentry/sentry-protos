@@ -4,9 +4,14 @@ package sentry_protos.billing.v1.services.seats.v1;
 
 import "sentry_protos/billing/v1/services/seat_activity/v1/seat_activity.proto";
 
+// Atomically renames a seat's identifier (e.g. when a monitor slug changes).
+// Implemented as two actions in one batch: old identifier -> DNE, new
+// identifier -> previous status. Only allowed for seat categories whose
+// policy supports renaming.
 message UpdateSeatIdentifierRequest {
   sentry_protos.billing.v1.services.seat_activity.v1.SeatObject seat_object = 1;
   string new_identifier = 2;
+  // When omitted, resolves to the org's current contract.
   optional uint64 contract_id = 3;
 }
 
