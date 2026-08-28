@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/services/seats/v1/seat_object.proto";
+
+// The status of a seat object from the perspective of the external product
+// that owns it (monitor, uptime detector, seer contributor).
+enum ExternalProductSeatStatus {
+  EXTERNAL_PRODUCT_SEAT_STATUS_UNSPECIFIED = 0;
+
+  // Does not exist, either because it was removed or it was never created.
+  EXTERNAL_PRODUCT_SEAT_STATUS_DNE = 1;
+
+  // Alive and well.
+  EXTERNAL_PRODUCT_SEAT_STATUS_ACTIVE = 2;
+
+  // The billing platform deems this seat object unusable for billing reasons.
+  EXTERNAL_PRODUCT_SEAT_STATUS_DISABLED = 3;
+}
+
+message GetSeatStatusForExternalProductRequest {
+  SeatObject seat_object = 1;
+}
+
+message GetSeatStatusForExternalProductResponse {
+  ExternalProductSeatStatus status = 1;
+}

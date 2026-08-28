@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/seat_category.proto";
+
+// A seat object representing a billable product entity (monitor, uptime
+// detector, seer contributor) within an organization.
+message SeatObject {
+  uint64 organization_id = 1;
+  uint64 project_id = 2;
+  SeatCategory seat_category = 3;
+  string external_product_display_name = 4;
+  string external_product_identifier = 5;
+}

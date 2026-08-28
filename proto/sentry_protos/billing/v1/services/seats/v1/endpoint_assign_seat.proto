@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/services/seats/v1/seat_object.proto";
+import "sentry_protos/billing/v1/services/seats/v1/endpoint_check_assign_seats.proto";
+
+message AssignSeatRequest {
+  SeatObject seat_object = 1;
+}
+
+message AssignSeatResponse {
+  SeatOutcome outcome = 1;
+}

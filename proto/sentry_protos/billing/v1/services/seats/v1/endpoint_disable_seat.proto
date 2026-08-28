@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/services/seats/v1/seat_object.proto";
+
+message DisableSeatRequest {
+  SeatObject seat_object = 1;
+
+  // When omitted the service resolves the organization's current contract.
+  optional uint64 contract_id = 2;
+}
