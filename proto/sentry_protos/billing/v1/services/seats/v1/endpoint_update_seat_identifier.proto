@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.seats.v1;
 
-import "sentry_protos/billing/v1/services/seats/v1/seat_object.proto";
+import "sentry_protos/billing/v1/seat_object.proto";
 
 message UpdateSeatIdentifierRequest {
-  SeatObject seat_object = 1;
+  sentry_protos.billing.v1.SeatObject seat_object = 1;
   string new_identifier = 2;
 
   // When omitted the service resolves the organization's current contract.

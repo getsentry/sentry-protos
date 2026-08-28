@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.seats.v1;
 
-import "sentry_protos/billing/v1/services/seats/v1/seat_object.proto";
+import "sentry_protos/billing/v1/seat_object.proto";
 
 // The status of a seat object from the perspective of the external product
 // that owns it (monitor, uptime detector, seer contributor).
@@ -20,7 +20,7 @@ enum ExternalProductSeatStatus {
 }
 
 message GetSeatStatusForExternalProductRequest {
-  SeatObject seat_object = 1;
+  sentry_protos.billing.v1.SeatObject seat_object = 1;
 }
 
 message GetSeatStatusForExternalProductResponse {
