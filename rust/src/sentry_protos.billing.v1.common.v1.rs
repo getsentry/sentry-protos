@@ -530,6 +530,49 @@ pub struct DataCategoryRetention {
     #[prost(message, optional, tag = "2")]
     pub settings: ::core::option::Option<RetentionSettings>,
 }
+/// Lifecycle status of a billing seat. Shared by both the seat_activity and
+/// seats services.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SeatStatus {
+    Unspecified = 0,
+    /// Seat is active and counting toward the billing period.
+    Active = 1,
+    /// Seat is disabled; it still counts toward the period total but new
+    /// activity (e.g. check-ins) is dropped.
+    Disabled = 2,
+    /// Seat was created but exceeds reserved+PAYG capacity. Treated as
+    /// DISABLED by external consumers (the distinction is internal only).
+    OverQuota = 3,
+    /// Seat does not exist (removed or never created).
+    Dne = 4,
+}
+impl SeatStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SEAT_STATUS_UNSPECIFIED",
+            Self::Active => "SEAT_STATUS_ACTIVE",
+            Self::Disabled => "SEAT_STATUS_DISABLED",
+            Self::OverQuota => "SEAT_STATUS_OVER_QUOTA",
+            Self::Dne => "SEAT_STATUS_DNE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SEAT_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "SEAT_STATUS_ACTIVE" => Some(Self::Active),
+            "SEAT_STATUS_DISABLED" => Some(Self::Disabled),
+            "SEAT_STATUS_OVER_QUOTA" => Some(Self::OverQuota),
+            "SEAT_STATUS_DNE" => Some(Self::Dne),
+            _ => None,
+        }
+    }
+}
 /// Card payment method details.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Card {

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/services/seats/v1/seats.proto";
+
+// Response-only proto; the request reuses GetUsageByProjectRequest from the
+// usage service. Same as GetDailySeatUsageResponse but broken out per project.
+message GetDailySeatUsageByProjectResponse {
+  repeated ProjectSeatUsage projects = 1;
+}

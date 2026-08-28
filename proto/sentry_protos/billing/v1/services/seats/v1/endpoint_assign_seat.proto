@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/services/seat_activity/v1/seat_activity.proto";
+import "sentry_protos/billing/v1/services/seats/v1/seats.proto";
+
+// Assigns a single billing seat for the current contract period. Internally
+// runs check_assign_seats to determine capacity: ACCEPTED seats become ACTIVE,
+// RATE_LIMITED seats become OVER_QUOTA, INVALID seats are rejected.
+// Lazily initializes the contract's seat tracker on first write.
+message AssignSeatRequest {
+  sentry_protos.billing.v1.services.seat_activity.v1.SeatObject seat_object = 1;
+}
+
+message AssignSeatResponse {
+  SeatAssignmentOutcome outcome = 1;
+}

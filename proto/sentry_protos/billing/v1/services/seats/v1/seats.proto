@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+
+// Result of a seat assignment or check_assign_seats call.
+enum SeatAssignmentOutcome {
+  SEAT_ASSIGNMENT_OUTCOME_UNSPECIFIED = 0;
+  // Seat fits within reserved or PAYG capacity.
+  SEAT_ASSIGNMENT_OUTCOME_ACCEPTED = 1;
+  // No budget remaining; seat is created as OVER_QUOTA on assign.
+  SEAT_ASSIGNMENT_OUTCOME_RATE_LIMITED = 2;
+  // Product not enabled on plan or request is structurally invalid.
+  SEAT_ASSIGNMENT_OUTCOME_INVALID = 3;
+}
+
+// Per-project seat usage over a date range, used by get_daily_seat_usage_by_project.
+message ProjectSeatUsage {
+  uint64 project_id = 1;
+  repeated sentry_protos.billing.v1.services.usage.v1.DailySeatUsage seat_days = 2;
+}

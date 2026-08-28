@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seat_activity.v1;
+
+import "sentry_protos/billing/v1/services/seat_activity/v1/seat_activity.proto";
+
+// The single write path for all seat mutations. Appends action records in bulk
+// under a transaction. Does NOT check budgets or eligibility — that is the
+// caller's responsibility.
+//
+// Rejects duplicate identifiers within a single request. Requires an ACTIVE
+// contract tracker unless create_new_contract_state is set.
+message PerformSeatActionsRequest {
+  uint64 contract_id = 1;
+  repeated SeatActionItem seat_actions = 2;
+  // When true, creates a new ACTIVE contract tracker for this contract.
+  // Fails if one already exists (used for first-time setup and rollover).
+  bool create_new_contract_state = 3;
+}
+
+message PerformSeatActionsResponse {
+  repeated SeatState current_seat_states = 1;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "sentry_protos/billing/v1/services/seat_activity/v1/seat_activity.proto";
+
+// Permanently removes a seat (status -> DNE), freeing the slot for
+// reallocation. Only allowed for seat categories whose policy supports removal.
+message RemoveSeatRequest {
+  sentry_protos.billing.v1.services.seat_activity.v1.SeatObject seat_object = 1;
+  // When omitted, resolves to the org's current contract.
+  optional uint64 contract_id = 2;
+}
+
+message RemoveSeatResponse {}

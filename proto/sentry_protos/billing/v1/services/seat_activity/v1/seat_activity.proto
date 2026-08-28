@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seat_activity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/seat_status.proto";
+import "sentry_protos/billing/v1/seat_category.proto";
+
+// Identifies a billable seat (e.g. a monitor, uptime detector, or seer
+// contributor) within an organization and project.
+message SeatObject {
+  uint64 organization_id = 1;
+  uint64 project_id = 2;
+  sentry_protos.billing.v1.SeatCategory seat_category = 3;
+  // Human-readable label for the seat (e.g. monitor name).
+  string external_product_display_name = 4;
+  // Unique identifier for the seat within its category and project
+  // (e.g. monitor slug). Used as the key for all state lookups.
+  string external_product_identifier = 5;
+}
+
+// Reconstructed point-in-time state for a single seat, derived by replaying
+// its action history (last action wins).
+message SeatState {
+  string external_product_identifier = 1;
+  sentry_protos.billing.v1.common.v1.SeatStatus current_status = 2;
+  // Timestamp of the first-ever action for this seat on the contract.
+  optional google.protobuf.Timestamp created_ts = 3;
+  // Timestamp of the most recent action for this seat on the contract.
+  optional google.protobuf.Timestamp last_action_ts = 4;
+  // When the state was read (server clock). Useful for cache staleness checks.
+  google.protobuf.Timestamp read_ts = 5;
+}
+
+// A single immutable record of a seat state transition, stored as an
+// append-only audit log.
+message SeatActionRecord {
+  uint64 contract_id = 1;
+  uint64 organization_id = 2;
+  uint64 project_id = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  sentry_protos.billing.v1.common.v1.SeatStatus status = 5;
+  uint32 seat_category = 6;
+  string external_product_identifier = 7;
+  string external_product_display_name = 8;
+}
+
+// All action records for a single external product identifier on a contract,
+// ordered chronologically.
+message ExternalProductSeatActivity {
+  string external_product_identifier = 1;
+  repeated SeatActionRecord seat_actions = 2;
+}
+
+// Input item for PerformSeatActions: pairs a seat with its desired new state.
+message SeatActionItem {
+  SeatObject seat_object = 1;
+  SeatState seat_state = 2;
+}
+
+// The earliest-ever recorded action timestamp for a seat across all contracts
+// in an organization. Used to sort seats by seniority during rollover.
+message OriginalSeatDate {
+  string external_product_identifier = 1;
+  google.protobuf.Timestamp created_ts = 2;
+}

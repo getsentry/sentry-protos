@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seat_activity.v1;
+
+// Marks a contract's seat tracker as CLOSED, preventing further seat actions.
+// Called during rollover before writing seats to the new contract.
+// Silently succeeds if no tracker exists for the contract.
+message CloseContractRequest {
+  uint64 contract_id = 1;
+}
+
+message CloseContractResponse {}
