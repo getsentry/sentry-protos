@@ -530,13 +530,21 @@ pub struct DataCategoryRetention {
     #[prost(message, optional, tag = "2")]
     pub settings: ::core::option::Option<RetentionSettings>,
 }
+/// Lifecycle status of a billing seat. Shared by both the seat_activity and
+/// seats services.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum SeatStatus {
     Unspecified = 0,
+    /// Seat is active and counting toward the billing period.
     Active = 1,
+    /// Seat is disabled; it still counts toward the period total but new
+    /// activity (e.g. check-ins) is dropped.
     Disabled = 2,
+    /// Seat was created but exceeds reserved+PAYG capacity. Treated as
+    /// DISABLED by external consumers (the distinction is internal only).
     OverQuota = 3,
+    /// Seat does not exist (removed or never created).
     Dne = 4,
 }
 impl SeatStatus {
