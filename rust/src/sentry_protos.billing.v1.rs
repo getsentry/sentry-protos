@@ -427,6 +427,21 @@ impl QuotaScope {
         }
     }
 }
+/// A seat object representing a billable product entity (monitor, uptime
+/// detector, seer contributor) within an organization.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SeatObject {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub project_id: u64,
+    #[prost(enumeration = "SeatCategory", tag = "3")]
+    pub seat_category: i32,
+    #[prost(string, tag = "4")]
+    pub external_product_display_name: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub external_product_identifier: ::prost::alloc::string::String,
+}
 /// Aggregated usage counts for a single data category.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UsageData {
