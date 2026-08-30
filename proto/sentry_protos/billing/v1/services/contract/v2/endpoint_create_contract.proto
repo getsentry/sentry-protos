@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "sentry_protos/billing/v1/common/v1/address.proto";
+import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
+import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+
+message CreateContractRequest {
+  uint64 organization_id = 1;
+  string package_uid = 2;
+  repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_configs = 3;
+  repeated sentry_protos.billing.v1.services.contract.v1.InvoiceLineItem line_items = 4;
+  sentry_protos.billing.v1.common.v1.Address address = 5;
+  // The customer's chosen cadence. Must be one of the package's
+  // supported_month_intervals. If unset, defaults to the package's first
+  // supported interval.
+  uint32 month_interval = 6;
+
+  // How the contract is billed. If unset (BILLING_TYPE_UNSPECIFIED), the
+  // contract defaults to credit-card.
+  sentry_protos.billing.v1.services.contract.v1.BillingType billing_type = 7;
+
+  // Whether usage past reserved volume is allowed (and billed) instead of
+  // hard-stopping ingestion.
+  bool has_soft_cap = 8;
+
+  // The tax provider's reference for the tax document opened for this invoice.
+  // When set, the contract service records it on the created invoice as a
+  // pending tax transaction atomically with invoice creation. Unset means no
+  // tax document was opened.
+  optional string tax_transaction_code = 9;
+
+  // The sponsored type of the contract. If unset, then this is a non-sponsored
+  // contract.
+  optional sentry_protos.billing.v1.common.v1.SponsoredType sponsorship_type = 10;
+
+  // The customer's tax registration number (e.g. VAT ID) on file.
+  optional string tax_number = 11;
+
+  // Whether the tax provider placed this invoice under reverse charge.
+  bool is_reverse_charge = 12;
+}
+
+message CreateContractResponse {
+  uint64 id = 1;
+  uint64 invoice_id = 2;
+  string invoice_guid = 3;
+  bool needs_charge = 4;
+  uint64 amount_billed = 5;
+}

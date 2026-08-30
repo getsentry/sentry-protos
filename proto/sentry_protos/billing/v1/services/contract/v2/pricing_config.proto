@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+
+message PricingConfig {
+  // Determines when to reset quotas and charge the subscription price.
+  sentry_protos.billing.v1.services.contract.v1.Date billing_period_start_date = 1;
+  sentry_protos.billing.v1.services.contract.v1.Date billing_period_end_date = 2;
+
+  //Determines when the on demand period for invoicing the organization starts and ends, even for annual plans we bill ondemand monthly
+  sentry_protos.billing.v1.services.contract.v1.Date ondemand_period_start_date = 3;
+  sentry_protos.billing.v1.services.contract.v1.Date ondemand_period_end_date = 4;
+  optional google.protobuf.Timestamp usage_watermark_ts = 5;
+
+  repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_config = 6;
+}
