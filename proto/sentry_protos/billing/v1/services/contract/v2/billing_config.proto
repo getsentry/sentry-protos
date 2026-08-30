@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
+
+// Configuration for a sponsored contract. The presence of this message on a
+// BillingConfig indicates the contract is sponsored; its absence means it is
+// not.
+message SponsorshipConfig {
+  // Whether this sponsored Contract is eligible to start trials.
+  bool can_trial = 1;
+
+  // Whether this sponsored Contract can checkout.
+  bool can_checkout = 2;
+
+  sentry_protos.billing.v1.common.v1.SponsoredType sponsorship_type = 3;
+}
+
+// Pay-as-you-go configuration. The presence of this message means the org may
+// incur payg usage; its absence means it may not.
+message PaygConfig {
+  // Whether we charge payg spend ourselves, against a card on file. When
+  // false, payg is still incurred but billed outside the platform.
+  bool charged = 1;
+}
+
+// Billed directly by us, on a card the customer manages. Payg is always both
+// permitted and charged, so there is nothing further to configure.
+message CreditCardConfig {}
+
+// Invoiced by us, under a sales-negotiated agreement.
+message InvoicedConfig {
+  // Absent means the org may not incur payg at all.
+  optional PaygConfig payg = 1;
+}
+
+// Billed by a third-party marketplace.
+message PartnerConfig {
+  // Whether the marketplace provisions through the channel flow, which leaves
+  // the customer able to change their own plan.
+  bool self_serve = 1;
+}
+
+message BillingConfig {
+  // The number-of-months interval the contract was signed under
+  // (1 = monthly, 12 = annual). Frozen for the life of the contract.
+  uint32 month_interval = 1;
+
+  // Sponsorship configuration. Absent means the contract is not sponsored.
+  // Orthogonal to `billing`: a sponsored contract is still billed through one
+  // of the arrangements below, and some are sponsored by the same marketplace
+  // that bills them.
+  optional SponsorshipConfig sponsorship_config = 5;
+
+  // Which arrangement bills the contract. Each arrangement carries only the
+  // configuration that applies to it. Unset means none is recorded.
+  oneof billing {
+    CreditCardConfig credit_card = 2;
+    InvoicedConfig invoiced = 3;
+    PartnerConfig partner = 4;
+  }
+}
