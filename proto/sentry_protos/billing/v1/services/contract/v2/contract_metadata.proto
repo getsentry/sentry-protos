@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "sentry_protos/billing/v1/services/contract/v1/contract_metadata.proto";
+
+message ContractMetadata {
+  uint64 id = 1;
+  uint64 organization_id = 2;
+  // The set of BillingRules that the BillingRulesEngine has to execute for this contract.
+  string ruleset_version = 3;
+  // Catch-all for overrides and information not covered above.
+  sentry_protos.billing.v1.services.contract.v1.MetadataOptions custom_options = 4;
+  string package_uid = 5;
+
+  optional uint64 previous_id = 6;
+}
