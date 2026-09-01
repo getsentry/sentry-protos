@@ -3,7 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.projection.v1;
 
 import "sentry_protos/billing/v1/date.proto";
-import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_get_daily_breakdown.proto";
+import "sentry_protos/billing/v1/usage_data.proto";
 
 // Estimates what a contract will use for the remainder of its on-demand
 // period, so a customer sees a full period rather than a series that stops
@@ -23,15 +23,34 @@ message GetProjectedDailyBreakdownRequest {
   sentry_protos.billing.v1.Date current_date = 2;
 }
 
+// One line item's projected per-outcome quantities on a projected date.
+message ProjectedLineItemOutcomes {
+  // Package line item uid, matching the line items UsagePricer reports
+  // actual usage against, so a caller can align the two by uid.
+  string line_item_uid = 1;
+
+  // The estimate for each of the seven outcome fields, rounded to whole
+  // counts. Two fields are not projected as recorded: quantities rejected
+  // for want of quota are counted as accepted, because that is what the
+  // customer would have sent, and over_quota itself is projected as zero,
+  // so a period that ran over quota does not forecast itself over again.
+  sentry_protos.billing.v1.UsageData outcomes = 2;
+}
+
+// One projected calendar date.
+message ProjectedDailyOutcomes {
+  sentry_protos.billing.v1.Date date = 1;
+
+  // Every line item the sample saw, including ones estimated at zero.
+  repeated ProjectedLineItemOutcomes line_items = 2;
+}
+
 message GetProjectedDailyBreakdownResponse {
   // Projected days in ascending date order, one per day between
   // ``current_date`` (exclusive) and the contract's on-demand period end
   // (inclusive). Empty when the period has already ended.
   //
-  // The rows are deliberately the same type UsagePricer returns for actual
-  // usage, so a caller can render or concatenate actual and projected days
-  // without converting between two shapes. Every projected day repeats the
-  // same estimate, because the estimate is a single weighted average per
-  // line item rather than a per-day forecast.
-  repeated sentry_protos.billing.v1.services.usage_pricer.v1.DailyLineItemOutcomes days = 1;
+  // Every projected day repeats the same estimate, because the estimate is a
+  // single weighted average per line item rather than a per-day forecast.
+  repeated ProjectedDailyOutcomes days = 1;
 }
