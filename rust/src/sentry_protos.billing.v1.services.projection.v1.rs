@@ -18,19 +18,38 @@ pub struct GetProjectedDailyBreakdownRequest {
     #[prost(message, optional, tag = "2")]
     pub current_date: ::core::option::Option<super::super::super::Date>,
 }
+/// One line item's projected per-outcome quantities on a projected date.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ProjectedLineItemOutcomes {
+    /// Package line item uid, matching the line items UsagePricer reports
+    /// actual usage against, so a caller can align the two by uid.
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    /// The estimate for each of the seven outcome fields, rounded to whole
+    /// counts. Two fields are not projected as recorded: quantities rejected
+    /// for want of quota are counted as accepted, because that is what the
+    /// customer would have sent, and over_quota itself is projected as zero,
+    /// so a period that ran over quota does not forecast itself over again.
+    #[prost(message, optional, tag = "2")]
+    pub outcomes: ::core::option::Option<super::super::super::UsageData>,
+}
+/// One projected calendar date.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ProjectedDailyOutcomes {
+    #[prost(message, optional, tag = "1")]
+    pub date: ::core::option::Option<super::super::super::Date>,
+    /// Every line item the sample saw, including ones estimated at zero.
+    #[prost(message, repeated, tag = "2")]
+    pub line_items: ::prost::alloc::vec::Vec<ProjectedLineItemOutcomes>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetProjectedDailyBreakdownResponse {
     /// Projected days in ascending date order, one per day between
     /// `current_date` (exclusive) and the contract's on-demand period end
     /// (inclusive). Empty when the period has already ended.
     ///
-    /// The rows are deliberately the same type UsagePricer returns for actual
-    /// usage, so a caller can render or concatenate actual and projected days
-    /// without converting between two shapes. Every projected day repeats the
-    /// same estimate, because the estimate is a single weighted average per
-    /// line item rather than a per-day forecast.
+    /// Every projected day repeats the same estimate, because the estimate is a
+    /// single weighted average per line item rather than a per-day forecast.
     #[prost(message, repeated, tag = "1")]
-    pub days: ::prost::alloc::vec::Vec<
-        super::super::usage_pricer::v1::DailyLineItemOutcomes,
-    >,
+    pub days: ::prost::alloc::vec::Vec<ProjectedDailyOutcomes>,
 }
