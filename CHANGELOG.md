@@ -1,3 +1,9 @@
+## 0.64.4
+
+### Internal Changes 🔧
+
+- (billing-platform) Add project_id to CalculateContractBudgetQuotasRequest by @brendanhsentry in [#418](https://github.com/getsentry/sentry-protos/pull/418)
+
 ## 0.64.3
 
 ### Internal Changes 🔧
