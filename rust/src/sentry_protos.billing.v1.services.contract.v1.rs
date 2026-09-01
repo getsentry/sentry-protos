@@ -883,11 +883,11 @@ pub struct GetAllContractsForOrganizationRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetAllContractsForOrganizationResponse {
-    /// use contract_ids to avoid fetching user parameters unnecessarily
-    #[deprecated]
     #[prost(message, repeated, tag = "1")]
     pub contracts: ::prost::alloc::vec::Vec<Contract>,
-    #[prost(uint64, repeated, tag = "2")]
+    /// DEPRECATED: use contracts instead
+    #[deprecated]
+    #[prost(uint64, repeated, packed = "false", tag = "2")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
