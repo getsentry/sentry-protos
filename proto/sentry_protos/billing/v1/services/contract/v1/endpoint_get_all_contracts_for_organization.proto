@@ -9,5 +9,7 @@ message GetAllContractsForOrganizationRequest {
 }
 
 message GetAllContractsForOrganizationResponse {
-  repeated Contract contracts = 1;
+  // use contract_ids to avoid fetching user parameters unnecessarily
+  repeated Contract contracts = 1 [deprecated = true];
+  repeated uint64 contract_ids = 2;
 }
