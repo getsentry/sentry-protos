@@ -1,3 +1,9 @@
+## 0.64.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Return contract IDs instead of full contracts by @brendanhsentry in [#416](https://github.com/getsentry/sentry-protos/pull/416)
+
 ## 0.64.1
 
 ### Internal Changes 🔧
