@@ -1,3 +1,9 @@
+## 0.64.3
+
+### Internal Changes 🔧
+
+- (billing-platform) Undo 416; keep returning full contract proto by @brendanhsentry in [#417](https://github.com/getsentry/sentry-protos/pull/417)
+
 ## 0.64.2
 
 ### Internal Changes 🔧
