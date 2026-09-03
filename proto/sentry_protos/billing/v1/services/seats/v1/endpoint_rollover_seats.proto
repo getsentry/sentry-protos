@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+message RolloverSeatsToNewContractRequest {
+  uint64 prev_contract_id = 1;
+  uint64 new_contract_id = 2;
+}
