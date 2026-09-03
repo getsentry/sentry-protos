@@ -1,3 +1,7 @@
+## 0.64.6
+
+- Add PackageFeatureConfigs to PackageConfig proto by @volokluev in [#421](https://github.com/getsentry/sentry-protos/pull/421)
+
 ## 0.64.5
 
 ### Internal Changes 🔧
