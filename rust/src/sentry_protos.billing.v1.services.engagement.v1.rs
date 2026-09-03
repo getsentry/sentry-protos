@@ -402,6 +402,18 @@ pub struct CreateTrialResponse {
     #[prost(bool, tag = "1")]
     pub created: bool,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EndTrialRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EndTrialResponse {
+    /// True when an active subscription trial was ended. TrialService sets this;
+    /// EngagementService may leave it unset.
+    #[prost(bool, tag = "1")]
+    pub ended: bool,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UnitGrant {
     #[prost(string, tag = "1")]
