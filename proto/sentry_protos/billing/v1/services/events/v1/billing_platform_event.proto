@@ -6,6 +6,7 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/services/events/v1/contract_rolled_over.proto";
 import "sentry_protos/billing/v1/services/events/v1/organization_over_usage.proto";
 import "sentry_protos/billing/v1/services/events/v1/organization_payg_changed.proto";
+import "sentry_protos/billing/v1/services/events/v1/organization_trial_ended.proto";
 import "sentry_protos/billing/v1/services/events/v1/organization_trial_started.proto";
 import "sentry_protos/billing/v1/services/events/v1/organization_unit_grant_added.proto";
 
@@ -21,6 +22,7 @@ message EventPayload {
     sentry_protos.billing.v1.services.events.v1.OrganizationUnitGrantAdded organization_unit_grant_added = 3;
     sentry_protos.billing.v1.services.events.v1.OrganizationTrialStarted organization_trial_started = 4;
     sentry_protos.billing.v1.services.events.v1.ContractRolledOver contract_rolled_over = 5;
+    sentry_protos.billing.v1.services.events.v1.OrganizationTrialEnded organization_trial_ended = 6;
   }
 }
 
