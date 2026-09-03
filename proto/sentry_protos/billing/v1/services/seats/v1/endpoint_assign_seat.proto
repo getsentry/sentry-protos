@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.seats.v1;
 
-import "sentry_protos/billing/v1/seat_object.proto";
-import "sentry_protos/billing/v1/services/seats/v1/endpoint_check_assign_seats.proto";
+import "sentry_protos/billing/v1/common/v1/seat_object.proto";
+import "sentry_protos/billing/v1/services/seats/v1/seat_outcome.proto";
 
 message AssignSeatRequest {
-  sentry_protos.billing.v1.SeatObject seat_object = 1;
+  sentry_protos.billing.v1.common.v1.SeatObject seat_object = 1;
 }
 
 message AssignSeatResponse {

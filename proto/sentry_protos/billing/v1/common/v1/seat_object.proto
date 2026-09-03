@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sentry_protos.billing.v1;
+package sentry_protos.billing.v1.common.v1;
 
 import "sentry_protos/billing/v1/seat_category.proto";
 
@@ -9,7 +9,7 @@ import "sentry_protos/billing/v1/seat_category.proto";
 message SeatObject {
   uint64 organization_id = 1;
   uint64 project_id = 2;
-  SeatCategory seat_category = 3;
+  sentry_protos.billing.v1.SeatCategory seat_category = 3;
   string external_product_display_name = 4;
   string external_product_identifier = 5;
 }
