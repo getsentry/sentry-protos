@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+message EndTrialRequest {
+  uint64 organization_id = 1;
+}
+
+message EndTrialResponse {
+  // True when an active subscription trial was ended. TrialService sets this;
+  // EngagementService may leave it unset.
+  bool ended = 1;
+}

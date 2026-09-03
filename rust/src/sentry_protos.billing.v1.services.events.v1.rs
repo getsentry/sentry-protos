@@ -8,6 +8,8 @@ pub struct OrganizationOverUsage {}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationPaygChanged {}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct OrganizationTrialEnded {}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationTrialStarted {}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationUnitGrantAdded {}
@@ -20,7 +22,7 @@ pub struct EventMeta {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct EventPayload {
-    #[prost(oneof = "event_payload::Payload", tags = "1, 2, 3, 4, 5")]
+    #[prost(oneof = "event_payload::Payload", tags = "1, 2, 3, 4, 5, 6")]
     pub payload: ::core::option::Option<event_payload::Payload>,
 }
 /// Nested message and enum types in `EventPayload`.
@@ -37,6 +39,8 @@ pub mod event_payload {
         OrganizationTrialStarted(super::OrganizationTrialStarted),
         #[prost(message, tag = "5")]
         ContractRolledOver(super::ContractRolledOver),
+        #[prost(message, tag = "6")]
+        OrganizationTrialEnded(super::OrganizationTrialEnded),
     }
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
