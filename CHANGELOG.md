@@ -1,3 +1,9 @@
+## 0.65.0
+
+### New Features ✨
+
+- (billing) Add protobuf definitions for the seats service by @volokluev in [#414](https://github.com/getsentry/sentry-protos/pull/414)
+
 ## 0.64.6
 
 - Add PackageFeatureConfigs to PackageConfig proto by @volokluev in [#421](https://github.com/getsentry/sentry-protos/pull/421)
