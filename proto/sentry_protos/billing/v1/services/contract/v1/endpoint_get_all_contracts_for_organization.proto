@@ -10,4 +10,5 @@ message GetAllContractsForOrganizationRequest {
 
 message GetAllContractsForOrganizationResponse {
   repeated Contract contracts = 1;
+  repeated uint64 contract_ids = 2 [deprecated = true]; // DEPRECATED: use contracts instead
 }

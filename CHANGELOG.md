@@ -1,3 +1,25 @@
+## 0.64.6
+
+- Add PackageFeatureConfigs to PackageConfig proto by @volokluev in [#421](https://github.com/getsentry/sentry-protos/pull/421)
+
+## 0.64.5
+
+### Internal Changes 🔧
+
+- (billing-platform) Add project_id to CalculateContractBudgetQuotasRequest by @brendanhsentry in [#418](https://github.com/getsentry/sentry-protos/pull/418)
+
+## 0.64.3
+
+### Internal Changes 🔧
+
+- (billing-platform) Undo 416; keep returning full contract proto by @brendanhsentry in [#417](https://github.com/getsentry/sentry-protos/pull/417)
+
+## 0.64.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Return contract IDs instead of full contracts by @brendanhsentry in [#416](https://github.com/getsentry/sentry-protos/pull/416)
+
 ## 0.64.1
 
 ### Internal Changes 🔧

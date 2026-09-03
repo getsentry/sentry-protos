@@ -122,6 +122,18 @@ pub mod shared_line_item_pool {
         NumTrialUnits(u64),
     }
 }
+/// Non-volume feature limits tied to a package tier (dashboards, metric
+/// detectors, etc.).  These are UI-facing caps that differ by plan but are
+/// not billed line items.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PackageFeatureConfigs {
+    /// Maximum number of custom dashboards.  -1 means unlimited.
+    #[prost(int32, tag = "1")]
+    pub dashboard_limit: i32,
+    /// Maximum number of metric detectors.
+    #[prost(int32, tag = "2")]
+    pub metric_detector_limit: i32,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PackageConfig {
     #[prost(string, tag = "1")]
@@ -172,6 +184,9 @@ pub struct PackageConfig {
     /// packages that can be bought through Vercel; unset otherwise.
     #[prost(string, optional, tag = "15")]
     pub vercel_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// Non-volume feature limits for this package.
+    #[prost(message, optional, tag = "16")]
+    pub feature_configs: ::core::option::Option<PackageFeatureConfigs>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {

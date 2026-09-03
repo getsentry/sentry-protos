@@ -885,6 +885,10 @@ pub struct GetAllContractsForOrganizationRequest {
 pub struct GetAllContractsForOrganizationResponse {
     #[prost(message, repeated, tag = "1")]
     pub contracts: ::prost::alloc::vec::Vec<Contract>,
+    /// DEPRECATED: use contracts instead
+    #[deprecated]
+    #[prost(uint64, repeated, packed = "false", tag = "2")]
+    pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetContractRequest {

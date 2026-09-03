@@ -74,6 +74,16 @@ message SharedLineItemPool {
   bool can_product_trial = 11;
 }
 
+// Non-volume feature limits tied to a package tier (dashboards, metric
+// detectors, etc.).  These are UI-facing caps that differ by plan but are
+// not billed line items.
+message PackageFeatureConfigs {
+  // Maximum number of custom dashboards.  -1 means unlimited.
+  int32 dashboard_limit = 1;
+  // Maximum number of metric detectors.
+  int32 metric_detector_limit = 2;
+}
+
 message PackageConfig {
   string uid = 1;
   repeated LineItemConfig line_item_configs = 2;
@@ -110,4 +120,7 @@ message PackageConfig {
   // Identifier for the matching plan in Vercel's marketplace. Set only on
   // packages that can be bought through Vercel; unset otherwise.
   optional string vercel_id = 15;
+
+  // Non-volume feature limits for this package.
+  PackageFeatureConfigs feature_configs = 16;
 }
