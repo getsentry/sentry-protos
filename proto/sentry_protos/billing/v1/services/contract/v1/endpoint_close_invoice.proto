@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
+// Closes an unpaid invoice so its payment is never retried: clears
+// needs_charged along with any pending retry or manual-payment claim, so the
+// invoice drops out of GetUnchargedInvoices. Takes a guid because the caller
+// is an admin endpoint that has one from its URL, matching RetryCharge.
+message CloseInvoiceRequest {
+  string invoice_guid = 1;
+}
+
+message CloseInvoiceResponse {
+  // True if a matching unpaid invoice was found and closed. False both when
+  // no invoice matches the guid and when the invoice is already paid, which
+  // callers separate via the invoice field below.
+  bool updated = 1;
+
+  // The invoice as it now stands. Unset only when no invoice matches the
+  // guid, so a caller seeing updated=false with this set is looking at an
+  // already-paid invoice it should refuse rather than a missing one.
+  optional Invoice invoice = 2;
+}
