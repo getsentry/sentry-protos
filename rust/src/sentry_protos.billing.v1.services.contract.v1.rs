@@ -779,6 +779,28 @@ pub struct ClaimChargeLockResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
+/// Closes an unpaid invoice so its payment is never retried: clears
+/// needs_charged along with any pending retry or manual-payment claim, so the
+/// invoice drops out of GetUnchargedInvoices. Takes a guid because the caller
+/// is an admin endpoint that has one from its URL, matching RetryCharge.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CloseInvoiceRequest {
+    #[prost(string, tag = "1")]
+    pub invoice_guid: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CloseInvoiceResponse {
+    /// True if a matching unpaid invoice was found and closed. False both when
+    /// no invoice matches the guid and when the invoice is already paid, which
+    /// callers separate via the invoice field below.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+    /// The invoice as it now stands. Unset only when no invoice matches the
+    /// guid, so a caller seeing updated=false with this set is looking at an
+    /// already-paid invoice it should refuse rather than a missing one.
+    #[prost(message, optional, tag = "2")]
+    pub invoice: ::core::option::Option<Invoice>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateContractRequest {
     #[prost(uint64, tag = "1")]
