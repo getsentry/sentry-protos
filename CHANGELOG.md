@@ -1,3 +1,9 @@
+## 0.66.0
+
+### New Features ✨
+
+- (billing-platform) Define GetProjectedDailyBreakdown endpoint by @armcknight in [#419](https://github.com/getsentry/sentry-protos/pull/419)
+
 ## 0.65.0
 
 ### New Features ✨
