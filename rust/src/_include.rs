@@ -64,6 +64,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.pending_change.v1.rs");
                     }
                 }
+                pub mod projection {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.projection.v1.rs");
+                    }
+                }
                 pub mod quotas {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.quotas.v1.rs");
