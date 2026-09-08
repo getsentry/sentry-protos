@@ -1,3 +1,9 @@
+## 0.68.0
+
+### New Features ✨
+
+- (snuba) Add OP_REGEXP to EAP comparison filters by @pbhandari in [#420](https://github.com/getsentry/sentry-protos/pull/420)
+
 ## 0.67.0
 
 ### New Features ✨
