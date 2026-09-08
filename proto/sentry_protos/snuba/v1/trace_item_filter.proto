@@ -31,6 +31,7 @@ message ComparisonFilter {
     OP_NOT_IN = 10; // array only
     OP_HAS_ANY = 11; // array attribute_key type only
     OP_HAS_ALL = 12; // array attribute_key type only
+    OP_REGEXP = 13; //string only, RE2
   }
   AttributeKey key = 1;
   Op op = 2;
@@ -56,6 +57,7 @@ message AnyAttributeFilter {
     OP_NOT_LIKE = 4;
     OP_IN = 5;
     OP_NOT_IN = 6;
+    OP_REGEXP = 7; //string only, RE2
   }
 
   Op op = 1;
