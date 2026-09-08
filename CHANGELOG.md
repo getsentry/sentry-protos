@@ -1,3 +1,9 @@
+## 0.67.0
+
+### New Features ✨
+
+- Add close invoice endpoint by @noahsmartin in [#423](https://github.com/getsentry/sentry-protos/pull/423)
+
 ## 0.66.0
 
 ### New Features ✨
