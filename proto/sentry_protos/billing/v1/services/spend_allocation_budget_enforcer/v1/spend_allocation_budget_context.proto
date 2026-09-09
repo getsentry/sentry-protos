@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.spend_allocation_budget_enforcer.v1;
+
+import "sentry_protos/billing/v1/services/package/v1/package.proto";
+import "sentry_protos/billing/v1/services/spend_allocation/v1/endpoint_get_spend_allocation_state.proto";
+import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_usage_pricer.proto";
+
+message SpendAllocationBudgetContext {
+  repeated sentry_protos.billing.v1.services.spend_allocation.v1.SpendAllocationUsage usages = 1;
+  sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse priced_usage = 2;
+  sentry_protos.billing.v1.services.package.v1.PackageConfig package_config = 3;
+}

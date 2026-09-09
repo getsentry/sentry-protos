@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.spend_allocation.v1;
+
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+
+message SpendAllocationUsage {
+  uint64 project_id = 1;
+  string line_item_uid = 2;
+  uint64 allocated = 3;
+  uint64 used = 4;
+}
+
+message GetSpendAllocationStateRequest {
+  uint64 contract_id = 1;
+}
+
+message GetSpendAllocationStateResponse {
+  repeated SpendAllocationUsage usages = 1;
+  sentry_protos.billing.v1.services.usage.v1.GetUsageResponse simulated_usage = 2;
+}
