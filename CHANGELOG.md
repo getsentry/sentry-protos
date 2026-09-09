@@ -1,3 +1,9 @@
+## 0.69.0
+
+### New Features ✨
+
+- (eap) Update trace item AttributeKeyExpression to allow literal values by @edwardgou-sentry in [#424](https://github.com/getsentry/sentry-protos/pull/424)
+
 ## 0.68.0
 
 ### New Features ✨
