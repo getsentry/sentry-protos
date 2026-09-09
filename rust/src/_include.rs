@@ -64,6 +64,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.pending_change.v1.rs");
                     }
                 }
+                pub mod projection {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.projection.v1.rs");
+                    }
+                }
                 pub mod quotas {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.quotas.v1.rs");
@@ -72,6 +77,21 @@ pub mod sentry_protos {
                 pub mod rate_card {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.rate_card.v1.rs");
+                    }
+                }
+                pub mod seats {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.seats.v1.rs");
+                    }
+                }
+                pub mod spend_allocation {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.spend_allocation.v1.rs");
+                    }
+                }
+                pub mod spend_allocation_budget_enforcer {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.spend_allocation_budget_enforcer.v1.rs");
                     }
                 }
                 pub mod trial {
