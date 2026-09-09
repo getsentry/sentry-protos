@@ -1042,3 +1042,28 @@ def test_example_attribute_key_expression() -> None:
             ),
         ),
     )
+
+
+def test_example_attribute_key_expression_literal() -> None:
+    '''
+    using a numeric constant as an operand inside an aggregation.
+    example case: two timestamps recorded in different units, where the constant
+    converts milliseconds to seconds so the subtraction is meaningful.
+    p99((ingested_at_ms / 1000) - received_at_seconds)
+    '''
+    AttributeConditionalAggregation(
+        aggregate=Function.FUNCTION_P99,
+        expression=AttributeKeyExpression(
+            formula=AttributeKeyExpression.Formula(
+                op=AttributeKeyExpression.Op.OP_SUB,
+                left=AttributeKeyExpression(
+                    formula=AttributeKeyExpression.Formula(
+                        op=AttributeKeyExpression.Op.OP_DIV,
+                        left=AttributeKeyExpression(key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="ingested_at_ms")),
+                        right=AttributeKeyExpression(literal=Literal(val_double=1000.0)),
+                    ),
+                ),
+                right=AttributeKeyExpression(key=AttributeKey(type=AttributeKey.TYPE_DOUBLE, name="received_at_seconds")),
+            ),
+        ),
+    )
