@@ -19,6 +19,7 @@ enum ExternalProductSeatStatus {
   EXTERNAL_PRODUCT_SEAT_STATUS_DISABLED = 3;
 
   // The billing platform cannot determine the seat status from the request.
+  // For example: the organziation does not have a billing platform contract
   EXTERNAL_PRODUCT_SEAT_STATUS_INVALID = 4;
 }
 
