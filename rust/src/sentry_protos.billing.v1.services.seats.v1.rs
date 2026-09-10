@@ -106,6 +106,8 @@ pub enum ExternalProductSeatStatus {
     Active = 2,
     /// The billing platform deems this seat object unusable for billing reasons.
     Disabled = 3,
+    /// The billing platform cannot determine the seat status from the request.
+    Invalid = 4,
 }
 impl ExternalProductSeatStatus {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -118,6 +120,7 @@ impl ExternalProductSeatStatus {
             Self::Dne => "EXTERNAL_PRODUCT_SEAT_STATUS_DNE",
             Self::Active => "EXTERNAL_PRODUCT_SEAT_STATUS_ACTIVE",
             Self::Disabled => "EXTERNAL_PRODUCT_SEAT_STATUS_DISABLED",
+            Self::Invalid => "EXTERNAL_PRODUCT_SEAT_STATUS_INVALID",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -127,6 +130,7 @@ impl ExternalProductSeatStatus {
             "EXTERNAL_PRODUCT_SEAT_STATUS_DNE" => Some(Self::Dne),
             "EXTERNAL_PRODUCT_SEAT_STATUS_ACTIVE" => Some(Self::Active),
             "EXTERNAL_PRODUCT_SEAT_STATUS_DISABLED" => Some(Self::Disabled),
+            "EXTERNAL_PRODUCT_SEAT_STATUS_INVALID" => Some(Self::Invalid),
             _ => None,
         }
     }
