@@ -107,6 +107,7 @@ pub enum ExternalProductSeatStatus {
     /// The billing platform deems this seat object unusable for billing reasons.
     Disabled = 3,
     /// The billing platform cannot determine the seat status from the request.
+    /// For example: the organziation does not have a billing platform contract
     Invalid = 4,
 }
 impl ExternalProductSeatStatus {
