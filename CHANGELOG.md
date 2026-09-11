@@ -1,3 +1,9 @@
+## 0.70.0
+
+### New Features ✨
+
+- (billing) Add invalid external seat status by @volokluev in [#426](https://github.com/getsentry/sentry-protos/pull/426)
+
 ## 0.69.0
 
 ### New Features ✨
