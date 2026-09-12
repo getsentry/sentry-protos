@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
+import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
+
+// Configuration for a sponsored contract. The presence of this message on a
+// BillingConfig indicates the contract is sponsored; its absence means it is
+// not.
+message SponsorshipConfig {
+  // Whether this sponsored Contract is eligible to start trials.
+  bool can_trial = 1;
+
+  // Whether this sponsored Contract can checkout.
+  bool can_checkout = 2;
+
+  sentry_protos.billing.v1.common.v1.SponsoredType sponsorship_type = 3;
+}
+
+message BillingConfig {
+  // The number-of-months interval the contract was signed under
+  // (1 = monthly, 12 = annual). Frozen for the life of the contract.
+  uint32 month_interval = 1;
+
+  // Whether the org is allowed to incur pay-as-you-go usage.
+  // Credit-card orgs always support payg; invoiced orgs that should
+  // support it are an explicit override.
+  bool supports_payg = 2;
+
+  // Whether this is a managed (sales-assisted) subscription rather than
+  // self-serve.
+  bool is_managed = 3;
+
+  // Whether the org has a soft cap: usage past reserved volume is allowed
+  // (and billed) instead of hard-stopping ingestion.
+  bool has_soft_cap = 4;
+
+  // Sponsorship configuration. Absent means the contract is not sponsored.
+  optional SponsorshipConfig sponsorship_config = 5;
+
+  sentry_protos.billing.v1.services.contract.v1.ChargeConfig charge_config = 6;
+}
