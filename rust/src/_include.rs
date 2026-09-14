@@ -33,6 +33,9 @@ pub mod sentry_protos {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.contract.v1.rs");
                     }
+                    pub mod v2 {
+                        include!("sentry_protos.billing.v1.services.contract.v2.rs");
+                    }
                 }
                 pub mod contract_budget_enforcer {
                     pub mod v1 {
@@ -52,6 +55,9 @@ pub mod sentry_protos {
                 pub mod invoicer {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.invoicer.v1.rs");
+                    }
+                    pub mod v2 {
+                        include!("sentry_protos.billing.v1.services.invoicer.v2.rs");
                     }
                 }
                 pub mod package {
