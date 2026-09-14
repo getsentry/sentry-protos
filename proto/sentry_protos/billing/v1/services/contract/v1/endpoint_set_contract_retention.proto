@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/retention_config.proto";
+
+// Replaces the retention overrides of one contract, effective immediately.
+//
+// The request carries the complete override set. A field that is absent in
+// the request is cleared on the contract; it does not keep its previous value.
+// A request with no override at all removes the contract's override, so the
+// package retention chain applies in full.
+//
+// The contract must be the organization's current contract. A contract that
+// already has a usage invoice belongs to a closed billing period, and the
+// request is rejected.
+message SetContractRetentionRequest {
+  uint64 contract_id = 1;
+
+  // The complete override set to store. It has the same shape and rules as
+  // Contract.retention_config.
+  RetentionConfig retention_config = 2;
+}
+
+message SetContractRetentionResponse {
+  // The override set now stored on the contract, as Contract.retention_config
+  // reads it. It has no fields set when the request cleared every field.
+  RetentionConfig retention_config = 1;
+}
