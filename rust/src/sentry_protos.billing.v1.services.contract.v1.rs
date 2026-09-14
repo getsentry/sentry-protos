@@ -1180,6 +1180,32 @@ pub struct RolloverContractResponse {
     #[prost(uint64, tag = "4")]
     pub new_contract_id: u64,
 }
+/// Replaces the retention overrides of one contract, effective immediately.
+///
+/// The request carries the complete override set. A field that is absent in
+/// the request is cleared on the contract; it does not keep its previous value.
+/// A request with no override at all removes the contract's override, so the
+/// package retention chain applies in full.
+///
+/// The contract must be the organization's current contract. A contract that
+/// already has a usage invoice belongs to a closed billing period, and the
+/// request is rejected.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetContractRetentionRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    /// The complete override set to store. It has the same shape and rules as
+    /// Contract.retention_config.
+    #[prost(message, optional, tag = "2")]
+    pub retention_config: ::core::option::Option<RetentionConfig>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetContractRetentionResponse {
+    /// The override set now stored on the contract, as Contract.retention_config
+    /// reads it. It has no fields set when the request cleared every field.
+    #[prost(message, optional, tag = "1")]
+    pub retention_config: ::core::option::Option<RetentionConfig>,
+}
 /// DEPRECATED: replaced by ClaimChargeLockRequest / ClaimChargeLockResponse
 /// in endpoint_claim_charge_lock.proto. The rename generalized the
 /// semantics -- the same column (manual_payment_started_at) is now
