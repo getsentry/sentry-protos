@@ -1,3 +1,9 @@
+## 0.70.1
+
+### Internal Changes 🔧
+
+- Add contract v2 deleting deprecated fields by @noahsmartin in [#415](https://github.com/getsentry/sentry-protos/pull/415)
+
 ## 0.70.0
 
 ### New Features ✨
