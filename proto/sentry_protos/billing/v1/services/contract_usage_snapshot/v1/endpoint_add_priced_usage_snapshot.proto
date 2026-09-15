@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract_usage_snapshot.v1;
+
+import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_usage_pricer.proto";
+
+message AddPricedUsageToSnapshotRequest {
+  uint64 snapshot_id = 1;
+  sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse usage_pricer_response = 2;
+}
+
+message AddPricedUsageToSnapshotResponse {
+  bool updated = 1;
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract_usage_snapshot.v1;
+
+import "sentry_protos/billing/v1/services/contract_usage_snapshot/v1/usage_snapshot.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage_by_project.proto";
+
+message CreateUsageSnapshotRequest {
+  uint64 organization_id = 1;
+  uint64 contract_id = 2;
+  sentry_protos.billing.v1.services.usage.v1.GetUsageResponse billing_usage_response = 3;
+  sentry_protos.billing.v1.services.usage.v1.GetUsageByProjectResponse billing_usage_by_project_response = 4;
+}
+
+message CreateUsageSnapshotResponse {
+  UsageSnapshot snapshot = 1;
+  bool created = 2;
+}
