@@ -1,3 +1,55 @@
+## 0.70.1
+
+### Internal Changes 🔧
+
+- Add contract v2 deleting deprecated fields by @noahsmartin in [#415](https://github.com/getsentry/sentry-protos/pull/415)
+
+## 0.70.0
+
+### New Features ✨
+
+- (billing) Add invalid external seat status by @volokluev in [#426](https://github.com/getsentry/sentry-protos/pull/426)
+
+## 0.69.0
+
+### New Features ✨
+
+- (eap) Update trace item AttributeKeyExpression to allow literal values by @edwardgou-sentry in [#424](https://github.com/getsentry/sentry-protos/pull/424)
+
+## 0.68.0
+
+### New Features ✨
+
+- (snuba) Add OP_REGEXP to EAP comparison filters by @pbhandari in [#420](https://github.com/getsentry/sentry-protos/pull/420)
+
+## 0.67.0
+
+### New Features ✨
+
+- Add close invoice endpoint by @noahsmartin in [#423](https://github.com/getsentry/sentry-protos/pull/423)
+
+## 0.66.0
+
+### New Features ✨
+
+- (billing-platform) Define GetProjectedDailyBreakdown endpoint by @armcknight in [#419](https://github.com/getsentry/sentry-protos/pull/419)
+
+## 0.65.0
+
+### New Features ✨
+
+- (billing) Add protobuf definitions for the seats service by @volokluev in [#414](https://github.com/getsentry/sentry-protos/pull/414)
+
+## 0.64.6
+
+- Add PackageFeatureConfigs to PackageConfig proto by @volokluev in [#421](https://github.com/getsentry/sentry-protos/pull/421)
+
+## 0.64.5
+
+### Internal Changes 🔧
+
+- (billing-platform) Add project_id to CalculateContractBudgetQuotasRequest by @brendanhsentry in [#418](https://github.com/getsentry/sentry-protos/pull/418)
+
 ## 0.64.3
 
 ### Internal Changes 🔧

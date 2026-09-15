@@ -530,6 +530,21 @@ pub struct DataCategoryRetention {
     #[prost(message, optional, tag = "2")]
     pub settings: ::core::option::Option<RetentionSettings>,
 }
+/// A seat object representing a billable product entity (monitor, uptime
+/// detector, seer contributor) within an organization.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SeatObject {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub project_id: u64,
+    #[prost(enumeration = "super::super::SeatCategory", tag = "3")]
+    pub seat_category: i32,
+    #[prost(string, tag = "4")]
+    pub external_product_display_name: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub external_product_identifier: ::prost::alloc::string::String,
+}
 /// Card payment method details.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Card {

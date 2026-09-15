@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/contract/v2/contract.proto";
+
+message GetContractRequest {
+  uint64 organization_id = 1;
+
+  // If provided, returns the Contract active on this date. Otherwise, returns the current Contract.
+  sentry_protos.billing.v1.Date date = 2;
+}
+
+message GetSpecificContractRequest {
+  uint64 contract_id = 1;
+}
+
+message GetContractResponse {
+  Contract contract = 1;
+}
