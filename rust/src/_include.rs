@@ -33,10 +33,18 @@ pub mod sentry_protos {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.contract.v1.rs");
                     }
+                    pub mod v2 {
+                        include!("sentry_protos.billing.v1.services.contract.v2.rs");
+                    }
                 }
                 pub mod contract_budget_enforcer {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.contract_budget_enforcer.v1.rs");
+                    }
+                }
+                pub mod contract_usage_snapshot {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.contract_usage_snapshot.v1.rs");
                     }
                 }
                 pub mod engagement {
@@ -53,6 +61,9 @@ pub mod sentry_protos {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.invoicer.v1.rs");
                     }
+                    pub mod v2 {
+                        include!("sentry_protos.billing.v1.services.invoicer.v2.rs");
+                    }
                 }
                 pub mod package {
                     pub mod v1 {
@@ -64,6 +75,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.pending_change.v1.rs");
                     }
                 }
+                pub mod projection {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.projection.v1.rs");
+                    }
+                }
                 pub mod quotas {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.quotas.v1.rs");
@@ -72,6 +88,11 @@ pub mod sentry_protos {
                 pub mod rate_card {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.rate_card.v1.rs");
+                    }
+                }
+                pub mod seats {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.seats.v1.rs");
                     }
                 }
                 pub mod trial {
