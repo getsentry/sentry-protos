@@ -18,6 +18,11 @@ message TraceItemDetailsRequest {
   // required: the trace ID of the item.
   string trace_id = 4;
   TraceItemFilter filter = 3;
+
+  // optional, the routing_hint from the TraceItemTableResponse the item was
+  // returned in. Without it, items older than the standard retention period
+  // may not be found. Clients should not inspect, construct, or modify it.
+  string routing_hint = 5;
 }
 
 message TraceItemDetailsAttribute {

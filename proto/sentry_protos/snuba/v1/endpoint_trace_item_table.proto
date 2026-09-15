@@ -206,4 +206,10 @@ message TraceItemTableResponse {
   PageToken page_token = 2;
 
   ResponseMeta meta = 3;
+
+  // opaque value identifying how this response was routed. Pass it as
+  // TraceItemDetailsRequest.routing_hint when fetching details for any row in
+  // this response so the lookup reads the same data. Clients should not
+  // inspect, construct, or modify it.
+  string routing_hint = 4;
 }
