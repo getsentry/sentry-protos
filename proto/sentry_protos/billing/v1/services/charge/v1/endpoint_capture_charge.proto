@@ -33,9 +33,15 @@ message CaptureChargeRequest {
   optional sentry_protos.billing.v1.common.v1.PaymentConfig payment_config = 8;
   // Required when charge_method is CHARGE_METHOD_STRIPE_PAYMENT_INTENT.
   optional sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 9;
+  optional string payment_intent = 10;
 }
 
 message CaptureChargeResponse {
   bool paid = 1;
   optional string failure_code = 2;
+  // The charge is not paid and has NOT failed. It is waiting on the customer.
+  // Callers must not run their dunning/failure handling for this outcome.
+  bool requires_action = 3;
+  optional string payment_intent_id = 4;
+  optional string client_secret = 5;
 }

@@ -13,4 +13,8 @@ message CreateAndBillContractRequest {
 
 message CreateAndBillContractResponse {
   bool success = 1;
+  optional uint64 invoice_id = 2;
+  bool requires_action = 3;
+  optional string payment_intent_id = 4;
+  optional string client_secret = 5;
 }

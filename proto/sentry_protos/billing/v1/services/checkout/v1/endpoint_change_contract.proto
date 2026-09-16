@@ -28,4 +28,7 @@ message ChangeContractResponse {
   // Unset when the change is deferred to the next billing period or applies no
   // charge (e.g. a PAYG-only change), which the caller returns as an empty 204.
   optional uint64 invoice_id = 1;
+  bool requires_action = 2;
+  optional string payment_intent_id = 3;
+  optional string client_secret = 4;
 }
