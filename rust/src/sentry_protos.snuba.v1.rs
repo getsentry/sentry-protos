@@ -2295,6 +2295,11 @@ pub struct TraceItemDetailsRequest {
     pub trace_id: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "3")]
     pub filter: ::core::option::Option<TraceItemFilter>,
+    /// optional, the routing_hint from the TraceItemTableResponse the item was
+    /// returned in. Without it, items older than the standard retention period
+    /// may not be found. Clients should not inspect, construct, or modify it.
+    #[prost(string, tag = "5")]
+    pub routing_hint: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TraceItemDetailsAttribute {
@@ -2905,6 +2910,12 @@ pub struct TraceItemTableResponse {
     pub page_token: ::core::option::Option<PageToken>,
     #[prost(message, optional, tag = "3")]
     pub meta: ::core::option::Option<ResponseMeta>,
+    /// opaque value identifying how this response was routed. Pass it as
+    /// TraceItemDetailsRequest.routing_hint when fetching details for any row in
+    /// this response so the lookup reads the same data. Clients should not
+    /// inspect, construct, or modify it.
+    #[prost(string, tag = "4")]
+    pub routing_hint: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateTraceItemTableSubscriptionRequest {

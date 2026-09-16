@@ -434,6 +434,25 @@ def test_trace_item_details() -> None:
         ]
     )
 
+
+def test_trace_item_details_with_routing_hint() -> None:
+    table_response = TraceItemTableResponse(
+        column_values=[
+            TraceItemColumnValues(
+                attribute_name="sentry.item_id",
+                results=[AttributeValue(val_str="1234567812345678aabbccddeeff")],
+            ),
+        ],
+        routing_hint="eyJ2IjogMSwgInRpZXIiOiA4LCAidHMiOiAxNzg5NDk5MDc5fQ==",
+    )
+
+    TraceItemDetailsRequest(
+        meta=COMMON_META,
+        item_id="1234567812345678aabbccddeeff",
+        trace_id="3a4b7f2e-9c1d-4e5f-8a6b-2c3d4e5f6a7b",
+        routing_hint=table_response.routing_hint,
+    )
+
 def test_export_trace_items() -> None:
     # Filter clause is optional
     ExportTraceItemsRequest(
