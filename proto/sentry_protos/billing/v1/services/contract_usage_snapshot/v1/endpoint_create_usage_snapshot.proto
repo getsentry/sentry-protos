@@ -15,5 +15,4 @@ message CreateUsageSnapshotRequest {
 
 message CreateUsageSnapshotResponse {
   UsageSnapshot snapshot = 1;
-  bool created = 2;
 }

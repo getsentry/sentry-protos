@@ -5,11 +5,10 @@ package sentry_protos.billing.v1.services.contract_usage_snapshot.v1;
 import "sentry_protos/billing/v1/services/contract_usage_snapshot/v1/usage_snapshot.proto";
 
 message GetUsageSnapshotRequest {
-  uint64 contract_id = 1;
-}
-
-message GetUsageSnapshotByIdRequest {
-  uint64 snapshot_id = 1;
+  oneof query {
+    uint64 contract_id = 1;
+    uint64 snapshot_id = 2;
+  }
 }
 
 message GetUsageSnapshotResponse {
