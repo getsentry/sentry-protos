@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.package.v1;
+
+import "sentry_protos/billing/v1/services/package/v1/package.proto";
+
+message GetAllPackagesRequest {}
+
+message GetAllPackagesResponse {
+  // Every package the service knows about, irrespective of how it is acquired.
+  // Unlike GetPackageCatalog this applies no acquisition-mode filter, so it
+  // includes sales-only packages such as enterprise.
+  repeated PackageConfig package_configs = 1;
+}

@@ -202,6 +202,16 @@ pub mod package_config {
         IsUnlimited(bool),
     }
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetAllPackagesRequest {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAllPackagesResponse {
+    /// Every package the service knows about, irrespective of how it is acquired.
+    /// Unlike GetPackageCatalog this applies no acquisition-mode filter, so it
+    /// includes sales-only packages such as enterprise.
+    #[prost(message, repeated, tag = "1")]
+    pub package_configs: ::prost::alloc::vec::Vec<PackageConfig>,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
     #[prost(string, tag = "1")]
