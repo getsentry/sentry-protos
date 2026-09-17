@@ -68,6 +68,8 @@ pub enum DataCategory {
     ProfileUi = 31,
     /// Trace metric bytes.
     TraceMetricByte = 32,
+    /// Usage based seer pricing
+    SeerUsageMicroCents = 33,
     /// Any other data category not known by this version.
     Unknown = -1,
 }
@@ -109,6 +111,7 @@ impl DataCategory {
             Self::ProfileBackend => "DATA_CATEGORY_PROFILE_BACKEND",
             Self::ProfileUi => "DATA_CATEGORY_PROFILE_UI",
             Self::TraceMetricByte => "DATA_CATEGORY_TRACE_METRIC_BYTE",
+            Self::SeerUsageMicroCents => "DATA_CATEGORY_SEER_USAGE_MICRO_CENTS",
             Self::Unknown => "DATA_CATEGORY_UNKNOWN",
         }
     }
@@ -146,6 +149,7 @@ impl DataCategory {
             "DATA_CATEGORY_PROFILE_BACKEND" => Some(Self::ProfileBackend),
             "DATA_CATEGORY_PROFILE_UI" => Some(Self::ProfileUi),
             "DATA_CATEGORY_TRACE_METRIC_BYTE" => Some(Self::TraceMetricByte),
+            "DATA_CATEGORY_SEER_USAGE_MICRO_CENTS" => Some(Self::SeerUsageMicroCents),
             "DATA_CATEGORY_UNKNOWN" => Some(Self::Unknown),
             _ => None,
         }
