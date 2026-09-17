@@ -187,6 +187,20 @@ pub struct PackageConfig {
     /// Non-volume feature limits for this package.
     #[prost(message, optional, tag = "16")]
     pub feature_configs: ::core::option::Option<PackageFeatureConfigs>,
+    /// Maximum number of users that can be added to an organization
+    #[prost(oneof = "package_config::MaxMembers", tags = "17, 18")]
+    pub max_members: ::core::option::Option<package_config::MaxMembers>,
+}
+/// Nested message and enum types in `PackageConfig`.
+pub mod package_config {
+    /// Maximum number of users that can be added to an organization
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum MaxMembers {
+        #[prost(uint32, tag = "17")]
+        Limit(u32),
+        #[prost(bool, tag = "18")]
+        IsUnlimited(bool),
+    }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
