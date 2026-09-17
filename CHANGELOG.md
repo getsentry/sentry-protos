@@ -1,3 +1,9 @@
+## 0.71.2
+
+### Internal Changes 🔧
+
+- Add seer usage data category by @noahsmartin in [#432](https://github.com/getsentry/sentry-protos/pull/432)
+
 ## 0.71.1
 
 ### Internal Changes 🔧
