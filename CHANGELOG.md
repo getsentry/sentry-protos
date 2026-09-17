@@ -1,3 +1,15 @@
+## 0.71.2
+
+### Internal Changes 🔧
+
+- Add seer usage data category by @noahsmartin in [#432](https://github.com/getsentry/sentry-protos/pull/432)
+
+## 0.71.1
+
+### Internal Changes 🔧
+
+- (bp) Add max members to package config by @brendanhsentry in [#431](https://github.com/getsentry/sentry-protos/pull/431)
+
 ## 0.71.0
 
 ### New Features ✨
