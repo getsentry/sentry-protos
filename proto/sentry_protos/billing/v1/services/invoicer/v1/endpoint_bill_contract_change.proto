@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.invoicer.v1;
 
 import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+import "sentry_protos/billing/v1/common/v1/stripe_verification.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 
 // Invoices an immediate mid-term contract change and rolls the contract over
@@ -30,7 +31,6 @@ message BillContractChangeRequest {
 message BillContractChangeResponse {
   // The invoice that settles the change (and closes the previous contract).
   uint64 invoice_id = 1;
-  bool requires_action = 2;
-  optional string payment_intent_id = 3;
-  optional string client_secret = 4;
+  // Set when the bank wants the customer to verify the payment.
+  sentry_protos.billing.v1.common.v1.StripeVerification verification = 2;
 }

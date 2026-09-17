@@ -5,6 +5,7 @@ package sentry_protos.billing.v1.services.charge.v1;
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/common/v1/payment_config.proto";
 import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
+import "sentry_protos/billing/v1/common/v1/stripe_verification.proto";
 
 // How the charge should be executed against the payment provider.
 enum ChargeMethod {
@@ -39,9 +40,6 @@ message CaptureChargeRequest {
 message CaptureChargeResponse {
   bool paid = 1;
   optional string failure_code = 2;
-  // The charge is not paid and has NOT failed. It is waiting on the customer.
-  // Callers must not run their dunning/failure handling for this outcome.
-  bool requires_action = 3;
-  optional string payment_intent_id = 4;
-  optional string client_secret = 5;
+  // Set when the bank wants the customer to verify the payment.
+  sentry_protos.billing.v1.common.v1.StripeVerification verification = 3;
 }

@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.invoicer.v1;
 
+import "sentry_protos/billing/v1/common/v1/stripe_verification.proto";
 import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
 
 message CreateAndBillContractRequest {
@@ -14,7 +15,6 @@ message CreateAndBillContractRequest {
 message CreateAndBillContractResponse {
   bool success = 1;
   optional uint64 invoice_id = 2;
-  bool requires_action = 3;
-  optional string payment_intent_id = 4;
-  optional string client_secret = 5;
+  // Set when the bank wants the customer to verify the payment.
+  sentry_protos.billing.v1.common.v1.StripeVerification verification = 3;
 }
