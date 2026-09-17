@@ -1,3 +1,9 @@
+## 0.72.0
+
+### New Features ✨
+
+- Add all packages proto by @noahsmartin in [#433](https://github.com/getsentry/sentry-protos/pull/433)
+
 ## 0.71.3
 
 ### Internal Changes 🔧
