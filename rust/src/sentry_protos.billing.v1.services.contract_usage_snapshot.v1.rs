@@ -53,18 +53,21 @@ pub struct CreateUsageSnapshotRequest {
 pub struct CreateUsageSnapshotResponse {
     #[prost(message, optional, tag = "1")]
     pub snapshot: ::core::option::Option<UsageSnapshot>,
-    #[prost(bool, tag = "2")]
-    pub created: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUsageSnapshotRequest {
-    #[prost(uint64, tag = "1")]
-    pub contract_id: u64,
+    #[prost(oneof = "get_usage_snapshot_request::Query", tags = "1, 2")]
+    pub query: ::core::option::Option<get_usage_snapshot_request::Query>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct GetUsageSnapshotByIdRequest {
-    #[prost(uint64, tag = "1")]
-    pub snapshot_id: u64,
+/// Nested message and enum types in `GetUsageSnapshotRequest`.
+pub mod get_usage_snapshot_request {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Query {
+        #[prost(uint64, tag = "1")]
+        ContractId(u64),
+        #[prost(uint64, tag = "2")]
+        SnapshotId(u64),
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUsageSnapshotResponse {
