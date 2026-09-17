@@ -123,4 +123,9 @@ message PackageConfig {
 
   // Non-volume feature limits for this package.
   PackageFeatureConfigs feature_configs = 16;
+
+  oneof max_members {
+    uint32 limit = 17;
+    bool is_unlimited = 18;
+  }
 }
