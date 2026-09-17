@@ -1,3 +1,9 @@
+## 0.71.1
+
+### Internal Changes 🔧
+
+- (bp) Add max members to package config by @brendanhsentry in [#431](https://github.com/getsentry/sentry-protos/pull/431)
+
 ## 0.71.0
 
 ### New Features ✨
