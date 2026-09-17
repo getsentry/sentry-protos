@@ -1,3 +1,9 @@
+## 0.71.3
+
+### Internal Changes 🔧
+
+- (billing-platform) Add snapshot service protos by @brendanhsentry in [#429](https://github.com/getsentry/sentry-protos/pull/429)
+
 ## 0.71.2
 
 ### Internal Changes 🔧
