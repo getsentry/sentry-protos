@@ -1,3 +1,9 @@
+## 0.71.0
+
+### New Features ✨
+
+- (eap) Add `routing_hint` to `TraceItemTable` and `TraceItemDetails` by @ElioDiNino in [#428](https://github.com/getsentry/sentry-protos/pull/428)
+
 ## 0.70.1
 
 ### Internal Changes 🔧
