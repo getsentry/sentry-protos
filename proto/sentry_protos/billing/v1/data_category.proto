@@ -69,6 +69,8 @@ enum DataCategory {
   DATA_CATEGORY_PROFILE_UI = 31;
   // Trace metric bytes.
   DATA_CATEGORY_TRACE_METRIC_BYTE = 32;
+  // Usage based seer pricing
+  DATA_CATEGORY_SEER_USAGE_MICRO_CENTS = 33;
   // Any other data category not known by this version.
   DATA_CATEGORY_UNKNOWN = -1;
 }
