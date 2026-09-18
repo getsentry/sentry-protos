@@ -37,13 +37,18 @@ pub struct ChangeContractRequest {
     #[prost(message, repeated, tag = "4")]
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ChangeContractResponse {
     /// The invoice created for an immediate change (a prorated upgrade charge).
     /// Unset when the change is deferred to the next billing period or applies no
     /// charge (e.g. a PAYG-only change), which the caller returns as an empty 204.
     #[prost(uint64, optional, tag = "1")]
     pub invoice_id: ::core::option::Option<u64>,
+    /// Set when the bank wants the customer to verify the payment.
+    #[prost(message, optional, tag = "2")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
 }
 /// Previews the effect of a contract change without committing it.
 #[derive(Clone, PartialEq, ::prost::Message)]

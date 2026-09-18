@@ -27,11 +27,16 @@ pub struct BillContractChangeRequest {
     #[prost(bool, tag = "4")]
     pub start_new_term: bool,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillContractChangeResponse {
     /// The invoice that settles the change (and closes the previous contract).
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
+    /// Set when the bank wants the customer to verify the payment.
+    #[prost(message, optional, tag = "2")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ChargeInvoicesRequest {
@@ -42,6 +47,22 @@ pub struct ChargeInvoicesRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ChargeInvoicesResponse {}
+/// Collects payment for an invoice using a PaymentIntent the customer has just
+/// authenticated with 3D Secure.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ConfirmInvoicePaymentRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub payment_intent: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ConfirmInvoicePaymentResponse {
+    #[prost(bool, tag = "1")]
+    pub paid: bool,
+    #[prost(string, optional, tag = "2")]
+    pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateAndBillContractRequest {
     #[prost(uint64, tag = "1")]
@@ -53,10 +74,17 @@ pub struct CreateAndBillContractRequest {
     #[prost(uint32, tag = "4")]
     pub month_interval: u32,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateAndBillContractResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
+    #[prost(uint64, optional, tag = "2")]
+    pub invoice_id: ::core::option::Option<u64>,
+    /// Set when the bank wants the customer to verify the payment.
+    #[prost(message, optional, tag = "3")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateInvoicesRequest {

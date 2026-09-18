@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+// Collects payment for an invoice using a PaymentIntent the customer has just
+// authenticated with 3D Secure.
+message ConfirmInvoicePaymentRequest {
+  uint64 invoice_id = 1;
+  string payment_intent = 2;
+}
+
+message ConfirmInvoicePaymentResponse {
+  bool paid = 1;
+  optional string failure_code = 2;
+}
