@@ -259,6 +259,12 @@ pub struct LineItemDetails {
     /// The invoice line item type strings for this line item.
     #[prost(message, optional, tag = "8")]
     pub invoice_data: ::core::option::Option<InvoiceMetadataTags>,
+    /// Whether the customer-facing usage UI shows a per-usage-category breakdown
+    /// for this line item, e.g. splitting a spans line item into the transaction
+    /// and profile usage that rolls up into it. Lets consumers select the lines to
+    /// break down from the package instead of hardcoding billed categories.
+    #[prost(bool, tag = "9")]
+    pub show_event_breakdown: bool,
 }
 /// Stripe-specific payment information for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
