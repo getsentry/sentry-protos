@@ -42,4 +42,9 @@ message LineItemDetails {
 
   // The invoice line item type strings for this line item.
   InvoiceMetadataTags invoice_data = 8;
+
+  // DEPRECATED: do not use for new APIs. The historical API name
+  // associated with this line item. Exists only to support migrating legacy
+  // APIs away from CATEGORY_INFO.
+  string legacy_api_name = 9 [deprecated = true];
 }
