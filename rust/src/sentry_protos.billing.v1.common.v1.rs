@@ -259,6 +259,12 @@ pub struct LineItemDetails {
     /// The invoice line item type strings for this line item.
     #[prost(message, optional, tag = "8")]
     pub invoice_data: ::core::option::Option<InvoiceMetadataTags>,
+    /// DEPRECATED: do not use for new APIs. The historical API name
+    /// associated with this line item. Exists only to support migrating legacy
+    /// APIs away from CATEGORY_INFO.
+    #[deprecated]
+    #[prost(string, tag = "9")]
+    pub legacy_api_name: ::prost::alloc::string::String,
 }
 /// Stripe-specific payment information for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
