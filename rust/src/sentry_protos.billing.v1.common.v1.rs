@@ -609,3 +609,17 @@ pub struct StripeCharge {
     #[prost(message, repeated, tag = "9")]
     pub refunds: ::prost::alloc::vec::Vec<StripeRefund>,
 }
+/// A bank can ask the customer to verify a payment before it releases the money.
+/// This carries that request and what the browser needs to answer it.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StripeVerification {
+    /// The bank wants the customer to verify this payment.
+    #[prost(bool, tag = "1")]
+    pub required: bool,
+    /// The Stripe payment that waits for the customer.
+    #[prost(string, optional, tag = "2")]
+    pub payment_intent_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// The key the browser needs to show the bank's question.
+    #[prost(string, optional, tag = "3")]
+    pub client_secret: ::core::option::Option<::prost::alloc::string::String>,
+}

@@ -97,6 +97,8 @@ pub struct CaptureChargeRequest {
     pub stripe_charge: ::core::option::Option<
         super::super::super::common::v1::StripeCharge,
     >,
+    #[prost(string, optional, tag = "10")]
+    pub payment_intent: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CaptureChargeResponse {
@@ -104,6 +106,11 @@ pub struct CaptureChargeResponse {
     pub paid: bool,
     #[prost(string, optional, tag = "2")]
     pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// Set when the bank wants the customer to verify the payment.
+    #[prost(message, optional, tag = "3")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
 }
 /// How the charge should be executed against the payment provider.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -186,6 +193,24 @@ pub struct GetChargeByStripeIdResponse {
     /// Unset when no platform charge with the given stripe_id exists.
     #[prost(message, optional, tag = "1")]
     pub charge: ::core::option::Option<PlatformCharge>,
+}
+/// Looks up the PaymentIntent an invoice is currently waiting on, if any.
+///
+/// An invoice is "waiting" when its most recent charge attempt stopped at 3D
+/// Secure: the issuer asked for authentication, nobody has provided it yet, and
+/// the intent is still sitting in requires_action on Stripe's side.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetResumablePaymentIntentRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetResumablePaymentIntentResponse {
+    /// Unset when the invoice is not waiting on authentication -- it was paid, it
+    /// failed for some other reason, or it has never been charged. Callers treat
+    /// an unset id as "start a fresh charge".
+    #[prost(string, optional, tag = "1")]
+    pub payment_intent_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Charge {
