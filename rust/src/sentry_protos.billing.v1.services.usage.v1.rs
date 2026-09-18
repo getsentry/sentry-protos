@@ -94,6 +94,36 @@ pub struct GetUsageByProjectResponse {
     #[prost(message, optional, tag = "2")]
     pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
+/// Usage for the line items a package flags with show_event_breakdown, summed
+/// over a period and broken out by the raw usage categories that roll up into
+/// them. Lets a caller render "this line item is made up of these categories"
+/// without walking the package's billable metric expressions itself.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetEventBreakdownRequest {
+    #[prost(int64, tag = "1")]
+    pub organization_id: i64,
+    /// Package whose show_event_breakdown line items define the categories to sum.
+    #[prost(string, tag = "2")]
+    pub package_uid: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub start: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "4")]
+    pub end: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EventBreakdownCategoryUsage {
+    #[prost(enumeration = "super::super::super::DataCategory", tag = "1")]
+    pub category: i32,
+    /// Totals for the period. Categories billed in units other than the one they
+    /// are ingested in are already converted, so callers sum these as-is.
+    #[prost(message, optional, tag = "2")]
+    pub totals: ::core::option::Option<super::super::super::UsageData>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetEventBreakdownResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub categories: ::prost::alloc::vec::Vec<EventBreakdownCategoryUsage>,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PageToken {
     #[prost(oneof = "page_token::Value", tags = "1")]
