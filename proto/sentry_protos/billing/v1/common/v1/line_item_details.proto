@@ -42,4 +42,10 @@ message LineItemDetails {
 
   // The invoice line item type strings for this line item.
   InvoiceMetadataTags invoice_data = 8;
+
+  // Whether the customer-facing usage UI shows a per-usage-category breakdown
+  // for this line item, e.g. splitting a spans line item into the transaction
+  // and profile usage that rolls up into it. Lets consumers select the lines to
+  // break down from the package instead of hardcoding billed categories.
+  bool show_event_breakdown = 9;
 }
