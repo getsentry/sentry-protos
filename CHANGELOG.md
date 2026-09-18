@@ -1,3 +1,9 @@
+## 0.73.0
+
+### New Features ✨
+
+- (billing) Add fields for 3D Secure card payments by @skonves in [#430](https://github.com/getsentry/sentry-protos/pull/430)
+
 ## 0.72.0
 
 ### New Features ✨
