@@ -40,7 +40,7 @@ pub struct PartnerConfig {
     /// the customer able to change their own plan.
     #[prost(bool, tag = "1")]
     pub self_serve: bool,
-    /// How is the partner is invoiced?
+    /// How is this customer invoiced?
     #[prost(enumeration = "PartnerBillingStrategy", tag = "2")]
     pub billing_strategy: i32,
 }
@@ -79,12 +79,11 @@ pub mod billing_config {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum PartnerBillingStrategy {
-    Unspecified = 0,
-    /// The partner bills the customer independently. The platform records a $0
+    /// 3rd party bills the customer independently. The platform records a $0
     /// invoice.
-    Invoiced = 1,
-    /// The platform calculates the invoice and submits it to Vercel.
-    Vercel = 2,
+    Unspecified = 0,
+    /// Platform calculates the invoice and submits it to Vercel.
+    Vercel = 1,
 }
 impl PartnerBillingStrategy {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -94,7 +93,6 @@ impl PartnerBillingStrategy {
     pub fn as_str_name(&self) -> &'static str {
         match self {
             Self::Unspecified => "PARTNER_BILLING_STRATEGY_UNSPECIFIED",
-            Self::Invoiced => "PARTNER_BILLING_STRATEGY_INVOICED",
             Self::Vercel => "PARTNER_BILLING_STRATEGY_VERCEL",
         }
     }
@@ -102,7 +100,6 @@ impl PartnerBillingStrategy {
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
             "PARTNER_BILLING_STRATEGY_UNSPECIFIED" => Some(Self::Unspecified),
-            "PARTNER_BILLING_STRATEGY_INVOICED" => Some(Self::Invoiced),
             "PARTNER_BILLING_STRATEGY_VERCEL" => Some(Self::Vercel),
             _ => None,
         }
