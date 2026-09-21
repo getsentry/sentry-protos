@@ -40,8 +40,7 @@ pub struct PartnerConfig {
     /// the customer able to change their own plan.
     #[prost(bool, tag = "1")]
     pub self_serve: bool,
-    /// The strategy that determines how the partner invoice is created and
-    /// collected.
+    /// How is the partner is invoiced?
     #[prost(enumeration = "PartnerBillingStrategy", tag = "2")]
     pub billing_strategy: i32,
 }
@@ -80,14 +79,11 @@ pub mod billing_config {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum PartnerBillingStrategy {
-    /// Invalid for new partner contracts. Consumers must not fall back to direct
-    /// collection when the strategy is unspecified.
     Unspecified = 0,
     /// The partner bills the customer independently. The platform records a $0
-    /// invoice and performs no collection.
+    /// invoice.
     Invoiced = 1,
-    /// The platform calculates the invoice and submits it to Vercel for
-    /// collection.
+    /// The platform calculates the invoice and submits it to Vercel.
     Vercel = 2,
 }
 impl PartnerBillingStrategy {
