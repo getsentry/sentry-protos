@@ -1,3 +1,9 @@
+## 0.73.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add partner billing strategy to billing config by @brendanhsentry in [#438](https://github.com/getsentry/sentry-protos/pull/438)
+
 ## 0.73.0
 
 ### New Features ✨
