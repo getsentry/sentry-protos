@@ -40,6 +40,10 @@ pub struct PartnerConfig {
     /// the customer able to change their own plan.
     #[prost(bool, tag = "1")]
     pub self_serve: bool,
+    /// The strategy that determines how the partner invoice is created and
+    /// collected.
+    #[prost(enumeration = "PartnerBillingStrategy", tag = "2")]
+    pub billing_strategy: i32,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillingConfig {
@@ -70,6 +74,42 @@ pub mod billing_config {
         Invoiced(super::InvoicedConfig),
         #[prost(message, tag = "4")]
         Partner(super::PartnerConfig),
+    }
+}
+/// The invoicing and collection behavior for a partner-billed contract.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PartnerBillingStrategy {
+    /// Invalid for new partner contracts. Consumers must not fall back to direct
+    /// collection when the strategy is unspecified.
+    Unspecified = 0,
+    /// The partner bills the customer independently. The platform records a $0
+    /// invoice and performs no collection.
+    Invoiced = 1,
+    /// The platform calculates the invoice and submits it to Vercel for
+    /// collection.
+    Vercel = 2,
+}
+impl PartnerBillingStrategy {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PARTNER_BILLING_STRATEGY_UNSPECIFIED",
+            Self::Invoiced => "PARTNER_BILLING_STRATEGY_INVOICED",
+            Self::Vercel => "PARTNER_BILLING_STRATEGY_VERCEL",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PARTNER_BILLING_STRATEGY_UNSPECIFIED" => Some(Self::Unspecified),
+            "PARTNER_BILLING_STRATEGY_INVOICED" => Some(Self::Invoiced),
+            "PARTNER_BILLING_STRATEGY_VERCEL" => Some(Self::Vercel),
+            _ => None,
+        }
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
