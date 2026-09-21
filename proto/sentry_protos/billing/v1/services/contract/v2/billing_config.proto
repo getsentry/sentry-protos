@@ -37,14 +37,12 @@ message InvoicedConfig {
 
 // The invoicing and collection behavior for a partner-billed contract.
 enum PartnerBillingStrategy {
+  // 3rd party bills the customer independently. The platform records a $0
+  // invoice.
   PARTNER_BILLING_STRATEGY_UNSPECIFIED = 0;
 
-  // The partner bills the customer independently. The platform records a $0
-  // invoice.
-  PARTNER_BILLING_STRATEGY_INVOICED = 1;
-
-  // The platform calculates the invoice and submits it to Vercel.
-  PARTNER_BILLING_STRATEGY_VERCEL = 2;
+  // Platform calculates the invoice and submits it to Vercel.
+  PARTNER_BILLING_STRATEGY_VERCEL = 1;
 }
 
 // Billed by a third-party marketplace.
@@ -53,7 +51,7 @@ message PartnerConfig {
   // the customer able to change their own plan.
   bool self_serve = 1;
 
-  // How is the partner is invoiced?
+  // How is this customer invoiced?
   PartnerBillingStrategy billing_strategy = 2;
 }
 
