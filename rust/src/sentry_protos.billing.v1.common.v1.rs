@@ -166,6 +166,39 @@ pub mod flexible_price {
         Fixed(u64),
     }
 }
+/// Product entitlements available to an organization.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ProductEntitlements {
+    #[prost(enumeration = "ProductEntitlement", repeated, tag = "1")]
+    pub entitlements: ::prost::alloc::vec::Vec<i32>,
+}
+/// An entitlement granting access to a product capability.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ProductEntitlement {
+    Unspecified = 0,
+    SeerUsage = 1,
+}
+impl ProductEntitlement {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PRODUCT_ENTITLEMENT_UNSPECIFIED",
+            Self::SeerUsage => "PRODUCT_ENTITLEMENT_SEER_USAGE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PRODUCT_ENTITLEMENT_UNSPECIFIED" => Some(Self::Unspecified),
+            "PRODUCT_ENTITLEMENT_SEER_USAGE" => Some(Self::SeerUsage),
+            _ => None,
+        }
+    }
+}
 /// Unit information for measurement and conversion.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UnitInfo {
@@ -259,6 +292,9 @@ pub struct LineItemDetails {
     /// The invoice line item type strings for this line item.
     #[prost(message, optional, tag = "8")]
     pub invoice_data: ::core::option::Option<InvoiceMetadataTags>,
+    /// Product entitlements included with this line item.
+    #[prost(message, optional, tag = "9")]
+    pub product_entitlements: ::core::option::Option<ProductEntitlements>,
 }
 /// Stripe-specific payment information for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]

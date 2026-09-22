@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.common.v1;
 
 import "sentry_protos/billing/v1/common/v1/billable_metric.proto";
+import "sentry_protos/billing/v1/common/v1/product_entitlements.proto";
 import "sentry_protos/billing/v1/common/v1/unit_info.proto";
 
 // The invoice line item type strings used when charging for a line item,
@@ -42,4 +43,7 @@ message LineItemDetails {
 
   // The invoice line item type strings for this line item.
   InvoiceMetadataTags invoice_data = 8;
+
+  // Product entitlements included with this line item.
+  ProductEntitlements product_entitlements = 9;
 }
