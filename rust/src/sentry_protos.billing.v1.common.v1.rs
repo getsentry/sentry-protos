@@ -293,6 +293,10 @@ pub struct LineItemDetails {
     #[prost(message, optional, tag = "8")]
     pub invoice_data: ::core::option::Option<InvoiceMetadataTags>,
     /// Product entitlements included with this line item.
+    /// By default, all ingested data cateories are enabled if the line item
+    /// includes them in its BillableMetric expression. For products that are not
+    /// ingestion based (e.g. seer), this allows any line item to enable
+    /// the product using those features
     #[prost(message, optional, tag = "9")]
     pub product_entitlements: ::core::option::Option<ProductEntitlements>,
 }
