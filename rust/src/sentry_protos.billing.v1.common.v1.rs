@@ -166,35 +166,38 @@ pub mod flexible_price {
         Fixed(u64),
     }
 }
-/// Product entitlements available to an organization.
+/// Tags assigned to a line item.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct ProductEntitlements {
-    #[prost(enumeration = "ProductEntitlement", repeated, tag = "1")]
-    pub entitlements: ::prost::alloc::vec::Vec<i32>,
+pub struct LineItemTags {
+    #[prost(enumeration = "LineItemTag", repeated, tag = "1")]
+    pub tags: ::prost::alloc::vec::Vec<i32>,
 }
-/// An entitlement granting access to a product capability.
+/// A tag describing a line item.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum ProductEntitlement {
+pub enum LineItemTag {
     Unspecified = 0,
     SeerUsage = 1,
+    IsDynamicallySampled = 2,
 }
-impl ProductEntitlement {
+impl LineItemTag {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            Self::Unspecified => "PRODUCT_ENTITLEMENT_UNSPECIFIED",
-            Self::SeerUsage => "PRODUCT_ENTITLEMENT_SEER_USAGE",
+            Self::Unspecified => "LINE_ITEM_TAG_UNSPECIFIED",
+            Self::SeerUsage => "LINE_ITEM_TAG_SEER_USAGE",
+            Self::IsDynamicallySampled => "LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "PRODUCT_ENTITLEMENT_UNSPECIFIED" => Some(Self::Unspecified),
-            "PRODUCT_ENTITLEMENT_SEER_USAGE" => Some(Self::SeerUsage),
+            "LINE_ITEM_TAG_UNSPECIFIED" => Some(Self::Unspecified),
+            "LINE_ITEM_TAG_SEER_USAGE" => Some(Self::SeerUsage),
+            "LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED" => Some(Self::IsDynamicallySampled),
             _ => None,
         }
     }
@@ -292,13 +295,13 @@ pub struct LineItemDetails {
     /// The invoice line item type strings for this line item.
     #[prost(message, optional, tag = "8")]
     pub invoice_data: ::core::option::Option<InvoiceMetadataTags>,
-    /// Product entitlements included with this line item.
+    /// Tags assigned to this line item.
     /// By default, all ingested data cateories are enabled if the line item
     /// includes them in its BillableMetric expression. For products that are not
     /// ingestion based (e.g. seer), this allows any line item to enable
     /// the product using those features
     #[prost(message, optional, tag = "9")]
-    pub product_entitlements: ::core::option::Option<ProductEntitlements>,
+    pub line_item_tags: ::core::option::Option<LineItemTags>,
 }
 /// Stripe-specific payment information for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]

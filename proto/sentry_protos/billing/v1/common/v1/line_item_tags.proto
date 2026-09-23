@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+// Tags assigned to a line item.
+message LineItemTags {
+  repeated LineItemTag tags = 1;
+}
+
+// A tag describing a line item.
+enum LineItemTag {
+  LINE_ITEM_TAG_UNSPECIFIED = 0;
+  LINE_ITEM_TAG_SEER_USAGE = 1;
+  LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED = 2;
+}
