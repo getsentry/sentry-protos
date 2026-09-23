@@ -166,6 +166,44 @@ pub mod flexible_price {
         Fixed(u64),
     }
 }
+/// Tags assigned to a line item.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct LineItemTags {
+    #[prost(enumeration = "LineItemTag", repeated, tag = "1")]
+    pub tags: ::prost::alloc::vec::Vec<i32>,
+}
+/// A tag describing a line item.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum LineItemTag {
+    Unspecified = 0,
+    /// this line item allows the usage of the seer product and sentry gen-ai features
+    GenAiUsage = 1,
+    /// this line item uses dynamic sampling at ingestion
+    IsDynamicallySampled = 2,
+}
+impl LineItemTag {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "LINE_ITEM_TAG_UNSPECIFIED",
+            Self::GenAiUsage => "LINE_ITEM_TAG_GEN_AI_USAGE",
+            Self::IsDynamicallySampled => "LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "LINE_ITEM_TAG_UNSPECIFIED" => Some(Self::Unspecified),
+            "LINE_ITEM_TAG_GEN_AI_USAGE" => Some(Self::GenAiUsage),
+            "LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED" => Some(Self::IsDynamicallySampled),
+            _ => None,
+        }
+    }
+}
 /// Unit information for measurement and conversion.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UnitInfo {
@@ -259,6 +297,12 @@ pub struct LineItemDetails {
     /// The invoice line item type strings for this line item.
     #[prost(message, optional, tag = "8")]
     pub invoice_data: ::core::option::Option<InvoiceMetadataTags>,
+    /// Tags assigned to this line item.
+    /// A way to label a line item with semantic information about itself.
+    /// Anytime you find yourself wanting to hardcode a line item uid somewhere,
+    /// Add a line item tag instead
+    #[prost(message, optional, tag = "9")]
+    pub line_item_tags: ::core::option::Option<LineItemTags>,
 }
 /// Stripe-specific payment information for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
