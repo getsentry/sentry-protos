@@ -1,3 +1,9 @@
+## 0.74.1
+
+### Internal Changes 🔧
+
+- Add new request/response for ending partner billing by @noahsmartin in [#440](https://github.com/getsentry/sentry-protos/pull/440)
+
 ## 0.74.0
 
 ### New Features ✨
