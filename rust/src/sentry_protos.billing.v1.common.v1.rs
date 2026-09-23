@@ -177,7 +177,9 @@ pub struct LineItemTags {
 #[repr(i32)]
 pub enum LineItemTag {
     Unspecified = 0,
-    SeerUsage = 1,
+    /// this line item allows the usage of the seer product and sentry gen-ai features
+    GenAiUsage = 1,
+    /// this line item uses dynamic sampling at ingestion
     IsDynamicallySampled = 2,
 }
 impl LineItemTag {
@@ -188,7 +190,7 @@ impl LineItemTag {
     pub fn as_str_name(&self) -> &'static str {
         match self {
             Self::Unspecified => "LINE_ITEM_TAG_UNSPECIFIED",
-            Self::SeerUsage => "LINE_ITEM_TAG_SEER_USAGE",
+            Self::GenAiUsage => "LINE_ITEM_TAG_GEN_AI_USAGE",
             Self::IsDynamicallySampled => "LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED",
         }
     }
@@ -196,7 +198,7 @@ impl LineItemTag {
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
             "LINE_ITEM_TAG_UNSPECIFIED" => Some(Self::Unspecified),
-            "LINE_ITEM_TAG_SEER_USAGE" => Some(Self::SeerUsage),
+            "LINE_ITEM_TAG_GEN_AI_USAGE" => Some(Self::GenAiUsage),
             "LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED" => Some(Self::IsDynamicallySampled),
             _ => None,
         }
