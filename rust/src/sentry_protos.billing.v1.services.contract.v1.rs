@@ -882,6 +882,19 @@ pub struct EndContractImmediatelyResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
+/// Moves the organization's current contract off partner invoicing onto credit
+/// card billing, effective immediately.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EndPartnerBillingRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EndPartnerBillingResponse {
+    /// True if the current contract was partner-invoiced and has been moved.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
 /// Locates a PlatformInvoice by guid alone. Used by webhook handlers that have
 /// the invoice guid in a Stripe event's metadata but haven't resolved the
 /// parent organization yet -- the org-scoped GetInvoice isn't a fit. Returns
