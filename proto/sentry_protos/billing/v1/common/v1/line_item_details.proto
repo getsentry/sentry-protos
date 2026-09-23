@@ -45,9 +45,8 @@ message LineItemDetails {
   InvoiceMetadataTags invoice_data = 8;
 
   // Tags assigned to this line item.
-  // By default, all ingested data cateories are enabled if the line item
-  // includes them in its BillableMetric expression. For products that are not
-  // ingestion based (e.g. seer), this allows any line item to enable
-  // the product using those features
+  // A way to label a line item with semantic information about itself.
+  // Anytime you find yourself wanting to hardcode a line item uid somewhere,
+  // Add a line item tag instead
   LineItemTags line_item_tags = 9;
 }
