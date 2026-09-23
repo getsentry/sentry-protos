@@ -1,3 +1,9 @@
+## 0.74.0
+
+### New Features ✨
+
+- (billing) Expose product entitlements on line items by @volokluev in [#439](https://github.com/getsentry/sentry-protos/pull/439)
+
 ## 0.73.1
 
 ### Internal Changes 🔧
