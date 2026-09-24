@@ -42,8 +42,6 @@ message Invoice {
   // provider; reversals are recorded against it.
   optional string tax_transaction_code = 12;
 
-  // The external provider responsible for collecting payment for this invoice.
-  // This is stored on the invoice so the collection path remains stable if the
-  // contract's billing arrangement changes after the invoice is created.
+  // The external provider responsible for collecting payment for this invoice. It may be none if this invoice is billed manually (ie enterprise).
   optional sentry_protos.billing.v1.common.v1.ExternalBillingProvider external_billing_provider = 13;
 }
