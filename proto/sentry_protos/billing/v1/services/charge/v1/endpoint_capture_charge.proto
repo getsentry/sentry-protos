@@ -21,6 +21,28 @@ enum ChargeMethod {
   CHARGE_METHOD_STRIPE = 2;
   // Record an already-succeeded Stripe charge without calling Stripe.
   CHARGE_METHOD_STRIPE_PAYMENT_INTENT = 3;
+  // Submit the invoice to Vercel for collection. Vercel confirms the eventual
+  // payment outcome asynchronously through marketplace invoice webhooks.
+  CHARGE_METHOD_VERCEL = 4;
+}
+
+// A line item in an invoice submitted to Vercel. The amount is signed so
+// credits can be represented alongside ordinary charges.
+message VercelInvoiceLineItem {
+  int64 amount_cents = 1;
+  optional string description = 2;
+  optional string type = 3;
+}
+
+// The provider-specific invoice details required by Vercel. Keeping this data
+// on the request lets the charge service submit the invoice without reading
+// contract-service state directly.
+message VercelInvoiceData {
+  string billing_plan_id = 1;
+  google.protobuf.Timestamp invoice_date = 2;
+  google.protobuf.Timestamp period_start = 3;
+  google.protobuf.Timestamp period_end = 4;
+  repeated VercelInvoiceLineItem line_items = 5;
 }
 
 message CaptureChargeRequest {
@@ -35,6 +57,8 @@ message CaptureChargeRequest {
   // Required when charge_method is CHARGE_METHOD_STRIPE_PAYMENT_INTENT.
   optional sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 9;
   optional string payment_intent = 10;
+  // Required when charge_method is CHARGE_METHOD_VERCEL.
+  optional VercelInvoiceData vercel_invoice = 11;
 }
 
 message CaptureChargeResponse {
@@ -42,4 +66,7 @@ message CaptureChargeResponse {
   optional string failure_code = 2;
   // Set when the bank wants the customer to verify the payment.
   sentry_protos.billing.v1.common.v1.StripeVerification verification = 3;
+  // The provider accepted the invoice for asynchronous collection, but payment
+  // has not been confirmed yet.
+  bool awaiting_payment = 4;
 }

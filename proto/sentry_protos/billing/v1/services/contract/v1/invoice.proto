@@ -4,6 +4,7 @@ package sentry_protos.billing.v1.services.contract.v1;
 
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/common/v1/address.proto";
+import "sentry_protos/billing/v1/common/v1/external_billing_provider.proto";
 
 // This is not the same as LineItemDetails, it includes
 // items not related to the package such as tax. Each line item may carry an
@@ -40,4 +41,19 @@ message Invoice {
   // Unset until the invoice's tax transaction is persisted with the
   // provider; reversals are recorded against it.
   optional string tax_transaction_code = 12;
+
+  // The external provider responsible for collecting payment for this invoice.
+  // This is stored on the invoice so the collection path remains stable if the
+  // contract's billing arrangement changes after the invoice is created.
+  optional sentry_protos.billing.v1.common.v1.ExternalBillingProvider external_billing_provider = 13;
+
+  // The service period covered by this invoice. These are snapshotted on the
+  // invoice because the contract may have rolled into its next period before
+  // collection begins.
+  optional google.protobuf.Timestamp period_start = 14;
+  optional google.protobuf.Timestamp period_end = 15;
+
+  // The package whose charges produced this invoice. For rollover invoices
+  // this is the package on the ending contract, not a pending replacement.
+  optional string package_uid = 16;
 }

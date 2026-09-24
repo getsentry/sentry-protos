@@ -580,6 +580,26 @@ pub struct Invoice {
     /// provider; reversals are recorded against it.
     #[prost(string, optional, tag = "12")]
     pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// The external provider responsible for collecting payment for this invoice.
+    /// This is stored on the invoice so the collection path remains stable if the
+    /// contract's billing arrangement changes after the invoice is created.
+    #[prost(
+        enumeration = "super::super::super::common::v1::ExternalBillingProvider",
+        optional,
+        tag = "13"
+    )]
+    pub external_billing_provider: ::core::option::Option<i32>,
+    /// The service period covered by this invoice. These are snapshotted on the
+    /// invoice because the contract may have rolled into its next period before
+    /// collection begins.
+    #[prost(message, optional, tag = "14")]
+    pub period_start: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "15")]
+    pub period_end: ::core::option::Option<::prost_types::Timestamp>,
+    /// The package whose charges produced this invoice. For rollover invoices
+    /// this is the package on the ending contract, not a pending replacement.
+    #[prost(string, optional, tag = "16")]
+    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
@@ -1078,6 +1098,22 @@ pub struct MarkInvoicePaidResponse {
     /// The updated invoice; unset when updated is false.
     #[prost(message, optional, tag = "2")]
     pub invoice: ::core::option::Option<Invoice>,
+}
+/// Records the provider-assigned identifier after an externally collected
+/// invoice has been accepted by its billing provider.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordExternalInvoiceCreatedRequest {
+    #[prost(string, tag = "1")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub organization_id: u64,
+    #[prost(string, tag = "3")]
+    pub external_invoice_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordExternalInvoiceCreatedResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
 }
 /// Records a failed charge attempt against an invoice.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
