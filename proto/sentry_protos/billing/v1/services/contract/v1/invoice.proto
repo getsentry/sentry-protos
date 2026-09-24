@@ -46,14 +46,4 @@ message Invoice {
   // This is stored on the invoice so the collection path remains stable if the
   // contract's billing arrangement changes after the invoice is created.
   optional sentry_protos.billing.v1.common.v1.ExternalBillingProvider external_billing_provider = 13;
-
-  // The service period covered by this invoice. These are snapshotted on the
-  // invoice because the contract may have rolled into its next period before
-  // collection begins.
-  optional google.protobuf.Timestamp period_start = 14;
-  optional google.protobuf.Timestamp period_end = 15;
-
-  // The package whose charges produced this invoice. For rollover invoices
-  // this is the package on the ending contract, not a pending replacement.
-  optional string package_uid = 16;
 }

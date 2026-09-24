@@ -72,33 +72,6 @@ pub struct PlatformRefund {
     #[prost(string, tag = "6")]
     pub stripe_charge_id: ::prost::alloc::string::String,
 }
-/// A line item in an invoice submitted to Vercel. The amount is signed so
-/// credits can be represented alongside ordinary charges.
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct VercelInvoiceLineItem {
-    #[prost(int64, tag = "1")]
-    pub amount_cents: i64,
-    #[prost(string, optional, tag = "2")]
-    pub description: ::core::option::Option<::prost::alloc::string::String>,
-    #[prost(string, optional, tag = "3")]
-    pub r#type: ::core::option::Option<::prost::alloc::string::String>,
-}
-/// The provider-specific invoice details required by Vercel. Keeping this data
-/// on the request lets the charge service submit the invoice without reading
-/// contract-service state directly.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct VercelInvoiceData {
-    #[prost(string, tag = "1")]
-    pub billing_plan_id: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub invoice_date: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, optional, tag = "3")]
-    pub period_start: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, optional, tag = "4")]
-    pub period_end: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, repeated, tag = "5")]
-    pub line_items: ::prost::alloc::vec::Vec<VercelInvoiceLineItem>,
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CaptureChargeRequest {
     #[prost(enumeration = "ChargeMethod", tag = "1")]
@@ -126,9 +99,6 @@ pub struct CaptureChargeRequest {
     >,
     #[prost(string, optional, tag = "10")]
     pub payment_intent: ::core::option::Option<::prost::alloc::string::String>,
-    /// Required when charge_method is CHARGE_METHOD_VERCEL.
-    #[prost(message, optional, tag = "11")]
-    pub vercel_invoice: ::core::option::Option<VercelInvoiceData>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CaptureChargeResponse {
@@ -141,10 +111,6 @@ pub struct CaptureChargeResponse {
     pub verification: ::core::option::Option<
         super::super::super::common::v1::StripeVerification,
     >,
-    /// The provider accepted the invoice for asynchronous collection, but payment
-    /// has not been confirmed yet.
-    #[prost(bool, tag = "4")]
-    pub awaiting_payment: bool,
 }
 /// How the charge should be executed against the payment provider.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -162,9 +128,6 @@ pub enum ChargeMethod {
     Stripe = 2,
     /// Record an already-succeeded Stripe charge without calling Stripe.
     StripePaymentIntent = 3,
-    /// Submit the invoice to Vercel for collection. Vercel confirms the eventual
-    /// payment outcome asynchronously through marketplace invoice webhooks.
-    Vercel = 4,
 }
 impl ChargeMethod {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -177,7 +140,6 @@ impl ChargeMethod {
             Self::None => "CHARGE_METHOD_NONE",
             Self::Stripe => "CHARGE_METHOD_STRIPE",
             Self::StripePaymentIntent => "CHARGE_METHOD_STRIPE_PAYMENT_INTENT",
-            Self::Vercel => "CHARGE_METHOD_VERCEL",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -187,7 +149,6 @@ impl ChargeMethod {
             "CHARGE_METHOD_NONE" => Some(Self::None),
             "CHARGE_METHOD_STRIPE" => Some(Self::Stripe),
             "CHARGE_METHOD_STRIPE_PAYMENT_INTENT" => Some(Self::StripePaymentIntent),
-            "CHARGE_METHOD_VERCEL" => Some(Self::Vercel),
             _ => None,
         }
     }

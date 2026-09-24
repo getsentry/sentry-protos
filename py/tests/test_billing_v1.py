@@ -51,6 +51,9 @@ from sentry_protos.billing.v1.common.v1.billable_metric_pb2 import (
     Operator,
 )
 from sentry_protos.billing.v1.common.v1.billing_interval_pb2 import BillingInterval
+from sentry_protos.billing.v1.common.v1.external_billing_provider_pb2 import (
+    EXTERNAL_BILLING_PROVIDER_VERCEL as INVOICE_EXTERNAL_BILLING_PROVIDER_VERCEL,
+)
 from sentry_protos.billing.v1.common.v1.retention_pb2 import (
     DataCategoryRetention,
     RetentionSettings,
@@ -59,6 +62,7 @@ from sentry_protos.billing.v1.services.contract.v1.retention_config_pb2 import (
     RetentionConfig,
     RetentionOverride,
 )
+from sentry_protos.billing.v1.services.contract.v1.invoice_pb2 import Invoice
 from sentry_protos.billing.v1.services.package.v1.package_pb2 import PackageConfig
 from sentry_protos.billing.v1.services.package.v1.endpoint_get_package_pb2 import (
     GetPackageRequest,
@@ -855,4 +859,12 @@ def test_data_category_retention_roundtrip():
     assert parsed.settings.HasField("downsampled_days")
     assert parsed.settings.downsampled_days == 0
 
+
+def test_invoice_external_billing_provider():
+    invoice = Invoice(
+        external_billing_provider=INVOICE_EXTERNAL_BILLING_PROVIDER_VERCEL,
+    )
+
+    assert invoice.HasField("external_billing_provider")
+    assert invoice.external_billing_provider == INVOICE_EXTERNAL_BILLING_PROVIDER_VERCEL
 
