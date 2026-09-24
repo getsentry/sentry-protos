@@ -854,3 +854,5 @@ def test_data_category_retention_roundtrip():
     assert parsed.settings.standard_days == 30
     assert parsed.settings.HasField("downsampled_days")
     assert parsed.settings.downsampled_days == 0
+
+
