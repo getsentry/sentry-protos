@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
+import "sentry_protos/billing/v1/services/contract/v2/contract.proto";
+
+// Returns each organization's current annual contract whose billing term ends
+// on one of the requested dates.
+message GetAnnualContractsEndingTermRequest {
+  // Exclusive term ends to match, i.e. the first day of the next term, the
+  // same convention as PricingConfig.billing_period_end_date.
+  repeated sentry_protos.billing.v1.services.contract.v1.Date term_end_dates = 1;
+}
+
+message GetAnnualContractsEndingTermResponse {
+  repeated Contract contracts = 1;
+}
