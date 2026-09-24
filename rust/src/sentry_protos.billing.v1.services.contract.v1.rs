@@ -580,9 +580,7 @@ pub struct Invoice {
     /// provider; reversals are recorded against it.
     #[prost(string, optional, tag = "12")]
     pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
-    /// The external provider responsible for collecting payment for this invoice.
-    /// This is stored on the invoice so the collection path remains stable if the
-    /// contract's billing arrangement changes after the invoice is created.
+    /// The external provider responsible for collecting payment for this invoice. It may be none if this invoice is billed manually (ie enterprise).
     #[prost(
         enumeration = "super::super::super::common::v1::ExternalBillingProvider",
         optional,
