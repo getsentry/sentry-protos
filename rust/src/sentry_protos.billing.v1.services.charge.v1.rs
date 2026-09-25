@@ -120,10 +120,6 @@ pub enum ChargeMethod {
     /// that an unset charge_method is never silently treated as an active
     /// billing choice.
     Unspecified = 0,
-    /// Record the charge against our DB models without contacting any
-    /// external payment provider. Payment is expected to be collected
-    /// externally.
-    None = 1,
     /// Call the Stripe API to bill the customer for this charge.
     Stripe = 2,
     /// Record an already-succeeded Stripe charge without calling Stripe.
@@ -139,7 +135,6 @@ impl ChargeMethod {
     pub fn as_str_name(&self) -> &'static str {
         match self {
             Self::Unspecified => "CHARGE_METHOD_UNSPECIFIED",
-            Self::None => "CHARGE_METHOD_NONE",
             Self::Stripe => "CHARGE_METHOD_STRIPE",
             Self::StripePaymentIntent => "CHARGE_METHOD_STRIPE_PAYMENT_INTENT",
             Self::Vercel => "CHARGE_METHOD_VERCEL",
@@ -149,7 +144,6 @@ impl ChargeMethod {
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
             "CHARGE_METHOD_UNSPECIFIED" => Some(Self::Unspecified),
-            "CHARGE_METHOD_NONE" => Some(Self::None),
             "CHARGE_METHOD_STRIPE" => Some(Self::Stripe),
             "CHARGE_METHOD_STRIPE_PAYMENT_INTENT" => Some(Self::StripePaymentIntent),
             "CHARGE_METHOD_VERCEL" => Some(Self::Vercel),
