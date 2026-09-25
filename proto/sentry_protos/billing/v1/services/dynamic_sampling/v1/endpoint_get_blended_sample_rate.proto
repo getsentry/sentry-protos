@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.dynamic_sampling.v1;
+
+// AM2 keep-rate for an organization. Derived from the current contract's
+// dynamically sampled line item: max(prepaid volume, current-period usage)
+// mapped onto the AM2 sampling table.
+message GetBlendedSampleRateRequest {
+  uint64 organization_id = 1;
+}
+
+message GetBlendedSampleRateResponse {
+  // Unset when there is no current contract, or the package has no
+  // LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED line item (not AM2). Keep-rates
+  // from the AM2 table are always greater than zero; 0.0 is not a sentinel.
+  optional double sample_rate = 1;
+}

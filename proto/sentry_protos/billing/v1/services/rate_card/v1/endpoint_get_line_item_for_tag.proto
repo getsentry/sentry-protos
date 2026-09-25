@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.rate_card.v1;
+
+import "sentry_protos/billing/v1/common/v1/line_item_tags.proto";
+import "sentry_protos/billing/v1/services/rate_card/v1/rate_card.proto";
+
+// The contract's effective rate-card row that carries `tag`. Transactions
+// and performance units share a uid, so callers that care about a
+// capability (for example dynamic sampling) should match on the line-item
+// tag rather than uid or metric name.
+message GetLineItemForTagRequest {
+  uint64 contract_id = 1;
+  sentry_protos.billing.v1.common.v1.LineItemTag tag = 2;
+}
+
+message GetLineItemForTagResponse {
+  // Unset when the effective rate card has no row with `tag`.
+  optional RateCardLineItem line_item = 1;
+}
