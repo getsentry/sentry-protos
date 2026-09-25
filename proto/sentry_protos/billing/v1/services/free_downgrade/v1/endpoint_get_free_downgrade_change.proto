@@ -1,23 +1,24 @@
 syntax = "proto3";
 
-package sentry_protos.billing.v1.services.contract_reset.v1;
+package sentry_protos.billing.v1.services.free_downgrade.v1;
 
 import "sentry_protos/billing/v1/common/v1/pending_change.proto";
 import "sentry_protos/billing/v1/services/contract/v2/contract.proto";
 
-// Builds the pending change that rolls the contract onto the latest catalog's
-// free package.
+// The pending change that moves a contract onto the latest catalog's free
+// package. This describes the change; it does not apply it.
 //
-// An older package generation must not keep an organization on a retired free
-// tier. Free is monthly and cannot retain sponsorship or paid-plan user
+// The target is the free package of the latest catalog, not of the contract's
+// own: an older generation downgrades onto the current free plan rather than
+// its own. Free is monthly and cannot retain sponsorship or paid-plan user
 // overrides; unset PendingChange fields mean "no change" to rollover, so
 // interval and sponsorship are only populated when they must actually change.
 // Shared by deferred cancel (which stages the change) and immediate downgrade
 // (which applies it now).
-message BuildLatestFreeChangeRequest {
+message GetFreeDowngradeChangeRequest {
   sentry_protos.billing.v1.services.contract.v2.Contract contract = 1;
 }
 
-message BuildLatestFreeChangeResponse {
+message GetFreeDowngradeChangeResponse {
   sentry_protos.billing.v1.common.v1.PendingChange change = 1;
 }
