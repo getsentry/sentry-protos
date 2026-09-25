@@ -42,11 +42,6 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.contract_budget_enforcer.v1.rs");
                     }
                 }
-                pub mod contract_reset {
-                    pub mod v1 {
-                        include!("sentry_protos.billing.v1.services.contract_reset.v1.rs");
-                    }
-                }
                 pub mod contract_usage_snapshot {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.contract_usage_snapshot.v1.rs");
@@ -60,6 +55,11 @@ pub mod sentry_protos {
                 pub mod events {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.events.v1.rs");
+                    }
+                }
+                pub mod free_downgrade {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.free_downgrade.v1.rs");
                     }
                 }
                 pub mod invoicer {
