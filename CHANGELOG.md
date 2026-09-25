@@ -1,3 +1,9 @@
+## 0.75.1
+
+### Internal Changes 🔧
+
+- (billing-platform) External billing provider by @brendanhsentry in [#441](https://github.com/getsentry/sentry-protos/pull/441)
+
 ## 0.75.0
 
 ### New Features ✨
