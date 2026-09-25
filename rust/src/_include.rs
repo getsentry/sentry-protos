@@ -57,6 +57,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.events.v1.rs");
                     }
                 }
+                pub mod free_downgrade {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.free_downgrade.v1.rs");
+                    }
+                }
                 pub mod invoicer {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.invoicer.v1.rs");

@@ -95,6 +95,25 @@ pub struct CreateInvoicesRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateInvoicesResponse {}
+/// Rolls a contract onto the latest catalog free package now, without crediting
+/// unused time. Shared by exhausted dunning and partner deprovision: the
+/// partner or failed invoice did not fund the remaining term.
+///
+/// Always opens a new term, including when the organization is already on
+/// free. Add-on activations are removed from the newly opened free contract
+/// after rollover, because a rollover carries them forward from the contract
+/// that just closed.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DowngradeToFreeImmediatelyRequest {
+    #[prost(message, optional, tag = "1")]
+    pub contract: ::core::option::Option<super::super::contract::v2::Contract>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DowngradeToFreeImmediatelyResponse {
+    /// The current contract after the immediate free rollover.
+    #[prost(message, optional, tag = "1")]
+    pub contract: ::core::option::Option<super::super::contract::v2::Contract>,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GeneratePdfRequest {
     #[prost(uint64, tag = "1")]

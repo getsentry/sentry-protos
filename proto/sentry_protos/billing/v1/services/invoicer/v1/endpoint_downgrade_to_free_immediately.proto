@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "sentry_protos/billing/v1/services/contract/v2/contract.proto";
+
+// Rolls a contract onto the latest catalog free package now, without crediting
+// unused time. Shared by exhausted dunning and partner deprovision: the
+// partner or failed invoice did not fund the remaining term.
+//
+// Always opens a new term, including when the organization is already on
+// free. Add-on activations are removed from the newly opened free contract
+// after rollover, because a rollover carries them forward from the contract
+// that just closed.
+message DowngradeToFreeImmediatelyRequest {
+  sentry_protos.billing.v1.services.contract.v2.Contract contract = 1;
+}
+
+message DowngradeToFreeImmediatelyResponse {
+  // The current contract after the immediate free rollover.
+  sentry_protos.billing.v1.services.contract.v2.Contract contract = 1;
+}

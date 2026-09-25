@@ -50,6 +50,31 @@ pub struct ChangeContractResponse {
         super::super::super::common::v1::StripeVerification,
     >,
 }
+/// Moves an organization onto the latest catalog free package now and closes
+/// its billing account.
+///
+/// This is separate from CancelContract, which only stages a free downgrade
+/// for the next rollover. CloseContractImmediately applies that same free
+/// target immediately, does not credit unused time (the partner or failed
+/// invoice did not fund the remaining term), and sets account status to
+/// CLOSED.
+///
+/// Missing-contract is not an error: the account is still closed so a
+/// partner deprovision can finish. An organization that is already CLOSED
+/// is a no-op.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CloseContractImmediatelyRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CloseContractImmediatelyResponse {
+    /// True when the close was applied or was already complete (already CLOSED
+    /// or no current contract). Callers treat this as success so a partner
+    /// webhook can finish or retry without a distinct missing-contract path.
+    #[prost(bool, tag = "1")]
+    pub handled: bool,
+}
 /// Previews the effect of a contract change without committing it.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PreviewChangeContractRequest {
