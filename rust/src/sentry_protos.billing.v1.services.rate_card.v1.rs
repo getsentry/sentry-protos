@@ -74,10 +74,9 @@ pub struct RateCard {
     #[prost(message, repeated, tag = "2")]
     pub shared_line_items: ::prost::alloc::vec::Vec<SharedRateCardLineItem>,
 }
-/// The contract's effective rate-card row that carries `tag`. Transactions
-/// and performance units share a uid, so callers that care about a
-/// capability (for example dynamic sampling) should match on the line-item
-/// tag rather than uid or metric name.
+/// The contract's effective rate-card row that carries `tag`.
+/// Transactions and performance units share a uid, so AM2 keep-rate
+/// lookup matches LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED rather than uid.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetLineItemForTagRequest {
     #[prost(uint64, tag = "1")]
