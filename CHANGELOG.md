@@ -1,3 +1,9 @@
+## 0.75.0
+
+### New Features ✨
+
+- (billing) Add request/response for annual contracts ending term by @noahsmartin in [#442](https://github.com/getsentry/sentry-protos/pull/442)
+
 ## 0.74.1
 
 ### Internal Changes 🔧
