@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.usage_pricer.v1;
+
+// Current-period raw usage for one line item on a contract
+// (LineItemUsageSummary.total_quantity). Used by DynamicSamplingService
+// to size the AM2 keep-rate against actual volume.
+message GetLineItemUsageForContractRequest {
+  uint64 contract_id = 1;
+  string line_item_uid = 2;
+}
+
+message GetLineItemUsageForContractResponse {
+  // LineItemUsageSummary.total_quantity for the current priced period.
+  uint64 total_quantity = 1;
+  // False when the priced contract has no matching regular line-item
+  // summary. total_quantity is then 0.
+  bool found = 2;
+}

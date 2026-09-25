@@ -74,6 +74,22 @@ pub struct RateCard {
     #[prost(message, repeated, tag = "2")]
     pub shared_line_items: ::prost::alloc::vec::Vec<SharedRateCardLineItem>,
 }
+/// The contract's effective rate-card row that carries `tag`.
+/// Transactions and performance units share a uid, so AM2 keep-rate
+/// lookup matches LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED rather than uid.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetLineItemForTagRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    #[prost(enumeration = "super::super::super::common::v1::LineItemTag", tag = "2")]
+    pub tag: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetLineItemForTagResponse {
+    /// Unset when the effective rate card has no row with `tag`.
+    #[prost(message, optional, tag = "1")]
+    pub line_item: ::core::option::Option<RateCardLineItem>,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetRateCardRequest {
     #[prost(uint64, tag = "1")]

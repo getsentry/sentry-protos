@@ -176,3 +176,23 @@ pub struct GetDailyBreakdownResponse {
     #[prost(message, repeated, tag = "1")]
     pub days: ::prost::alloc::vec::Vec<DailyLineItemOutcomes>,
 }
+/// Current-period raw usage for one line item on a contract
+/// (LineItemUsageSummary.total_quantity). Used by DynamicSamplingService
+/// to size the AM2 keep-rate against actual volume.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetLineItemUsageForContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    #[prost(string, tag = "2")]
+    pub line_item_uid: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetLineItemUsageForContractResponse {
+    /// LineItemUsageSummary.total_quantity for the current priced period.
+    #[prost(uint64, tag = "1")]
+    pub total_quantity: u64,
+    /// False when the priced contract has no matching regular line-item
+    /// summary. total_quantity is then 0.
+    #[prost(bool, tag = "2")]
+    pub found: bool,
+}
