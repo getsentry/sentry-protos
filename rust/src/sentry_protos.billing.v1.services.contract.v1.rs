@@ -580,6 +580,13 @@ pub struct Invoice {
     /// provider; reversals are recorded against it.
     #[prost(string, optional, tag = "12")]
     pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// The external provider responsible for collecting payment for this invoice. It may be none if this invoice is billed manually (ie enterprise).
+    #[prost(
+        enumeration = "super::super::super::common::v1::ExternalBillingProvider",
+        optional,
+        tag = "13"
+    )]
+    pub external_billing_provider: ::core::option::Option<i32>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
