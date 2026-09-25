@@ -226,6 +226,20 @@ pub struct GetAllContractsForOrganizationResponse {
     #[prost(message, repeated, tag = "1")]
     pub contracts: ::prost::alloc::vec::Vec<Contract>,
 }
+/// Returns each organization's current annual contract whose billing term ends
+/// on one of the requested dates.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnnualContractsEndingTermRequest {
+    /// Exclusive term ends to match, i.e. the first day of the next term, the
+    /// same convention as PricingConfig.billing_period_end_date.
+    #[prost(message, repeated, tag = "1")]
+    pub term_end_dates: ::prost::alloc::vec::Vec<super::v1::Date>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnnualContractsEndingTermResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub contracts: ::prost::alloc::vec::Vec<Contract>,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetContractRequest {
     #[prost(uint64, tag = "1")]
