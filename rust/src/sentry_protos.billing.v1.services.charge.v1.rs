@@ -128,6 +128,8 @@ pub enum ChargeMethod {
     Stripe = 2,
     /// Record an already-succeeded Stripe charge without calling Stripe.
     StripePaymentIntent = 3,
+    /// Submit the invoice to Vercel for collection.
+    Vercel = 4,
 }
 impl ChargeMethod {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -140,6 +142,7 @@ impl ChargeMethod {
             Self::None => "CHARGE_METHOD_NONE",
             Self::Stripe => "CHARGE_METHOD_STRIPE",
             Self::StripePaymentIntent => "CHARGE_METHOD_STRIPE_PAYMENT_INTENT",
+            Self::Vercel => "CHARGE_METHOD_VERCEL",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -149,6 +152,7 @@ impl ChargeMethod {
             "CHARGE_METHOD_NONE" => Some(Self::None),
             "CHARGE_METHOD_STRIPE" => Some(Self::Stripe),
             "CHARGE_METHOD_STRIPE_PAYMENT_INTENT" => Some(Self::StripePaymentIntent),
+            "CHARGE_METHOD_VERCEL" => Some(Self::Vercel),
             _ => None,
         }
     }
