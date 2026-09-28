@@ -1,3 +1,9 @@
+## 0.75.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Add vercel charge method by @brendanhsentry in [#445](https://github.com/getsentry/sentry-protos/pull/445)
+
 ## 0.75.1
 
 ### Internal Changes 🔧
