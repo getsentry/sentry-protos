@@ -21,6 +21,8 @@ enum ChargeMethod {
   CHARGE_METHOD_STRIPE = 2;
   // Record an already-succeeded Stripe charge without calling Stripe.
   CHARGE_METHOD_STRIPE_PAYMENT_INTENT = 3;
+  // Submit the invoice to Vercel for collection.
+  CHARGE_METHOD_VERCEL = 4;
 }
 
 message CaptureChargeRequest {

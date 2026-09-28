@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+// The external provider responsible for collecting payment for an invoice.
+enum ExternalBillingProvider {
+  EXTERNAL_BILLING_PROVIDER_UNSPECIFIED = 0;
+  EXTERNAL_BILLING_PROVIDER_STRIPE = 1;
+  EXTERNAL_BILLING_PROVIDER_VERCEL = 2;
+}

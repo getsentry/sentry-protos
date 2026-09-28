@@ -1,3 +1,21 @@
+## 0.75.3
+
+### Internal Changes 🔧
+
+- Add recurring credit fields for API by @noahsmartin in [#447](https://github.com/getsentry/sentry-protos/pull/447)
+
+## 0.75.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Add vercel charge method by @brendanhsentry in [#445](https://github.com/getsentry/sentry-protos/pull/445)
+
+## 0.75.1
+
+### Internal Changes 🔧
+
+- (billing-platform) External billing provider by @brendanhsentry in [#441](https://github.com/getsentry/sentry-protos/pull/441)
+
 ## 0.75.0
 
 ### New Features ✨
