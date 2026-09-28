@@ -15,6 +15,14 @@ pub struct RecurringCredit {
     pub r#type: i32,
     #[prost(uint64, tag = "3")]
     pub amount: u64,
+    #[prost(uint64, tag = "4")]
+    pub id: u64,
+    /// The contract the credit was granted on.
+    #[prost(uint64, tag = "5")]
+    pub initial_contract_id: u64,
+    /// Periods the credit still covers, counting the requested contract's period.
+    #[prost(uint32, tag = "6")]
+    pub remaining_periods: u32,
 }
 /// Denomination of a RecurringCredit.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
