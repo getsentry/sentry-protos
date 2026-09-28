@@ -31,9 +31,11 @@ message BillContractChangeRequest {
   // omitted for compatibility with existing callers.
   optional bool credit_unused_time = 5;
 
-  // Whether this request may collect payment inline. Defaults to true when
-  // omitted; invoice eligibility and the synchronous-charge option still apply.
-  optional bool collect_payment = 6;
+  // Whether this call may charge the invoice inline. Defaults to true when
+  // omitted. The invoice must still need a charge, and the synchronous-charge
+  // option must be on. This does not change whether the charge sweep can
+  // collect the invoice later.
+  optional bool charge_inline = 6;
 }
 
 message BillContractChangeResponse {
