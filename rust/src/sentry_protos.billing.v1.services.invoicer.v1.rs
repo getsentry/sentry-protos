@@ -30,10 +30,12 @@ pub struct BillContractChangeRequest {
     /// omitted for compatibility with existing callers.
     #[prost(bool, optional, tag = "5")]
     pub credit_unused_time: ::core::option::Option<bool>,
-    /// Whether this request may collect payment inline. Defaults to true when
-    /// omitted; invoice eligibility and the synchronous-charge option still apply.
+    /// Whether this call may charge the invoice inline. Defaults to true when
+    /// omitted. The invoice must still need a charge, and the synchronous-charge
+    /// option must be on. This does not change whether the charge sweep can
+    /// collect the invoice later.
     #[prost(bool, optional, tag = "6")]
-    pub collect_payment: ::core::option::Option<bool>,
+    pub charge_inline: ::core::option::Option<bool>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillContractChangeResponse {
