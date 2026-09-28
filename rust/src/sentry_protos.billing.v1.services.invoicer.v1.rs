@@ -26,6 +26,14 @@ pub struct BillContractChangeRequest {
     /// Whether the requested change should result in a new billing period.
     #[prost(bool, tag = "4")]
     pub start_new_term: bool,
+    /// Whether to credit unused time on the current plan. Defaults to true when
+    /// omitted for compatibility with existing callers.
+    #[prost(bool, optional, tag = "5")]
+    pub credit_unused_time: ::core::option::Option<bool>,
+    /// Whether this request may collect payment inline. Defaults to true when
+    /// omitted; invoice eligibility and the synchronous-charge option still apply.
+    #[prost(bool, optional, tag = "6")]
+    pub collect_payment: ::core::option::Option<bool>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillContractChangeResponse {
