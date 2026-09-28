@@ -1,3 +1,9 @@
+## 0.75.3
+
+### Internal Changes 🔧
+
+- Add recurring credit fields for API by @noahsmartin in [#447](https://github.com/getsentry/sentry-protos/pull/447)
+
 ## 0.75.2
 
 ### Internal Changes 🔧
