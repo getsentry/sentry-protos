@@ -1152,9 +1152,7 @@ pub struct RetryChargeResponse {
     pub updated: bool,
 }
 /// Reschedules the organization's most recent failed charge, e.g. after the
-/// customer adds a new payment method. Unlike RetryCharge, this never overrides
-/// an active charge claim: an invoice that a Pay Now checkout or the automated
-/// batch is charging right now is left alone to avoid a double charge.
+/// customer adds a new payment method.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RetryFailedChargeRequest {
     #[prost(uint64, tag = "1")]
