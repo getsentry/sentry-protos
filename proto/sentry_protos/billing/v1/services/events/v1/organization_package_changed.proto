@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.events.v1;
+
+// Published when an organization's contract moves to a different package, e.g. a
+// plan upgrade or downgrade taking effect. Not published for renewals that keep
+// the same package.
+message OrganizationPackageChanged {
+  string old_package_uid = 1;
+  string new_package_uid = 2;
+}
