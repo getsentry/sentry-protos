@@ -1,3 +1,9 @@
+## 0.77.0
+
+### New Features ✨
+
+- (billing) Add retry failed charge endpoint protos by @noahsmartin in [#449](https://github.com/getsentry/sentry-protos/pull/449)
+
 ## 0.76.1
 
 ### Documentation 📚
