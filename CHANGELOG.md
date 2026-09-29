@@ -1,3 +1,9 @@
+## 0.76.1
+
+### Documentation 📚
+
+- (billing) Drop AM2 from blended sample-rate proto comments by @armenzg in [#448](https://github.com/getsentry/sentry-protos/pull/448)
+
 ## 0.76.0
 
 ### New Features ✨
