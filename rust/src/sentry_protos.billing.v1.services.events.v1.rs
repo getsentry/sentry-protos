@@ -5,6 +5,16 @@
 pub struct ContractRolledOver {}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationOverUsage {}
+/// Published when an organization's contract moves to a different package, e.g. a
+/// plan upgrade or downgrade taking effect. Not published for renewals that keep
+/// the same package.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct OrganizationPackageChanged {
+    #[prost(string, tag = "1")]
+    pub old_package_uid: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub new_package_uid: ::prost::alloc::string::String,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationPaygChanged {}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
@@ -18,14 +28,14 @@ pub struct EventMeta {
     #[prost(message, optional, tag = "2")]
     pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct EventPayload {
-    #[prost(oneof = "event_payload::Payload", tags = "1, 2, 3, 4, 5")]
+    #[prost(oneof = "event_payload::Payload", tags = "1, 2, 3, 4, 5, 6")]
     pub payload: ::core::option::Option<event_payload::Payload>,
 }
 /// Nested message and enum types in `EventPayload`.
 pub mod event_payload {
-    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum Payload {
         #[prost(message, tag = "1")]
         OrganizationOverUsage(super::OrganizationOverUsage),
@@ -37,9 +47,11 @@ pub mod event_payload {
         OrganizationTrialStarted(super::OrganizationTrialStarted),
         #[prost(message, tag = "5")]
         ContractRolledOver(super::ContractRolledOver),
+        #[prost(message, tag = "6")]
+        OrganizationPackageChanged(super::OrganizationPackageChanged),
     }
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillingPlatformEvent {
     #[prost(message, optional, tag = "1")]
     pub meta: ::core::option::Option<EventMeta>,
