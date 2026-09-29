@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Reschedules the organization's most recent failed charge, e.g. after the
+// customer adds a new payment method.
+message RetryFailedChargeRequest {
+  uint64 organization_id = 1;
+}
+
+message RetryFailedChargeResponse {
+  // True if an invoice with a failed charge attempt was found and rescheduled.
+  bool updated = 1;
+
+  // Guid of the rescheduled invoice. Only set when updated is true.
+  optional string invoice_guid = 2;
+}
