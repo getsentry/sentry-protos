@@ -20,6 +20,10 @@ message RateCardLineItem {
 
   // Whether this line item is currently enabled
   bool is_enabled = 7;
+
+  // Soft-cap enforcement for this line item. Independent of reserved_units: prepaid
+  // volume stays in the oneof; this flag only marks soft-cap policy.
+  bool is_soft_capped = 8;
 }
 
 message SharedRateCardLineItem {

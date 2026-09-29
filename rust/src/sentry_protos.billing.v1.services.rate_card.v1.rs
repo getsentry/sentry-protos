@@ -20,6 +20,10 @@ pub struct RateCardLineItem {
     /// Whether this line item is currently enabled
     #[prost(bool, tag = "7")]
     pub is_enabled: bool,
+    /// Soft-cap enforcement for this line item. Independent of reserved_units: prepaid
+    /// volume stays in the oneof; this flag only marks soft-cap policy.
+    #[prost(bool, tag = "8")]
+    pub is_soft_capped: bool,
     /// The following values are the effective values *after* contract overrides have been resolved. If there are no
     /// contract overrides, the default package values are used.
     #[prost(oneof = "rate_card_line_item::ReservedUnits", tags = "2, 3")]
