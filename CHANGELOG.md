@@ -1,3 +1,9 @@
+## 0.76.0
+
+### New Features ✨
+
+- (billing) Add AM2 blended sample-rate service boundaries by @armenzg in [#444](https://github.com/getsentry/sentry-protos/pull/444)
+
 ## 0.75.3
 
 ### Internal Changes 🔧
