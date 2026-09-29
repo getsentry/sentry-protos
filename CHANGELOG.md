@@ -1,3 +1,13 @@
+## 0.78.0
+
+### New Features ✨
+
+- (workflow_engine) Add the TraceItemType for Workflow Engine Evaluations by @saponifi3d in [#451](https://github.com/getsentry/sentry-protos/pull/451)
+
+### Internal Changes 🔧
+
+- Add package change event by @noahsmartin in [#452](https://github.com/getsentry/sentry-protos/pull/452)
+
 ## 0.77.0
 
 ### New Features ✨
