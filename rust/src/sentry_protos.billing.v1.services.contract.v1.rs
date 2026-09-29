@@ -1151,6 +1151,24 @@ pub struct RetryChargeResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
+/// Reschedules the organization's most recent failed charge, e.g. after the
+/// customer adds a new payment method. Unlike RetryCharge, this never overrides
+/// an active charge claim: an invoice that a Pay Now checkout or the automated
+/// batch is charging right now is left alone to avoid a double charge.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetryFailedChargeRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetryFailedChargeResponse {
+    /// True if an invoice with a failed charge attempt was found and rescheduled.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+    /// Guid of the rescheduled invoice. Only set when updated is true.
+    #[prost(string, optional, tag = "2")]
+    pub invoice_guid: ::core::option::Option<::prost::alloc::string::String>,
+}
 /// Creates a new contract for a new billing period. Closes out the current contract by
 /// creating an invoice and setting the last usage date
 #[derive(Clone, PartialEq, ::prost::Message)]
