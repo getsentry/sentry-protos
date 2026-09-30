@@ -44,4 +44,7 @@ message Invoice {
 
   // The external provider responsible for collecting payment for this invoice. It may be none if this invoice is billed manually (ie enterprise).
   optional sentry_protos.billing.v1.common.v1.ExternalBillingProvider external_billing_provider = 13;
+
+  // The invoice ID assigned by the external billing provider.
+  optional string external_invoice_id = 14;
 }

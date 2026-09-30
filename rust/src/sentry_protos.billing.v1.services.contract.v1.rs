@@ -587,6 +587,9 @@ pub struct Invoice {
         tag = "13"
     )]
     pub external_billing_provider: ::core::option::Option<i32>,
+    /// The invoice ID assigned by the external billing provider.
+    #[prost(string, optional, tag = "14")]
+    pub external_invoice_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
