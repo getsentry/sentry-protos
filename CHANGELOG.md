@@ -1,3 +1,9 @@
+## 0.79.0
+
+### New Features ✨
+
+- (billing) Expose external invoice ID by @brendanhsentry in [#454](https://github.com/getsentry/sentry-protos/pull/454)
+
 ## 0.78.0
 
 ### New Features ✨
