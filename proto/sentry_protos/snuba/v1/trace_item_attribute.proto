@@ -158,7 +158,9 @@ enum ExtrapolationMode {
 enum InterpolationMode {
   // unspecified = NONE
   INTERPOLATION_MODE_UNSPECIFIED = 0;
+  // real or empty
   INTERPOLATION_MODE_NONE = 1;
+  // last observation carried forward
   INTERPOLATION_MODE_LOCF = 2;
 }
 
