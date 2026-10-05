@@ -1,3 +1,9 @@
+## 0.80.0
+
+### New Features ✨
+
+- (snuba) Add InterpolationMode to TimeSeries RPC by @pbhandari in [#455](https://github.com/getsentry/sentry-protos/pull/455)
+
 ## 0.79.0
 
 ### New Features ✨
