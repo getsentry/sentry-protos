@@ -590,6 +590,11 @@ pub struct Invoice {
     /// The invoice ID assigned by the external billing provider.
     #[prost(string, optional, tag = "14")]
     pub external_invoice_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// When true, this invoice should be omitted from customer-facing receipts
+    /// (e.g. pre-migration shadow rollovers and the $0 migration stub). Default
+    /// false means the invoice is visible on receipts.
+    #[prost(bool, tag = "15")]
+    pub hide_from_customer_receipts: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
@@ -1053,6 +1058,10 @@ pub struct ListInvoicesRequest {
     /// through results.
     #[prost(uint32, optional, tag = "3")]
     pub offset: ::core::option::Option<u32>,
+    /// When true, omit invoices with hide_from_customer_receipts=true so the
+    /// response (and total) match what customers should see on receipts.
+    #[prost(bool, tag = "4")]
+    pub customer_receipts_only: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListInvoicesResponse {

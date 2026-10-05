@@ -16,6 +16,10 @@ message ListInvoicesRequest {
   // Zero-based offset into the result set. Pair with max_items to page
   // through results.
   optional uint32 offset = 3;
+
+  // When true, omit invoices with hide_from_customer_receipts=true so the
+  // response (and total) match what customers should see on receipts.
+  bool customer_receipts_only = 4;
 }
 
 message ListInvoicesResponse {
