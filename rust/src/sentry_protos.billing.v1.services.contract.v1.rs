@@ -822,6 +822,18 @@ pub struct CloseInvoiceResponse {
     #[prost(bool, tag = "3")]
     pub has_other_invoices_awaiting_payment: bool,
 }
+/// Stops every unpaid invoice for an organization from being charged.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CloseOpenInvoicesRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CloseOpenInvoicesResponse {
+    /// Number of open invoices that were closed.
+    #[prost(uint64, tag = "1")]
+    pub closed_count: u64,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateContractRequest {
     #[prost(uint64, tag = "1")]
@@ -1227,6 +1239,20 @@ pub struct RolloverContractResponse {
     pub amount_billed: u64,
     #[prost(uint64, tag = "4")]
     pub new_contract_id: u64,
+}
+/// Sets or clears the external invoice identifier for an invoice.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetExternalInvoiceIdRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, optional, tag = "2")]
+    pub external_invoice_id: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetExternalInvoiceIdResponse {
+    /// True if a matching invoice was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
 }
 /// DEPRECATED: replaced by ClaimChargeLockRequest / ClaimChargeLockResponse
 /// in endpoint_claim_charge_lock.proto. The rename generalized the

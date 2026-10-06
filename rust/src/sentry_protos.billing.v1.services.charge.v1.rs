@@ -308,6 +308,56 @@ pub struct RecordChargeRefundsResponse {
     #[prost(message, repeated, tag = "2")]
     pub new_refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
 }
+/// Records a charge that an external billing provider has already collected.
+/// The charge is upserted by invoice id; this service does not contact the
+/// provider or collect payment itself.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordPaidChargeRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub invoice_id: u64,
+    #[prost(uint64, tag = "3")]
+    pub amount_cents: u64,
+    #[prost(string, tag = "4")]
+    pub description: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordPaidChargeResponse {
+    /// True when this call inserted a new charge; false when it updated the
+    /// existing charge for the invoice.
+    #[prost(bool, tag = "1")]
+    pub created: bool,
+}
+/// Records a refund that an external billing provider has already issued. If
+/// the paid charge has not been recorded yet, the request also provides enough
+/// information to create it before attaching the refund.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordRefundedChargeRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub invoice_id: u64,
+    /// The total amount of the original charge, not the amount being refunded.
+    #[prost(uint64, tag = "3")]
+    pub charge_amount_cents: u64,
+    #[prost(string, tag = "4")]
+    pub description: ::prost::alloc::string::String,
+    /// Provider-issued identifier used to make webhook redelivery idempotent.
+    #[prost(string, tag = "5")]
+    pub external_refund_id: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "6")]
+    pub reason: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(uint64, tag = "7")]
+    pub refund_amount_cents: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordRefundedChargeResponse {
+    /// True when this call inserted a new refund; false when a refund with the
+    /// same external_refund_id was already recorded.
+    #[prost(bool, tag = "1")]
+    pub created: bool,
+}
 /// Synchronizes a stored platform charge with the latest snapshot from
 /// Stripe. The charge is identified by `stripe_charge.id`. Fields like
 /// `paid`, `failure_code` and refund state are copied onto the stored
