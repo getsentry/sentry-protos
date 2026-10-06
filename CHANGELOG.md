@@ -1,3 +1,9 @@
+## 0.81.0
+
+### New Features ✨
+
+- (billing) Add invoice customer-receipt visibility fields by @armenzg in [#456](https://github.com/getsentry/sentry-protos/pull/456)
+
 ## 0.80.0
 
 ### New Features ✨
