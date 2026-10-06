@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Stops every unpaid invoice for an organization from being charged.
+message CloseOpenInvoicesRequest {
+  uint64 organization_id = 1;
+}
+
+message CloseOpenInvoicesResponse {
+  // Number of open invoices that were closed.
+  uint64 closed_count = 1;
+}

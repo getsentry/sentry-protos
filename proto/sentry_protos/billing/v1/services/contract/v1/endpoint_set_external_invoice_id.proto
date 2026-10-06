@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Sets or clears the external invoice identifier for an invoice.
+message SetExternalInvoiceIdRequest {
+  uint64 invoice_id = 1;
+  optional string external_invoice_id = 2;
+}
+
+message SetExternalInvoiceIdResponse {
+  // True if a matching invoice was found and updated.
+  bool updated = 1;
+}

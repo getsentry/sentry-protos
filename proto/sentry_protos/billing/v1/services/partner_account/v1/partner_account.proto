@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.partner_account.v1;
+
+import "google/protobuf/struct.proto";
+
+// The marketplace or channel partner that owns the account relationship.
+enum PartnerAccountType {
+  PARTNER_ACCOUNT_TYPE_UNSPECIFIED = 0;
+  PARTNER_ACCOUNT_TYPE_HEROKU = 1;
+  PARTNER_ACCOUNT_TYPE_GITHUB_EDU = 2;
+  PARTNER_ACCOUNT_TYPE_FLY_IO = 3;
+  PARTNER_ACCOUNT_TYPE_LARAVEL = 4;
+  PARTNER_ACCOUNT_TYPE_NINTENDO = 5;
+  PARTNER_ACCOUNT_TYPE_CLOUDFOUNDRY = 6;
+  PARTNER_ACCOUNT_TYPE_GITHUB = 7;
+  PARTNER_ACCOUNT_TYPE_VERCEL = 8;
+}
+
+// A Sentry organization account provisioned through a marketplace or channel
+// partner.
+message PartnerAccount {
+  uint64 id = 1;
+  PartnerAccountType partner_account_type = 2;
+  // Unset when the partner account is not associated with a Sentry user.
+  optional uint64 user_id = 3;
+  uint64 organization_id = 4;
+  // The account identifier assigned by the partner.
+  string external_id = 5;
+  bool partnership_agreement_restricted = 6;
+  bool is_active = 7;
+  // Partner-specific JSON-compatible data. Unset when no metadata is stored.
+  google.protobuf.Struct metadata = 8;
+}
