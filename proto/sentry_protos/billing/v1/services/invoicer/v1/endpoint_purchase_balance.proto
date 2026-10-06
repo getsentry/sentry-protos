@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "sentry_protos/billing/v1/common/v1/stripe_verification.proto";
+
+message PurchaseBalanceRequest {
+  uint64 organization_id = 1;
+  uint64 amount_cents = 2;
+  string idempotency_key = 3;
+}
+
+message PurchaseBalanceResponse {
+  bool success = 1;
+  uint64 invoice_id = 2;
+  sentry_protos.billing.v1.common.v1.StripeVerification verification = 3;
+  string failure_code = 4;
+}

@@ -10,6 +10,14 @@ import "sentry_protos/billing/v1/common/v1/external_billing_provider.proto";
 // items not related to the package such as tax. Each line item may carry an
 // optional type that classifies it (e.g. "tax") so consumers can treat it
 // specially without inspecting the description.
+enum InvoicePurpose {
+  // Existing invoices were contract lifecycle invoices before purpose existed.
+  INVOICE_PURPOSE_UNSPECIFIED = 0;
+  INVOICE_PURPOSE_CONTRACT_CREATED = 1;
+  INVOICE_PURPOSE_CONTRACT_USAGE = 2;
+  INVOICE_PURPOSE_BALANCE_TOP_UP = 3;
+}
+
 message InvoiceLineItem {
   // Intentionally not a uint (some line items could be discounts)
   int64 amount_cents = 1;
@@ -52,4 +60,9 @@ message Invoice {
   // (e.g. pre-migration shadow rollovers and the $0 migration stub). Default
   // false means the invoice is visible on receipts.
   bool hide_from_customer_receipts = 15;
+
+  InvoicePurpose purpose = 16;
+  optional uint64 balance_purchase_contract_id = 17;
+  optional uint64 balance_amount_cents = 18;
+  bool balance_top_up_fulfilled = 19;
 }
