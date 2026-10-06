@@ -42,6 +42,11 @@ message CreateContractRequest {
 
   // Whether the tax provider placed this invoice under reverse charge.
   bool is_reverse_charge = 12;
+
+  // When true, the created invoice is marked hide_from_customer_receipts so
+  // it is omitted from customer-facing receipt lists (e.g. the $0 migration
+  // provisioning stub). Default false leaves the invoice visible.
+  bool hide_from_customer_receipts = 14;
 }
 
 message CreateContractResponse {

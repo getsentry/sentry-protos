@@ -47,4 +47,9 @@ message Invoice {
 
   // The invoice ID assigned by the external billing provider.
   optional string external_invoice_id = 14;
+
+  // When true, this invoice should be omitted from customer-facing receipts
+  // (e.g. pre-migration shadow rollovers and the $0 migration stub). Default
+  // false means the invoice is visible on receipts.
+  bool hide_from_customer_receipts = 15;
 }

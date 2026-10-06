@@ -184,6 +184,11 @@ pub struct CreateContractRequest {
     /// Whether the tax provider placed this invoice under reverse charge.
     #[prost(bool, tag = "12")]
     pub is_reverse_charge: bool,
+    /// When true, the created invoice is marked hide_from_customer_receipts so
+    /// it is omitted from customer-facing receipt lists (e.g. the $0 migration
+    /// provisioning stub). Default false leaves the invoice visible.
+    #[prost(bool, tag = "14")]
+    pub hide_from_customer_receipts: bool,
     /// Which arrangement bills the contract. Each arrangement carries only the
     /// configuration that applies to it. Unset defaults to credit-card.
     #[prost(oneof = "create_contract_request::Billing", tags = "7, 8, 13")]
