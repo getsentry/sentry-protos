@@ -128,6 +128,26 @@ pub struct AddUnitGrantRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct AddUnitGrantResponse {}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ApplyBalanceTopUpRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub active_contract_id: u64,
+    #[prost(uint64, tag = "3")]
+    pub invoice_id: u64,
+    #[prost(uint64, tag = "4")]
+    pub amount_cents: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ApplyBalanceTopUpResponse {
+    #[prost(bool, tag = "1")]
+    pub applied: bool,
+    #[prost(uint64, tag = "2")]
+    pub new_balance_cents: u64,
+    #[prost(uint64, tag = "3")]
+    pub adjustment_id: u64,
+}
 /// Assigns a previously staged rollover balance to the new contract, completing
 /// the rollover started by StageRolloverBalance. Balance changes are allowed after
 /// a Balance is committed.
