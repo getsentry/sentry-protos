@@ -1,3 +1,9 @@
+## 0.81.1
+
+### Internal Changes 🔧
+
+- (billing) Add marketplace service protobufs by @brendanhsentry in [#458](https://github.com/getsentry/sentry-protos/pull/458)
+
 ## 0.81.0
 
 ### New Features ✨
