@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.events.v1;
+
+import "sentry_protos/billing/v1/services/payment/v1/payment.proto";
+
+message PaymentSucceeded {
+  sentry_protos.billing.v1.services.payment.v1.PaymentIdentity payment = 1;
+  string client_payment_reference = 2;
+}

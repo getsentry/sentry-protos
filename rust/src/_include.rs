@@ -75,6 +75,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.package.v1.rs");
                     }
                 }
+                pub mod payment {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.payment.v1.rs");
+                    }
+                }
                 pub mod pending_change {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.pending_change.v1.rs");

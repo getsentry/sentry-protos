@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.payment.v1;
+
+import "sentry_protos/billing/v1/common/v1/payment_config.proto";
+import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
+import "sentry_protos/billing/v1/common/v1/stripe_verification.proto";
+import "sentry_protos/billing/v1/services/charge/v1/endpoint_capture_charge.proto";
+import "sentry_protos/billing/v1/services/payment/v1/payment.proto";
+
+// Completes a payment on behalf of a payment client. client_payment_reference
+// remains opaque to the payment service and is returned in payment outcome events.
+message CompletePaymentRequest {
+  PaymentIdentity payment = 1;
+  uint64 organization_id = 2;
+  string client_payment_reference = 3;
+  uint64 amount_cents = 4;
+  string currency = 5;
+  sentry_protos.billing.v1.services.charge.v1.ChargeMethod charge_method = 6;
+  optional string description = 7;
+  optional string invoice_id = 8;
+  optional string invoice_guid = 9;
+  optional sentry_protos.billing.v1.common.v1.PaymentConfig payment_config = 10;
+  optional sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 11;
+  optional string payment_intent = 12;
+}
+
+message CompletePaymentResponse {
+  bool paid = 1;
+  optional string failure_code = 2;
+  sentry_protos.billing.v1.common.v1.StripeVerification verification = 3;
+  // True only when collection was handed to an external provider and its final
+  // outcome will arrive asynchronously.
+  bool submitted = 4;
+}
