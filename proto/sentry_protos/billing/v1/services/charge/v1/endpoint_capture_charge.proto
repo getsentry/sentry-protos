@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.charge.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/payment_client.proto";
 import "sentry_protos/billing/v1/common/v1/payment_config.proto";
 import "sentry_protos/billing/v1/common/v1/stripe_charge.proto";
 import "sentry_protos/billing/v1/common/v1/stripe_verification.proto";
@@ -37,6 +38,12 @@ message CaptureChargeRequest {
   // Required when charge_method is CHARGE_METHOD_STRIPE_PAYMENT_INTENT.
   optional sentry_protos.billing.v1.common.v1.StripeCharge stripe_charge = 9;
   optional string payment_intent = 10;
+  // Provider-safe idempotency key for this logical payment attempt.
+  optional string payment_idempotency_key = 11;
+  // Client that requested this charge. Legacy invoice callers may omit this.
+  sentry_protos.billing.v1.common.v1.PaymentClient payment_client_id = 12;
+  // Opaque charge reference supplied by the requesting client.
+  optional string client_charge_reference_id = 13;
 }
 
 message CaptureChargeResponse {

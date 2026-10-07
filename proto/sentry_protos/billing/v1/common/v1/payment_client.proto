@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+// Identifies the client that owns a payment's business consequences.
+enum PaymentClient {
+  PAYMENT_CLIENT_UNSPECIFIED = 0;
+  PAYMENT_CLIENT_INVOICER = 1;
+}

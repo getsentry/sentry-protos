@@ -46,6 +46,14 @@ pub struct PlatformCharge {
     /// refund timelines can sort them off a single time axis.
     #[prost(int64, tag = "11")]
     pub date_added_st: i64,
+    /// Client that requested this charge. Unspecified for legacy rows.
+    #[prost(enumeration = "super::super::super::common::v1::PaymentClient", tag = "12")]
+    pub payment_client_id: i32,
+    /// Opaque charge reference supplied by the requesting client.
+    #[prost(string, optional, tag = "13")]
+    pub client_charge_reference_id: ::core::option::Option<
+        ::prost::alloc::string::String,
+    >,
 }
 /// Canonical projection of a stored platform refund. One row per recorded
 /// refund against a `PlatformCharge`.
@@ -99,6 +107,17 @@ pub struct CaptureChargeRequest {
     >,
     #[prost(string, optional, tag = "10")]
     pub payment_intent: ::core::option::Option<::prost::alloc::string::String>,
+    /// Provider-safe idempotency key for this logical payment attempt.
+    #[prost(string, optional, tag = "11")]
+    pub payment_idempotency_key: ::core::option::Option<::prost::alloc::string::String>,
+    /// Client that requested this charge. Legacy invoice callers may omit this.
+    #[prost(enumeration = "super::super::super::common::v1::PaymentClient", tag = "12")]
+    pub payment_client_id: i32,
+    /// Opaque charge reference supplied by the requesting client.
+    #[prost(string, optional, tag = "13")]
+    pub client_charge_reference_id: ::core::option::Option<
+        ::prost::alloc::string::String,
+    >,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CaptureChargeResponse {
