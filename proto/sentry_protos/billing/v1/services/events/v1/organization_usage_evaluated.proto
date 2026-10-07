@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.events.v1;
+
+import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_usage_pricer.proto";
+
+// Published when the quota evaluation path prices an organization's current
+// contract usage. Consumers can derive threshold crossings from the same
+// authoritative result used for quota enforcement without pricing usage again.
+message OrganizationUsageEvaluated {
+  uint64 contract_id = 1;
+  sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse priced_usage = 2;
+}
