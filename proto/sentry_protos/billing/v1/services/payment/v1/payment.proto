@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.payment.v1;
+
+message PaymentIdentity {
+  // Identifies the client that owns the business consequences of this payment.
+  string payment_client = 1;
+  // Client-provided idempotency key for one logical payment attempt.
+  string payment_idempotency_key = 2;
+}

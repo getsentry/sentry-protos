@@ -9,6 +9,8 @@ import "sentry_protos/billing/v1/services/events/v1/organization_package_changed
 import "sentry_protos/billing/v1/services/events/v1/organization_payg_changed.proto";
 import "sentry_protos/billing/v1/services/events/v1/organization_trial_started.proto";
 import "sentry_protos/billing/v1/services/events/v1/organization_unit_grant_added.proto";
+import "sentry_protos/billing/v1/services/events/v1/payment_failed.proto";
+import "sentry_protos/billing/v1/services/events/v1/payment_succeeded.proto";
 
 message EventMeta {
   uint64 organization_id = 1;
@@ -23,6 +25,8 @@ message EventPayload {
     sentry_protos.billing.v1.services.events.v1.OrganizationTrialStarted organization_trial_started = 4;
     sentry_protos.billing.v1.services.events.v1.ContractRolledOver contract_rolled_over = 5;
     sentry_protos.billing.v1.services.events.v1.OrganizationPackageChanged organization_package_changed = 6;
+    sentry_protos.billing.v1.services.events.v1.PaymentSucceeded payment_succeeded = 7;
+    sentry_protos.billing.v1.services.events.v1.PaymentFailed payment_failed = 8;
   }
 }
 

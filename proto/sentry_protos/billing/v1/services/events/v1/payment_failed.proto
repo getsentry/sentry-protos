@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.events.v1;
+
+import "sentry_protos/billing/v1/services/payment/v1/payment.proto";
+
+enum PaymentFailureDisposition {
+  PAYMENT_FAILURE_DISPOSITION_UNSPECIFIED = 0;
+  // The provider attempted to collect funds and the client may run its failure workflow.
+  PAYMENT_FAILURE_DISPOSITION_ATTEMPTED = 1;
+  // The request was invalid before the provider attempted collection.
+  PAYMENT_FAILURE_DISPOSITION_REJECTED_BEFORE_ATTEMPT = 2;
+}
+
+message PaymentFailed {
+  sentry_protos.billing.v1.services.payment.v1.PaymentIdentity payment = 1;
+  string client_payment_reference = 2;
+  optional string failure_code = 3;
+  PaymentFailureDisposition disposition = 4;
+}

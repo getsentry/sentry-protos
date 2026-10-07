@@ -21,6 +21,59 @@ pub struct OrganizationPaygChanged {}
 pub struct OrganizationTrialStarted {}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationUnitGrantAdded {}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PaymentFailed {
+    #[prost(message, optional, tag = "1")]
+    pub payment: ::core::option::Option<super::super::payment::v1::PaymentIdentity>,
+    #[prost(string, tag = "2")]
+    pub client_payment_reference: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "3")]
+    pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(enumeration = "PaymentFailureDisposition", tag = "4")]
+    pub disposition: i32,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PaymentFailureDisposition {
+    Unspecified = 0,
+    /// The provider attempted to collect funds and the client may run its failure workflow.
+    Attempted = 1,
+    /// The request was invalid before the provider attempted collection.
+    RejectedBeforeAttempt = 2,
+}
+impl PaymentFailureDisposition {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PAYMENT_FAILURE_DISPOSITION_UNSPECIFIED",
+            Self::Attempted => "PAYMENT_FAILURE_DISPOSITION_ATTEMPTED",
+            Self::RejectedBeforeAttempt => {
+                "PAYMENT_FAILURE_DISPOSITION_REJECTED_BEFORE_ATTEMPT"
+            }
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PAYMENT_FAILURE_DISPOSITION_UNSPECIFIED" => Some(Self::Unspecified),
+            "PAYMENT_FAILURE_DISPOSITION_ATTEMPTED" => Some(Self::Attempted),
+            "PAYMENT_FAILURE_DISPOSITION_REJECTED_BEFORE_ATTEMPT" => {
+                Some(Self::RejectedBeforeAttempt)
+            }
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PaymentSucceeded {
+    #[prost(message, optional, tag = "1")]
+    pub payment: ::core::option::Option<super::super::payment::v1::PaymentIdentity>,
+    #[prost(string, tag = "2")]
+    pub client_payment_reference: ::prost::alloc::string::String,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct EventMeta {
     #[prost(uint64, tag = "1")]
@@ -30,7 +83,7 @@ pub struct EventMeta {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct EventPayload {
-    #[prost(oneof = "event_payload::Payload", tags = "1, 2, 3, 4, 5, 6")]
+    #[prost(oneof = "event_payload::Payload", tags = "1, 2, 3, 4, 5, 6, 7, 8")]
     pub payload: ::core::option::Option<event_payload::Payload>,
 }
 /// Nested message and enum types in `EventPayload`.
@@ -49,6 +102,10 @@ pub mod event_payload {
         ContractRolledOver(super::ContractRolledOver),
         #[prost(message, tag = "6")]
         OrganizationPackageChanged(super::OrganizationPackageChanged),
+        #[prost(message, tag = "7")]
+        PaymentSucceeded(super::PaymentSucceeded),
+        #[prost(message, tag = "8")]
+        PaymentFailed(super::PaymentFailed),
     }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
