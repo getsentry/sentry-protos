@@ -532,10 +532,6 @@ pub struct PricingConfig {
     #[prost(uint64, tag = "5")]
     pub max_spend_cents: u64,
 }
-/// This is not the same as LineItemDetails, it includes
-/// items not related to the package such as tax. Each line item may carry an
-/// optional type that classifies it (e.g. "tax") so consumers can treat it
-/// specially without inspecting the description.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct InvoiceLineItem {
     /// Intentionally not a uint (some line items could be discounts)
@@ -595,6 +591,51 @@ pub struct Invoice {
     /// false means the invoice is visible on receipts.
     #[prost(bool, tag = "15")]
     pub hide_from_customer_receipts: bool,
+    #[prost(enumeration = "InvoicePurpose", tag = "16")]
+    pub purpose: i32,
+    #[prost(uint64, optional, tag = "17")]
+    pub balance_purchase_contract_id: ::core::option::Option<u64>,
+    #[prost(uint64, optional, tag = "18")]
+    pub balance_amount_cents: ::core::option::Option<u64>,
+    #[prost(bool, tag = "19")]
+    pub balance_top_up_fulfilled: bool,
+}
+/// This is not the same as LineItemDetails, it includes
+/// items not related to the package such as tax. Each line item may carry an
+/// optional type that classifies it (e.g. "tax") so consumers can treat it
+/// specially without inspecting the description.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum InvoicePurpose {
+    /// Existing invoices were contract lifecycle invoices before purpose existed.
+    Unspecified = 0,
+    ContractCreated = 1,
+    ContractUsage = 2,
+    BalanceTopUp = 3,
+}
+impl InvoicePurpose {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "INVOICE_PURPOSE_UNSPECIFIED",
+            Self::ContractCreated => "INVOICE_PURPOSE_CONTRACT_CREATED",
+            Self::ContractUsage => "INVOICE_PURPOSE_CONTRACT_USAGE",
+            Self::BalanceTopUp => "INVOICE_PURPOSE_BALANCE_TOP_UP",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "INVOICE_PURPOSE_UNSPECIFIED" => Some(Self::Unspecified),
+            "INVOICE_PURPOSE_CONTRACT_CREATED" => Some(Self::ContractCreated),
+            "INVOICE_PURPOSE_CONTRACT_USAGE" => Some(Self::ContractUsage),
+            "INVOICE_PURPOSE_BALANCE_TOP_UP" => Some(Self::BalanceTopUp),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
@@ -835,6 +876,42 @@ pub struct CloseOpenInvoicesResponse {
     pub closed_count: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateBalanceTopUpInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The prepaid balance amount. Tax line items may make the invoice total higher.
+    #[prost(uint64, tag = "2")]
+    pub amount_cents: u64,
+    #[prost(string, tag = "3")]
+    pub idempotency_key: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "4")]
+    pub line_items: ::prost::alloc::vec::Vec<InvoiceLineItem>,
+    #[prost(message, optional, tag = "5")]
+    pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+    #[prost(string, optional, tag = "6")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(bool, tag = "7")]
+    pub is_reverse_charge: bool,
+    #[prost(string, optional, tag = "8")]
+    pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(
+        enumeration = "super::super::super::common::v1::ExternalBillingProvider",
+        tag = "9"
+    )]
+    pub external_billing_provider: i32,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateBalanceTopUpInvoiceResponse {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub amount_billed: u64,
+    #[prost(uint64, tag = "4")]
+    pub balance_purchase_contract_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateContractRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
@@ -1007,6 +1084,16 @@ pub struct GetInvoiceGuidsForIdsResponse {
     pub invoice_guids: ::std::collections::HashMap<u64, ::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetPaidUnfulfilledBalanceTopUpInvoiceIdsRequest {
+    #[prost(uint32, tag = "1")]
+    pub max_items: u32,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetPaidUnfulfilledBalanceTopUpInvoiceIdsResponse {
+    #[prost(uint64, repeated, tag = "1")]
+    pub invoice_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUnchargedInvoicesRequest {
     /// Returns Invoices whose current billing period ends before this time and
     /// have not yet been charged for the current period.
@@ -1093,6 +1180,16 @@ pub struct ListInvoicesResponse {
     /// max_items.
     #[prost(uint32, tag = "4")]
     pub total: u32,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MarkBalanceTopUpFulfilledRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct MarkBalanceTopUpFulfilledResponse {
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
 }
 /// Marks an invoice as paid and clears its needs_charged flag so it is no longer
 /// returned by GetUnchargedInvoices.

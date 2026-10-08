@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+message ApplyBalanceTopUpRequest {
+  uint64 organization_id = 1;
+  uint64 active_contract_id = 2;
+  uint64 invoice_id = 3;
+  uint64 amount_cents = 4;
+}
+
+message ApplyBalanceTopUpResponse {
+  bool applied = 1;
+  uint64 new_balance_cents = 2;
+  uint64 adjustment_id = 3;
+}

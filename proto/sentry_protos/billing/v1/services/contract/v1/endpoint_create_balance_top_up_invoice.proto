@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "sentry_protos/billing/v1/common/v1/address.proto";
+import "sentry_protos/billing/v1/common/v1/external_billing_provider.proto";
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
+message CreateBalanceTopUpInvoiceRequest {
+  uint64 organization_id = 1;
+  // The prepaid balance amount. Tax line items may make the invoice total higher.
+  uint64 amount_cents = 2;
+  string idempotency_key = 3;
+  repeated InvoiceLineItem line_items = 4;
+  optional sentry_protos.billing.v1.common.v1.Address address = 5;
+  optional string tax_number = 6;
+  bool is_reverse_charge = 7;
+  optional string tax_transaction_code = 8;
+  sentry_protos.billing.v1.common.v1.ExternalBillingProvider external_billing_provider = 9;
+}
+
+message CreateBalanceTopUpInvoiceResponse {
+  uint64 invoice_id = 1;
+  string invoice_guid = 2;
+  uint64 amount_billed = 3;
+  uint64 balance_purchase_contract_id = 4;
+}

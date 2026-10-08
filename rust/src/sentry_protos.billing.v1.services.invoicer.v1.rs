@@ -295,3 +295,25 @@ pub struct PreviewNextInvoiceResponse {
     #[prost(uint64, tag = "2")]
     pub amount_billed_cents: u64,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PurchaseBalanceRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub amount_cents: u64,
+    #[prost(string, tag = "3")]
+    pub idempotency_key: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PurchaseBalanceResponse {
+    #[prost(bool, tag = "1")]
+    pub success: bool,
+    #[prost(uint64, tag = "2")]
+    pub invoice_id: u64,
+    #[prost(message, optional, tag = "3")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
+    #[prost(string, tag = "4")]
+    pub failure_code: ::prost::alloc::string::String,
+}

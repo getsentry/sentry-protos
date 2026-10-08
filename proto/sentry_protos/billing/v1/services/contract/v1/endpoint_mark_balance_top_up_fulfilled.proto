@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+message MarkBalanceTopUpFulfilledRequest {
+  uint64 invoice_id = 1;
+}
+
+message MarkBalanceTopUpFulfilledResponse {
+  bool updated = 1;
+}
