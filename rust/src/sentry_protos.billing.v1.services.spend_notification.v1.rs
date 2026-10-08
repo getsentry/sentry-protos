@@ -13,7 +13,7 @@ pub struct SpendNotificationConfig {
 pub struct SpendNotificationExpression {
     #[prost(
         oneof = "spend_notification_expression::ExpressionType",
-        tags = "1, 2, 3, 4, 5, 6, 7, 8"
+        tags = "1, 4, 5, 6, 7, 8"
     )]
     pub expression_type: ::core::option::Option<
         spend_notification_expression::ExpressionType,
@@ -24,11 +24,7 @@ pub mod spend_notification_expression {
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum ExpressionType {
         #[prost(message, tag = "1")]
-        LineItemUsage(super::LineItemUsageReference),
-        #[prost(message, tag = "2")]
-        SharedLineItemUsage(super::SharedLineItemUsageReference),
-        #[prost(message, tag = "3")]
-        UsagePricerResponse(super::UsagePricerResponseReference),
+        Usage(super::UsageValueReference),
         #[prost(message, tag = "4")]
         RateCardLineItem(super::RateCardLineItemReference),
         #[prost(message, tag = "5")]
@@ -42,23 +38,23 @@ pub mod spend_notification_expression {
     }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct LineItemUsageReference {
-    #[prost(string, tag = "1")]
-    pub line_item_uid: ::prost::alloc::string::String,
-    #[prost(enumeration = "LineItemUsageField", tag = "2")]
+pub struct UsageValueReference {
+    #[prost(enumeration = "UsageValueField", tag = "4")]
     pub field: i32,
+    #[prost(oneof = "usage_value_reference::Target", tags = "1, 2, 3")]
+    pub target: ::core::option::Option<usage_value_reference::Target>,
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct SharedLineItemUsageReference {
-    #[prost(string, tag = "1")]
-    pub shared_line_item_uid: ::prost::alloc::string::String,
-    #[prost(enumeration = "SharedLineItemUsageField", tag = "2")]
-    pub field: i32,
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct UsagePricerResponseReference {
-    #[prost(enumeration = "UsagePricerResponseField", tag = "1")]
-    pub field: i32,
+/// Nested message and enum types in `UsageValueReference`.
+pub mod usage_value_reference {
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Target {
+        #[prost(string, tag = "1")]
+        LineItemUid(::prost::alloc::string::String),
+        #[prost(string, tag = "2")]
+        SharedLineItemUid(::prost::alloc::string::String),
+        #[prost(bool, tag = "3")]
+        AllLineItems(bool),
+    }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RateCardLineItemReference {
@@ -104,96 +100,35 @@ pub struct SpendNotificationBinaryOperation {
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum LineItemUsageField {
-    Unspecified = 0,
-    PaygSpendCents = 1,
-    PaygQuantity = 2,
-    TotalQuantity = 3,
-    ReservedSpendCents = 4,
-}
-impl LineItemUsageField {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "LINE_ITEM_USAGE_FIELD_UNSPECIFIED",
-            Self::PaygSpendCents => "LINE_ITEM_USAGE_FIELD_PAYG_SPEND_CENTS",
-            Self::PaygQuantity => "LINE_ITEM_USAGE_FIELD_PAYG_QUANTITY",
-            Self::TotalQuantity => "LINE_ITEM_USAGE_FIELD_TOTAL_QUANTITY",
-            Self::ReservedSpendCents => "LINE_ITEM_USAGE_FIELD_RESERVED_SPEND_CENTS",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "LINE_ITEM_USAGE_FIELD_UNSPECIFIED" => Some(Self::Unspecified),
-            "LINE_ITEM_USAGE_FIELD_PAYG_SPEND_CENTS" => Some(Self::PaygSpendCents),
-            "LINE_ITEM_USAGE_FIELD_PAYG_QUANTITY" => Some(Self::PaygQuantity),
-            "LINE_ITEM_USAGE_FIELD_TOTAL_QUANTITY" => Some(Self::TotalQuantity),
-            "LINE_ITEM_USAGE_FIELD_RESERVED_SPEND_CENTS" => {
-                Some(Self::ReservedSpendCents)
-            }
-            _ => None,
-        }
-    }
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum SharedLineItemUsageField {
+pub enum UsageValueField {
     Unspecified = 0,
     PaygSpendCents = 1,
     ReservedSpendCents = 2,
+    PaygQuantity = 3,
+    TotalQuantity = 4,
 }
-impl SharedLineItemUsageField {
+impl UsageValueField {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            Self::Unspecified => "SHARED_LINE_ITEM_USAGE_FIELD_UNSPECIFIED",
-            Self::PaygSpendCents => "SHARED_LINE_ITEM_USAGE_FIELD_PAYG_SPEND_CENTS",
-            Self::ReservedSpendCents => {
-                "SHARED_LINE_ITEM_USAGE_FIELD_RESERVED_SPEND_CENTS"
-            }
+            Self::Unspecified => "USAGE_VALUE_FIELD_UNSPECIFIED",
+            Self::PaygSpendCents => "USAGE_VALUE_FIELD_PAYG_SPEND_CENTS",
+            Self::ReservedSpendCents => "USAGE_VALUE_FIELD_RESERVED_SPEND_CENTS",
+            Self::PaygQuantity => "USAGE_VALUE_FIELD_PAYG_QUANTITY",
+            Self::TotalQuantity => "USAGE_VALUE_FIELD_TOTAL_QUANTITY",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "SHARED_LINE_ITEM_USAGE_FIELD_UNSPECIFIED" => Some(Self::Unspecified),
-            "SHARED_LINE_ITEM_USAGE_FIELD_PAYG_SPEND_CENTS" => Some(Self::PaygSpendCents),
-            "SHARED_LINE_ITEM_USAGE_FIELD_RESERVED_SPEND_CENTS" => {
-                Some(Self::ReservedSpendCents)
-            }
-            _ => None,
-        }
-    }
-}
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum UsagePricerResponseField {
-    Unspecified = 0,
-    PaygSpendCents = 1,
-}
-impl UsagePricerResponseField {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "USAGE_PRICER_RESPONSE_FIELD_UNSPECIFIED",
-            Self::PaygSpendCents => "USAGE_PRICER_RESPONSE_FIELD_PAYG_SPEND_CENTS",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "USAGE_PRICER_RESPONSE_FIELD_UNSPECIFIED" => Some(Self::Unspecified),
-            "USAGE_PRICER_RESPONSE_FIELD_PAYG_SPEND_CENTS" => Some(Self::PaygSpendCents),
+            "USAGE_VALUE_FIELD_UNSPECIFIED" => Some(Self::Unspecified),
+            "USAGE_VALUE_FIELD_PAYG_SPEND_CENTS" => Some(Self::PaygSpendCents),
+            "USAGE_VALUE_FIELD_RESERVED_SPEND_CENTS" => Some(Self::ReservedSpendCents),
+            "USAGE_VALUE_FIELD_PAYG_QUANTITY" => Some(Self::PaygQuantity),
+            "USAGE_VALUE_FIELD_TOTAL_QUANTITY" => Some(Self::TotalQuantity),
             _ => None,
         }
     }

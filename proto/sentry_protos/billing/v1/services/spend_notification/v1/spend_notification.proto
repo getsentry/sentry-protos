@@ -13,9 +13,7 @@ message SpendNotificationConfig {
 
 message SpendNotificationExpression {
   oneof expression_type {
-    LineItemUsageReference line_item_usage = 1;
-    SharedLineItemUsageReference shared_line_item_usage = 2;
-    UsagePricerResponseReference usage_pricer_response = 3;
+    UsageValueReference usage = 1;
     RateCardLineItemReference rate_card_line_item = 4;
     SharedRateCardLineItemReference shared_rate_card_line_item = 5;
     ContractBudgetReference contract_budget = 6;
@@ -24,37 +22,21 @@ message SpendNotificationExpression {
   }
 }
 
-message LineItemUsageReference {
-  string line_item_uid = 1;
-  LineItemUsageField field = 2;
+message UsageValueReference {
+  oneof target {
+    string line_item_uid = 1;
+    string shared_line_item_uid = 2;
+    bool all_line_items = 3;
+  }
+  UsageValueField field = 4;
 }
 
-enum LineItemUsageField {
-  LINE_ITEM_USAGE_FIELD_UNSPECIFIED = 0;
-  LINE_ITEM_USAGE_FIELD_PAYG_SPEND_CENTS = 1;
-  LINE_ITEM_USAGE_FIELD_PAYG_QUANTITY = 2;
-  LINE_ITEM_USAGE_FIELD_TOTAL_QUANTITY = 3;
-  LINE_ITEM_USAGE_FIELD_RESERVED_SPEND_CENTS = 4;
-}
-
-message SharedLineItemUsageReference {
-  string shared_line_item_uid = 1;
-  SharedLineItemUsageField field = 2;
-}
-
-enum SharedLineItemUsageField {
-  SHARED_LINE_ITEM_USAGE_FIELD_UNSPECIFIED = 0;
-  SHARED_LINE_ITEM_USAGE_FIELD_PAYG_SPEND_CENTS = 1;
-  SHARED_LINE_ITEM_USAGE_FIELD_RESERVED_SPEND_CENTS = 2;
-}
-
-message UsagePricerResponseReference {
-  UsagePricerResponseField field = 1;
-}
-
-enum UsagePricerResponseField {
-  USAGE_PRICER_RESPONSE_FIELD_UNSPECIFIED = 0;
-  USAGE_PRICER_RESPONSE_FIELD_PAYG_SPEND_CENTS = 1;
+enum UsageValueField {
+  USAGE_VALUE_FIELD_UNSPECIFIED = 0;
+  USAGE_VALUE_FIELD_PAYG_SPEND_CENTS = 1;
+  USAGE_VALUE_FIELD_RESERVED_SPEND_CENTS = 2;
+  USAGE_VALUE_FIELD_PAYG_QUANTITY = 3;
+  USAGE_VALUE_FIELD_TOTAL_QUANTITY = 4;
 }
 
 message RateCardLineItemReference {
