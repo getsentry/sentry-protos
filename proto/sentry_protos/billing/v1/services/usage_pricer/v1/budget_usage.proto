@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.usage_pricer.v1;
+
+// The percentage-based utilization metric represented by the summary.
+enum BudgetUsageMetric {
+  BUDGET_USAGE_METRIC_UNSPECIFIED = 0;
+  // Consumption of reserved capacity, whether measured in units for a line
+  // item or cents for a shared reserved budget.
+  BUDGET_USAGE_METRIC_RESERVED = 1;
+  // Consumption of a contract's PAYG spending limit.
+  BUDGET_USAGE_METRIC_PAYG = 2;
+}
+
+// The scope of a concrete budget. Together with metric and
+// target_identifier, this identifies a budget within a contract.
+enum BudgetUsageTargetType {
+  BUDGET_USAGE_TARGET_TYPE_UNSPECIFIED = 0;
+  BUDGET_USAGE_TARGET_TYPE_LINE_ITEM = 1;
+  BUDGET_USAGE_TARGET_TYPE_SHARED_BUDGET = 2;
+  BUDGET_USAGE_TARGET_TYPE_ALL_LINE_ITEMS = 3;
+}
+
+// Unit shared by used and limit in a BudgetUsageSummary.
+enum BudgetUsageUnit {
+  BUDGET_USAGE_UNIT_UNSPECIFIED = 0;
+  BUDGET_USAGE_UNIT_QUANTITY = 1;
+  BUDGET_USAGE_UNIT_CENTS = 2;
+}
+
+// Current utilization of one finite contract budget. Unlimited budgets and
+// budgets with no positive limit are omitted.
+message BudgetUsageSummary {
+  BudgetUsageMetric metric = 1;
+  BudgetUsageTargetType target_type = 2;
+
+  // Stable identifier for this target within the contract. This is the line
+  // item uid for LINE_ITEM and the shared budget's identifier for
+  // SHARED_BUDGET. It is unset for ALL_LINE_ITEMS. Consumers should treat the
+  // value as opaque rather than deriving budget behavior from known uids.
+  optional string target_identifier = 3;
+
+  // Current consumption and effective contract limit, expressed in unit.
+  uint64 used = 4;
+  uint64 limit = 5;
+  BudgetUsageUnit unit = 6;
+
+  // Line items that consume this budget. LINE_ITEM contains one uid; shared
+  // and all-line-item budgets contain every contributing uid. This field is
+  // descriptive and is not part of the budget's identity.
+  repeated string line_item_uids = 7;
+}

@@ -21,6 +21,19 @@ pub struct OrganizationPaygChanged {}
 pub struct OrganizationTrialStarted {}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationUnitGrantAdded {}
+/// Published after current contract usage is priced for quota enforcement.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OrganizationUsageEvaluated {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    /// The normalized utilization values produced by the usage pricer. Consumers
+    /// can compare used and limit without loading package or contract pricing
+    /// configuration or assigning special meaning to line item uids.
+    #[prost(message, repeated, tag = "2")]
+    pub budget_usage_summaries: ::prost::alloc::vec::Vec<
+        super::super::usage_pricer::v1::BudgetUsageSummary,
+    >,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct EventMeta {
     #[prost(uint64, tag = "1")]
@@ -28,14 +41,14 @@ pub struct EventMeta {
     #[prost(message, optional, tag = "2")]
     pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EventPayload {
-    #[prost(oneof = "event_payload::Payload", tags = "1, 2, 3, 4, 5, 6")]
+    #[prost(oneof = "event_payload::Payload", tags = "1, 2, 3, 4, 5, 6, 7")]
     pub payload: ::core::option::Option<event_payload::Payload>,
 }
 /// Nested message and enum types in `EventPayload`.
 pub mod event_payload {
-    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Payload {
         #[prost(message, tag = "1")]
         OrganizationOverUsage(super::OrganizationOverUsage),
@@ -49,9 +62,11 @@ pub mod event_payload {
         ContractRolledOver(super::ContractRolledOver),
         #[prost(message, tag = "6")]
         OrganizationPackageChanged(super::OrganizationPackageChanged),
+        #[prost(message, tag = "7")]
+        OrganizationUsageEvaluated(super::OrganizationUsageEvaluated),
     }
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BillingPlatformEvent {
     #[prost(message, optional, tag = "1")]
     pub meta: ::core::option::Option<EventMeta>,

@@ -4,6 +4,7 @@ package sentry_protos.billing.v1.services.usage_pricer.v1;
 
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+import "sentry_protos/billing/v1/services/usage_pricer/v1/budget_usage.proto";
 import "sentry_protos/billing/v1/sku.proto";
 
 message UsagePricerRequest {
@@ -114,4 +115,10 @@ message UsagePricerResponse {
   repeated SharedLineItemUsageSummary shared_line_item_summaries = 4;
 
   google.protobuf.Timestamp last_usage_ts = 5;
+
+  // Effective finite budgets and their current utilization. These summaries
+  // are derived from the same rate card, contract overrides, and usage as the
+  // pricing result so downstream consumers do not need to reconstruct budget
+  // semantics from line item uids.
+  repeated BudgetUsageSummary budget_usage_summaries = 6;
 }
