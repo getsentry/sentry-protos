@@ -26,12 +26,9 @@ pub struct OrganizationUnitGrantAdded {}
 pub struct OrganizationUsageEvaluated {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
-    /// The normalized utilization values produced by the usage pricer. Consumers
-    /// can compare used and limit without loading package or contract pricing
-    /// configuration or assigning special meaning to line item uids.
-    #[prost(message, repeated, tag = "2")]
-    pub budget_usage_summaries: ::prost::alloc::vec::Vec<
-        super::super::usage_pricer::v1::BudgetUsageSummary,
+    #[prost(message, optional, tag = "2")]
+    pub usage_pricer_response: ::core::option::Option<
+        super::super::usage_pricer::v1::UsagePricerResponse,
     >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]

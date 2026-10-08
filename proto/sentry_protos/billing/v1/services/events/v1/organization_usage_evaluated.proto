@@ -2,13 +2,10 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.events.v1;
 
-import "sentry_protos/billing/v1/services/usage_pricer/v1/budget_usage.proto";
+import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_usage_pricer.proto";
 
 // Published after current contract usage is priced for quota enforcement.
 message OrganizationUsageEvaluated {
   uint64 contract_id = 1;
-  // The normalized utilization values produced by the usage pricer. Consumers
-  // can compare used and limit without loading package or contract pricing
-  // configuration or assigning special meaning to line item uids.
-  repeated sentry_protos.billing.v1.services.usage_pricer.v1.BudgetUsageSummary budget_usage_summaries = 2;
+  sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse usage_pricer_response = 2;
 }
