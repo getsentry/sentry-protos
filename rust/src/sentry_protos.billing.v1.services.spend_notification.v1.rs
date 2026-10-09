@@ -20,6 +20,17 @@ pub mod spend_notification_config {
     }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SpendNotificationConfigRecord {
+    #[prost(uint64, tag = "1")]
+    pub id: u64,
+    #[prost(uint64, tag = "2")]
+    pub organization_id: u64,
+    #[prost(message, optional, tag = "3")]
+    pub config: ::core::option::Option<SpendNotificationConfig>,
+    #[prost(bool, tag = "4")]
+    pub is_enabled: bool,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct LineItemUids {
     #[prost(string, repeated, tag = "1")]
     pub uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
