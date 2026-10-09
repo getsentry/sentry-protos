@@ -2,5 +2,10 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.events.v1;
 
+import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_usage_pricer.proto";
+
 // Requests evaluation of billing alert configurations for an organization.
-message BillingAlertEvaluationRequested {}
+message BillingAlertEvaluationRequested {
+  uint64 contract_id = 1;
+  sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse usage_pricer_response = 2;
+}
