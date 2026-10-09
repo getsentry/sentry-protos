@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.events.v1;
+
+// Published when a one-off invoice changes state, so the service that
+// requested it can grant, withhold or claw back what was purchased.
+message OneOffInvoiceUpdated {
+  enum Outcome {
+    OUTCOME_UNSPECIFIED = 0;
+    OUTCOME_PAID = 1;
+    // Retries ran out or the invoice was closed. It can still be paid later,
+    // which publishes OUTCOME_PAID.
+    OUTCOME_CLOSED_UNPAID = 2;
+    OUTCOME_REFUNDED = 3;
+  }
+
+  uint64 invoice_id = 1;
+  string invoice_guid = 2;
+  string idempotency_key = 3;
+  Outcome outcome = 4;
+  // PAID: the invoice's amount_billed. REFUNDED: the amount of this refund,
+  // for the invoice as a whole rather than per line.
+  uint64 amount_cents = 5;
+}

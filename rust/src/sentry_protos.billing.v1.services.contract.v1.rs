@@ -547,6 +547,10 @@ pub struct InvoiceLineItem {
     /// priced line items.
     #[prost(string, optional, tag = "3")]
     pub r#type: ::core::option::Option<::prost::alloc::string::String>,
+    /// Caller-defined identifier for what this line bills, set on one-off
+    /// invoice lines. Opaque to the platform.
+    #[prost(string, optional, tag = "4")]
+    pub external_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Invoice {
@@ -595,6 +599,44 @@ pub struct Invoice {
     /// false means the invoice is visible on receipts.
     #[prost(bool, tag = "15")]
     pub hide_from_customer_receipts: bool,
+    #[prost(enumeration = "InvoiceKind", tag = "16")]
+    pub kind: i32,
+    /// Caller-supplied key that makes one-off invoice creation safe to retry.
+    /// Unique per organization; unset on contract invoices.
+    #[prost(string, optional, tag = "17")]
+    pub idempotency_key: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum InvoiceKind {
+    /// Invoices written before kinds existed; these are all contract invoices.
+    Unspecified = 0,
+    /// Created or rolled over alongside a contract.
+    Contract = 1,
+    /// Billed to an organization outside of any contract, charged immediately.
+    OneOff = 2,
+}
+impl InvoiceKind {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "INVOICE_KIND_UNSPECIFIED",
+            Self::Contract => "INVOICE_KIND_CONTRACT",
+            Self::OneOff => "INVOICE_KIND_ONE_OFF",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "INVOICE_KIND_UNSPECIFIED" => Some(Self::Unspecified),
+            "INVOICE_KIND_CONTRACT" => Some(Self::Contract),
+            "INVOICE_KIND_ONE_OFF" => Some(Self::OneOff),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
