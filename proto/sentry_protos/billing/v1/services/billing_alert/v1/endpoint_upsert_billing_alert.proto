@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_alert.v1;
+
+import "sentry_protos/billing/v1/services/billing_alert/v1/billing_alert.proto";
+
+message UpsertBillingAlertRequest {
+  uint64 organization_id = 1;
+  BillingAlertConfig config = 2;
+  optional bool is_enabled = 3;
+}
+
+message UpsertBillingAlertResponse {
+  BillingAlert alert = 1;
+}

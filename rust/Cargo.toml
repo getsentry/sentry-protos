@@ -10,6 +10,7 @@ repository = "https://github.com/getsentry/sentry-protos"
 
 [lints.clippy]
 large_enum_variant = "allow" # Auto generated code
+double_must_use = "allow" # Auto-generated async trait methods
 
 [dependencies]
 tonic = "0.14"
