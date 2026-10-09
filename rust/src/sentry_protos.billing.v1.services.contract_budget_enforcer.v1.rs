@@ -10,8 +10,4 @@ pub struct CalculateContractBudgetQuotasRequest {
 pub struct CalculateContractBudgetQuotasResponse {
     #[prost(message, repeated, tag = "1")]
     pub quotas: ::prost::alloc::vec::Vec<super::super::super::QuotaConfig>,
-    #[prost(message, optional, tag = "2")]
-    pub usage_pricer_response: ::core::option::Option<
-        super::super::usage_pricer::v1::UsagePricerResponse,
-    >,
 }
