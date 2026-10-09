@@ -82,10 +82,8 @@ impl SpendNotificationBudgetType {
 pub struct GetSpendNotificationsRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
-    #[prost(uint64, optional, tag = "2")]
-    pub contract_id: ::core::option::Option<u64>,
-    #[prost(bool, optional, tag = "3")]
-    pub is_enabled: ::core::option::Option<bool>,
+    #[prost(uint64, tag = "2")]
+    pub contract_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetSpendNotificationsResponse {
