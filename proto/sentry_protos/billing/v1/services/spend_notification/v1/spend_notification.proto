@@ -15,7 +15,7 @@ message SpendNotificationConfig {
   }
 }
 
-message SpendNotificationConfigRecord {
+message SpendNotification {
   uint64 id = 1;
   uint64 organization_id = 2;
   SpendNotificationConfig config = 3;

@@ -20,7 +20,7 @@ pub mod spend_notification_config {
     }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct SpendNotificationConfigRecord {
+pub struct SpendNotification {
     #[prost(uint64, tag = "1")]
     pub id: u64,
     #[prost(uint64, tag = "2")]
