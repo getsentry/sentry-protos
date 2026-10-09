@@ -3,10 +3,12 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract_budget_enforcer.v1;
 
 import "sentry_protos/billing/v1/quota_config.proto";
+import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_usage_pricer.proto";
 
 message CalculateContractBudgetQuotasRequest {
   uint64 contract_id = 1;
   uint64 project_id = 2;
+  sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse usage_pricer_response = 3;
 }
 
 message CalculateContractBudgetQuotasResponse {
