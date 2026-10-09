@@ -21,4 +21,7 @@ message OneOffInvoiceUpdated {
   // PAID: the invoice's amount_billed. REFUNDED: the amount of this refund,
   // for the invoice as a whole rather than per line.
   uint64 amount_cents = 5;
+  // The service that requested the invoice. A handler acts only on events
+  // carrying its own client_id; idempotency_key is unique within it.
+  string client_id = 6;
 }

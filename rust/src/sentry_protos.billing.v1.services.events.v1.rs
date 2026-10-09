@@ -22,6 +22,10 @@ pub struct OneOffInvoiceUpdated {
     /// for the invoice as a whole rather than per line.
     #[prost(uint64, tag = "5")]
     pub amount_cents: u64,
+    /// The service that requested the invoice. A handler acts only on events
+    /// carrying its own client_id; idempotency_key is unique within it.
+    #[prost(string, tag = "6")]
+    pub client_id: ::prost::alloc::string::String,
 }
 /// Nested message and enum types in `OneOffInvoiceUpdated`.
 pub mod one_off_invoice_updated {

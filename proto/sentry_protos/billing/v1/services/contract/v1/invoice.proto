@@ -68,6 +68,11 @@ message Invoice {
   InvoiceKind kind = 16;
 
   // Caller-supplied key that makes one-off invoice creation safe to retry.
-  // Unique per organization; unset on contract invoices.
+  // Unique per organization and client_id; unset on contract invoices.
   optional string idempotency_key = 17;
+
+  // Identifies the service that requested a one-off invoice, so it can
+  // recognize its own invoices and map idempotency_key back to its own
+  // records. Unset on contract invoices.
+  optional string client_id = 18;
 }

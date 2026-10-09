@@ -602,9 +602,14 @@ pub struct Invoice {
     #[prost(enumeration = "InvoiceKind", tag = "16")]
     pub kind: i32,
     /// Caller-supplied key that makes one-off invoice creation safe to retry.
-    /// Unique per organization; unset on contract invoices.
+    /// Unique per organization and client_id; unset on contract invoices.
     #[prost(string, optional, tag = "17")]
     pub idempotency_key: ::core::option::Option<::prost::alloc::string::String>,
+    /// Identifies the service that requested a one-off invoice, so it can
+    /// recognize its own invoices and map idempotency_key back to its own
+    /// records. Unset on contract invoices.
+    #[prost(string, optional, tag = "18")]
+    pub client_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
