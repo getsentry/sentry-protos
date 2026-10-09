@@ -2,72 +2,22 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.spend_notification.v1;
 
-import "sentry_protos/billing/v1/common/v1/billable_metric.proto";
+import "google/protobuf/empty.proto";
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
 
 // Configuration persisted as JSON by the spend notification data service.
 message SpendNotificationConfig {
-  string line_item_uid = 1;
-  uint32 threshold = 2;
-  SpendNotificationExpression evaluation_expression = 3;
-}
+  uint32 threshold = 1;
+  SpendNotificationBudget budget = 2;
 
-message SpendNotificationExpression {
-  oneof expression_type {
-    UsageValueReference usage = 1;
-    RateCardLineItemReference rate_card_line_item = 4;
-    SharedRateCardLineItemReference shared_rate_card_line_item = 5;
-    ContractBudgetReference contract_budget = 6;
-    double constant = 7;
-    SpendNotificationBinaryOperation binary_op = 8;
+  oneof line_items {
+    sentry_protos.billing.v1.services.contract.v1.LineItemUids specific_items = 3;
+    google.protobuf.Empty all_items = 4;
   }
 }
 
-message UsageValueReference {
-  oneof target {
-    string line_item_uid = 1;
-    string shared_line_item_uid = 2;
-    bool all_line_items = 3;
-  }
-  UsageValueField field = 4;
-}
-
-enum UsageValueField {
-  USAGE_VALUE_FIELD_UNSPECIFIED = 0;
-  USAGE_VALUE_FIELD_PAYG_SPEND_CENTS = 1;
-  USAGE_VALUE_FIELD_RESERVED_SPEND_CENTS = 2;
-  USAGE_VALUE_FIELD_PAYG_QUANTITY = 3;
-  USAGE_VALUE_FIELD_TOTAL_QUANTITY = 4;
-}
-
-message RateCardLineItemReference {
-  string line_item_uid = 1;
-  RateCardLineItemField field = 2;
-}
-
-enum RateCardLineItemField {
-  RATE_CARD_LINE_ITEM_FIELD_UNSPECIFIED = 0;
-  RATE_CARD_LINE_ITEM_FIELD_RESERVED_UNITS = 1;
-}
-
-message SharedRateCardLineItemReference {
-  string shared_line_item_uid = 1;
-  SharedRateCardLineItemField field = 2;
-}
-
-enum SharedRateCardLineItemField {
-  SHARED_RATE_CARD_LINE_ITEM_FIELD_UNSPECIFIED = 0;
-  SHARED_RATE_CARD_LINE_ITEM_FIELD_RESERVED_CENTS = 1;
-}
-
-message ContractBudgetReference {
-  oneof scope {
-    string line_item_uid = 1;
-    bool all_line_items = 2;
-  }
-}
-
-message SpendNotificationBinaryOperation {
-  sentry_protos.billing.v1.common.v1.Operator operator = 1;
-  SpendNotificationExpression left = 2;
-  SpendNotificationExpression right = 3;
+enum SpendNotificationBudget {
+  SPEND_NOTIFICATION_BUDGET_UNSPECIFIED = 0;
+  SPEND_NOTIFICATION_BUDGET_RESERVED = 1;
+  SPEND_NOTIFICATION_BUDGET_PAYG = 2;
 }
