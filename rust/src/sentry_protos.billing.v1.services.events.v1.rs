@@ -6,6 +6,74 @@ pub struct BillingAlertEvaluationRequested {}
 /// Future: uint64 new_contract_id = 2;
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ContractRolledOver {}
+/// Published when a one-off invoice changes state, so the service that
+/// requested it can grant, withhold or claw back what was purchased.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct OneOffInvoiceUpdated {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub idempotency_key: ::prost::alloc::string::String,
+    #[prost(enumeration = "one_off_invoice_updated::Outcome", tag = "4")]
+    pub outcome: i32,
+    /// PAID: the invoice's amount_billed. REFUNDED: the amount of this refund,
+    /// for the invoice as a whole rather than per line.
+    #[prost(uint64, tag = "5")]
+    pub amount_cents: u64,
+    /// The service that requested the invoice. A handler acts only on events
+    /// carrying its own client_id; idempotency_key is unique within it.
+    #[prost(string, tag = "6")]
+    pub client_id: ::prost::alloc::string::String,
+}
+/// Nested message and enum types in `OneOffInvoiceUpdated`.
+pub mod one_off_invoice_updated {
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
+    #[repr(i32)]
+    pub enum Outcome {
+        Unspecified = 0,
+        Paid = 1,
+        /// Retries ran out or the invoice was closed. It can still be paid later,
+        /// which publishes OUTCOME_PAID.
+        ClosedUnpaid = 2,
+        Refunded = 3,
+    }
+    impl Outcome {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Self::Unspecified => "OUTCOME_UNSPECIFIED",
+                Self::Paid => "OUTCOME_PAID",
+                Self::ClosedUnpaid => "OUTCOME_CLOSED_UNPAID",
+                Self::Refunded => "OUTCOME_REFUNDED",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "OUTCOME_UNSPECIFIED" => Some(Self::Unspecified),
+                "OUTCOME_PAID" => Some(Self::Paid),
+                "OUTCOME_CLOSED_UNPAID" => Some(Self::ClosedUnpaid),
+                "OUTCOME_REFUNDED" => Some(Self::Refunded),
+                _ => None,
+            }
+        }
+    }
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationOverUsage {}
 /// Published when an organization's contract moves to a different package, e.g. a
@@ -33,7 +101,7 @@ pub struct EventMeta {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct EventPayload {
-    #[prost(oneof = "event_payload::Payload", tags = "1, 2, 3, 4, 5, 6, 7")]
+    #[prost(oneof = "event_payload::Payload", tags = "1, 2, 3, 4, 5, 6, 7, 8")]
     pub payload: ::core::option::Option<event_payload::Payload>,
 }
 /// Nested message and enum types in `EventPayload`.
@@ -54,6 +122,8 @@ pub mod event_payload {
         OrganizationPackageChanged(super::OrganizationPackageChanged),
         #[prost(message, tag = "7")]
         BillingAlertEvaluationRequested(super::BillingAlertEvaluationRequested),
+        #[prost(message, tag = "8")]
+        OneOffInvoiceUpdated(super::OneOffInvoiceUpdated),
     }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]

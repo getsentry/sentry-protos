@@ -5,6 +5,7 @@ package sentry_protos.billing.v1.services.events.v1;
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/services/events/v1/billing_alert_evaluation_requested.proto";
 import "sentry_protos/billing/v1/services/events/v1/contract_rolled_over.proto";
+import "sentry_protos/billing/v1/services/events/v1/one_off_invoice_updated.proto";
 import "sentry_protos/billing/v1/services/events/v1/organization_over_usage.proto";
 import "sentry_protos/billing/v1/services/events/v1/organization_package_changed.proto";
 import "sentry_protos/billing/v1/services/events/v1/organization_payg_changed.proto";
@@ -25,6 +26,7 @@ message EventPayload {
     sentry_protos.billing.v1.services.events.v1.ContractRolledOver contract_rolled_over = 5;
     sentry_protos.billing.v1.services.events.v1.OrganizationPackageChanged organization_package_changed = 6;
     sentry_protos.billing.v1.services.events.v1.BillingAlertEvaluationRequested billing_alert_evaluation_requested = 7;
+    sentry_protos.billing.v1.services.events.v1.OneOffInvoiceUpdated one_off_invoice_updated = 8;
   }
 }
 
