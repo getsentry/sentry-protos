@@ -1,6 +1,0 @@
-syntax = "proto3";
-
-package sentry_protos.billing.v1.services.events.v1;
-
-// Requests evaluation of spend notification configurations for an organization.
-message SpendNotificationEvaluationRequested {}

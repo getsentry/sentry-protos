@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_alert.v1;
+
+message ClaimBillingAlertRequest {
+  uint64 organization_id = 1;
+  uint64 contract_id = 2;
+  uint64 alert_id = 3;
+}
+
+message ClaimBillingAlertResponse {
+  bool claimed = 1;
+}

@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_alert.v1;
+
+import "google/protobuf/empty.proto";
+
+// Configuration persisted as JSON by the billing alert data service.
+message BillingAlertConfig {
+  uint32 threshold = 1;
+  BillingAlertBudgetType budget_type = 2;
+
+  oneof line_items {
+    LineItemUids specific_items = 3;
+    google.protobuf.Empty all_items = 4;
+  }
+}
+
+message BillingAlert {
+  uint64 id = 1;
+  uint64 organization_id = 2;
+  BillingAlertConfig config = 3;
+  bool is_enabled = 4;
+}
+
+message LineItemUids {
+  repeated string uids = 1;
+}
+
+enum BillingAlertBudgetType {
+  BILLING_ALERT_BUDGET_TYPE_UNSPECIFIED = 0;
+  BILLING_ALERT_BUDGET_TYPE_RESERVED = 1;
+  BILLING_ALERT_BUDGET_TYPE_PAYG = 2;
+}
