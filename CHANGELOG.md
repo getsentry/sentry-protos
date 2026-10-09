@@ -1,3 +1,9 @@
+## 0.82.0
+
+### New Features ✨
+
+- (billing) Define BillingAlert protos by @brendanhsentry in [#462](https://github.com/getsentry/sentry-protos/pull/462)
+
 ## 0.81.1
 
 ### Internal Changes 🔧
