@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.charge.v1;
 
+import "sentry_protos/billing/v1/common/v1/payment_client.proto";
+
 // Canonical projection of a stored platform charge. Returned by charge
 // service endpoints that need to expose the persisted charge state to
 // callers.
@@ -35,6 +37,10 @@ message PlatformCharge {
   // PlatformRefund.date_added_st so consumers that render mixed charge +
   // refund timelines can sort them off a single time axis.
   int64 date_added_st = 11;
+  // Client that requested this charge. Unspecified for legacy rows.
+  sentry_protos.billing.v1.common.v1.PaymentClient payment_client_id = 12;
+  // Opaque charge reference supplied by the requesting client.
+  optional string client_charge_reference_id = 13;
 }
 
 // Canonical projection of a stored platform refund. One row per recorded

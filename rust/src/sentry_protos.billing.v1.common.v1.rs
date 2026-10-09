@@ -334,6 +334,33 @@ pub struct LineItemDetails {
     #[prost(message, optional, tag = "9")]
     pub line_item_tags: ::core::option::Option<LineItemTags>,
 }
+/// Identifies the client that owns a payment's business consequences.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PaymentClient {
+    Unspecified = 0,
+    Invoicer = 1,
+}
+impl PaymentClient {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PAYMENT_CLIENT_UNSPECIFIED",
+            Self::Invoicer => "PAYMENT_CLIENT_INVOICER",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PAYMENT_CLIENT_UNSPECIFIED" => Some(Self::Unspecified),
+            "PAYMENT_CLIENT_INVOICER" => Some(Self::Invoicer),
+            _ => None,
+        }
+    }
+}
 /// Stripe-specific payment information for an organization.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct StripePaymentData {
