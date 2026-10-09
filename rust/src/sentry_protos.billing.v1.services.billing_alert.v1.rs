@@ -3,7 +3,7 @@
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillingAlertConfig {
     #[prost(uint32, tag = "1")]
-    pub threshold: u32,
+    pub threshold_percent: u32,
     #[prost(enumeration = "BillingAlertBudgetType", tag = "2")]
     pub budget_type: i32,
     #[prost(oneof = "billing_alert_config::LineItems", tags = "3, 4")]

@@ -6,7 +6,7 @@ import "google/protobuf/empty.proto";
 
 // Configuration persisted as JSON by the billing alert data service.
 message BillingAlertConfig {
-  uint32 threshold = 1;
+  uint32 threshold_percent = 1;
   BillingAlertBudgetType budget_type = 2;
 
   oneof line_items {
