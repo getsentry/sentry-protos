@@ -10,5 +10,4 @@ message ClaimSpendNotificationRequest {
 
 message ClaimSpendNotificationResponse {
   bool claimed = 1;
-  uint64 claim_id = 2;
 }

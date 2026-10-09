@@ -12,8 +12,6 @@ pub struct ClaimSpendNotificationRequest {
 pub struct ClaimSpendNotificationResponse {
     #[prost(bool, tag = "1")]
     pub claimed: bool,
-    #[prost(uint64, tag = "2")]
-    pub claim_id: u64,
 }
 /// Configuration persisted as JSON by the spend notification data service.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
