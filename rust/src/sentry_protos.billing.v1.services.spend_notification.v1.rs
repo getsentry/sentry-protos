@@ -14,10 +14,15 @@ pub mod spend_notification_config {
     #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum LineItems {
         #[prost(message, tag = "3")]
-        SpecificItems(super::super::super::contract::v1::LineItemUids),
+        SpecificItems(super::LineItemUids),
         #[prost(message, tag = "4")]
         AllItems(()),
     }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct LineItemUids {
+    #[prost(string, repeated, tag = "1")]
+    pub uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]

@@ -3,7 +3,6 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.spend_notification.v1;
 
 import "google/protobuf/empty.proto";
-import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
 
 // Configuration persisted as JSON by the spend notification data service.
 message SpendNotificationConfig {
@@ -11,9 +10,13 @@ message SpendNotificationConfig {
   SpendNotificationBudget budget = 2;
 
   oneof line_items {
-    sentry_protos.billing.v1.services.contract.v1.LineItemUids specific_items = 3;
+    LineItemUids specific_items = 3;
     google.protobuf.Empty all_items = 4;
   }
+}
+
+message LineItemUids {
+  repeated string uids = 1;
 }
 
 enum SpendNotificationBudget {
