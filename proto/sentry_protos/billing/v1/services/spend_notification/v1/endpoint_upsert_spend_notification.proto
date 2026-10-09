@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.spend_notification.v1;
+
+import "sentry_protos/billing/v1/services/spend_notification/v1/spend_notification.proto";
+
+message UpsertSpendNotificationRequest {
+  uint64 organization_id = 1;
+  SpendNotificationConfig config = 2;
+  optional bool is_enabled = 3;
+}
+
+message UpsertSpendNotificationResponse {
+  SpendNotification notification = 1;
+}
