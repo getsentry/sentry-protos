@@ -7,7 +7,7 @@ import "google/protobuf/empty.proto";
 // Configuration persisted as JSON by the spend notification data service.
 message SpendNotificationConfig {
   uint32 threshold = 1;
-  SpendNotificationBudget budget = 2;
+  SpendNotificationBudgetType budget_type = 2;
 
   oneof line_items {
     LineItemUids specific_items = 3;
@@ -19,8 +19,8 @@ message LineItemUids {
   repeated string uids = 1;
 }
 
-enum SpendNotificationBudget {
-  SPEND_NOTIFICATION_BUDGET_UNSPECIFIED = 0;
-  SPEND_NOTIFICATION_BUDGET_RESERVED = 1;
-  SPEND_NOTIFICATION_BUDGET_PAYG = 2;
+enum SpendNotificationBudgetType {
+  SPEND_NOTIFICATION_BUDGET_TYPE_UNSPECIFIED = 0;
+  SPEND_NOTIFICATION_BUDGET_TYPE_RESERVED = 1;
+  SPEND_NOTIFICATION_BUDGET_TYPE_PAYG = 2;
 }

@@ -4,8 +4,8 @@
 pub struct SpendNotificationConfig {
     #[prost(uint32, tag = "1")]
     pub threshold: u32,
-    #[prost(enumeration = "SpendNotificationBudget", tag = "2")]
-    pub budget: i32,
+    #[prost(enumeration = "SpendNotificationBudgetType", tag = "2")]
+    pub budget_type: i32,
     #[prost(oneof = "spend_notification_config::LineItems", tags = "3, 4")]
     pub line_items: ::core::option::Option<spend_notification_config::LineItems>,
 }
@@ -26,29 +26,29 @@ pub struct LineItemUids {
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum SpendNotificationBudget {
+pub enum SpendNotificationBudgetType {
     Unspecified = 0,
     Reserved = 1,
     Payg = 2,
 }
-impl SpendNotificationBudget {
+impl SpendNotificationBudgetType {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            Self::Unspecified => "SPEND_NOTIFICATION_BUDGET_UNSPECIFIED",
-            Self::Reserved => "SPEND_NOTIFICATION_BUDGET_RESERVED",
-            Self::Payg => "SPEND_NOTIFICATION_BUDGET_PAYG",
+            Self::Unspecified => "SPEND_NOTIFICATION_BUDGET_TYPE_UNSPECIFIED",
+            Self::Reserved => "SPEND_NOTIFICATION_BUDGET_TYPE_RESERVED",
+            Self::Payg => "SPEND_NOTIFICATION_BUDGET_TYPE_PAYG",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "SPEND_NOTIFICATION_BUDGET_UNSPECIFIED" => Some(Self::Unspecified),
-            "SPEND_NOTIFICATION_BUDGET_RESERVED" => Some(Self::Reserved),
-            "SPEND_NOTIFICATION_BUDGET_PAYG" => Some(Self::Payg),
+            "SPEND_NOTIFICATION_BUDGET_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "SPEND_NOTIFICATION_BUDGET_TYPE_RESERVED" => Some(Self::Reserved),
+            "SPEND_NOTIFICATION_BUDGET_TYPE_PAYG" => Some(Self::Payg),
             _ => None,
         }
     }
