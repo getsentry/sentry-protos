@@ -8,7 +8,7 @@ import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_usage_pricer.
 message CalculateContractBudgetQuotasRequest {
   uint64 contract_id = 1;
   uint64 project_id = 2;
-  sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse usage_pricer_response = 3;
+  sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse priced_usage = 3;
 }
 
 message CalculateContractBudgetQuotasResponse {

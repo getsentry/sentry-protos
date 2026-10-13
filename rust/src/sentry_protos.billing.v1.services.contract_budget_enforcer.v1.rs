@@ -6,7 +6,7 @@ pub struct CalculateContractBudgetQuotasRequest {
     #[prost(uint64, tag = "2")]
     pub project_id: u64,
     #[prost(message, optional, tag = "3")]
-    pub usage_pricer_response: ::core::option::Option<
+    pub priced_usage: ::core::option::Option<
         super::super::usage_pricer::v1::UsagePricerResponse,
     >,
 }

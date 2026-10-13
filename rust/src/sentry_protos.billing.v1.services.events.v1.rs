@@ -5,7 +5,7 @@ pub struct BillingAlertEvaluationRequested {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
     #[prost(message, optional, tag = "2")]
-    pub usage_pricer_response: ::core::option::Option<
+    pub priced_usage: ::core::option::Option<
         super::super::usage_pricer::v1::UsagePricerResponse,
     >,
 }
