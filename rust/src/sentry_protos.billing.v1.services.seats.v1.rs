@@ -137,6 +137,77 @@ impl ExternalProductSeatStatus {
     }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Seat {
+    #[prost(string, tag = "1")]
+    pub external_product_identifier: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub external_product_display_name: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub project_id: u64,
+    #[prost(enumeration = "SeatStatus", tag = "4")]
+    pub status: i32,
+    /// When the seat was first recorded on the contract.
+    #[prost(message, optional, tag = "5")]
+    pub created_at: ::core::option::Option<::prost_types::Timestamp>,
+}
+/// Lists every seat in a category that has activity on the organization's
+/// current contract, including seats removed during the contract.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListSeatsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(enumeration = "super::super::super::SeatCategory", tag = "2")]
+    pub seat_category: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListSeatsResponse {
+    /// Newest first, by created_at.
+    #[prost(message, repeated, tag = "1")]
+    pub seats: ::prost::alloc::vec::Vec<Seat>,
+}
+/// The billing state of a seat on a contract. Unlike ExternalProductSeatStatus,
+/// OVER_QUOTA is kept distinct from DISABLED so billing UIs can show why a seat
+/// isn't usable.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SeatStatus {
+    Unspecified = 0,
+    /// Counted against reserved volume or pay-as-you-go budget.
+    Active = 1,
+    /// Explicitly turned off by the customer.
+    Disabled = 2,
+    /// There was no reserved volume or budget left when the seat was assigned.
+    OverQuota = 3,
+    /// Removed during the contract.
+    Removed = 4,
+}
+impl SeatStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SEAT_STATUS_UNSPECIFIED",
+            Self::Active => "SEAT_STATUS_ACTIVE",
+            Self::Disabled => "SEAT_STATUS_DISABLED",
+            Self::OverQuota => "SEAT_STATUS_OVER_QUOTA",
+            Self::Removed => "SEAT_STATUS_REMOVED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SEAT_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "SEAT_STATUS_ACTIVE" => Some(Self::Active),
+            "SEAT_STATUS_DISABLED" => Some(Self::Disabled),
+            "SEAT_STATUS_OVER_QUOTA" => Some(Self::OverQuota),
+            "SEAT_STATUS_REMOVED" => Some(Self::Removed),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RemoveSeatRequest {
     #[prost(message, optional, tag = "1")]
     pub seat_object: ::core::option::Option<super::super::super::common::v1::SeatObject>,

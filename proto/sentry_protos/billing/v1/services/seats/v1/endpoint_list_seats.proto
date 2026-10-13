@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/seat_category.proto";
+
+// The billing state of a seat on a contract. Unlike ExternalProductSeatStatus,
+// OVER_QUOTA is kept distinct from DISABLED so billing UIs can show why a seat
+// isn't usable.
+enum SeatStatus {
+  SEAT_STATUS_UNSPECIFIED = 0;
+
+  // Counted against reserved volume or pay-as-you-go budget.
+  SEAT_STATUS_ACTIVE = 1;
+
+  // Explicitly turned off by the customer.
+  SEAT_STATUS_DISABLED = 2;
+
+  // There was no reserved volume or budget left when the seat was assigned.
+  SEAT_STATUS_OVER_QUOTA = 3;
+
+  // Removed during the contract.
+  SEAT_STATUS_REMOVED = 4;
+}
+
+message Seat {
+  string external_product_identifier = 1;
+  string external_product_display_name = 2;
+  uint64 project_id = 3;
+  SeatStatus status = 4;
+  // When the seat was first recorded on the contract.
+  google.protobuf.Timestamp created_at = 5;
+}
+
+// Lists every seat in a category that has activity on the organization's
+// current contract, including seats removed during the contract.
+message ListSeatsRequest {
+  uint64 organization_id = 1;
+  sentry_protos.billing.v1.SeatCategory seat_category = 2;
+}
+
+message ListSeatsResponse {
+  // Newest first, by created_at.
+  repeated Seat seats = 1;
+}
