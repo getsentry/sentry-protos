@@ -1,3 +1,9 @@
+## 0.82.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Share priced usage with quota consumers by @brendanhsentry in [#464](https://github.com/getsentry/sentry-protos/pull/464)
+
 ## 0.82.0
 
 ### New Features ✨
