@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/seat_status.proto";
+import "sentry_protos/billing/v1/seat_category.proto";
+
+message Seat {
+  string external_product_identifier = 1;
+  string external_product_display_name = 2;
+  uint64 project_id = 3;
+  sentry_protos.billing.v1.common.v1.SeatStatus status = 4;
+  // When the seat was first recorded on the contract.
+  google.protobuf.Timestamp created_at = 5;
+}
+
+// Lists every seat in a category that has activity on the organization's
+// current contract, including seats removed during the contract (status DNE).
+message ListSeatsRequest {
+  uint64 organization_id = 1;
+  sentry_protos.billing.v1.SeatCategory seat_category = 2;
+}
+
+message ListSeatsResponse {
+  // Newest first, by created_at.
+  repeated Seat seats = 1;
+}
