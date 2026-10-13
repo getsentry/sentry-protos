@@ -599,46 +599,48 @@ pub struct Invoice {
     /// false means the invoice is visible on receipts.
     #[prost(bool, tag = "15")]
     pub hide_from_customer_receipts: bool,
-    #[prost(enumeration = "InvoiceKind", tag = "16")]
-    pub kind: i32,
+    #[prost(enumeration = "FailurePolicy", tag = "16")]
+    pub failure_policy: i32,
     /// Caller-supplied key that makes one-off invoice creation safe to retry.
     /// Unique per organization and client_id; unset on contract invoices.
     #[prost(string, optional, tag = "17")]
     pub idempotency_key: ::core::option::Option<::prost::alloc::string::String>,
-    /// Identifies the service that requested a one-off invoice, so it can
-    /// recognize its own invoices and map idempotency_key back to its own
-    /// records. Unset on contract invoices.
+    /// Identifies the service that requested the invoice. When set, that service
+    /// is told when the invoice is paid, closed unpaid or refunded, and can map
+    /// idempotency_key back to its own records. Unset on contract invoices.
     #[prost(string, optional, tag = "18")]
     pub client_id: ::core::option::Option<::prost::alloc::string::String>,
 }
+/// What paying, or failing to pay, an invoice does to the organization's
+/// account status. Retries and payment emails apply under every policy.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum InvoiceKind {
-    /// Invoices written before kinds existed; these are all contract invoices.
+pub enum FailurePolicy {
+    /// Account dunning: a failed payment makes the account past due and, once
+    /// retries run out, downgrades it or disables on-demand; a successful payment
+    /// reactivates it. Every invoice written before policies existed has this.
     Unspecified = 0,
-    /// Created or rolled over alongside a contract.
-    Contract = 1,
-    /// Billed to an organization outside of any contract, charged immediately.
-    OneOff = 2,
+    /// Payment state never changes account status, in either direction. The
+    /// service that requested the invoice (client_id) owns the consequences of
+    /// non-payment, so an invoice with this policy always has a client_id.
+    RetryOnly = 1,
 }
-impl InvoiceKind {
+impl FailurePolicy {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            Self::Unspecified => "INVOICE_KIND_UNSPECIFIED",
-            Self::Contract => "INVOICE_KIND_CONTRACT",
-            Self::OneOff => "INVOICE_KIND_ONE_OFF",
+            Self::Unspecified => "FAILURE_POLICY_UNSPECIFIED",
+            Self::RetryOnly => "FAILURE_POLICY_RETRY_ONLY",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "INVOICE_KIND_UNSPECIFIED" => Some(Self::Unspecified),
-            "INVOICE_KIND_CONTRACT" => Some(Self::Contract),
-            "INVOICE_KIND_ONE_OFF" => Some(Self::OneOff),
+            "FAILURE_POLICY_UNSPECIFIED" => Some(Self::Unspecified),
+            "FAILURE_POLICY_RETRY_ONLY" => Some(Self::RetryOnly),
             _ => None,
         }
     }
