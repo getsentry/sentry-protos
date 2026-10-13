@@ -1,3 +1,9 @@
+## 0.83.0
+
+### New Features ✨
+
+- (billing-platform) Add ListSeats endpoint to seats service by @volokluev in [#465](https://github.com/getsentry/sentry-protos/pull/465)
+
 ## 0.82.1
 
 ### Internal Changes 🔧
