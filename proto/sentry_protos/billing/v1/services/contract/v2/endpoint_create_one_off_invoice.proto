@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sentry_protos.billing.v1.services.contract.v1;
+package sentry_protos.billing.v1.services.contract.v2;
 
 import "sentry_protos/billing/v1/common/v1/address.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
@@ -9,7 +9,10 @@ import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 // caller to charge right away. The charge claim is taken at creation so the
 // charge sweep leaves the invoice alone while the caller charges it; if the
 // caller never does, the claim expires and the sweep charges it as a normal
-// attempt. Touches only invoice tables: no contract is read or changed.
+// attempt. The billing provider is derived from the organization's current
+// contract; the request is rejected when that provider can't collect a
+// one-off charge (e.g. Vercel, or invoiced billing with no provider). No
+// contract is changed.
 message CreateOneOffInvoiceRequest {
   uint64 organization_id = 1;
   // The requesting service. Required when failure_policy is
@@ -18,9 +21,9 @@ message CreateOneOffInvoiceRequest {
   // Unique per organization and client_id. A repeated key writes nothing and
   // returns the existing invoice with created=false.
   string idempotency_key = 3;
-  FailurePolicy failure_policy = 4;
+  sentry_protos.billing.v1.services.contract.v1.FailurePolicy failure_policy = 4;
   // Already includes the sales-tax line, if any, and every line's type.
-  repeated InvoiceLineItem line_items = 5;
+  repeated sentry_protos.billing.v1.services.contract.v1.InvoiceLineItem line_items = 5;
   sentry_protos.billing.v1.common.v1.Address address = 6;
   optional string tax_number = 7;
   // The tax document the provider opened for this invoice, if any.

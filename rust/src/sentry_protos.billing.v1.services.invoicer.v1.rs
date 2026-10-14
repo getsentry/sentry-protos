@@ -39,8 +39,8 @@ pub struct BillContractChangeResponse {
     >,
 }
 /// Bills an organization for line items another service has priced, outside of
-/// its contract: adds sales tax, writes a FAILURE_POLICY_RETRY_ONLY invoice and
-/// charges it right away. Only migrated, credit-card billed organizations are
+/// its contract: adds sales tax, writes an invoice with the caller's failure
+/// policy and charges it right away. Only migrated, credit-card billed organizations are
 /// eligible. The requesting service learns the outcome from the response, and
 /// afterwards by reading the invoice.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -63,6 +63,11 @@ pub struct BillOneOffInvoiceRequest {
     /// Stripe charge description.
     #[prost(string, optional, tag = "5")]
     pub description: ::core::option::Option<::prost::alloc::string::String>,
+    /// What paying, or failing to pay, the invoice does to account status. The
+    /// requesting service chooses: FAILURE_POLICY_RETRY_ONLY leaves account
+    /// status alone and makes the service responsible for non-payment.
+    #[prost(enumeration = "super::super::contract::v1::FailurePolicy", tag = "6")]
+    pub failure_policy: i32,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillOneOffInvoiceResponse {
