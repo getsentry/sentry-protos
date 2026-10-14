@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_alert_evaluation.v1;
+
+import "sentry_protos/billing/v1/services/billing_alert/v1/billing_alert.proto";
+import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_usage_pricer.proto";
+
+message EvaluateBillingAlertsRequest {
+  uint64 organization_id = 1;
+  uint64 contract_id = 2;
+  sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse usage_pricer_response = 3;
+  repeated sentry_protos.billing.v1.services.billing_alert.v1.BillingAlert alerts = 4;
+}
+
+message EvaluateBillingAlertsResponse {
+  repeated uint64 alert_ids = 1;
+  map<uint64, double> actual_percent_by_alert_id = 2;
+}
