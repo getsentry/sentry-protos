@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "sentry_protos/billing/v1/common/v1/stripe_verification.proto";
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
+// Bills an organization for line items another service has priced, outside of
+// its contract: adds sales tax, writes a FAILURE_POLICY_RETRY_ONLY invoice and
+// charges it right away. Only migrated, credit-card billed organizations are
+// eligible. The requesting service learns the outcome from the response, and
+// afterwards by reading the invoice.
+message BillOneOffInvoiceRequest {
+  uint64 organization_id = 1;
+  // Names the requesting service, which owns what non-payment means.
+  string client_id = 2;
+  // Unique per organization and client_id. A repeated key returns the first
+  // call's invoice without charging again.
+  string idempotency_key = 3;
+  // Each line needs amount_cents, description and an external_id; the
+  // platform sets every line's type, so type must be unset.
+  repeated sentry_protos.billing.v1.services.contract.v1.InvoiceLineItem line_items = 4;
+  // Stripe charge description.
+  optional string description = 5;
+}
+
+message BillOneOffInvoiceResponse {
+  uint64 invoice_id = 1;
+  string invoice_guid = 2;
+  bool paid = 3;
+  // Empty when paid, or when the key matched an existing invoice.
+  string failure_code = 4;
+  // Set when Stripe requires 3D Secure; finish it with ConfirmInvoicePayment.
+  optional sentry_protos.billing.v1.common.v1.StripeVerification verification = 5;
+}

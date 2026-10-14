@@ -38,6 +38,49 @@ pub struct BillContractChangeResponse {
         super::super::super::common::v1::StripeVerification,
     >,
 }
+/// Bills an organization for line items another service has priced, outside of
+/// its contract: adds sales tax, writes a FAILURE_POLICY_RETRY_ONLY invoice and
+/// charges it right away. Only migrated, credit-card billed organizations are
+/// eligible. The requesting service learns the outcome from the response, and
+/// afterwards by reading the invoice.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BillOneOffInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Names the requesting service, which owns what non-payment means.
+    #[prost(string, tag = "2")]
+    pub client_id: ::prost::alloc::string::String,
+    /// Unique per organization and client_id. A repeated key returns the first
+    /// call's invoice without charging again.
+    #[prost(string, tag = "3")]
+    pub idempotency_key: ::prost::alloc::string::String,
+    /// Each line needs amount_cents, description and an external_id; the
+    /// platform sets every line's type, so type must be unset.
+    #[prost(message, repeated, tag = "4")]
+    pub line_items: ::prost::alloc::vec::Vec<
+        super::super::contract::v1::InvoiceLineItem,
+    >,
+    /// Stripe charge description.
+    #[prost(string, optional, tag = "5")]
+    pub description: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct BillOneOffInvoiceResponse {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(bool, tag = "3")]
+    pub paid: bool,
+    /// Empty when paid, or when the key matched an existing invoice.
+    #[prost(string, tag = "4")]
+    pub failure_code: ::prost::alloc::string::String,
+    /// Set when Stripe requires 3D Secure; finish it with ConfirmInvoicePayment.
+    #[prost(message, optional, tag = "5")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ChargeInvoicesRequest {
     /// The current time used to select invoices that are due and require a
