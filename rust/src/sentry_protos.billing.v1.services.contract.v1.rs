@@ -605,9 +605,9 @@ pub struct Invoice {
     /// Unique per organization and client_id; unset on contract invoices.
     #[prost(string, optional, tag = "17")]
     pub idempotency_key: ::core::option::Option<::prost::alloc::string::String>,
-    /// Identifies the service that requested the invoice. When set, that service
-    /// is told when the invoice is paid, closed unpaid or refunded, and can map
-    /// idempotency_key back to its own records. Unset on contract invoices.
+    /// Identifies the service that requested the invoice, which reads the
+    /// invoice to learn its outcome and maps idempotency_key back to its own
+    /// records. Unset on contract invoices.
     #[prost(string, optional, tag = "18")]
     pub client_id: ::core::option::Option<::prost::alloc::string::String>,
 }
@@ -622,7 +622,8 @@ pub enum FailurePolicy {
     Unspecified = 0,
     /// Payment state never changes account status, in either direction. The
     /// service that requested the invoice (client_id) owns the consequences of
-    /// non-payment, so an invoice with this policy always has a client_id.
+    /// non-payment and reads the outcome from the invoice, so an invoice with
+    /// this policy always has a client_id.
     RetryOnly = 1,
 }
 impl FailurePolicy {
