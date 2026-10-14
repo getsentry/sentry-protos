@@ -547,10 +547,6 @@ pub struct InvoiceLineItem {
     /// priced line items.
     #[prost(string, optional, tag = "3")]
     pub r#type: ::core::option::Option<::prost::alloc::string::String>,
-    /// Caller-defined identifier for what this line bills, set on one-off
-    /// invoice lines. Opaque to the platform.
-    #[prost(string, optional, tag = "4")]
-    pub external_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Invoice {

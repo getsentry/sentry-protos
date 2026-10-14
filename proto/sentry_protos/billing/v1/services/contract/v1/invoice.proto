@@ -31,9 +31,6 @@ message InvoiceLineItem {
   // Optional classifier for the line item, e.g. "tax". Unset for ordinary
   // priced line items.
   optional string type = 3;
-  // Caller-defined identifier for what this line bills, set on one-off
-  // invoice lines. Opaque to the platform.
-  optional string external_id = 4;
 }
 
 message Invoice {

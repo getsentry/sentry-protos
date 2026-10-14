@@ -17,8 +17,8 @@ message BillOneOffInvoiceRequest {
   // Unique per organization and client_id. A repeated key returns the first
   // call's invoice without charging again.
   string idempotency_key = 3;
-  // Each line needs amount_cents, description and an external_id; the
-  // platform sets every line's type, so type must be unset.
+  // Each line needs amount_cents and description; the platform sets every
+  // line's type, so type must be unset.
   repeated sentry_protos.billing.v1.services.contract.v1.InvoiceLineItem line_items = 4;
   // Stripe charge description.
   optional string description = 5;

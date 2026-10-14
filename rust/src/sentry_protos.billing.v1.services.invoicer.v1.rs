@@ -54,8 +54,8 @@ pub struct BillOneOffInvoiceRequest {
     /// call's invoice without charging again.
     #[prost(string, tag = "3")]
     pub idempotency_key: ::prost::alloc::string::String,
-    /// Each line needs amount_cents, description and an external_id; the
-    /// platform sets every line's type, so type must be unset.
+    /// Each line needs amount_cents and description; the platform sets every
+    /// line's type, so type must be unset.
     #[prost(message, repeated, tag = "4")]
     pub line_items: ::prost::alloc::vec::Vec<
         super::super::contract::v1::InvoiceLineItem,
