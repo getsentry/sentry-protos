@@ -1,3 +1,9 @@
+## 0.86.0
+
+### New Features ✨
+
+- (billing) Add non-granted usage quantity by @brendanhsentry in [#468](https://github.com/getsentry/sentry-protos/pull/468)
+
 ## 0.85.0
 
 ### New Features ✨
