@@ -7,6 +7,9 @@ pub struct GetOrgsWithoutActiveSeatContractRequest {
     /// Only consider seat contract states closed at or after this time.
     #[prost(message, optional, tag = "1")]
     pub closed_since: ::core::option::Option<::prost_types::Timestamp>,
+    /// Maximum number of organizations to return. Defaults to 1000 when unset.
+    #[prost(uint32, tag = "2")]
+    pub limit: u32,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrgWithoutActiveSeatContract {

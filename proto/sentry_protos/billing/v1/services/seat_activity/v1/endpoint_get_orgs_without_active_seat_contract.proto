@@ -10,6 +10,8 @@ import "google/protobuf/timestamp.proto";
 message GetOrgsWithoutActiveSeatContractRequest {
   // Only consider seat contract states closed at or after this time.
   google.protobuf.Timestamp closed_since = 1;
+  // Maximum number of organizations to return. Defaults to 1000 when unset.
+  uint32 limit = 2;
 }
 
 message OrgWithoutActiveSeatContract {
