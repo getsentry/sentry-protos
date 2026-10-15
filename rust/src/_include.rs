@@ -19,6 +19,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.billing_alert.v1.rs");
                     }
                 }
+                pub mod billing_alert_evaluation {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.billing_alert_evaluation.v1.rs");
+                    }
+                }
                 pub mod billing_details {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.billing_details.v1.rs");
