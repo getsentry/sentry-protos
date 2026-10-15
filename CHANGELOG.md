@@ -1,3 +1,9 @@
+## 0.85.0
+
+### New Features ✨
+
+- (billing) Add off-cycle invoice protos by @volokluev in [#463](https://github.com/getsentry/sentry-protos/pull/463)
+
 ## 0.84.0
 
 ### New Features ✨
