@@ -221,6 +221,53 @@ pub struct CreateContractResponse {
     #[prost(uint64, tag = "5")]
     pub amount_billed: u64,
 }
+/// Writes an organization-scoped invoice outside of any contract, ready for the
+/// caller to charge right away. The charge claim is taken at creation so the
+/// charge sweep leaves the invoice alone while the caller charges it; if the
+/// caller never does, the claim expires and the sweep charges it as a normal
+/// attempt. The billing provider is derived from the organization's current
+/// contract; the request is rejected when that provider can't collect a
+/// off-cycle charge (e.g. Vercel, or invoiced billing with no provider). No
+/// contract is changed.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateOffCycleInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The requesting service. Required when failure_policy is
+    /// FAILURE_POLICY_RETRY_ONLY, since nothing else acts on non-payment.
+    #[prost(string, tag = "2")]
+    pub client_id: ::prost::alloc::string::String,
+    /// Unique per organization and client_id. A repeated key writes nothing and
+    /// returns the existing invoice with created=false.
+    #[prost(string, tag = "3")]
+    pub idempotency_key: ::prost::alloc::string::String,
+    #[prost(enumeration = "super::v1::FailurePolicy", tag = "4")]
+    pub failure_policy: i32,
+    /// Already includes the sales-tax line, if any, and every line's type.
+    #[prost(message, repeated, tag = "5")]
+    pub line_items: ::prost::alloc::vec::Vec<super::v1::InvoiceLineItem>,
+    #[prost(message, optional, tag = "6")]
+    pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+    #[prost(string, optional, tag = "7")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
+    /// The tax document the provider opened for this invoice, if any.
+    #[prost(string, optional, tag = "8")]
+    pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(bool, tag = "9")]
+    pub is_reverse_charge: bool,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateOffCycleInvoiceResponse {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub amount_billed: u64,
+    /// False when the idempotency key matched an existing invoice.
+    #[prost(bool, tag = "4")]
+    pub created: bool,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetAllContractsForOrganizationRequest {
     #[prost(uint64, tag = "1")]

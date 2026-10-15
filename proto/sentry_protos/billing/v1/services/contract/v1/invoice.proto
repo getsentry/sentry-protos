@@ -6,6 +6,20 @@ import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/common/v1/address.proto";
 import "sentry_protos/billing/v1/common/v1/external_billing_provider.proto";
 
+// What paying, or failing to pay, an invoice does to the organization's
+// account status. Retries and payment emails apply under every policy.
+enum FailurePolicy {
+  // Account dunning: a failed payment makes the account past due and, once
+  // retries run out, downgrades it or disables on-demand; a successful payment
+  // reactivates it. Every invoice written before policies existed has this.
+  FAILURE_POLICY_UNSPECIFIED = 0;
+  // Payment state never changes account status, in either direction. The
+  // service that requested the invoice (client_id) owns the consequences of
+  // non-payment and reads the outcome from the invoice, so an invoice with
+  // this policy always has a client_id.
+  FAILURE_POLICY_RETRY_ONLY = 1;
+}
+
 // This is not the same as LineItemDetails, it includes
 // items not related to the package such as tax. Each line item may carry an
 // optional type that classifies it (e.g. "tax") so consumers can treat it
@@ -52,4 +66,15 @@ message Invoice {
   // (e.g. pre-migration shadow rollovers and the $0 migration stub). Default
   // false means the invoice is visible on receipts.
   bool hide_from_customer_receipts = 15;
+
+  FailurePolicy failure_policy = 16;
+
+  // Caller-supplied key that makes off-cycle invoice creation safe to retry.
+  // Unique per organization and client_id; unset on contract invoices.
+  optional string idempotency_key = 17;
+
+  // Identifies the service that requested the invoice, which reads the
+  // invoice to learn its outcome and maps idempotency_key back to its own
+  // records. Unset on contract invoices.
+  optional string client_id = 18;
 }
