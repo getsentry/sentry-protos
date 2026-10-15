@@ -88,6 +88,11 @@ pub struct LineItemUsageSummary {
     /// source, including reserved, PAYG, or granted capacity.
     #[prost(bool, tag = "8")]
     pub has_remaining_capacity: bool,
+    /// Total units consumed by this line item in the billing period after unit
+    /// grants are applied, but before reserved quantity is deducted. This includes
+    /// both reserved and PAYG usage (in the line item's units).
+    #[prost(uint64, tag = "9")]
+    pub non_granted_quantity: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
