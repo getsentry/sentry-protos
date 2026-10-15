@@ -105,6 +105,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.rate_card.v1.rs");
                     }
                 }
+                pub mod seat_activity {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.seat_activity.v1.rs");
+                    }
+                }
                 pub mod seats {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.seats.v1.rs");

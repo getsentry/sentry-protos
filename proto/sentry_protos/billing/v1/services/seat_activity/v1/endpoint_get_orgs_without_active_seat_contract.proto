@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seat_activity.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Finds organizations whose seat contract state was closed but which have no
+// active seat contract state to replace it, i.e. a contract rollover that
+// closed the old contract without establishing the new one.
+message GetOrgsWithoutActiveSeatContractRequest {
+  // Only consider seat contract states closed at or after this time.
+  google.protobuf.Timestamp closed_since = 1;
+  // Maximum number of organizations to return. Defaults to 1000 when unset.
+  uint32 limit = 2;
+}
+
+message OrgWithoutActiveSeatContract {
+  uint64 organization_id = 1;
+  // The organization's most recently closed contract.
+  uint64 closed_contract_id = 2;
+}
+
+message GetOrgsWithoutActiveSeatContractResponse {
+  repeated OrgWithoutActiveSeatContract organizations = 1;
+}
