@@ -1,3 +1,15 @@
+## 0.83.0
+
+### New Features ✨
+
+- (billing-platform) Add ListSeats endpoint to seats service by @volokluev in [#465](https://github.com/getsentry/sentry-protos/pull/465)
+
+## 0.82.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Share priced usage with quota consumers by @brendanhsentry in [#464](https://github.com/getsentry/sentry-protos/pull/464)
+
 ## 0.82.0
 
 ### New Features ✨
