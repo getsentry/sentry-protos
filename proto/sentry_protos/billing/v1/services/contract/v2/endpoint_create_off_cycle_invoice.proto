@@ -11,9 +11,9 @@ import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 // caller never does, the claim expires and the sweep charges it as a normal
 // attempt. The billing provider is derived from the organization's current
 // contract; the request is rejected when that provider can't collect a
-// one-off charge (e.g. Vercel, or invoiced billing with no provider). No
+// off-cycle charge (e.g. Vercel, or invoiced billing with no provider). No
 // contract is changed.
-message CreateOneOffInvoiceRequest {
+message CreateOffCycleInvoiceRequest {
   uint64 organization_id = 1;
   // The requesting service. Required when failure_policy is
   // FAILURE_POLICY_RETRY_ONLY, since nothing else acts on non-payment.
@@ -31,7 +31,7 @@ message CreateOneOffInvoiceRequest {
   bool is_reverse_charge = 9;
 }
 
-message CreateOneOffInvoiceResponse {
+message CreateOffCycleInvoiceResponse {
   uint64 invoice_id = 1;
   string invoice_guid = 2;
   uint64 amount_billed = 3;

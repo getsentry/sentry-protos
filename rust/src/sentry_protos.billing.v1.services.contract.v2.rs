@@ -227,10 +227,10 @@ pub struct CreateContractResponse {
 /// caller never does, the claim expires and the sweep charges it as a normal
 /// attempt. The billing provider is derived from the organization's current
 /// contract; the request is rejected when that provider can't collect a
-/// one-off charge (e.g. Vercel, or invoiced billing with no provider). No
+/// off-cycle charge (e.g. Vercel, or invoiced billing with no provider). No
 /// contract is changed.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CreateOneOffInvoiceRequest {
+pub struct CreateOffCycleInvoiceRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
     /// The requesting service. Required when failure_policy is
@@ -257,7 +257,7 @@ pub struct CreateOneOffInvoiceRequest {
     pub is_reverse_charge: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct CreateOneOffInvoiceResponse {
+pub struct CreateOffCycleInvoiceResponse {
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
     #[prost(string, tag = "2")]

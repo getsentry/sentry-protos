@@ -10,7 +10,7 @@ import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 // policy and charges it right away. Only migrated, credit-card billed organizations are
 // eligible. The requesting service learns the outcome from the response, and
 // afterwards by reading the invoice.
-message BillOneOffInvoiceRequest {
+message BillOffCycleInvoiceRequest {
   uint64 organization_id = 1;
   // Names the requesting service, which owns what non-payment means.
   string client_id = 2;
@@ -28,7 +28,7 @@ message BillOneOffInvoiceRequest {
   sentry_protos.billing.v1.services.contract.v1.FailurePolicy failure_policy = 6;
 }
 
-message BillOneOffInvoiceResponse {
+message BillOffCycleInvoiceResponse {
   uint64 invoice_id = 1;
   string invoice_guid = 2;
   bool paid = 3;

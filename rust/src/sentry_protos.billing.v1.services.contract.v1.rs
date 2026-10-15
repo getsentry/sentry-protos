@@ -597,7 +597,7 @@ pub struct Invoice {
     pub hide_from_customer_receipts: bool,
     #[prost(enumeration = "FailurePolicy", tag = "16")]
     pub failure_policy: i32,
-    /// Caller-supplied key that makes one-off invoice creation safe to retry.
+    /// Caller-supplied key that makes off-cycle invoice creation safe to retry.
     /// Unique per organization and client_id; unset on contract invoices.
     #[prost(string, optional, tag = "17")]
     pub idempotency_key: ::core::option::Option<::prost::alloc::string::String>,

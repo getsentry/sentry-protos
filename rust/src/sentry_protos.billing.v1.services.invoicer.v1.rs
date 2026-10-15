@@ -44,7 +44,7 @@ pub struct BillContractChangeResponse {
 /// eligible. The requesting service learns the outcome from the response, and
 /// afterwards by reading the invoice.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct BillOneOffInvoiceRequest {
+pub struct BillOffCycleInvoiceRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
     /// Names the requesting service, which owns what non-payment means.
@@ -70,7 +70,7 @@ pub struct BillOneOffInvoiceRequest {
     pub failure_policy: i32,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct BillOneOffInvoiceResponse {
+pub struct BillOffCycleInvoiceResponse {
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
     #[prost(string, tag = "2")]
