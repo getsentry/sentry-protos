@@ -1,3 +1,9 @@
+## 0.84.0
+
+### New Features ✨
+
+- (billing-platform) Add GetOrgsWithoutActiveSeatContract to seat activity service by @volokluev in [#467](https://github.com/getsentry/sentry-protos/pull/467)
+
 ## 0.83.0
 
 ### New Features ✨
