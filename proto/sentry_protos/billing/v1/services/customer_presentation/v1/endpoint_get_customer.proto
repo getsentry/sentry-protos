@@ -25,6 +25,13 @@ message GetCustomerPresentationRequest {
   bool include_payment_details = 4;
 }
 
+message AvailableTrials {
+  // Product trials available for individual line items.
+  repeated string line_item_uids = 1;
+  // The subscription trial available for a package, when eligible.
+  optional string package_uid = 2;
+}
+
 // A read-only, platform-native view of the billing concepts needed to present
 // a customer. Consumers should adapt this response at their boundary when they
 // need a legacy API shape rather than introducing legacy concepts here.
@@ -41,10 +48,9 @@ message GetCustomerPresentationResponse {
   sentry_protos.billing.v1.common.v1.PendingChange pending_change = 8;
   sentry_protos.billing.v1.services.package.v1.PackageConfig pending_package = 9;
   repeated sentry_protos.billing.v1.services.engagement.v1.Trial active_trials = 10;
-  repeated string available_trial_line_item_uids = 11;
-  optional string available_trial_package_uid = 12;
-  repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveUnitGrant unit_grants = 13;
-  sentry_protos.billing.v1.Date last_subscription_trial_end = 14;
-  repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveMonetaryGrant monetary_grants = 15;
-  sentry_protos.billing.v1.services.billing_details.v1.BillingDetails billing_details = 16;
+  AvailableTrials available_trials = 11;
+  repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveUnitGrant unit_grants = 12;
+  sentry_protos.billing.v1.Date last_subscription_trial_end = 13;
+  repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveMonetaryGrant monetary_grants = 14;
+  sentry_protos.billing.v1.services.billing_details.v1.BillingDetails billing_details = 15;
 }

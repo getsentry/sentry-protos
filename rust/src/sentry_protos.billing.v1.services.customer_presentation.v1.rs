@@ -13,6 +13,15 @@ pub struct GetCustomerPresentationRequest {
     #[prost(bool, tag = "4")]
     pub include_payment_details: bool,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct AvailableTrials {
+    /// Product trials available for individual line items.
+    #[prost(string, repeated, tag = "1")]
+    pub line_item_uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// The subscription trial available for a package, when eligible.
+    #[prost(string, optional, tag = "2")]
+    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
+}
 /// A read-only, platform-native view of the billing concepts needed to present
 /// a customer. Consumers should adapt this response at their boundary when they
 /// need a legacy API shape rather than introducing legacy concepts here.
@@ -52,25 +61,19 @@ pub struct GetCustomerPresentationResponse {
     >,
     #[prost(message, repeated, tag = "10")]
     pub active_trials: ::prost::alloc::vec::Vec<super::super::engagement::v1::Trial>,
-    #[prost(string, repeated, tag = "11")]
-    pub available_trial_line_item_uids: ::prost::alloc::vec::Vec<
-        ::prost::alloc::string::String,
-    >,
-    #[prost(string, optional, tag = "12")]
-    pub available_trial_package_uid: ::core::option::Option<
-        ::prost::alloc::string::String,
-    >,
-    #[prost(message, repeated, tag = "13")]
+    #[prost(message, optional, tag = "11")]
+    pub available_trials: ::core::option::Option<AvailableTrials>,
+    #[prost(message, repeated, tag = "12")]
     pub unit_grants: ::prost::alloc::vec::Vec<
         super::super::engagement::v1::EffectiveUnitGrant,
     >,
-    #[prost(message, optional, tag = "14")]
+    #[prost(message, optional, tag = "13")]
     pub last_subscription_trial_end: ::core::option::Option<super::super::super::Date>,
-    #[prost(message, repeated, tag = "15")]
+    #[prost(message, repeated, tag = "14")]
     pub monetary_grants: ::prost::alloc::vec::Vec<
         super::super::engagement::v1::EffectiveMonetaryGrant,
     >,
-    #[prost(message, optional, tag = "16")]
+    #[prost(message, optional, tag = "15")]
     pub billing_details: ::core::option::Option<
         super::super::billing_details::v1::BillingDetails,
     >,
