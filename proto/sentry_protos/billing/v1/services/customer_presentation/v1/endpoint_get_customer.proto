@@ -52,11 +52,12 @@ message PendingChangeInfo {
   sentry_protos.billing.v1.services.package.v1.PackageConfig pending_package = 2;
 }
 
-// Fields fetched only when their corresponding request option is enabled.
-message CustomerPresentationDetails {
+message MonetaryDetails {
   repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveMonetaryGrant monetary_grants = 1;
-  sentry_protos.billing.v1.services.billing_details.v1.BillingDetails billing_details = 2;
-  sentry_protos.billing.v1.common.v1.StripePaymentData stripe_payment_data = 3;
+}
+
+message StripeDetails {
+  sentry_protos.billing.v1.common.v1.StripePaymentData stripe_payment_data = 1;
 }
 
 // A read-only, platform-native view of the billing concepts needed to present
@@ -68,7 +69,9 @@ message GetCustomerPresentationResponse {
   sentry_protos.billing.v1.services.rate_card.v1.RateCard rate_card = 4;
   sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse priced_usage = 5;
   sentry_protos.billing.v1.services.account_status.v1.AccountStatus account_status = 6;
-  CustomerPresentationDetails details = 7;
-  PendingChangeInfo pending_change_info = 8;
-  repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveUnitGrant unit_grants = 9;
+  PendingChangeInfo pending_change_info = 7;
+  repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveUnitGrant unit_grants = 8;
+  MonetaryDetails monetary_details = 9;
+  sentry_protos.billing.v1.services.billing_details.v1.BillingDetails billing_details = 10;
+  StripeDetails stripe_details = 11;
 }

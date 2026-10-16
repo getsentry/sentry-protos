@@ -52,18 +52,16 @@ pub struct PendingChangeInfo {
         super::super::package::v1::PackageConfig,
     >,
 }
-/// Fields fetched only when their corresponding request option is enabled.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct CustomerPresentationDetails {
+pub struct MonetaryDetails {
     #[prost(message, repeated, tag = "1")]
     pub monetary_grants: ::prost::alloc::vec::Vec<
         super::super::engagement::v1::EffectiveMonetaryGrant,
     >,
-    #[prost(message, optional, tag = "2")]
-    pub billing_details: ::core::option::Option<
-        super::super::billing_details::v1::BillingDetails,
-    >,
-    #[prost(message, optional, tag = "3")]
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StripeDetails {
+    #[prost(message, optional, tag = "1")]
     pub stripe_payment_data: ::core::option::Option<
         super::super::super::common::v1::StripePaymentData,
     >,
@@ -91,11 +89,17 @@ pub struct GetCustomerPresentationResponse {
         super::super::account_status::v1::AccountStatus,
     >,
     #[prost(message, optional, tag = "7")]
-    pub details: ::core::option::Option<CustomerPresentationDetails>,
-    #[prost(message, optional, tag = "8")]
     pub pending_change_info: ::core::option::Option<PendingChangeInfo>,
-    #[prost(message, repeated, tag = "9")]
+    #[prost(message, repeated, tag = "8")]
     pub unit_grants: ::prost::alloc::vec::Vec<
         super::super::engagement::v1::EffectiveUnitGrant,
     >,
+    #[prost(message, optional, tag = "9")]
+    pub monetary_details: ::core::option::Option<MonetaryDetails>,
+    #[prost(message, optional, tag = "10")]
+    pub billing_details: ::core::option::Option<
+        super::super::billing_details::v1::BillingDetails,
+    >,
+    #[prost(message, optional, tag = "11")]
+    pub stripe_details: ::core::option::Option<StripeDetails>,
 }
