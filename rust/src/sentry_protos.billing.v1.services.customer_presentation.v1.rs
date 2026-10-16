@@ -53,14 +53,14 @@ pub struct PendingChangeInfo {
     >,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MonetaryDetails {
+pub struct MonetaryGrants {
     #[prost(message, repeated, tag = "1")]
-    pub monetary_grants: ::prost::alloc::vec::Vec<
+    pub grants: ::prost::alloc::vec::Vec<
         super::super::engagement::v1::EffectiveMonetaryGrant,
     >,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct StripeDetails {
+pub struct PaymentDetails {
     #[prost(message, optional, tag = "1")]
     pub stripe_payment_data: ::core::option::Option<
         super::super::super::common::v1::StripePaymentData,
@@ -95,11 +95,11 @@ pub struct GetCustomerPresentationResponse {
         super::super::engagement::v1::EffectiveUnitGrant,
     >,
     #[prost(message, optional, tag = "9")]
-    pub monetary_details: ::core::option::Option<MonetaryDetails>,
+    pub monetary_grants: ::core::option::Option<MonetaryGrants>,
     #[prost(message, optional, tag = "10")]
     pub billing_details: ::core::option::Option<
         super::super::billing_details::v1::BillingDetails,
     >,
     #[prost(message, optional, tag = "11")]
-    pub stripe_details: ::core::option::Option<StripeDetails>,
+    pub payment_details: ::core::option::Option<PaymentDetails>,
 }
