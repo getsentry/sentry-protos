@@ -39,8 +39,7 @@ message AvailableTrials {
 }
 
 // A read-only, platform-native view of the billing concepts needed to present
-// a customer. Consumers should adapt this response at their boundary when they
-// need a legacy API shape rather than introducing legacy concepts here.
+// a customer.
 message GetCustomerPresentationResponse {
   sentry_protos.billing.v1.services.contract.v2.Contract contract = 1;
   sentry_protos.billing.v1.services.package.v1.PackageConfig subscribed_package = 2;

@@ -29,8 +29,7 @@ pub struct AvailableTrials {
     pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// A read-only, platform-native view of the billing concepts needed to present
-/// a customer. Consumers should adapt this response at their boundary when they
-/// need a legacy API shape rather than introducing legacy concepts here.
+/// a customer.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetCustomerPresentationResponse {
     #[prost(message, optional, tag = "1")]
