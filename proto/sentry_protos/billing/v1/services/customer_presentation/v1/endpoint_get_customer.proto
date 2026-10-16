@@ -20,8 +20,14 @@ import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_usage_pricer.
 // billing information that callers must authorize independently.
 message GetCustomerPresentationRequest {
   uint64 organization_id = 1;
+  // Fetch monetary grants used to calculate account balance in the legacy
+  // detailed customer response. List responses omit this extra service call.
   bool include_detailed = 2;
+  // Fetch billing contact, address, and tax details. Callers must verify that
+  // the requesting actor has billing access before setting this field.
   bool include_billing_details = 3;
+  // Fetch Stripe customer and card metadata. Callers must verify that the
+  // requesting actor has billing or admin access before setting this field.
   bool include_payment_details = 4;
 }
 

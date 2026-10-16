@@ -6,10 +6,16 @@
 pub struct GetCustomerPresentationRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
+    /// Fetch monetary grants used to calculate account balance in the legacy
+    /// detailed customer response. List responses omit this extra service call.
     #[prost(bool, tag = "2")]
     pub include_detailed: bool,
+    /// Fetch billing contact, address, and tax details. Callers must verify that
+    /// the requesting actor has billing access before setting this field.
     #[prost(bool, tag = "3")]
     pub include_billing_details: bool,
+    /// Fetch Stripe customer and card metadata. Callers must verify that the
+    /// requesting actor has billing or admin access before setting this field.
     #[prost(bool, tag = "4")]
     pub include_payment_details: bool,
 }
