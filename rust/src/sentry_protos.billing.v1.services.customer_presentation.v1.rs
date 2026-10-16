@@ -28,6 +28,30 @@ pub struct AvailableTrials {
     #[prost(string, optional, tag = "2")]
     pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TrialInfo {
+    /// The package supplying feature entitlements while a package trial is active.
+    #[prost(message, optional, tag = "1")]
+    pub trial_package: ::core::option::Option<super::super::package::v1::PackageConfig>,
+    #[prost(message, repeated, tag = "2")]
+    pub active_trials: ::prost::alloc::vec::Vec<super::super::engagement::v1::Trial>,
+    #[prost(message, optional, tag = "3")]
+    pub available_trials: ::core::option::Option<AvailableTrials>,
+    #[prost(message, optional, tag = "4")]
+    pub last_subscription_trial_end: ::core::option::Option<super::super::super::Date>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PendingChangeInfo {
+    #[prost(message, optional, tag = "1")]
+    pub pending_change: ::core::option::Option<
+        super::super::super::common::v1::PendingChange,
+    >,
+    /// The package the contract will use after the pending change, when one is staged.
+    #[prost(message, optional, tag = "2")]
+    pub pending_package: ::core::option::Option<
+        super::super::package::v1::PackageConfig,
+    >,
+}
 /// Fields fetched only when their corresponding request option is enabled.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CustomerPresentationDetails {
@@ -54,10 +78,8 @@ pub struct GetCustomerPresentationResponse {
     pub subscribed_package: ::core::option::Option<
         super::super::package::v1::PackageConfig,
     >,
-    /// The package supplying feature entitlements. This differs from the
-    /// subscribed package while a package trial is active.
     #[prost(message, optional, tag = "3")]
-    pub active_package: ::core::option::Option<super::super::package::v1::PackageConfig>,
+    pub trial_info: ::core::option::Option<TrialInfo>,
     #[prost(message, optional, tag = "4")]
     pub rate_card: ::core::option::Option<super::super::rate_card::v1::RateCard>,
     #[prost(message, optional, tag = "5")]
@@ -71,21 +93,9 @@ pub struct GetCustomerPresentationResponse {
     #[prost(message, optional, tag = "7")]
     pub details: ::core::option::Option<CustomerPresentationDetails>,
     #[prost(message, optional, tag = "8")]
-    pub pending_change: ::core::option::Option<
-        super::super::super::common::v1::PendingChange,
-    >,
-    #[prost(message, optional, tag = "9")]
-    pub pending_package: ::core::option::Option<
-        super::super::package::v1::PackageConfig,
-    >,
-    #[prost(message, repeated, tag = "10")]
-    pub active_trials: ::prost::alloc::vec::Vec<super::super::engagement::v1::Trial>,
-    #[prost(message, optional, tag = "11")]
-    pub available_trials: ::core::option::Option<AvailableTrials>,
-    #[prost(message, repeated, tag = "12")]
+    pub pending_change_info: ::core::option::Option<PendingChangeInfo>,
+    #[prost(message, repeated, tag = "9")]
     pub unit_grants: ::prost::alloc::vec::Vec<
         super::super::engagement::v1::EffectiveUnitGrant,
     >,
-    #[prost(message, optional, tag = "13")]
-    pub last_subscription_trial_end: ::core::option::Option<super::super::super::Date>,
 }

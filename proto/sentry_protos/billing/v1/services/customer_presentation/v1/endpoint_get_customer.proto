@@ -38,6 +38,20 @@ message AvailableTrials {
   optional string package_uid = 2;
 }
 
+message TrialInfo {
+  // The package supplying feature entitlements while a package trial is active.
+  sentry_protos.billing.v1.services.package.v1.PackageConfig trial_package = 1;
+  repeated sentry_protos.billing.v1.services.engagement.v1.Trial active_trials = 2;
+  AvailableTrials available_trials = 3;
+  sentry_protos.billing.v1.Date last_subscription_trial_end = 4;
+}
+
+message PendingChangeInfo {
+  sentry_protos.billing.v1.common.v1.PendingChange pending_change = 1;
+  // The package the contract will use after the pending change, when one is staged.
+  sentry_protos.billing.v1.services.package.v1.PackageConfig pending_package = 2;
+}
+
 // Fields fetched only when their corresponding request option is enabled.
 message CustomerPresentationDetails {
   repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveMonetaryGrant monetary_grants = 1;
@@ -50,17 +64,11 @@ message CustomerPresentationDetails {
 message GetCustomerPresentationResponse {
   sentry_protos.billing.v1.services.contract.v2.Contract contract = 1;
   sentry_protos.billing.v1.services.package.v1.PackageConfig subscribed_package = 2;
-  // The package supplying feature entitlements. This differs from the
-  // subscribed package while a package trial is active.
-  sentry_protos.billing.v1.services.package.v1.PackageConfig active_package = 3;
+  TrialInfo trial_info = 3;
   sentry_protos.billing.v1.services.rate_card.v1.RateCard rate_card = 4;
   sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse priced_usage = 5;
   sentry_protos.billing.v1.services.account_status.v1.AccountStatus account_status = 6;
   CustomerPresentationDetails details = 7;
-  sentry_protos.billing.v1.common.v1.PendingChange pending_change = 8;
-  sentry_protos.billing.v1.services.package.v1.PackageConfig pending_package = 9;
-  repeated sentry_protos.billing.v1.services.engagement.v1.Trial active_trials = 10;
-  AvailableTrials available_trials = 11;
-  repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveUnitGrant unit_grants = 12;
-  sentry_protos.billing.v1.Date last_subscription_trial_end = 13;
+  PendingChangeInfo pending_change_info = 8;
+  repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveUnitGrant unit_grants = 9;
 }
