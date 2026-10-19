@@ -754,6 +754,16 @@ impl EffectiveUnitSource {
         }
     }
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HasCompletedSubscriptionTrialRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HasCompletedSubscriptionTrialResponse {
+    #[prost(bool, tag = "1")]
+    pub has_completed: bool,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RedeemPromoCodeRequest {
     #[prost(string, tag = "1")]
