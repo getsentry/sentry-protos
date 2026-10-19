@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+message HasCompletedSubscriptionTrialRequest {
+  uint64 organization_id = 1;
+}
+
+message HasCompletedSubscriptionTrialResponse {
+  bool has_completed = 1;
+}
