@@ -1,3 +1,9 @@
+## 0.87.0
+
+### New Features ✨
+
+- (billing) Return daily usage breakdowns from the usage pricer by @noahsmartin in [#472](https://github.com/getsentry/sentry-protos/pull/472)
+
 ## 0.86.0
 
 ### New Features ✨
