@@ -1,3 +1,14 @@
+## 0.89.0
+
+### New Features ✨
+
+- (billing) Add customer presentation proto by @hybrendan in [#469](https://github.com/getsentry/sentry-protos/pull/469)
+- Add contracts for invoices batch by @noahsmartin in [#473](https://github.com/getsentry/sentry-protos/pull/473)
+
+### Internal Changes 🔧
+
+- Bump Python to 3.11.17 by @hybrendan in [#474](https://github.com/getsentry/sentry-protos/pull/474)
+
 ## 0.87.0
 
 ### New Features ✨
