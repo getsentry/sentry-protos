@@ -310,6 +310,21 @@ pub struct GetContractResponse {
     #[prost(message, optional, tag = "1")]
     pub contract: ::core::option::Option<Contract>,
 }
+/// Batch-resolves PlatformInvoice ids to the Contract each one created, i.e.
+/// the Contract whose created_invoice it is. Ids that created no Contract, such
+/// as off-cycle invoices, are silently omitted from the response.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetContractsForInvoicesRequest {
+    #[prost(uint64, repeated, tag = "1")]
+    pub invoice_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetContractsForInvoicesResponse {
+    /// Mapping from invoice id to the Contract it created for every invoice that
+    /// created one. Empty when the request supplied no ids or none of them matched.
+    #[prost(map = "uint64, message", tag = "1")]
+    pub contracts: ::std::collections::HashMap<u64, Contract>,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUninvoicedContractsRequest {
     /// Returns Contracts whose current billing period ends before this time and
