@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.customer_presentation.v1;
+
+import "sentry_protos/billing/v1/common/v1/payment_config.proto";
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/account_status/v1/account_status.proto";
+import "sentry_protos/billing/v1/services/billing_details/v1/billing_details.proto";
+import "sentry_protos/billing/v1/services/contract/v2/contract.proto";
+import "sentry_protos/billing/v1/services/engagement/v1/endpoint_get_active_trials.proto";
+import "sentry_protos/billing/v1/services/engagement/v1/endpoint_get_monetary_grants.proto";
+import "sentry_protos/billing/v1/services/engagement/v1/endpoint_get_unit_grants.proto";
+import "sentry_protos/billing/v1/services/package/v1/package.proto";
+import "sentry_protos/billing/v1/services/rate_card/v1/rate_card.proto";
+import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_usage_pricer.proto";
+
+// Selects the platform-native customer billing presentation. Additional fields
+// are opt-in because they require extra service calls and may contain sensitive
+// billing information that callers must authorize independently.
+message GetCustomerPresentationRequest {
+  uint64 organization_id = 1;
+  // Fetch monetary grants. The legacy customer response uses them to calculate
+  // account balance; callers that do not need grants omit this extra service call.
+  bool include_monetary_grants = 2;
+  // Fetch billing contact, address, and tax details. Callers must verify that
+  // the requesting actor has billing access before setting this field.
+  bool include_billing_details = 3;
+  // Fetch Stripe customer and card metadata. Callers must verify that the
+  // requesting actor has billing or admin access before setting this field.
+  bool include_payment_details = 4;
+}
+
+message AvailableTrials {
+  // Product trials available for individual line items.
+  repeated string line_item_uids = 1;
+  // The subscription trial available for a package, when eligible.
+  optional string package_uid = 2;
+}
+
+message TrialInfo {
+  // The package supplying feature entitlements while a package trial is active.
+  sentry_protos.billing.v1.services.package.v1.PackageConfig trial_package = 1;
+  repeated sentry_protos.billing.v1.services.engagement.v1.Trial active_trials = 2;
+  AvailableTrials available_trials = 3;
+  sentry_protos.billing.v1.Date last_subscription_trial_end = 4;
+}
+
+message PendingChangeInfo {
+  sentry_protos.billing.v1.common.v1.PendingChange pending_change = 1;
+  // The package the contract will use after the pending change, when one is staged.
+  sentry_protos.billing.v1.services.package.v1.PackageConfig pending_package = 2;
+}
+
+message MonetaryGrants {
+  repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveMonetaryGrant grants = 1;
+}
+
+message PaymentDetails {
+  sentry_protos.billing.v1.common.v1.StripePaymentData stripe_payment_data = 1;
+}
+
+// A read-only, platform-native view of the billing concepts needed to present
+// a customer.
+message GetCustomerPresentationResponse {
+  sentry_protos.billing.v1.services.contract.v2.Contract contract = 1;
+  sentry_protos.billing.v1.services.package.v1.PackageConfig subscribed_package = 2;
+  TrialInfo trial_info = 3;
+  sentry_protos.billing.v1.services.rate_card.v1.RateCard rate_card = 4;
+  sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse priced_usage = 5;
+  sentry_protos.billing.v1.services.account_status.v1.AccountStatus account_status = 6;
+  PendingChangeInfo pending_change_info = 7;
+  repeated sentry_protos.billing.v1.services.engagement.v1.EffectiveUnitGrant unit_grants = 8;
+  MonetaryGrants monetary_grants = 9;
+  sentry_protos.billing.v1.services.billing_details.v1.BillingDetails billing_details = 10;
+  PaymentDetails payment_details = 11;
+}
