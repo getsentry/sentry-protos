@@ -32,8 +32,12 @@ message BillOffCycleInvoiceResponse {
   uint64 invoice_id = 1;
   string invoice_guid = 2;
   bool paid = 3;
-  // Empty when paid, or when the key matched an existing invoice.
+  // Empty when paid. A repeated key makes no charge; the field is then
+  // "action_required" if a 3D Secure challenge is still open, and empty
+  // otherwise. The customer finishes an open challenge through Pay Now.
   string failure_code = 4;
   // Set when Stripe requires 3D Secure; finish it with ConfirmInvoicePayment.
+  // Never set for a repeated key, because the Stripe client secret is not
+  // stored.
   optional sentry_protos.billing.v1.common.v1.StripeVerification verification = 5;
 }

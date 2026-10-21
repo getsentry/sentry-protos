@@ -77,10 +77,14 @@ pub struct BillOffCycleInvoiceResponse {
     pub invoice_guid: ::prost::alloc::string::String,
     #[prost(bool, tag = "3")]
     pub paid: bool,
-    /// Empty when paid, or when the key matched an existing invoice.
+    /// Empty when paid. A repeated key makes no charge; the field is then
+    /// "action_required" if a 3D Secure challenge is still open, and empty
+    /// otherwise. The customer finishes an open challenge through Pay Now.
     #[prost(string, tag = "4")]
     pub failure_code: ::prost::alloc::string::String,
     /// Set when Stripe requires 3D Secure; finish it with ConfirmInvoicePayment.
+    /// Never set for a repeated key, because the Stripe client secret is not
+    /// stored.
     #[prost(message, optional, tag = "5")]
     pub verification: ::core::option::Option<
         super::super::super::common::v1::StripeVerification,
