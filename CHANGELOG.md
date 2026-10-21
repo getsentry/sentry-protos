@@ -1,3 +1,9 @@
+## 0.88.0
+
+### New Features ✨
+
+- Add contracts for invoices batch by @noahsmartin in [#473](https://github.com/getsentry/sentry-protos/pull/473)
+
 ## 0.87.0
 
 ### New Features ✨
