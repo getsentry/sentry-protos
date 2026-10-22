@@ -9,10 +9,15 @@ pub struct BillingAlertEvaluationRequested {
         super::super::usage_pricer::v1::UsagePricerResponse,
     >,
 }
-/// Future: uint64 old_contract_id = 1;
-/// Future: uint64 new_contract_id = 2;
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct ContractRolledOver {}
+pub struct ContractRolledOver {
+    /// The contract that was closed by the rollover.
+    #[prost(uint64, tag = "1")]
+    pub old_contract_id: u64,
+    /// The contract the rollover created to replace it.
+    #[prost(uint64, tag = "2")]
+    pub new_contract_id: u64,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationOverUsage {}
 /// Published when an organization's contract moves to a different package, e.g. a
