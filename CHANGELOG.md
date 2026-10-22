@@ -1,3 +1,9 @@
+## 0.90.0
+
+### New Features ✨
+
+- (billing) Add contract ids to ContractRolledOver by @noahsmartin in [#475](https://github.com/getsentry/sentry-protos/pull/475)
+
 ## 0.89.0
 
 ### New Features ✨
