@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_feature_billing.v1;
+
+message GetIsFreeSeerFeatureRequest {
+  // A Seer feature string, as recorded in LLM proxy cost data.
+  string feature_id = 1;
+}
+
+message GetIsFreeSeerFeatureResponse {
+  // True when usage of the feature is never billed for any organization.
+  bool is_free = 1;
+}
