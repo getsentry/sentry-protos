@@ -4,12 +4,10 @@ pub struct GetIsFreeSeerFeatureRequest {
     /// A Seer feature string, as recorded in LLM proxy cost data.
     #[prost(string, tag = "1")]
     pub feature_id: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    pub organization_id: u64,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetIsFreeSeerFeatureResponse {
-    /// True when usage of the feature is never billed for the organization.
+    /// True when usage of the feature is never billed for any organization.
     #[prost(bool, tag = "1")]
     pub is_free: bool,
 }
