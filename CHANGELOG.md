@@ -1,3 +1,13 @@
+## 0.91.0
+
+### New Features ✨
+
+- (billing) Add seer feature billing service protos by @volokluev in [#477](https://github.com/getsentry/sentry-protos/pull/477)
+
+### Bug Fixes 🐛
+
+- (ci) Authenticate setup-protoc to avoid GitHub API rate limits by @volokluev in [#478](https://github.com/getsentry/sentry-protos/pull/478)
+
 ## 0.90.0
 
 ### New Features ✨
