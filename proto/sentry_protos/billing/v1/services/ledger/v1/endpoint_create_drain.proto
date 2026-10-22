@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// The caller sends period-to-date totals. The ledger subtracts the account's
+// last_drain totals to get the entry amounts. When contract_id is different
+// from last_drain, the subtraction starts from zero.
+message CreateDrainRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  // Must equal last_drain.drain_seq. A mismatch is an error, so an old or
+  // concurrent drain cannot replace a newer watermark.
+  uint64 expected_drain_seq = 3;
+  // drain_seq is ignored. usage_end_ts must not be before
+  // last_drain.usage_end_ts.
+  DrainWatermark watermark = 4;
+}
+
+message CreateDrainResponse {
+  // Not set when both the units and the cents changes are zero. The watermark
+  // still moves forward.
+  optional LedgerEntry entry = 1;
+  LedgerAccount account = 2;
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// Returns entries newest first.
+message ListEntriesRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  // Empty means all kinds.
+  repeated LedgerEntryKind kinds = 3;
+  // Empty means all statuses.
+  repeated LedgerEntryStatus statuses = 4;
+  // 0 means 100. The maximum is 1000.
+  uint32 limit = 5;
+  // Return only entries with an id lower than this.
+  optional uint64 before_id = 6;
+}
+
+message ListEntriesResponse {
+  repeated LedgerEntry entries = 1;
+  // Not set on the last page.
+  optional uint64 next_before_id = 2;
+}

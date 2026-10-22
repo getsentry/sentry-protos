@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// Sums top-ups created in [start, end).
+message GetTopUpTotalRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  google.protobuf.Timestamp start = 3;
+  google.protobuf.Timestamp end = 4;
+  // Empty means all statuses.
+  repeated LedgerEntryStatus statuses = 5;
+}
+
+message GetTopUpTotalResponse {
+  uint64 amount_cents = 1;
+  uint64 line_item_unit_count = 2;
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.wallet_top_up_config.v1;
+
+import "sentry_protos/billing/v1/services/wallet_top_up_config/v1/wallet_top_up_config.proto";
+
+// Returns configs for all organizations.
+message ListTopUpConfigsRequest {
+  bool enabled_only = 1;
+  // 0 means 100. The maximum is 1000.
+  uint32 limit = 2;
+  // Return only configs with an id higher than this.
+  optional uint64 after_id = 3;
+}
+
+message ListTopUpConfigsResponse {
+  repeated TopUpConfig configs = 1;
+  // Not set on the last page.
+  optional uint64 next_after_id = 2;
+}

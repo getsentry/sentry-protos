@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.wallet.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/stripe_verification.proto";
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+message WalletBalance {
+  // Ledger balance minus usage that is not drained yet. Can be negative.
+  int64 balance_units = 1;
+  // balance_units at the current price per credit. For display only.
+  int64 balance_cents = 2;
+  // Usage after the last drain, included in balance_units.
+  int64 undrained_units = 3;
+  // undrained_units as priced by the usage pricer.
+  int64 undrained_cents = 4;
+  google.protobuf.Timestamp as_of = 5;
+  // Not included in balance_units until the invoice is paid.
+  optional sentry_protos.billing.v1.services.ledger.v1.LedgerEntry pending_top_up = 6;
+}
+
+message TopUpResult {
+  sentry_protos.billing.v1.services.ledger.v1.LedgerEntry entry = 1;
+  bool paid = 2;
+  // From the invoicer. Empty when paid.
+  string failure_code = 3;
+  // Set when Stripe requires 3D Secure. The customer finishes it with Pay Now.
+  optional sentry_protos.billing.v1.common.v1.StripeVerification verification = 4;
+}

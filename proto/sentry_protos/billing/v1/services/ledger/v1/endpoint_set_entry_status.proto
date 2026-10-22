@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// Allowed changes: PENDING to APPROVED or REJECTED, and REJECTED to APPROVED.
+// Setting the status an entry already has does nothing. Any other change is
+// an error.
+message SetEntryStatusRequest {
+  uint64 organization_id = 1;
+  uint64 entry_id = 2;
+  LedgerEntryStatus status = 3;
+  // Required when status is REJECTED.
+  optional string rejection_reason = 4;
+}
+
+message SetEntryStatusResponse {
+  LedgerEntry entry = 1;
+}

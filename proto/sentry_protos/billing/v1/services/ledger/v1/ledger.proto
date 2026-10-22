@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum LedgerEntryKind {
+  LEDGER_ENTRY_KIND_UNSPECIFIED = 0;
+  // Credits bought with an invoice.
+  LEDGER_ENTRY_KIND_TOP_UP = 1;
+  // Credits used by priced usage.
+  LEDGER_ENTRY_KIND_DRAIN = 2;
+  // Manual correction, for example a refund or a goodwill grant.
+  LEDGER_ENTRY_KIND_ADJUSTMENT = 3;
+}
+
+enum LedgerEntryStatus {
+  LEDGER_ENTRY_STATUS_UNSPECIFIED = 0;
+  // A top-up whose invoice is not paid yet. It does not count toward the balance.
+  LEDGER_ENTRY_STATUS_PENDING = 1;
+  LEDGER_ENTRY_STATUS_APPROVED = 2;
+  // A top-up whose invoice failed or was not eligible. It can still become
+  // APPROVED, because the customer can pay a failed invoice later.
+  LEDGER_ENTRY_STATUS_REJECTED = 3;
+}
+
+message TransactionMeta {
+  string line_item_uid = 1;
+  // Credits. Positive adds to the balance, negative removes from it.
+  int64 line_item_unit_count = 2;
+  // Set on drains only.
+  optional google.protobuf.Timestamp usage_start_ts = 3;
+  optional google.protobuf.Timestamp usage_end_ts = 4;
+}
+
+// Period-to-date totals for one contract, at the end of a drain. The next drain
+// subtracts these from new totals. Pricing only the new usage would apply
+// reserved volume and unit grants again.
+message DrainWatermark {
+  uint64 contract_id = 1;
+  google.protobuf.Timestamp usage_end_ts = 2;
+  int64 period_units = 3;
+  int64 period_cents = 4;
+  // Set by the ledger. Increases by one on each drain. Callers send it back as
+  // CreateDrainRequest.expected_drain_seq. usage_end_ts cannot do this job,
+  // because it does not move when no new usage arrives.
+  uint64 drain_seq = 5;
+}
+
+message LedgerEntry {
+  uint64 id = 1;
+  uint64 organization_id = 2;
+  string account_id = 3;
+  LedgerEntryKind kind = 4;
+  LedgerEntryStatus status = 5;
+  // Money. Positive for a top-up. Usually negative for a drain, as the priced
+  // value of the usage. A usage correction can make a drain positive.
+  int64 amount_cents = 6;
+  // Millionths of a US dollar per credit, when the entry was written. Set on
+  // top-ups only. Stored because the price can change later.
+  optional uint64 unit_price_micros = 7;
+  // Set on top-ups after the invoice exists.
+  optional uint64 invoice_id = 8;
+  optional string invoice_guid = 9;
+  // The caller's key for top-ups and adjustments. The ledger makes the key for
+  // drains from drain_seq.
+  string idempotency_key = 10;
+  google.protobuf.Timestamp created_at = 11;
+  TransactionMeta meta = 12;
+  // Set on drains only. Its usage_end_ts is the same as meta.usage_end_ts.
+  optional DrainWatermark drain_watermark = 13;
+  // Set when status is REJECTED.
+  optional string rejection_reason = 14;
+}
+
+// One wallet.
+message LedgerAccount {
+  uint64 organization_id = 1;
+  // A name the caller chooses, unique per organization. One organization can
+  // have more than one wallet.
+  string account_id = 2;
+  // The line item whose usage drains this wallet.
+  string line_item_uid = 3;
+  // Sum of APPROVED entries. Usage after last_drain is not included.
+  int64 balance_units = 4;
+  // Set when the account is created, so usage from before the wallet existed
+  // is not drained.
+  DrainWatermark last_drain = 5;
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.wallet.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// Writes a drain entry for usage since the last drain. If the contract changed
+// since the last drain, it first writes a final drain for the old contract.
+// Does not top up. The caller calls MaybeTopUp after.
+message DrainRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+}
+
+message DrainResponse {
+  // Empty when there was no new usage.
+  repeated sentry_protos.billing.v1.services.ledger.v1.LedgerEntry entries = 1;
+}

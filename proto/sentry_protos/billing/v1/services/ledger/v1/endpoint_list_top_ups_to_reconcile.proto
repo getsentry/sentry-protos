@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// Returns top-ups for all organizations, oldest first. Used by the reconcile
+// task. Includes REJECTED top-ups that have an invoice, because the customer
+// can still pay that invoice.
+message ListTopUpsToReconcileRequest {
+  // Skips entries a running top-up may still finish.
+  google.protobuf.Timestamp created_before = 1;
+  // Skips REJECTED entries older than this.
+  google.protobuf.Timestamp rejected_created_after = 2;
+  // 0 means 100. The maximum is 1000.
+  uint32 limit = 3;
+  // Return only entries with an id higher than this.
+  optional uint64 after_id = 4;
+}
+
+message ListTopUpsToReconcileResponse {
+  repeated LedgerEntry entries = 1;
+  // Not set on the last page.
+  optional uint64 next_after_id = 2;
+}

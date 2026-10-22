@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.wallet.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// Creates the ledger account. Its starting watermark is the current
+// period-to-date usage, so usage from before the wallet existed is not drained.
+// Calling it for an existing wallet returns that wallet.
+message CreateWalletRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  string line_item_uid = 3;
+}
+
+message CreateWalletResponse {
+  sentry_protos.billing.v1.services.ledger.v1.LedgerAccount account = 1;
+  bool created = 2;
+}

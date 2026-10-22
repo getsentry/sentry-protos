@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.wallet.v1;
+
+import "sentry_protos/billing/v1/services/wallet/v1/wallet.proto";
+
+// Buys credits now, without checking the threshold. Spend limits still apply.
+// Fails with an error when another top-up is PENDING.
+message TopUpRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  uint64 amount_cents = 3;
+  // Unique per account. A repeated key returns the first call's result without
+  // charging again, and ignores the other request fields.
+  string idempotency_key = 4;
+}
+
+message TopUpResponse {
+  TopUpResult result = 1;
+}

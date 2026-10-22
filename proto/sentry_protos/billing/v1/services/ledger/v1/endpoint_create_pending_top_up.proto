@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+enum CreatePendingTopUpOutcome {
+  CREATE_PENDING_TOP_UP_OUTCOME_UNSPECIFIED = 0;
+  CREATE_PENDING_TOP_UP_OUTCOME_CREATED = 1;
+  // The key matched an entry. The other request fields are ignored.
+  CREATE_PENDING_TOP_UP_OUTCOME_REPLAY = 2;
+  // The account already has a PENDING top-up with a different key. Do not bill
+  // the returned entry with this request's amount.
+  CREATE_PENDING_TOP_UP_OUTCOME_OTHER_PENDING = 3;
+}
+
+// Writes a PENDING top-up before the invoice is created, so a crash after
+// billing leaves a record to reconcile.
+message CreatePendingTopUpRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  // Unique per account.
+  string idempotency_key = 3;
+  uint64 amount_cents = 4;
+  uint64 line_item_unit_count = 5;
+  uint64 unit_price_micros = 6;
+}
+
+message CreatePendingTopUpResponse {
+  LedgerEntry entry = 1;
+  CreatePendingTopUpOutcome outcome = 2;
+}

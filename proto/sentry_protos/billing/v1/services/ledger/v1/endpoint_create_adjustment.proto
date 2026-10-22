@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// Writes an APPROVED entry that changes the balance directly.
+message CreateAdjustmentRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  // Unique per account. A repeated key returns the existing entry and ignores
+  // the other request fields.
+  string idempotency_key = 3;
+  int64 amount_cents = 4;
+  int64 line_item_unit_count = 5;
+  string reason = 6;
+}
+
+message CreateAdjustmentResponse {
+  LedgerEntry entry = 1;
+  bool created = 2;
+}
