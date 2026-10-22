@@ -80,6 +80,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.invoicer.v2.rs");
                     }
                 }
+                pub mod ledger {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.ledger.v1.rs");
+                    }
+                }
                 pub mod package {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.package.v1.rs");
@@ -133,6 +138,16 @@ pub mod sentry_protos {
                 pub mod usage_pricer {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.usage_pricer.v1.rs");
+                    }
+                }
+                pub mod wallet {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.wallet.v1.rs");
+                    }
+                }
+                pub mod wallet_top_up_config {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.wallet_top_up_config.v1.rs");
                     }
                 }
             }

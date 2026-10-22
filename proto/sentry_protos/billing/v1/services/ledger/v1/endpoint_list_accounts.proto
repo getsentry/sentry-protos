@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// Returns accounts for all organizations. Used by the drain task, which must
+// drain every wallet, also wallets with no auto top-up.
+message ListAccountsRequest {
+  // 0 means 100. The maximum is 1000.
+  uint32 limit = 1;
+  // Return only accounts with an id higher than this.
+  optional uint64 after_id = 2;
+}
+
+message ListAccountsResponse {
+  repeated LedgerAccount accounts = 1;
+  // Not set on the last page.
+  optional uint64 next_after_id = 2;
+}

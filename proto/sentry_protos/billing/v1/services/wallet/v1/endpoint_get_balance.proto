@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.wallet.v1;
+
+import "sentry_protos/billing/v1/services/wallet/v1/wallet.proto";
+
+// Fails with an error when the wallet does not exist.
+message GetBalanceRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+}
+
+message GetBalanceResponse {
+  WalletBalance balance = 1;
+}

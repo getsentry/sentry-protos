@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.wallet.v1;
+
+import "sentry_protos/billing/v1/services/wallet/v1/wallet.proto";
+
+enum TopUpSkipReason {
+  TOP_UP_SKIP_REASON_UNSPECIFIED = 0;
+  TOP_UP_SKIP_REASON_NOT_CONFIGURED = 1;
+  TOP_UP_SKIP_REASON_DISABLED = 2;
+  TOP_UP_SKIP_REASON_ABOVE_THRESHOLD = 3;
+  // A top-up is already PENDING for the account.
+  TOP_UP_SKIP_REASON_TOP_UP_PENDING = 4;
+  // The amount left under the spend limits is less than the minimum charge.
+  TOP_UP_SKIP_REASON_SPEND_LIMIT_REACHED = 5;
+  // A recent auto top-up was REJECTED. Trying again on each run would open a
+  // new invoice each time.
+  TOP_UP_SKIP_REASON_RECENT_FAILURE = 6;
+}
+
+// Tops up by the configured amount if the balance is below the threshold.
+message MaybeTopUpRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+}
+
+message MaybeTopUpResponse {
+  oneof outcome {
+    TopUpResult result = 1;
+    TopUpSkipReason skip_reason = 2;
+  }
+}

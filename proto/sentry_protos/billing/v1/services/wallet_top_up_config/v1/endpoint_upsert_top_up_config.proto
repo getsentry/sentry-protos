@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.wallet_top_up_config.v1;
+
+import "sentry_protos/billing/v1/services/wallet_top_up_config/v1/wallet_top_up_config.proto";
+
+// Replaces the whole config, including spend limits. Omit a limit to remove it.
+// There is no version check, so the last of two concurrent writes wins.
+message UpsertTopUpConfigRequest {
+  TopUpConfig config = 1;
+}
+
+message UpsertTopUpConfigResponse {
+  TopUpConfig config = 1;
+}

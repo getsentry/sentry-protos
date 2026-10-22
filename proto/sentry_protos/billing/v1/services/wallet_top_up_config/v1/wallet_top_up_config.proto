@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.wallet_top_up_config.v1;
+
+enum SpendLimitType {
+  SPEND_LIMIT_TYPE_UNSPECIFIED = 0;
+  // Top-ups created in the current calendar month, UTC.
+  SPEND_LIMIT_TYPE_MONTHLY = 1;
+}
+
+message SpendLimit {
+  SpendLimitType type = 1;
+  uint64 amount_cents = 2;
+}
+
+message TopUpConfig {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  bool enabled = 3;
+  // Top up when the balance in credits goes below this.
+  int64 threshold_units = 4;
+  uint64 top_up_amount_cents = 5;
+  // At most one limit per type. A top-up that goes over any limit is reduced
+  // or skipped.
+  repeated SpendLimit spend_limits = 6;
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// Recording the same invoice again does nothing. A different invoice is an
+// error.
+message RecordTopUpInvoiceRequest {
+  uint64 organization_id = 1;
+  uint64 entry_id = 2;
+  uint64 invoice_id = 3;
+  string invoice_guid = 4;
+}
+
+message RecordTopUpInvoiceResponse {
+  LedgerEntry entry = 1;
+}

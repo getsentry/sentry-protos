@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.ledger.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+message GetOrCreateAccountRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  // line_item_uid and initial_watermark are used only when the account is
+  // created. An existing account keeps its values.
+  string line_item_uid = 3;
+  // Period-to-date totals when the wallet is created. drain_seq is ignored.
+  DrainWatermark initial_watermark = 4;
+}
+
+message GetOrCreateAccountResponse {
+  LedgerAccount account = 1;
+  bool created = 2;
+}

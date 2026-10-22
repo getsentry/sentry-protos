@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.wallet.v1;
+
+import "sentry_protos/billing/v1/services/ledger/v1/ledger.proto";
+
+// Updates a PENDING or REJECTED top-up. With no invoice, it bills again with
+// the same idempotency key, which does not charge twice. With an invoice, it
+// reads the invoice: paid gives APPROVED, retries used up gives REJECTED,
+// otherwise the status does not change.
+message ReconcileTopUpRequest {
+  uint64 organization_id = 1;
+  uint64 entry_id = 2;
+}
+
+message ReconcileTopUpResponse {
+  sentry_protos.billing.v1.services.ledger.v1.LedgerEntry entry = 1;
+}
