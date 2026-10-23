@@ -35,6 +35,11 @@ pub mod sentry_protos {
                     }
                 }
                 pub mod contract {
+                    pub mod ledger {
+                        pub mod v1 {
+                            include!("sentry_protos.billing.v1.services.contract.ledger.v1.rs");
+                        }
+                    }
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.contract.v1.rs");
                     }
