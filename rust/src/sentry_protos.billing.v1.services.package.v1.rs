@@ -222,6 +222,15 @@ pub struct GetPackageResponse {
     #[prost(message, optional, tag = "1")]
     pub package_config: ::core::option::Option<PackageConfig>,
 }
+/// The package a sponsorship grants.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SponsoredPackageOption {
+    #[prost(enumeration = "super::super::super::common::v1::SponsoredType", tag = "1")]
+    pub sponsored_type: i32,
+    /// uid of the granted option within the catalog's `packages`.
+    #[prost(string, tag = "2")]
+    pub package_uid: ::prost::alloc::string::String,
+}
 /// A package a customer can subscribe to, such as the Team or Business package.
 /// Carries only what a catalog needs beyond a bare reference; fetch full details
 /// (title, pricing, supported intervals) with GetPackage / GetPackages.
@@ -253,6 +262,12 @@ pub struct PackageCatalog {
     /// uid of the default option within `packages`: the one checkout pre-selects.
     #[prost(string, tag = "3")]
     pub default_package_uid: ::prost::alloc::string::String,
+    /// The package each sponsorship grants, at most one per sponsored type. A
+    /// sponsored type with no entry cannot be granted from this catalog, such as a
+    /// partner sponsorship provisioned by the partner. Empty on catalogs of older
+    /// package generations, which no longer take on new sponsorships.
+    #[prost(message, repeated, tag = "4")]
+    pub sponsored_packages: ::prost::alloc::vec::Vec<SponsoredPackageOption>,
 }
 /// How a customer can start on a package.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

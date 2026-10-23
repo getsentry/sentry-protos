@@ -5,7 +5,9 @@
 /// the credit for unused time on the current plan itself, settles accrued
 /// pay-as-you-go usage at the current contract's rates, applies monetary grants
 /// and sales tax, closes the current contract immediately, and opens the new
-/// contract with the supplied change applied.
+/// contract with the supplied change applied. When the credit for unused time
+/// exceeds the invoice's charges, as it can on a move onto a cheaper package,
+/// the surplus is added to the new contract's balance rather than forgiven.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BillContractChangeRequest {
     #[prost(uint64, tag = "1")]
