@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.ledger.v1;
+
+import "google/protobuf/timestamp.proto";
+
+enum LedgerEntryType {
+  LEDGER_ENTRY_TYPE_UNSPECIFIED = 0;
+  // Credit bought through an invoice. It adds to the balance only after the
+  // invoice is paid.
+  LEDGER_ENTRY_TYPE_DEPOSIT = 1;
+  // Credit used, e.g. the credit-only usage tallied at contract rollover.
+  LEDGER_ENTRY_TYPE_WITHDRAWAL = 2;
+  // A manual correction, such as a refund. It can be positive or negative.
+  LEDGER_ENTRY_TYPE_ADJUSTMENT = 3;
+}
+
+// One row of an account's transaction history. Entries are append-only.
+message LedgerEntry {
+  uint64 id = 1;
+  uint64 organization_id = 2;
+  // Identifies one balance among the organization's accounts, e.g. "seer".
+  string account_id = 3;
+  // The organization's contract when the entry was written, if it had one.
+  optional uint64 contract_id = 4;
+  // Signed: deposits are positive, withdrawals are negative or zero.
+  int64 amount_cents = 5;
+  LedgerEntryType entry_type = 6;
+  // The invoice that pays for a deposit, or that an adjustment refers to.
+  optional uint64 invoice_id = 7;
+  google.protobuf.Timestamp date_added = 8;
+  optional string idempotency_key = 9;
+  optional string description = 10;
+  // False only for a deposit whose invoice is not paid yet. Such an entry
+  // does not count toward the balance.
+  bool counts_toward_balance = 11;
+}
