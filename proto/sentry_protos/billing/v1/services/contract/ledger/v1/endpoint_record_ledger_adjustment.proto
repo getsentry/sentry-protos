@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.ledger.v1;
+
+import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_entry.proto";
+
+// Records a manual correction. A refund is a negative adjustment: the refunded
+// invoice stays paid, so its deposit still counts and the adjustment cancels
+// it. Unlike a withdrawal, an adjustment can make the balance negative.
+message RecordLedgerAdjustmentRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  // Must not be zero.
+  int64 amount_cents = 3;
+  // Unique per organization and account_id. A repeated key writes nothing
+  // and returns the existing entry with created=false.
+  string idempotency_key = 4;
+  // Required, so that the ledger shows why the balance changed.
+  string description = 5;
+  // The invoice the adjustment refers to, e.g. the refunded one.
+  optional uint64 invoice_id = 6;
+}
+
+message RecordLedgerAdjustmentResponse {
+  LedgerEntry entry = 1;
+  bool created = 2;
+  // The balance after the adjustment.
+  int64 balance_cents = 3;
+}
