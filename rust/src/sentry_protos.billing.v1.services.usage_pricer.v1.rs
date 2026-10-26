@@ -151,11 +151,11 @@ pub struct LineItemUsageSummary {
     /// both reserved and PAYG usage (in the line item's units).
     #[prost(uint64, tag = "9")]
     pub non_granted_quantity: u64,
-    /// True when pre-cap PAYG spend exceeds the applicable budget and must be
-    /// reduced. For an all-items budget, reflects overflow of the entire budget.
+    /// True when pre-cap PAYG spend exceeds the effective PAYG allowance.
+    /// Missing budgets and disabled PAYG allow zero spend. For an all-items
+    /// budget, reflects overflow of the entire budget.
     /// Exactly consuming the budget exhausts it without exceeding it.
-    /// False when no PAYG budget applies; this alone does not establish PAYG
-    /// eligibility.
+    /// False does not establish PAYG eligibility when there is no priced usage.
     #[prost(bool, tag = "10")]
     pub exceeded_payg_budget: bool,
 }
