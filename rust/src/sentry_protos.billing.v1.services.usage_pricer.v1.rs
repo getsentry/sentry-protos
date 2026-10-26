@@ -123,6 +123,7 @@ pub struct LineItemUsageSummary {
     #[prost(uint64, tag = "3")]
     pub quantity: u64,
     /// Whether the usage pricer had to cap the spend based on the budget set by the contract
+    #[deprecated]
     #[prost(bool, tag = "4")]
     pub payg_budget_exhausted: bool,
     /// false when this line item still has reserved quantity left.
@@ -130,6 +131,7 @@ pub struct LineItemUsageSummary {
     /// Example: there's an overall PAYG budget of $10, a customer sends $10 worth of errors
     /// the payg_budget_exhausted field is true for all line items
     /// however, the plan still includes 5GB of free logs, so reserved_budget_exhausted is false for logs.
+    #[deprecated]
     #[prost(bool, tag = "5")]
     pub reserved_budget_exhausted: bool,
     /// Total units consumed by this line item in the billing period, including
@@ -166,9 +168,11 @@ pub struct SharedLineItemUsageSummary {
     #[prost(message, repeated, tag = "2")]
     pub line_item_summaries: ::prost::alloc::vec::Vec<LineItemUsageSummary>,
     /// Whether the usage pricer had to cap the spend based on the budget set by the contract
+    #[deprecated]
     #[prost(bool, tag = "3")]
     pub payg_budget_exhausted: bool,
     /// false when this pool still has reserved quantity left.
+    #[deprecated]
     #[prost(bool, tag = "4")]
     pub reserved_budget_exhausted: bool,
     /// True when any member of this pool can continue accepting usage.
