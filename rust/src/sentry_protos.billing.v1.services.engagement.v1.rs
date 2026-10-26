@@ -778,6 +778,18 @@ pub struct RedeemPromoCodeResponse {
     #[prost(string, optional, tag = "6")]
     pub campaign: ::core::option::Option<::prost::alloc::string::String>,
 }
+/// Clears an organization's ended subscription trials so it can start another.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ResetSubscriptionTrialRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ResetSubscriptionTrialResponse {
+    /// Whether any ended subscription trial was cleared.
+    #[prost(bool, tag = "1")]
+    pub reset: bool,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverMonetaryGrantsRequest {
     #[prost(uint64, tag = "1")]
