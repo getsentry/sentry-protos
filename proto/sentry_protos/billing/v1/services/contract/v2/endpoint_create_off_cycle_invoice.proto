@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v2;
 
 import "sentry_protos/billing/v1/common/v1/address.proto";
+import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_deposit.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 
 // Writes an organization-scoped invoice outside of any contract, ready for the
@@ -29,6 +30,9 @@ message CreateOffCycleInvoiceRequest {
   // The tax document the provider opened for this invoice, if any.
   optional string tax_transaction_code = 8;
   bool is_reverse_charge = 9;
+  // Required. The credit the invoice buys. A repeated idempotency_key returns
+  // the existing invoice and writes no second deposit.
+  sentry_protos.billing.v1.services.contract.ledger.v1.LedgerDeposit ledger_deposit = 10;
 }
 
 message CreateOffCycleInvoiceResponse {

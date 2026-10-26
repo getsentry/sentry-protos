@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.ledger.v1;
+
+// Credit that an off-cycle invoice buys. The deposit is written in the same
+// transaction as the invoice, so a crash can not leave a charge without its
+// credit. It counts toward the balance once the invoice is paid.
+message LedgerDeposit {
+  // 1 to 64 characters.
+  string account_id = 1;
+  // The credit bought. Must be positive and at most the invoice's total
+  // before tax.
+  uint64 amount_cents = 2;
+  // At most 256 characters.
+  optional string description = 3;
+}
