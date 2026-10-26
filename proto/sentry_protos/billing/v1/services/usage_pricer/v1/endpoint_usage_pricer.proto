@@ -95,11 +95,9 @@ message LineItemUsageSummary {
   // both reserved and PAYG usage (in the line item's units).
   uint64 non_granted_quantity = 9;
 
-  // True when pre-cap PAYG spend exceeds the effective PAYG allowance.
-  // Missing budgets and disabled PAYG allow zero spend. For an all-items
-  // budget, reflects overflow of the entire budget.
-  // Exactly consuming the budget exhausts it without exceeding it.
-  // False does not establish PAYG eligibility when there is no priced usage.
+  // True when PAYG spend is greater than the budget.
+  // For example, a $1 allocation against a $1 budget returns false.
+  // For an all-items budget, compares the total spend across its line items.
   bool exceeded_payg_budget = 10;
 }
 
@@ -119,8 +117,7 @@ message SharedLineItemUsageSummary {
   // True when any member of this pool can continue accepting usage.
   bool has_remaining_capacity = 5;
 
-  // True when any member's applicable PAYG budget was exceeded.
-  // Exactly consuming a budget exhausts it without exceeding it.
+  // True when any member's PAYG spend is greater than its budget.
   bool exceeded_payg_budget = 6;
 }
 
