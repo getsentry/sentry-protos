@@ -29,7 +29,7 @@ pub struct LedgerEntry {
     /// The organization's contract when the entry was written, if it had one.
     #[prost(uint64, optional, tag = "4")]
     pub contract_id: ::core::option::Option<u64>,
-    /// Signed: deposits are positive, withdrawals are negative or zero.
+    /// Signed: deposits are positive, withdrawals are negative.
     #[prost(int64, tag = "5")]
     pub amount_cents: i64,
     #[prost(enumeration = "LedgerEntryType", tag = "6")]
@@ -109,7 +109,7 @@ pub struct ListLedgerEntriesResponse {
 }
 /// Records a manual correction. A refund is a negative adjustment: the refunded
 /// invoice stays paid, so its deposit still counts and the adjustment cancels
-/// it. Unlike a withdrawal, an adjustment can make the balance negative.
+/// it.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RecordLedgerAdjustmentRequest {
     #[prost(uint64, tag = "1")]
@@ -167,15 +167,15 @@ pub struct RecordLedgerDepositResponse {
     #[prost(bool, tag = "2")]
     pub created: bool,
 }
-/// Takes credit out of an account. A withdrawal never makes the balance
-/// negative. The balance check and the write are atomic, so concurrent
-/// withdrawals can not spend the same credit.
+/// Takes credit out of an account. The full amount is always withdrawn, even
+/// when that makes the balance negative.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RecordLedgerWithdrawalRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
     #[prost(string, tag = "2")]
     pub account_id: ::prost::alloc::string::String,
+    /// Must be positive.
     #[prost(uint64, tag = "3")]
     pub amount_cents: u64,
     /// Unique per organization and account_id. A repeated key writes nothing
@@ -186,28 +186,16 @@ pub struct RecordLedgerWithdrawalRequest {
     /// organization's current contract.
     #[prost(uint64, optional, tag = "5")]
     pub contract_id: ::core::option::Option<u64>,
-    /// When the balance is less than amount_cents: if true, withdraw the whole
-    /// balance and report the remainder in shortfall_cents; if false, write
-    /// nothing and set shortfall_cents to amount_cents.
-    #[prost(bool, tag = "6")]
-    pub allow_partial: bool,
-    #[prost(string, optional, tag = "7")]
+    #[prost(string, optional, tag = "6")]
     pub description: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RecordLedgerWithdrawalResponse {
-    /// Unset when nothing was written.
     #[prost(message, optional, tag = "1")]
     pub entry: ::core::option::Option<LedgerEntry>,
-    #[prost(uint64, tag = "2")]
-    pub withdrawn_cents: u64,
-    /// The part of amount_cents that the balance did not cover. The caller
-    /// must collect it some other way.
-    #[prost(uint64, tag = "3")]
-    pub shortfall_cents: u64,
-    /// The balance after the withdrawal.
-    #[prost(int64, tag = "4")]
-    pub balance_cents: i64,
-    #[prost(bool, tag = "5")]
+    #[prost(bool, tag = "2")]
     pub created: bool,
+    /// The balance after the withdrawal.
+    #[prost(int64, tag = "3")]
+    pub balance_cents: i64,
 }
