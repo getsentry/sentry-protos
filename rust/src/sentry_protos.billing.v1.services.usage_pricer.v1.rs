@@ -151,6 +151,13 @@ pub struct LineItemUsageSummary {
     /// both reserved and PAYG usage (in the line item's units).
     #[prost(uint64, tag = "9")]
     pub non_granted_quantity: u64,
+    /// True when pre-cap PAYG spend exceeds the applicable budget and must be
+    /// reduced. For an all-items budget, reflects overflow of the entire budget.
+    /// Exactly consuming the budget exhausts it without exceeding it.
+    /// False when no PAYG budget applies; this alone does not establish PAYG
+    /// eligibility.
+    #[prost(bool, tag = "10")]
+    pub exceeded_payg_budget: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
@@ -169,6 +176,10 @@ pub struct SharedLineItemUsageSummary {
     /// True when any member of this pool can continue accepting usage.
     #[prost(bool, tag = "5")]
     pub has_remaining_capacity: bool,
+    /// True when any member's applicable PAYG budget was exceeded.
+    /// Exactly consuming a budget exhausts it without exceeding it.
+    #[prost(bool, tag = "6")]
+    pub exceeded_payg_budget: bool,
 }
 /// One project's per-day outcomes. Only days and line items with usage
 /// are present; anything missing had no usage.
