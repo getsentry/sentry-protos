@@ -255,6 +255,10 @@ pub struct CreateOffCycleInvoiceRequest {
     pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(bool, tag = "9")]
     pub is_reverse_charge: bool,
+    /// Required. The credit the invoice buys. A repeated idempotency_key returns
+    /// the existing invoice and writes no second deposit.
+    #[prost(message, optional, tag = "10")]
+    pub ledger_deposit: ::core::option::Option<super::ledger::v1::LedgerDeposit>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateOffCycleInvoiceResponse {

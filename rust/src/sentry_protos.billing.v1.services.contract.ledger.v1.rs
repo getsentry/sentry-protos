@@ -140,33 +140,6 @@ pub struct RecordLedgerAdjustmentResponse {
     #[prost(int64, tag = "3")]
     pub balance_cents: i64,
 }
-/// Records credit bought through an off-cycle invoice. The balance excludes
-/// the deposit until the invoice is paid, so record it as soon as the invoice
-/// exists. An invoice holds at most one deposit: a repeated request writes
-/// nothing and returns the existing entry with created=false.
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct RecordLedgerDepositRequest {
-    #[prost(uint64, tag = "1")]
-    pub organization_id: u64,
-    #[prost(string, tag = "2")]
-    pub account_id: ::prost::alloc::string::String,
-    /// Must belong to organization_id.
-    #[prost(uint64, tag = "3")]
-    pub invoice_id: u64,
-    /// The credit bought, excluding tax. Must be positive and at most the
-    /// invoice amount.
-    #[prost(uint64, tag = "4")]
-    pub amount_cents: u64,
-    #[prost(string, optional, tag = "5")]
-    pub description: ::core::option::Option<::prost::alloc::string::String>,
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct RecordLedgerDepositResponse {
-    #[prost(message, optional, tag = "1")]
-    pub entry: ::core::option::Option<LedgerEntry>,
-    #[prost(bool, tag = "2")]
-    pub created: bool,
-}
 /// Takes credit out of an account. The full amount is always withdrawn, even
 /// when that makes the balance negative.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -198,4 +171,20 @@ pub struct RecordLedgerWithdrawalResponse {
     /// The balance after the withdrawal.
     #[prost(int64, tag = "3")]
     pub balance_cents: i64,
+}
+/// Credit that an off-cycle invoice buys. The deposit is written in the same
+/// transaction as the invoice, so a crash can not leave a charge without its
+/// credit. It counts toward the balance once the invoice is paid.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct LedgerDeposit {
+    /// 1 to 64 characters.
+    #[prost(string, tag = "1")]
+    pub account_id: ::prost::alloc::string::String,
+    /// The credit bought. Must be positive and at most the invoice's total
+    /// before tax.
+    #[prost(uint64, tag = "2")]
+    pub amount_cents: u64,
+    /// At most 256 characters.
+    #[prost(string, optional, tag = "3")]
+    pub description: ::core::option::Option<::prost::alloc::string::String>,
 }
