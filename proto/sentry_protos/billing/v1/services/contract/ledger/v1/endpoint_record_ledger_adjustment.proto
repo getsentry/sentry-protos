@@ -6,7 +6,7 @@ import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_entry.proto"
 
 // Records a manual correction. A refund is a negative adjustment: the refunded
 // invoice stays paid, so its deposit still counts and the adjustment cancels
-// it. Unlike a withdrawal, an adjustment can make the balance negative.
+// it.
 message RecordLedgerAdjustmentRequest {
   uint64 organization_id = 1;
   string account_id = 2;

@@ -4,12 +4,12 @@ package sentry_protos.billing.v1.services.contract.ledger.v1;
 
 import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_entry.proto";
 
-// Takes credit out of an account. A withdrawal never makes the balance
-// negative. The balance check and the write are atomic, so concurrent
-// withdrawals can not spend the same credit.
+// Takes credit out of an account. The full amount is always withdrawn, even
+// when that makes the balance negative.
 message RecordLedgerWithdrawalRequest {
   uint64 organization_id = 1;
   string account_id = 2;
+  // Must be positive.
   uint64 amount_cents = 3;
   // Unique per organization and account_id. A repeated key writes nothing
   // and returns the existing entry with created=false.
@@ -17,21 +17,12 @@ message RecordLedgerWithdrawalRequest {
   // The contract whose usage the withdrawal pays for. Defaults to the
   // organization's current contract.
   optional uint64 contract_id = 5;
-  // When the balance is less than amount_cents: if true, withdraw the whole
-  // balance and report the remainder in shortfall_cents; if false, write
-  // nothing and set shortfall_cents to amount_cents.
-  bool allow_partial = 6;
-  optional string description = 7;
+  optional string description = 6;
 }
 
 message RecordLedgerWithdrawalResponse {
-  // Unset when nothing was written.
-  optional LedgerEntry entry = 1;
-  uint64 withdrawn_cents = 2;
-  // The part of amount_cents that the balance did not cover. The caller
-  // must collect it some other way.
-  uint64 shortfall_cents = 3;
+  LedgerEntry entry = 1;
+  bool created = 2;
   // The balance after the withdrawal.
-  int64 balance_cents = 4;
-  bool created = 5;
+  int64 balance_cents = 3;
 }

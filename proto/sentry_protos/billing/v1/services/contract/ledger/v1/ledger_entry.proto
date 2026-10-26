@@ -23,7 +23,7 @@ message LedgerEntry {
   string account_id = 3;
   // The organization's contract when the entry was written, if it had one.
   optional uint64 contract_id = 4;
-  // Signed: deposits are positive, withdrawals are negative or zero.
+  // Signed: deposits are positive, withdrawals are negative.
   int64 amount_cents = 5;
   LedgerEntryType entry_type = 6;
   // The invoice that pays for a deposit, or that an adjustment refers to.
