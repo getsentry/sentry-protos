@@ -94,6 +94,13 @@ message LineItemUsageSummary {
   // grants are applied, but before reserved quantity is deducted. This includes
   // both reserved and PAYG usage (in the line item's units).
   uint64 non_granted_quantity = 9;
+
+  // True when pre-cap PAYG spend exceeds the applicable budget and must be
+  // reduced. For an all-items budget, reflects overflow of the entire budget.
+  // Exactly consuming the budget exhausts it without exceeding it.
+  // False when no PAYG budget applies; this alone does not establish PAYG
+  // eligibility.
+  bool exceeded_payg_budget = 10;
 }
 
 message SharedLineItemUsageSummary {
@@ -111,6 +118,10 @@ message SharedLineItemUsageSummary {
 
   // True when any member of this pool can continue accepting usage.
   bool has_remaining_capacity = 5;
+
+  // True when any member's applicable PAYG budget was exceeded.
+  // Exactly consuming a budget exhausts it without exceeding it.
+  bool exceeded_payg_budget = 6;
 }
 
 // One project's per-day outcomes. Only days and line items with usage
