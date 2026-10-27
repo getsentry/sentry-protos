@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.invoicer.v1;
 
 import "sentry_protos/billing/v1/common/v1/stripe_verification.proto";
+import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_deposit.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 
 // Bills an organization for line items another service has priced, outside of
@@ -26,6 +27,9 @@ message BillOffCycleInvoiceRequest {
   // requesting service chooses: FAILURE_POLICY_RETRY_ONLY leaves account
   // status alone and makes the service responsible for non-payment.
   sentry_protos.billing.v1.services.contract.v1.FailurePolicy failure_policy = 6;
+  // Required. The credit the invoice buys. The deposit exists before the
+  // charge starts.
+  sentry_protos.billing.v1.services.contract.ledger.v1.LedgerDeposit ledger_deposit = 7;
 }
 
 message BillOffCycleInvoiceResponse {

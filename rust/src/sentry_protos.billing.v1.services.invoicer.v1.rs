@@ -68,6 +68,12 @@ pub struct BillOffCycleInvoiceRequest {
     /// status alone and makes the service responsible for non-payment.
     #[prost(enumeration = "super::super::contract::v1::FailurePolicy", tag = "6")]
     pub failure_policy: i32,
+    /// Required. The credit the invoice buys. The deposit exists before the
+    /// charge starts.
+    #[prost(message, optional, tag = "7")]
+    pub ledger_deposit: ::core::option::Option<
+        super::super::contract::ledger::v1::LedgerDeposit,
+    >,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillOffCycleInvoiceResponse {
