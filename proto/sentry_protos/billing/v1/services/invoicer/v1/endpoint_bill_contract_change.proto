@@ -26,10 +26,6 @@ message BillContractChangeRequest {
 
   // Whether the requested change should result in a new billing period.
   bool start_new_term = 4;
-
-  // Replace all existing user configs with the supplied change's configs.
-  // An empty list removes all overrides. Defaults to merging by scope.
-  bool replace_user_configs = 5;
 }
 
 message BillContractChangeResponse {

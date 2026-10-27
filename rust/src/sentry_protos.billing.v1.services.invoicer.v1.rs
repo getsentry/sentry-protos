@@ -26,10 +26,6 @@ pub struct BillContractChangeRequest {
     /// Whether the requested change should result in a new billing period.
     #[prost(bool, tag = "4")]
     pub start_new_term: bool,
-    /// Replace all existing user configs with the supplied change's configs.
-    /// An empty list removes all overrides. Defaults to merging by scope.
-    #[prost(bool, tag = "5")]
-    pub replace_user_configs: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillContractChangeResponse {
@@ -303,10 +299,6 @@ pub struct PreviewImmediateInvoiceRequest {
     /// consumes; here it applies immediately rather than at a period boundary.
     #[prost(message, optional, tag = "2")]
     pub change: ::core::option::Option<super::super::super::common::v1::PendingChange>,
-    /// Replace all existing user configs with the supplied change's configs.
-    /// An empty list removes all overrides. Defaults to merging by scope.
-    #[prost(bool, tag = "3")]
-    pub replace_user_configs: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PreviewImmediateInvoiceResponse {
