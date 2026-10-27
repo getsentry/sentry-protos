@@ -1,3 +1,9 @@
+## 0.93.0
+
+### New Features ✨
+
+- (billing) Add ResetSubscriptionTrial engagement protos by @hybrendan in [#481](https://github.com/getsentry/sentry-protos/pull/481)
+
 ## 0.92.0
 
 ### New Features ✨
