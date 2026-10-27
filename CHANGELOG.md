@@ -1,3 +1,9 @@
+## 0.92.0
+
+### New Features ✨
+
+- (billing) Add snapshot image data category by @noahsmartin in [#483](https://github.com/getsentry/sentry-protos/pull/483)
+
 ## 0.91.0
 
 ### New Features ✨
