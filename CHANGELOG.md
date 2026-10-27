@@ -1,3 +1,9 @@
+## 0.96.0
+
+### New Features ✨
+
+- (billing) Add deposit ledger protos to the contract service by @volokluev with @getsantry in [#480](https://github.com/getsentry/sentry-protos/pull/480)
+
 ## 0.95.0
 
 ### New Features ✨
