@@ -8,8 +8,7 @@ message GetLedgerBalanceRequest {
 }
 
 message GetLedgerBalanceResponse {
-  // Paid deposits minus withdrawals, plus adjustments. Zero for an account
-  // with no entries.
+  // Paid deposits minus withdrawals. Zero for an account with no entries.
   int64 balance_cents = 1;
   // Deposits whose invoices are not paid yet. Not part of balance_cents.
   int64 pending_deposit_cents = 2;
