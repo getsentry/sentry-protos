@@ -25,26 +25,23 @@ pub struct LedgerEntry {
     /// Identifies one balance among the organization's accounts, e.g. "seer".
     #[prost(string, tag = "3")]
     pub account_id: ::prost::alloc::string::String,
-    /// The organization's contract when the entry was written, if it had one.
-    #[prost(uint64, optional, tag = "4")]
-    pub contract_id: ::core::option::Option<u64>,
     /// Signed: deposits are positive, withdrawals are negative.
-    #[prost(int64, tag = "5")]
+    #[prost(int64, tag = "4")]
     pub amount_cents: i64,
-    #[prost(enumeration = "LedgerEntryType", tag = "6")]
+    #[prost(enumeration = "LedgerEntryType", tag = "5")]
     pub entry_type: i32,
-    /// The invoice that pays for a deposit.
-    #[prost(uint64, optional, tag = "7")]
-    pub invoice_id: ::core::option::Option<u64>,
-    #[prost(message, optional, tag = "8")]
+    /// The invoice that shows the entry to the customer: for a deposit, the
+    /// invoice that pays for it; for a withdrawal, the invoice that carries the
+    /// credit-only usage it pays for.
+    #[prost(uint64, tag = "6")]
+    pub invoice_id: u64,
+    #[prost(message, optional, tag = "7")]
     pub date_added: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(string, optional, tag = "9")]
-    pub idempotency_key: ::core::option::Option<::prost::alloc::string::String>,
-    #[prost(string, optional, tag = "10")]
+    #[prost(string, optional, tag = "8")]
     pub description: ::core::option::Option<::prost::alloc::string::String>,
     /// False only for a deposit whose invoice is not paid yet. Such an entry
     /// does not count toward the balance.
-    #[prost(bool, tag = "11")]
+    #[prost(bool, tag = "9")]
     pub counts_toward_balance: bool,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -103,7 +100,9 @@ pub struct ListLedgerEntriesResponse {
     pub next_cursor: ::core::option::Option<u64>,
 }
 /// Takes credit out of an account. The full amount is always withdrawn, even
-/// when that makes the balance negative.
+/// when that makes the balance negative. An invoice holds at most one
+/// withdrawal per account: a repeated request writes nothing and returns the
+/// existing entry with created=false.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RecordLedgerWithdrawalRequest {
     #[prost(uint64, tag = "1")]
@@ -113,15 +112,11 @@ pub struct RecordLedgerWithdrawalRequest {
     /// Must be positive.
     #[prost(uint64, tag = "3")]
     pub amount_cents: u64,
-    /// Unique per organization and account_id. A repeated key writes nothing
-    /// and returns the existing entry with created=false.
-    #[prost(string, tag = "4")]
-    pub idempotency_key: ::prost::alloc::string::String,
-    /// The contract whose usage the withdrawal pays for. Defaults to the
-    /// organization's current contract.
-    #[prost(uint64, optional, tag = "5")]
-    pub contract_id: ::core::option::Option<u64>,
-    #[prost(string, optional, tag = "6")]
+    /// The invoice that carries the credit-only usage this withdrawal pays for.
+    /// Must belong to organization_id.
+    #[prost(uint64, tag = "4")]
+    pub invoice_id: u64,
+    #[prost(string, optional, tag = "5")]
     pub description: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
