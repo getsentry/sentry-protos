@@ -123,6 +123,7 @@ pub struct LineItemUsageSummary {
     #[prost(uint64, tag = "3")]
     pub quantity: u64,
     /// Whether the usage pricer had to cap the spend based on the budget set by the contract
+    #[deprecated]
     #[prost(bool, tag = "4")]
     pub payg_budget_exhausted: bool,
     /// false when this line item still has reserved quantity left.
@@ -130,6 +131,7 @@ pub struct LineItemUsageSummary {
     /// Example: there's an overall PAYG budget of $10, a customer sends $10 worth of errors
     /// the payg_budget_exhausted field is true for all line items
     /// however, the plan still includes 5GB of free logs, so reserved_budget_exhausted is false for logs.
+    #[deprecated]
     #[prost(bool, tag = "5")]
     pub reserved_budget_exhausted: bool,
     /// Total units consumed by this line item in the billing period, including
@@ -151,6 +153,11 @@ pub struct LineItemUsageSummary {
     /// both reserved and PAYG usage (in the line item's units).
     #[prost(uint64, tag = "9")]
     pub non_granted_quantity: u64,
+    /// True when PAYG spend is greater than the budget.
+    /// For example, a $1 allocation against a $1 budget returns false.
+    /// For an all-items budget, compares the total spend across its line items.
+    #[prost(bool, tag = "10")]
+    pub exceeded_payg_budget: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
@@ -161,14 +168,19 @@ pub struct SharedLineItemUsageSummary {
     #[prost(message, repeated, tag = "2")]
     pub line_item_summaries: ::prost::alloc::vec::Vec<LineItemUsageSummary>,
     /// Whether the usage pricer had to cap the spend based on the budget set by the contract
+    #[deprecated]
     #[prost(bool, tag = "3")]
     pub payg_budget_exhausted: bool,
     /// false when this pool still has reserved quantity left.
+    #[deprecated]
     #[prost(bool, tag = "4")]
     pub reserved_budget_exhausted: bool,
     /// True when any member of this pool can continue accepting usage.
     #[prost(bool, tag = "5")]
     pub has_remaining_capacity: bool,
+    /// True when any member's PAYG spend is greater than its budget.
+    #[prost(bool, tag = "6")]
+    pub exceeded_payg_budget: bool,
 }
 /// One project's per-day outcomes. Only days and line items with usage
 /// are present; anything missing had no usage.
