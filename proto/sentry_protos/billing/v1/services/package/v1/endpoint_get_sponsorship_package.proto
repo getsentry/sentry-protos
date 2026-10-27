@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.package.v1;
+
+import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+import "sentry_protos/billing/v1/services/package/v1/package.proto";
+
+message GetSponsorshipPackageRequest {
+  // Must name a sponsorship supported by self-serve checkout.
+  sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 1;
+}
+
+message GetSponsorshipPackageResponse {
+  PackageConfig package_config = 1;
+  // Allowance overrides to persist on the contract alongside the package.
+  repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_configs = 2;
+}

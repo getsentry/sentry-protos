@@ -308,6 +308,20 @@ pub struct GetPackagesResponse {
     pub package_configs: ::prost::alloc::vec::Vec<PackageConfig>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSponsorshipPackageRequest {
+    /// Must name a sponsorship supported by self-serve checkout.
+    #[prost(enumeration = "super::super::super::common::v1::SponsoredType", tag = "1")]
+    pub sponsored_type: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSponsorshipPackageResponse {
+    #[prost(message, optional, tag = "1")]
+    pub package_config: ::core::option::Option<PackageConfig>,
+    /// Allowance overrides to persist on the contract alongside the package.
+    #[prost(message, repeated, tag = "2")]
+    pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetVercelPackagesRequest {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetVercelPackagesResponse {
