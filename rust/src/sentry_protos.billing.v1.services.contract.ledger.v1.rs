@@ -8,8 +8,7 @@ pub struct GetLedgerBalanceRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetLedgerBalanceResponse {
-    /// Paid deposits minus withdrawals, plus adjustments. Zero for an account
-    /// with no entries.
+    /// Paid deposits minus withdrawals. Zero for an account with no entries.
     #[prost(int64, tag = "1")]
     pub balance_cents: i64,
     /// Deposits whose invoices are not paid yet. Not part of balance_cents.
@@ -34,7 +33,7 @@ pub struct LedgerEntry {
     pub amount_cents: i64,
     #[prost(enumeration = "LedgerEntryType", tag = "6")]
     pub entry_type: i32,
-    /// The invoice that pays for a deposit, or that an adjustment refers to.
+    /// The invoice that pays for a deposit.
     #[prost(uint64, optional, tag = "7")]
     pub invoice_id: ::core::option::Option<u64>,
     #[prost(message, optional, tag = "8")]
@@ -57,8 +56,6 @@ pub enum LedgerEntryType {
     Deposit = 1,
     /// Credit used, e.g. the credit-only usage tallied at contract rollover.
     Withdrawal = 2,
-    /// A manual correction, such as a refund. It can be positive or negative.
-    Adjustment = 3,
 }
 impl LedgerEntryType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -70,7 +67,6 @@ impl LedgerEntryType {
             Self::Unspecified => "LEDGER_ENTRY_TYPE_UNSPECIFIED",
             Self::Deposit => "LEDGER_ENTRY_TYPE_DEPOSIT",
             Self::Withdrawal => "LEDGER_ENTRY_TYPE_WITHDRAWAL",
-            Self::Adjustment => "LEDGER_ENTRY_TYPE_ADJUSTMENT",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -79,7 +75,6 @@ impl LedgerEntryType {
             "LEDGER_ENTRY_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
             "LEDGER_ENTRY_TYPE_DEPOSIT" => Some(Self::Deposit),
             "LEDGER_ENTRY_TYPE_WITHDRAWAL" => Some(Self::Withdrawal),
-            "LEDGER_ENTRY_TYPE_ADJUSTMENT" => Some(Self::Adjustment),
             _ => None,
         }
     }
@@ -106,39 +101,6 @@ pub struct ListLedgerEntriesResponse {
     /// Unset on the last page.
     #[prost(uint64, optional, tag = "2")]
     pub next_cursor: ::core::option::Option<u64>,
-}
-/// Records a manual correction. A refund is a negative adjustment: the refunded
-/// invoice stays paid, so its deposit still counts and the adjustment cancels
-/// it.
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct RecordLedgerAdjustmentRequest {
-    #[prost(uint64, tag = "1")]
-    pub organization_id: u64,
-    #[prost(string, tag = "2")]
-    pub account_id: ::prost::alloc::string::String,
-    /// Must not be zero.
-    #[prost(int64, tag = "3")]
-    pub amount_cents: i64,
-    /// Unique per organization and account_id. A repeated key writes nothing
-    /// and returns the existing entry with created=false.
-    #[prost(string, tag = "4")]
-    pub idempotency_key: ::prost::alloc::string::String,
-    /// Required, so that the ledger shows why the balance changed.
-    #[prost(string, tag = "5")]
-    pub description: ::prost::alloc::string::String,
-    /// The invoice the adjustment refers to, e.g. the refunded one.
-    #[prost(uint64, optional, tag = "6")]
-    pub invoice_id: ::core::option::Option<u64>,
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct RecordLedgerAdjustmentResponse {
-    #[prost(message, optional, tag = "1")]
-    pub entry: ::core::option::Option<LedgerEntry>,
-    #[prost(bool, tag = "2")]
-    pub created: bool,
-    /// The balance after the adjustment.
-    #[prost(int64, tag = "3")]
-    pub balance_cents: i64,
 }
 /// Takes credit out of an account. The full amount is always withdrawn, even
 /// when that makes the balance negative.
