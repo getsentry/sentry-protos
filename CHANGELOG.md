@@ -1,3 +1,9 @@
+## 0.94.0
+
+### New Features ✨
+
+- (billing) Expose when PAYG spend exceeds its budget by @hybrendan in [#482](https://github.com/getsentry/sentry-protos/pull/482)
+
 ## 0.93.0
 
 ### New Features ✨
