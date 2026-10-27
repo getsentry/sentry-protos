@@ -24,12 +24,13 @@ message LedgerEntry {
   // Signed: deposits are positive, withdrawals are negative.
   int64 amount_cents = 5;
   LedgerEntryType entry_type = 6;
-  // The invoice that pays for a deposit.
-  optional uint64 invoice_id = 7;
+  // The invoice that shows the entry to the customer: for a deposit, the
+  // invoice that pays for it; for a withdrawal, the invoice that carries the
+  // credit-only usage it pays for.
+  uint64 invoice_id = 7;
   google.protobuf.Timestamp date_added = 8;
-  optional string idempotency_key = 9;
-  optional string description = 10;
+  optional string description = 9;
   // False only for a deposit whose invoice is not paid yet. Such an entry
   // does not count toward the balance.
-  bool counts_toward_balance = 11;
+  bool counts_toward_balance = 10;
 }

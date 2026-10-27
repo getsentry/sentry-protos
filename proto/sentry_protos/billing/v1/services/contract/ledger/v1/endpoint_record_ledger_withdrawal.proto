@@ -5,15 +5,17 @@ package sentry_protos.billing.v1.services.contract.ledger.v1;
 import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_entry.proto";
 
 // Takes credit out of an account. The full amount is always withdrawn, even
-// when that makes the balance negative.
+// when that makes the balance negative. An invoice holds at most one
+// withdrawal per account: a repeated request writes nothing and returns the
+// existing entry with created=false.
 message RecordLedgerWithdrawalRequest {
   uint64 organization_id = 1;
   string account_id = 2;
   // Must be positive.
   uint64 amount_cents = 3;
-  // Unique per organization and account_id. A repeated key writes nothing
-  // and returns the existing entry with created=false.
-  string idempotency_key = 4;
+  // The invoice that carries the credit-only usage this withdrawal pays for.
+  // Must belong to organization_id.
+  uint64 invoice_id = 4;
   // The contract whose usage the withdrawal pays for. Defaults to the
   // organization's current contract.
   optional uint64 contract_id = 5;
