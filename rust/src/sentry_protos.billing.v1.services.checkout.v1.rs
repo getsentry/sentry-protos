@@ -18,24 +18,35 @@ pub struct CancelContractRequest {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CancelContractResponse {}
 /// Changes an organization's contract to a new configuration. Any unset field
-/// leaves the corresponding part of the contract unchanged.
+/// leaves the corresponding part of the contract unchanged, except when a
+/// sponsorship supplies its package, interval, and allowances.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ChangeContractRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
     /// The package the contract will switch to. If unset, the package is left
-    /// unchanged.
+    /// unchanged unless selected by the sponsorship.
     #[prost(string, optional, tag = "2")]
     pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
     /// The contract month_interval the subscription will switch to. Must be one
     /// of the package's supported_month_intervals. If unset, the month_interval
-    /// is left unchanged.
+    /// is left unchanged unless selected by the sponsorship.
     #[prost(uint32, optional, tag = "3")]
     pub month_interval: ::core::option::Option<u32>,
     /// The new user configs (PAYG budgets and/or reservation overrides) to apply
-    /// to the contract. If empty, the user configs are left unchanged.
+    /// to the contract. If empty, the user configs are left unchanged unless
+    /// replaced by the sponsorship's allowances.
     #[prost(message, repeated, tag = "4")]
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
+    /// The sponsorship to apply. Unset leaves sponsorship unchanged;
+    /// SPONSORED_TYPE_UNSPECIFIED removes it. Applying a sponsorship selects its
+    /// package, interval, and allowances; conflicting explicit values are invalid.
+    #[prost(
+        enumeration = "super::super::super::common::v1::SponsoredType",
+        optional,
+        tag = "5"
+    )]
+    pub sponsored_type: ::core::option::Option<i32>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ChangeContractResponse {
