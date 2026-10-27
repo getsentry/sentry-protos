@@ -1,3 +1,9 @@
+## 0.95.0
+
+### New Features ✨
+
+- (billing) Add sponsored checkout and package resolution by @hybrendan with @getsantry in [#484](https://github.com/getsentry/sentry-protos/pull/484)
+
 ## 0.94.0
 
 ### New Features ✨
