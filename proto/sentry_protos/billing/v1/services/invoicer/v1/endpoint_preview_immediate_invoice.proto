@@ -17,6 +17,10 @@ message PreviewImmediateInvoiceRequest {
   // it applies, so this is required. Reuses the PendingChange shape the rollover
   // consumes; here it applies immediately rather than at a period boundary.
   sentry_protos.billing.v1.common.v1.PendingChange change = 2;
+
+  // Replace all existing user configs with the supplied change's configs.
+  // An empty list removes all overrides. Defaults to merging by scope.
+  bool replace_user_configs = 3;
 }
 
 message PreviewImmediateInvoiceResponse {

@@ -37,6 +37,11 @@ message RolloverContractRequest {
 
   // Whether the tax provider placed this invoice under reverse charge.
   bool is_reverse_charge = 11;
+
+  // Replace all existing user configs with the supplied change's configs.
+  // An empty list removes all overrides. Defaults to merging by scope.
+  // Requires an immediate rollover.
+  bool replace_user_configs = 12;
 }
 
 message RolloverContractResponse {

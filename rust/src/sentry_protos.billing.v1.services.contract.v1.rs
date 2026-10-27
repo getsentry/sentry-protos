@@ -1275,6 +1275,11 @@ pub struct RolloverContractRequest {
     /// Whether the tax provider placed this invoice under reverse charge.
     #[prost(bool, tag = "11")]
     pub is_reverse_charge: bool,
+    /// Replace all existing user configs with the supplied change's configs.
+    /// An empty list removes all overrides. Defaults to merging by scope.
+    /// Requires an immediate rollover.
+    #[prost(bool, tag = "12")]
+    pub replace_user_configs: bool,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
