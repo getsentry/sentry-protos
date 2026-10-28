@@ -87,6 +87,9 @@ pub struct GetOrCreateCustomerRequest {
     pub organization_id: u64,
     #[prost(string, optional, tag = "2")]
     pub billing_email: ::core::option::Option<::prost::alloc::string::String>,
+    /// Used only when creating a customer; existing customer details are preserved.
+    #[prost(string, optional, tag = "3")]
+    pub organization_slug: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetOrCreateCustomerResponse {
