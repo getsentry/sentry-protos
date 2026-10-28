@@ -29,6 +29,8 @@ pub struct LineItemConfig {
     /// Whether this LineItem is eligible for a product trial.
     #[prost(bool, tag = "12")]
     pub can_product_trial: bool,
+    #[prost(enumeration = "super::super::super::common::v1::BillingType", tag = "13")]
+    pub billing_type: i32,
     /// how many of this lineitem are included in the package, the customer can reserve more on their contract
     #[prost(oneof = "line_item_config::IncludedReservedUnits", tags = "5, 6")]
     pub included_reserved_units: ::core::option::Option<

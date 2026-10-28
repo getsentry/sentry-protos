@@ -151,6 +151,39 @@ impl BillingInterval {
         }
     }
 }
+/// How a line item's usage is settled.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum BillingType {
+    /// The producer did not set a billing type. Consumers treat this as invoice-cycle billing.
+    Unspecified = 0,
+    /// Usage is charged on the invoice cycle.
+    InvoiceCycle = 1,
+    /// Usage is settled by a prepaid credit balance.
+    CreditOnly = 2,
+}
+impl BillingType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "BILLING_TYPE_UNSPECIFIED",
+            Self::InvoiceCycle => "BILLING_TYPE_INVOICE_CYCLE",
+            Self::CreditOnly => "BILLING_TYPE_CREDIT_ONLY",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "BILLING_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "BILLING_TYPE_INVOICE_CYCLE" => Some(Self::InvoiceCycle),
+            "BILLING_TYPE_CREDIT_ONLY" => Some(Self::CreditOnly),
+            _ => None,
+        }
+    }
+}
 /// The external provider responsible for collecting payment for an invoice.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]

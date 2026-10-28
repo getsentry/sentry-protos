@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+// How a line item's usage is settled.
+enum BillingType {
+  // The producer did not set a billing type. Consumers treat this as invoice-cycle billing.
+  BILLING_TYPE_UNSPECIFIED = 0;
+
+  // Usage is charged on the invoice cycle.
+  BILLING_TYPE_INVOICE_CYCLE = 1;
+
+  // Usage is settled by a prepaid credit balance.
+  BILLING_TYPE_CREDIT_ONLY = 2;
+}
