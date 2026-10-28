@@ -65,6 +65,40 @@ pub struct GetCardLocationResponse {
     #[prost(string, optional, tag = "2")]
     pub country_code: ::core::option::Option<::prost::alloc::string::String>,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrCreateBillingDetailsRequest {
+    /// The organization must already have a customer.
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Used only when creating billing details; existing details are preserved.
+    #[prost(string, optional, tag = "2")]
+    pub billing_email: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrCreateBillingDetailsResponse {
+    #[prost(message, optional, tag = "1")]
+    pub billing_details: ::core::option::Option<BillingDetails>,
+    #[prost(bool, tag = "2")]
+    pub created: bool,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrCreateCustomerRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(string, optional, tag = "2")]
+    pub billing_email: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrCreateCustomerResponse {
+    #[prost(uint64, tag = "1")]
+    pub customer_id: u64,
+    #[prost(string, tag = "2")]
+    pub customer_stripe_id: ::prost::alloc::string::String,
+    /// Whether the local customer was created by this request. An existing customer
+    /// without a Stripe account is completed without changing this flag.
+    #[prost(bool, tag = "3")]
+    pub created: bool,
+}
 /// Fetches lightweight identity fields for an organization. Used by callers
 /// that need slug/name/default_user_id without pulling the full Organization
 /// record across service boundaries.
