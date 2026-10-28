@@ -7,6 +7,8 @@ message GetOrCreateCustomerRequest {
   optional string billing_email = 2;
   // Used only when creating a customer; existing customer details are preserved.
   optional string organization_slug = 3;
+  // Adopt an existing Stripe customer when the local customer has no Stripe ID.
+  optional string customer_stripe_id = 4;
 }
 
 message GetOrCreateCustomerResponse {
