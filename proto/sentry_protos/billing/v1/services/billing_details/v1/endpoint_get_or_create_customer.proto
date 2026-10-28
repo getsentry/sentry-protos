@@ -5,6 +5,8 @@ package sentry_protos.billing.v1.services.billing_details.v1;
 message GetOrCreateCustomerRequest {
   uint64 organization_id = 1;
   optional string billing_email = 2;
+  // Used only when creating a customer; existing customer details are preserved.
+  optional string organization_slug = 3;
 }
 
 message GetOrCreateCustomerResponse {
