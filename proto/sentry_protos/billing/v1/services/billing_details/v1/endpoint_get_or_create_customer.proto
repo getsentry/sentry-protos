@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_details.v1;
+
+message GetOrCreateCustomerRequest {
+  uint64 organization_id = 1;
+  optional string billing_email = 2;
+}
+
+message GetOrCreateCustomerResponse {
+  uint64 customer_id = 1;
+  string customer_stripe_id = 2;
+  // Whether the local customer was created by this request. An existing customer
+  // without a Stripe account is completed without changing this flag.
+  bool created = 3;
+}
