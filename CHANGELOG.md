@@ -1,3 +1,9 @@
+## 0.97.0
+
+### New Features ✨
+
+- (billing) Declare line-item billing types by @volokluev with @getsantry in [#485](https://github.com/getsentry/sentry-protos/pull/485)
+
 ## 0.96.0
 
 ### New Features ✨
