@@ -1114,6 +1114,7 @@ pub enum TraceItemType {
     UserSession = 12,
     ProcessingError = 13,
     WorkflowEngineEvaluation = 14,
+    EnrichmentAttributes = 15,
 }
 impl TraceItemType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -1139,6 +1140,7 @@ impl TraceItemType {
             Self::WorkflowEngineEvaluation => {
                 "TRACE_ITEM_TYPE_WORKFLOW_ENGINE_EVALUATION"
             }
+            Self::EnrichmentAttributes => "TRACE_ITEM_TYPE_ENRICHMENT_ATTRIBUTES",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -1161,6 +1163,7 @@ impl TraceItemType {
             "TRACE_ITEM_TYPE_WORKFLOW_ENGINE_EVALUATION" => {
                 Some(Self::WorkflowEngineEvaluation)
             }
+            "TRACE_ITEM_TYPE_ENRICHMENT_ATTRIBUTES" => Some(Self::EnrichmentAttributes),
             _ => None,
         }
     }
