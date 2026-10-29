@@ -145,3 +145,19 @@ pub struct LedgerDeposit {
     #[prost(string, optional, tag = "3")]
     pub description: ::core::option::Option<::prost::alloc::string::String>,
 }
+/// Credit that a contract's usage invoice uses up for credit-only usage. The
+/// withdrawal is written in the same transaction as the invoice, so a crash can
+/// not leave usage invoiced as prepaid without taking it from the balance. The
+/// full amount is withdrawn even when that makes the balance negative.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct LedgerWithdrawal {
+    /// 1 to 64 characters.
+    #[prost(string, tag = "1")]
+    pub account_id: ::prost::alloc::string::String,
+    /// Must be positive.
+    #[prost(uint64, tag = "2")]
+    pub amount_cents: u64,
+    /// At most 256 characters.
+    #[prost(string, optional, tag = "3")]
+    pub description: ::core::option::Option<::prost::alloc::string::String>,
+}

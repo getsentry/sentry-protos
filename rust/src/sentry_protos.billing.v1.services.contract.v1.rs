@@ -1275,6 +1275,12 @@ pub struct RolloverContractRequest {
     /// Whether the tax provider placed this invoice under reverse charge.
     #[prost(bool, tag = "11")]
     pub is_reverse_charge: bool,
+    /// Credit that the new invoice's credit-only usage takes from the ledger. At
+    /// most one per account_id. Written atomically with the invoice.
+    #[prost(message, repeated, tag = "12")]
+    pub ledger_withdrawals: ::prost::alloc::vec::Vec<
+        super::ledger::v1::LedgerWithdrawal,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
