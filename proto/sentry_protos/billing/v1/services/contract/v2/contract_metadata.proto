@@ -12,4 +12,10 @@ message ContractMetadata {
   string package_uid = 5;
 
   optional uint64 previous_id = 6;
+
+  // Increases every time a write changes what the contract's next invoice would
+  // price: its pending change, its user configs, its package, or its open state.
+  // Pass it back as RolloverContractRequest.expected_version to fail the rollover
+  // when one of those writes landed after this contract was read.
+  uint64 version = 7;
 }

@@ -37,6 +37,12 @@ message RolloverContractRequest {
 
   // Whether the tax provider placed this invoice under reverse charge.
   bool is_reverse_charge = 11;
+
+  // The ContractMetadata.version the invoice was priced from. When set, the
+  // rollover fails without writing anything if the contract's version has
+  // changed since, so the caller can re-price against the current state. Unset
+  // skips the check.
+  optional uint64 expected_version = 12;
 }
 
 message RolloverContractResponse {
