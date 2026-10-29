@@ -24,3 +24,20 @@ pub struct GetMappingResponse {
         i32,
     >,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HasSeerCreditsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// A Seer feature string, as recorded in LLM proxy cost data.
+    #[prost(string, tag = "2")]
+    pub feature_id: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub predicted_credit_usage: u64,
+    #[prost(bool, tag = "4")]
+    pub take_lease: bool,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct HasSeerCreditsResponse {
+    #[prost(bool, tag = "1")]
+    pub has_enough_credits: bool,
+}
