@@ -5,6 +5,7 @@ package sentry_protos.billing.v1.services.contract.v1;
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/common/v1/address.proto";
 import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_withdrawal.proto";
 import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
 
 // Creates a new contract for a new billing period. Closes out the current contract by
@@ -37,6 +38,10 @@ message RolloverContractRequest {
 
   // Whether the tax provider placed this invoice under reverse charge.
   bool is_reverse_charge = 11;
+
+  // Credit that the new invoice's credit-only usage takes from the ledger. At
+  // most one per account_id. Written atomically with the invoice.
+  repeated sentry_protos.billing.v1.services.contract.ledger.v1.LedgerWithdrawal ledger_withdrawals = 12;
 }
 
 message RolloverContractResponse {
