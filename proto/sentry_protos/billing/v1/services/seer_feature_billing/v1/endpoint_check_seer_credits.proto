@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.seer_feature_billing.v1;
 
-message HasSeerCreditsRequest {
+message CheckSeerCreditsRequest {
   uint64 organization_id = 1;
   // A Seer feature string, as recorded in LLM proxy cost data.
   string feature_id = 2;
@@ -10,6 +10,6 @@ message HasSeerCreditsRequest {
   bool take_lease = 4;
 }
 
-message HasSeerCreditsResponse {
+message CheckSeerCreditsResponse {
   bool has_enough_credits = 1;
 }
