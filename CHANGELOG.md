@@ -1,3 +1,9 @@
+## 0.99.0
+
+### New Features ✨
+
+- (billing) Add CheckSeerCredits request and response by @srest2021 with @getsantry and @sentry-junior in [#490](https://github.com/getsentry/sentry-protos/pull/490)
+
 ## 0.98.0
 
 ### New Features ✨
