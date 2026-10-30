@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/address.proto";
+import "sentry_protos/billing/v1/services/contract/v1/invoice.proto";
+
+// Copies a legacy invoice onto the platform when its organization migrates.
+// Only for an invoice that legacy closed unpaid after its charge retries ran
+// out. The copy is closed too, so the platform never retries it, but the
+// customer can still pay it, and paying it reactivates the account. The copy
+// keeps the legacy guid, so payment links already sent for the invoice open
+// the copy. A repeated guid writes nothing and returns the existing copy.
+message ImportClosedLegacyInvoiceRequest {
+  uint64 organization_id = 1;
+  string guid = 2;
+  // Already includes the sales-tax line, if any, and every line's type.
+  repeated InvoiceLineItem line_items = 3;
+  // Not just a sum of line items, since credit may have been applied.
+  uint64 amount_billed = 4;
+  google.protobuf.Timestamp date_added = 5;
+  // How many times legacy tried to charge the invoice.
+  uint32 attempt_count = 6;
+  sentry_protos.billing.v1.common.v1.Address address = 7;
+  optional string tax_number = 8;
+  // The tax document legacy opened for the invoice, if any.
+  optional string tax_transaction_code = 9;
+  bool is_reverse_charge = 10;
+}
+
+message ImportClosedLegacyInvoiceResponse {
+  uint64 invoice_id = 1;
+  // False when the organization already had an invoice with the guid.
+  bool created = 2;
+}
