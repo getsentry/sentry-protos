@@ -12,6 +12,5 @@ message CheckSeerCreditsRequest {
 
 message CheckSeerCreditsResponse {
   bool has_enough_credits = 1;
-  // Set only when take_lease is true and a lease was granted.
   optional string lease_id = 2;
 }
