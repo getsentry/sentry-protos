@@ -15,7 +15,6 @@ pub struct CheckSeerCreditsRequest {
 pub struct CheckSeerCreditsResponse {
     #[prost(bool, tag = "1")]
     pub has_enough_credits: bool,
-    /// Set only when take_lease is true and a lease was granted.
     #[prost(string, optional, tag = "2")]
     pub lease_id: ::core::option::Option<::prost::alloc::string::String>,
 }
