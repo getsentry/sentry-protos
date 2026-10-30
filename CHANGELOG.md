@@ -1,3 +1,12 @@
+## 0.98.0
+
+### New Features ✨
+
+#### Billing
+
+- Add CheckSeerCredits request and response by @srest2021 with @getsantry and @sentry-junior in [#490](https://github.com/getsentry/sentry-protos/pull/490)
+- Withdraw credit-only usage on contract rollover by @volokluev with @getsantry in [#488](https://github.com/getsentry/sentry-protos/pull/488)
+
 ## 0.97.0
 
 ### New Features ✨
