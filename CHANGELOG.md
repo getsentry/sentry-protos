@@ -1,3 +1,9 @@
+## 0.98.0
+
+### New Features ✨
+
+- (billing) Withdraw credit-only usage on contract rollover by @volokluev with @getsantry in [#488](https://github.com/getsentry/sentry-protos/pull/488)
+
 ## 0.97.0
 
 ### New Features ✨
