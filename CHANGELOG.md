@@ -1,3 +1,9 @@
+## 0.100.0
+
+### New Features ✨
+
+- (eap) Add enrichment attributes trace item type by @vgrozdanic with @getsantry in [#487](https://github.com/getsentry/sentry-protos/pull/487)
+
 ## 0.99.0
 
 ### New Features ✨
