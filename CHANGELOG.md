@@ -1,3 +1,9 @@
+## 0.101.0
+
+### New Features ✨
+
+- (billing) Define internal ledger deposit invoices by @volokluev in [#491](https://github.com/getsentry/sentry-protos/pull/491)
+
 ## 0.100.0
 
 ### New Features ✨
