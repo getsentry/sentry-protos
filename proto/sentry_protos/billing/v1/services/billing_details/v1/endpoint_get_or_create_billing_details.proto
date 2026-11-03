@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_details.v1;
+
+import "sentry_protos/billing/v1/services/billing_details/v1/billing_details.proto";
+
+message GetOrCreateBillingDetailsRequest {
+  // The organization must already have a customer.
+  uint64 organization_id = 1;
+  // Used only when creating billing details; existing details are preserved.
+  optional string billing_email = 2;
+}
+
+message GetOrCreateBillingDetailsResponse {
+  BillingDetails billing_details = 1;
+  bool created = 2;
+}
