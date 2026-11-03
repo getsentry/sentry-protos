@@ -43,3 +43,104 @@ pub struct GetMappingResponse {
         i32,
     >,
 }
+/// Reads the organization's prepaid Seer credit from its current contract.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSeerWalletBalanceRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SeerWallet {
+    /// The ledger account: the uid of the credit-only line item that meters Seer.
+    #[prost(string, tag = "1")]
+    pub account_id: ::prost::alloc::string::String,
+    /// Paid credit minus usage, rounded down to whole credits. Negative once
+    /// usage has outrun the paid credit.
+    #[prost(int64, tag = "2")]
+    pub balance_credits: i64,
+    /// The cost of one credit: the line item's PAYG rate on the rate card, in
+    /// the rate card's price units (10^-11 cents).
+    #[prost(uint64, tag = "3")]
+    pub credit_price: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSeerWalletBalanceResponse {
+    /// Unset when the current contract has no Seer wallet: no contract, no
+    /// enabled credit-only line item metering Seer, or an unlimited one.
+    #[prost(message, optional, tag = "1")]
+    pub wallet: ::core::option::Option<SeerWallet>,
+}
+/// Buys the configured credits when the Seer wallet is below its auto top-up
+/// threshold. Safe to call any number of times, concurrently included: at most
+/// one auto top-up invoice is unpaid at a time.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RunSeerAutoTopUpRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RunSeerAutoTopUpResponse {
+    #[prost(enumeration = "SeerAutoTopUpOutcome", tag = "1")]
+    pub outcome: i32,
+    /// Set when outcome is BILLED.
+    #[prost(uint64, optional, tag = "2")]
+    pub invoice_id: ::core::option::Option<u64>,
+    #[prost(bool, tag = "3")]
+    pub paid: bool,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SeerAutoTopUpOutcome {
+    Unspecified = 0,
+    /// An invoice was billed. It may still be unpaid.
+    Billed = 1,
+    /// No config, or the customer turned it off.
+    NotEnabled = 2,
+    NoWallet = 3,
+    /// The newest auto top-up invoice is unpaid and the charge sweep is still
+    /// retrying it.
+    PaymentPending = 4,
+    /// The newest auto top-up invoice is unpaid and retries ran out. Auto top-up
+    /// stays paused until the customer pays it.
+    PaymentFailed = 5,
+    AboveThreshold = 6,
+    /// Another top-up would buy more than the daily cap allows.
+    DailyCapReached = 7,
+    /// The billing platform can't bill the organization off-cycle, e.g. it is
+    /// not billed by credit card.
+    NotEligible = 8,
+}
+impl SeerAutoTopUpOutcome {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SEER_AUTO_TOP_UP_OUTCOME_UNSPECIFIED",
+            Self::Billed => "SEER_AUTO_TOP_UP_OUTCOME_BILLED",
+            Self::NotEnabled => "SEER_AUTO_TOP_UP_OUTCOME_NOT_ENABLED",
+            Self::NoWallet => "SEER_AUTO_TOP_UP_OUTCOME_NO_WALLET",
+            Self::PaymentPending => "SEER_AUTO_TOP_UP_OUTCOME_PAYMENT_PENDING",
+            Self::PaymentFailed => "SEER_AUTO_TOP_UP_OUTCOME_PAYMENT_FAILED",
+            Self::AboveThreshold => "SEER_AUTO_TOP_UP_OUTCOME_ABOVE_THRESHOLD",
+            Self::DailyCapReached => "SEER_AUTO_TOP_UP_OUTCOME_DAILY_CAP_REACHED",
+            Self::NotEligible => "SEER_AUTO_TOP_UP_OUTCOME_NOT_ELIGIBLE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SEER_AUTO_TOP_UP_OUTCOME_UNSPECIFIED" => Some(Self::Unspecified),
+            "SEER_AUTO_TOP_UP_OUTCOME_BILLED" => Some(Self::Billed),
+            "SEER_AUTO_TOP_UP_OUTCOME_NOT_ENABLED" => Some(Self::NotEnabled),
+            "SEER_AUTO_TOP_UP_OUTCOME_NO_WALLET" => Some(Self::NoWallet),
+            "SEER_AUTO_TOP_UP_OUTCOME_PAYMENT_PENDING" => Some(Self::PaymentPending),
+            "SEER_AUTO_TOP_UP_OUTCOME_PAYMENT_FAILED" => Some(Self::PaymentFailed),
+            "SEER_AUTO_TOP_UP_OUTCOME_ABOVE_THRESHOLD" => Some(Self::AboveThreshold),
+            "SEER_AUTO_TOP_UP_OUTCOME_DAILY_CAP_REACHED" => Some(Self::DailyCapReached),
+            "SEER_AUTO_TOP_UP_OUTCOME_NOT_ELIGIBLE" => Some(Self::NotEligible),
+            _ => None,
+        }
+    }
+}

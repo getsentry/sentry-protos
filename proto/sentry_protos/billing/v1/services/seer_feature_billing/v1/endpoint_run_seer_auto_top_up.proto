@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_feature_billing.v1;
+
+enum SeerAutoTopUpOutcome {
+  SEER_AUTO_TOP_UP_OUTCOME_UNSPECIFIED = 0;
+  // An invoice was billed. It may still be unpaid.
+  SEER_AUTO_TOP_UP_OUTCOME_BILLED = 1;
+  // No config, or the customer turned it off.
+  SEER_AUTO_TOP_UP_OUTCOME_NOT_ENABLED = 2;
+  SEER_AUTO_TOP_UP_OUTCOME_NO_WALLET = 3;
+  // The newest auto top-up invoice is unpaid and the charge sweep is still
+  // retrying it.
+  SEER_AUTO_TOP_UP_OUTCOME_PAYMENT_PENDING = 4;
+  // The newest auto top-up invoice is unpaid and retries ran out. Auto top-up
+  // stays paused until the customer pays it.
+  SEER_AUTO_TOP_UP_OUTCOME_PAYMENT_FAILED = 5;
+  SEER_AUTO_TOP_UP_OUTCOME_ABOVE_THRESHOLD = 6;
+  // Another top-up would buy more than the daily cap allows.
+  SEER_AUTO_TOP_UP_OUTCOME_DAILY_CAP_REACHED = 7;
+  // The billing platform can't bill the organization off-cycle, e.g. it is
+  // not billed by credit card.
+  SEER_AUTO_TOP_UP_OUTCOME_NOT_ELIGIBLE = 8;
+}
+
+// Buys the configured credits when the Seer wallet is below its auto top-up
+// threshold. Safe to call any number of times, concurrently included: at most
+// one auto top-up invoice is unpaid at a time.
+message RunSeerAutoTopUpRequest {
+  uint64 organization_id = 1;
+}
+
+message RunSeerAutoTopUpResponse {
+  SeerAutoTopUpOutcome outcome = 1;
+  // Set when outcome is BILLED.
+  optional uint64 invoice_id = 2;
+  bool paid = 3;
+}

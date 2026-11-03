@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.auto_top_up.v1;
+
+import "sentry_protos/billing/v1/services/auto_top_up/v1/auto_top_up_config.proto";
+
+// The idempotency key for the wallet's next auto top-up invoice. The key
+// depends only on the request, so every caller that sees the same newest auto
+// top-up invoice gets the same key, and billing that key again returns the
+// first invoice instead of charging twice. Once that invoice exists it is the
+// newest one, so the top-up after it gets a new key.
+message GetAutoTopUpIdempotencyKeyRequest {
+  uint64 organization_id = 1;
+  Wallet wallet = 2;
+  // The newest auto top-up invoice for the wallet. Unset before the first.
+  optional uint64 previous_invoice_id = 3;
+}
+
+message GetAutoTopUpIdempotencyKeyResponse {
+  // At most 64 characters, the off-cycle invoice limit.
+  string idempotency_key = 1;
+}

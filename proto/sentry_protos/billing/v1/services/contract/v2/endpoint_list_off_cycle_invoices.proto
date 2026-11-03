@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_deposit.proto";
+
+// Lists the off-cycle invoices one client requested for an organization,
+// newest first. The requesting service reads its outcomes from these instead
+// of keeping its own copy of invoice state.
+message ListOffCycleInvoicesRequest {
+  uint64 organization_id = 1;
+  string client_id = 2;
+  // Only invoices created at or after this time.
+  optional google.protobuf.Timestamp created_after = 3;
+  // 0 means 100. The maximum is 1000.
+  uint32 limit = 4;
+}
+
+message OffCycleInvoice {
+  uint64 invoice_id = 1;
+  string invoice_guid = 2;
+  string idempotency_key = 3;
+  google.protobuf.Timestamp date_added = 4;
+  bool paid = 5;
+  // Set while the charge sweep will still try to collect the invoice. Unpaid
+  // with this unset means retries ran out or the invoice was closed; the
+  // customer can still pay it.
+  bool needs_charged = 6;
+  // The credit the invoice buys.
+  sentry_protos.billing.v1.services.contract.ledger.v1.LedgerDeposit ledger_deposit = 7;
+}
+
+message ListOffCycleInvoicesResponse {
+  repeated OffCycleInvoice invoices = 1;
+  // Set when more invoices matched than limit.
+  bool truncated = 2;
+}
