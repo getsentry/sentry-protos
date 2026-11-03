@@ -14,7 +14,8 @@ ledger in step with invoices.
 | Message | Purpose |
 | --- | --- |
 | `LedgerEntry` | One deposit or withdrawal. Amounts are signed. |
-| `LedgerDeposit` | The credit that an off-cycle invoice buys. |
+| `LedgerDeposit` | The credit an invoice grants. |
+| `CreateLedgerDepositInvoice` | Grants internal credit with an already-paid invoice. |
 | `RecordLedgerWithdrawal` | Takes credit out of an account. |
 | `GetLedgerBalance` | The balance, and the deposits that are still unpaid. |
 | `ListLedgerEntries` | An account's entries, newest first. |
@@ -27,11 +28,16 @@ ledger in step with invoices.
 
 ## Deposits
 
-There is no endpoint that records a deposit. To buy credit, set
-`ledger_deposit` on `BillOffCycleInvoiceRequest` or
+To sell credit, set `ledger_deposit` on `BillOffCycleInvoiceRequest` or
 `CreateOffCycleInvoiceRequest`. The deposit is written in the same transaction
 as the invoice. If the deposit were a separate call, a caller that crashed
 between the two calls could leave a customer charged without credit.
+
+`CreateLedgerDepositInvoice` grants credit for an internal adjustment, such as
+an admin action or a job. It writes a paid, non-chargeable invoice and its
+deposit in the same transaction. The credit is available immediately, and no
+payment provider or tax calculation runs. Callers must supply an idempotency
+key so retrying an adjustment does not grant credit twice.
 
 ## The balance is pessimistic
 
