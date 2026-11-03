@@ -14,6 +14,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.account_status.v1.rs");
                     }
                 }
+                pub mod auto_top_up {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.auto_top_up.v1.rs");
+                    }
+                }
                 pub mod billing_alert {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.billing_alert.v1.rs");

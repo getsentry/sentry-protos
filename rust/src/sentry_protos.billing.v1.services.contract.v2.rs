@@ -352,3 +352,48 @@ pub struct GetUninvoicedContractsResponse {
     #[prost(uint64, repeated, tag = "2")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
+/// Lists the off-cycle invoices one client requested for an organization,
+/// newest first. The requesting service reads its outcomes from these instead
+/// of keeping its own copy of invoice state.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListOffCycleInvoicesRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(string, tag = "2")]
+    pub client_id: ::prost::alloc::string::String,
+    /// Only invoices created at or after this time.
+    #[prost(message, optional, tag = "3")]
+    pub created_after: ::core::option::Option<::prost_types::Timestamp>,
+    /// 0 means 100. The maximum is 1000.
+    #[prost(uint32, tag = "4")]
+    pub limit: u32,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct OffCycleInvoice {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub idempotency_key: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "4")]
+    pub date_added: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(bool, tag = "5")]
+    pub paid: bool,
+    /// Set while the charge sweep will still try to collect the invoice. Unpaid
+    /// with this unset means retries ran out or the invoice was closed; the
+    /// customer can still pay it.
+    #[prost(bool, tag = "6")]
+    pub needs_charged: bool,
+    /// The credit the invoice buys.
+    #[prost(message, optional, tag = "7")]
+    pub ledger_deposit: ::core::option::Option<super::ledger::v1::LedgerDeposit>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListOffCycleInvoicesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub invoices: ::prost::alloc::vec::Vec<OffCycleInvoice>,
+    /// Set when more invoices matched than limit.
+    #[prost(bool, tag = "2")]
+    pub truncated: bool,
+}
