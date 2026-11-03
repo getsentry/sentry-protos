@@ -345,9 +345,9 @@ pub struct GetCurrentContractForOrganizationWithLockResponse {
     /// Unset when the organization has no open contract.
     #[prost(message, optional, tag = "1")]
     pub contract: ::core::option::Option<Contract>,
-    /// Empty when this call did not acquire the lock: the lock is disabled,
-    /// or this task already holds the organization. Releasing an empty lease
-    /// does nothing, so a nested call cannot drop the outer hold.
+    /// Always set. Releasing a lease from a call that did not take the lock
+    /// (the lock is disabled, or this task already holds the organization)
+    /// leaves the outer hold in place.
     #[prost(string, tag = "2")]
     pub lease_id: ::prost::alloc::string::String,
 }
@@ -376,7 +376,8 @@ pub struct GetUninvoicedContractsResponse {
 }
 /// Releases the open-contract lock acquired by
 /// GetCurrentContractForOrganizationWithLock. An empty, unknown, or
-/// already-released lease leaves the lock alone.
+/// already-released lease leaves the lock alone. So does a lease from a call
+/// that did not take the lock.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ReleaseContractLockRequest {
     #[prost(string, tag = "1")]
@@ -384,7 +385,8 @@ pub struct ReleaseContractLockRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ReleaseContractLockResponse {
-    /// False when the lease was empty, unknown, or already released.
+    /// False when the lease did not hold the lock: it was empty, unknown,
+    /// already released, or returned by a call that did not take the lock.
     #[prost(bool, tag = "1")]
     pub released: bool,
 }
