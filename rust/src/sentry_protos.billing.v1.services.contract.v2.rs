@@ -329,6 +329,28 @@ pub struct GetContractsForInvoicesResponse {
     #[prost(map = "uint64, message", tag = "1")]
     pub contracts: ::std::collections::HashMap<u64, Contract>,
 }
+/// Reads the open contract after acquiring the organization lock that
+/// rollover and checkout share. The lock outlives this call; release it
+/// with ReleaseContractLock.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetCurrentContractForOrganizationWithLockRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Names the caller in the lock hold-time metric.
+    #[prost(string, tag = "2")]
+    pub referrer: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetCurrentContractForOrganizationWithLockResponse {
+    /// Unset when the organization has no open contract.
+    #[prost(message, optional, tag = "1")]
+    pub contract: ::core::option::Option<Contract>,
+    /// Empty when this call did not acquire the lock: the lock is disabled,
+    /// or this task already holds the organization. Releasing an empty lease
+    /// does nothing, so a nested call cannot drop the outer hold.
+    #[prost(string, tag = "2")]
+    pub lease_id: ::prost::alloc::string::String,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUninvoicedContractsRequest {
     /// Returns Contracts whose current billing period ends before this time and
@@ -351,4 +373,18 @@ pub struct GetUninvoicedContractsResponse {
     pub truncated: bool,
     #[prost(uint64, repeated, tag = "2")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
+}
+/// Releases the open-contract lock acquired by
+/// GetCurrentContractForOrganizationWithLock. An empty, unknown, or
+/// already-released lease leaves the lock alone.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseContractLockRequest {
+    #[prost(string, tag = "1")]
+    pub lease_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseContractLockResponse {
+    /// False when the lease was empty, unknown, or already released.
+    #[prost(bool, tag = "1")]
+    pub released: bool,
 }
