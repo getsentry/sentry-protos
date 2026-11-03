@@ -448,6 +448,7 @@ pub enum SponsoredType {
     FlyIo = 5,
     Nintendo = 6,
     Employee = 7,
+    Laravel = 8,
 }
 impl SponsoredType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -464,6 +465,7 @@ impl SponsoredType {
             Self::FlyIo => "SPONSORED_TYPE_FLY_IO",
             Self::Nintendo => "SPONSORED_TYPE_NINTENDO",
             Self::Employee => "SPONSORED_TYPE_EMPLOYEE",
+            Self::Laravel => "SPONSORED_TYPE_LARAVEL",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -477,6 +479,7 @@ impl SponsoredType {
             "SPONSORED_TYPE_FLY_IO" => Some(Self::FlyIo),
             "SPONSORED_TYPE_NINTENDO" => Some(Self::Nintendo),
             "SPONSORED_TYPE_EMPLOYEE" => Some(Self::Employee),
+            "SPONSORED_TYPE_LARAVEL" => Some(Self::Laravel),
             _ => None,
         }
     }
