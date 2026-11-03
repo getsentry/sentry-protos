@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.auto_top_up.v1;
+
+import "sentry_protos/billing/v1/services/auto_top_up/v1/auto_top_up_config.proto";
+
+message GetAutoTopUpConfigRequest {
+  uint64 organization_id = 1;
+  Wallet wallet = 2;
+}
+
+message GetAutoTopUpConfigResponse {
+  // Unset when the organization never saved a config for the wallet.
+  optional AutoTopUpConfig config = 1;
+}

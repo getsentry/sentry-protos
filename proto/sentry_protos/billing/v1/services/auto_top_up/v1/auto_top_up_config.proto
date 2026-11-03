@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.auto_top_up.v1;
+
+// A prepaid balance that auto top-up can refill.
+enum Wallet {
+  WALLET_UNSPECIFIED = 0;
+  WALLET_SEER = 1;
+}
+
+// An organization's settings for buying credit when its wallet runs low.
+// Every amount is in credits before tax, because credits are what the customer
+// buys. Whether a top-up is in progress or has failed is not stored here; the
+// off-cycle invoices that bought the credit are the record of that.
+message AutoTopUpConfig {
+  uint64 id = 1;
+  uint64 organization_id = 2;
+  Wallet wallet = 3;
+  // Set only by the customer.
+  bool enabled = 4;
+  // A top-up starts when the balance is below this.
+  uint64 threshold_credits = 5;
+  // The credits each top-up buys.
+  uint64 top_up_credits = 6;
+  // The most credits auto top-up buys in any 24 hours.
+  uint64 daily_cap_credits = 7;
+}
