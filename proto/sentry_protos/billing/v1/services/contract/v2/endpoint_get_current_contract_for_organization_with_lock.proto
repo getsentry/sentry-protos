@@ -18,8 +18,8 @@ message GetCurrentContractForOrganizationWithLockResponse {
   // Unset when the organization has no open contract.
   Contract contract = 1;
 
-  // Empty when this call did not acquire the lock: the lock is disabled,
-  // or this task already holds the organization. Releasing an empty lease
-  // does nothing, so a nested call cannot drop the outer hold.
+  // Always set. Releasing a lease from a call that did not take the lock
+  // (the lock is disabled, or this task already holds the organization)
+  // leaves the outer hold in place.
   string lease_id = 2;
 }
