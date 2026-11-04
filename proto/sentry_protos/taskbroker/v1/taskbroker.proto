@@ -85,6 +85,11 @@ message TaskActivation {
   // is enforced during taskbroker ingestion as adding required fields to a protobuf
   // is a breaking change.
   optional string application = 12;
+
+  // The duration in seconds that a worker has between heartbeats.
+  // When set, an activation in processing that misses a heartbeat is retried
+  // without waiting for processing_deadline_duration.
+  optional uint64 heartbeat = 14;
 }
 
 ////////////////////////////
@@ -99,6 +104,10 @@ service ConsumerService {
 
   // Update the status of multiple activations
   rpc SetBatchActivationStatus(SetBatchActivationStatusRequest) returns (SetBatchActivationStatusResponse) {}
+
+  // Signal that an activation is still being processed.
+  // Returns NOT_FOUND if the activation is no longer processing.
+  rpc UpdateHeartbeat(UpdateHeartbeatRequest) returns (UpdateHeartbeatResponse) {}
 }
 
 message GetTaskRequest {
@@ -152,6 +161,16 @@ message SetBatchActivationStatusRequest {
 }
 
 message SetBatchActivationStatusResponse {}
+
+message UpdateHeartbeatRequest {
+  // The id of the activation being processed.
+  string id = 1;
+
+  // The heartbeat interval in seconds.
+  uint32 heartbeat_interval = 2;
+}
+
+message UpdateHeartbeatResponse {}
 
 service WorkerService {
   // Provide the worker with an activation to execute.

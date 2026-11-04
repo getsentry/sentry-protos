@@ -72,6 +72,11 @@ pub struct TaskActivation {
     /// is a breaking change.
     #[prost(string, optional, tag = "12")]
     pub application: ::core::option::Option<::prost::alloc::string::String>,
+    /// The duration in seconds that a worker has between heartbeats.
+    /// When set, an activation in processing that misses a heartbeat is retried
+    /// without waiting for processing_deadline_duration.
+    #[prost(uint64, optional, tag = "14")]
+    pub heartbeat: ::core::option::Option<u64>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetTaskRequest {
@@ -133,6 +138,17 @@ pub struct SetBatchActivationStatusRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetBatchActivationStatusResponse {}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UpdateHeartbeatRequest {
+    /// The id of the activation being processed.
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    /// The heartbeat interval in seconds.
+    #[prost(uint32, tag = "2")]
+    pub heartbeat_interval: u32,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UpdateHeartbeatResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PushTaskRequest {
     #[prost(message, optional, tag = "1")]
@@ -394,6 +410,37 @@ pub mod consumer_service_client {
                 );
             self.inner.unary(req, path, codec).await
         }
+        /// Signal that an activation is still being processed.
+        /// Returns NOT_FOUND if the activation is no longer processing.
+        pub async fn update_heartbeat(
+            &mut self,
+            request: impl tonic::IntoRequest<super::UpdateHeartbeatRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateHeartbeatResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/sentry_protos.taskbroker.v1.ConsumerService/UpdateHeartbeat",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "sentry_protos.taskbroker.v1.ConsumerService",
+                        "UpdateHeartbeat",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -428,6 +475,15 @@ pub mod consumer_service_server {
             request: tonic::Request<super::SetBatchActivationStatusRequest>,
         ) -> std::result::Result<
             tonic::Response<super::SetBatchActivationStatusResponse>,
+            tonic::Status,
+        >;
+        /// Signal that an activation is still being processed.
+        /// Returns NOT_FOUND if the activation is no longer processing.
+        async fn update_heartbeat(
+            &self,
+            request: tonic::Request<super::UpdateHeartbeatRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdateHeartbeatResponse>,
             tonic::Status,
         >;
     }
@@ -637,6 +693,52 @@ pub mod consumer_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = SetBatchActivationStatusSvc(inner);
+                        let codec = tonic_prost::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/sentry_protos.taskbroker.v1.ConsumerService/UpdateHeartbeat" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdateHeartbeatSvc<T: ConsumerService>(pub Arc<T>);
+                    impl<
+                        T: ConsumerService,
+                    > tonic::server::UnaryService<super::UpdateHeartbeatRequest>
+                    for UpdateHeartbeatSvc<T> {
+                        type Response = super::UpdateHeartbeatResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::UpdateHeartbeatRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as ConsumerService>::update_heartbeat(&inner, request)
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = UpdateHeartbeatSvc(inner);
                         let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
