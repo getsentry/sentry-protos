@@ -1,3 +1,9 @@
+## 0.102.1
+
+### Documentation 📚
+
+- (billing) Document release outcomes for the contract lock by @armenzg with @sentry-junior in [#498](https://github.com/getsentry/sentry-protos/pull/498)
+
 ## 0.102.0
 
 ### New Features ✨
