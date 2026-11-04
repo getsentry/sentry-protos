@@ -1,3 +1,9 @@
+## 0.102.0
+
+### New Features ✨
+
+- (billing) Add open-contract lock endpoint messages by @armenzg and @cursoragent with @getsantry in [#492](https://github.com/getsentry/sentry-protos/pull/492)
+
 ## 0.101.0
 
 ### New Features ✨
