@@ -5,13 +5,17 @@ package sentry_protos.billing.v1.services.contract.v2;
 // Releases the open-contract lock acquired by
 // GetCurrentContractForOrganizationWithLock. An empty, unknown, or
 // already-released lease leaves the lock alone. So does a lease from a call
-// that did not take the lock.
+// that did not take the lock. A Redis error while deleting the key also leaves
+// it held, and the same lease id can be released again.
 message ReleaseContractLockRequest {
   string lease_id = 1;
 }
 
 message ReleaseContractLockResponse {
-  // False when the lease did not hold the lock: it was empty, unknown,
-  // already released, or returned by a call that did not take the lock.
+  // True when the lease is dropped: its key was deleted, or the key had already
+  // expired or been taken by a newer holder. False when the lease was empty,
+  // unknown, already released, or returned by a call that did not take the
+  // lock. Also false on a Redis error while deleting the key: that lease id
+  // still owns the key until a later release deletes it or the lease expires.
   bool released = 1;
 }
