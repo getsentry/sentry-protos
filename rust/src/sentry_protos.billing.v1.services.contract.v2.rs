@@ -377,7 +377,8 @@ pub struct GetUninvoicedContractsResponse {
 /// Releases the open-contract lock acquired by
 /// GetCurrentContractForOrganizationWithLock. An empty, unknown, or
 /// already-released lease leaves the lock alone. So does a lease from a call
-/// that did not take the lock.
+/// that did not take the lock. A Redis error while deleting the key also
+/// leaves it held, and the same lease id can be released again.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ReleaseContractLockRequest {
     #[prost(string, tag = "1")]
@@ -385,8 +386,10 @@ pub struct ReleaseContractLockRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ReleaseContractLockResponse {
-    /// False when the lease did not hold the lock: it was empty, unknown,
-    /// already released, or returned by a call that did not take the lock.
+    /// False when this call did not delete the key. The lease was empty, unknown,
+    /// already released, or returned by a call that did not take the lock. Also
+    /// false when deleting the key hit a Redis error: that lease id still owns
+    /// the key until a later release deletes it or the lease expires.
     #[prost(bool, tag = "1")]
     pub released: bool,
 }
