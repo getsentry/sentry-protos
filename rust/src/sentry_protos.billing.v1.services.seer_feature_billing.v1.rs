@@ -54,14 +54,23 @@ pub struct SeerWallet {
     /// The ledger account: the uid of the credit-only line item that meters Seer.
     #[prost(string, tag = "1")]
     pub account_id: ::prost::alloc::string::String,
-    /// Paid credit minus usage, rounded down to whole credits. Negative once
-    /// usage has outrun the paid credit.
+    /// Purchased credits left: paid credit minus the usage it has paid for,
+    /// rounded down to whole credits. Usage draws on included credits first, so
+    /// this only drops once they run out. Negative once usage has outrun the
+    /// paid credit.
     #[prost(int64, tag = "2")]
     pub balance_credits: i64,
     /// The cost of one credit: the line item's PAYG rate on the rate card, in
     /// the rate card's price units (10^-11 cents).
     #[prost(uint64, tag = "3")]
     pub credit_price: u64,
+    /// Credits the package includes each billing period: the line item's
+    /// reserved units on the rate card.
+    #[prost(uint64, tag = "4")]
+    pub included_credits: u64,
+    /// Included credits used this billing period. At most included_credits.
+    #[prost(uint64, tag = "5")]
+    pub included_credits_used: u64,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetSeerWalletBalanceResponse {
