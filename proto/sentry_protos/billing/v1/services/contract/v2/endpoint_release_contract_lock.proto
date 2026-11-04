@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+// Releases the open-contract lock acquired by
+// GetCurrentContractForOrganizationWithLock. An empty, unknown, or
+// already-released lease leaves the lock alone. So does a lease from a call
+// that did not take the lock.
+message ReleaseContractLockRequest {
+  string lease_id = 1;
+}
+
+message ReleaseContractLockResponse {
+  // False when the lease did not hold the lock: it was empty, unknown,
+  // already released, or returned by a call that did not take the lock.
+  bool released = 1;
+}
