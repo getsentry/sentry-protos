@@ -1,16 +1,22 @@
+import pytest
 from google.protobuf.timestamp_pb2 import Timestamp
 
 from sentry_protos.billing.v1.data_category_pb2 import DataCategory
 from sentry_protos.billing.v1.date_pb2 import Date
 from sentry_protos.billing.v1.usage_data_pb2 import UsageData
 from sentry_protos.billing.v1.seat_category_pb2 import SeatCategory
+from sentry_protos.billing.v1.services.usage.v1.endpoint_usage_by_project_pb2 import (
+    GetUsageByProjectRequest,
+)
 from sentry_protos.billing.v1.services.usage.v1.endpoint_usage_pb2 import (
     CategorySeatUsage,
     CategoryUsage,
     DailyUsage,
     DailySeatUsage,
+    FilterableDataCategory,
     GetUsageRequest,
     GetUsageResponse,
+    SeerFilter,
 )
 
 
@@ -103,6 +109,38 @@ def test_get_usage_request_has_field():
     )
     assert request_with_times.HasField("start")
     assert request_with_times.HasField("end")
+
+
+@pytest.mark.parametrize("request_type", [GetUsageRequest, GetUsageByProjectRequest])
+def test_usage_request_filterable_categories_roundtrip(request_type):
+    request = request_type(
+        organization_id=1,
+        filterable_categories=[
+            FilterableDataCategory(category=DataCategory.DATA_CATEGORY_ERROR),
+            FilterableDataCategory(
+                category=DataCategory.DATA_CATEGORY_BILLABLE_SEER_CREDITS,
+                seer_filter=SeerFilter(feature="automations", attribution_id=42),
+            ),
+        ],
+    )
+
+    decoded = request_type.FromString(request.SerializeToString())
+
+    assert decoded == request
+    assert decoded.filterable_categories[0].WhichOneof("filter") is None
+    assert decoded.filterable_categories[1].WhichOneof("filter") == "seer_filter"
+
+
+@pytest.mark.parametrize("attribution_id", [None, 0, -1, 1 << 40])
+def test_seer_filter_attribution_roundtrip(attribution_id):
+    seer_filter = SeerFilter(feature="automations")
+    if attribution_id is not None:
+        seer_filter.attribution_id = attribution_id
+
+    decoded = SeerFilter.FromString(seer_filter.SerializeToString())
+
+    assert decoded == seer_filter
+    assert decoded.HasField("attribution_id") == (attribution_id is not None)
 
 
 def test_daily_seat_usage():

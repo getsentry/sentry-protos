@@ -47,7 +47,38 @@ pub struct GetUsageResponse {
     #[prost(message, optional, tag = "4")]
     pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
+/// Selects a category, optionally narrowing it without affecting other categories
+/// or seat usage. With no filter set, the category is unrestricted.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct FilterableDataCategory {
+    #[prost(enumeration = "super::super::super::DataCategory", tag = "1")]
+    pub category: i32,
+    #[prost(oneof = "filterable_data_category::Filter", tags = "2")]
+    pub filter: ::core::option::Option<filterable_data_category::Filter>,
+}
+/// Nested message and enum types in `FilterableDataCategory`.
+pub mod filterable_data_category {
+    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Filter {
+        /// Only valid for DATA_CATEGORY_SEER_USAGE_MICRO_CENTS and
+        /// DATA_CATEGORY_BILLABLE_SEER_CREDITS. Consumers must reject other categories.
+        #[prost(message, tag = "2")]
+        SeerFilter(super::SeerFilter),
+    }
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SeerFilter {
+    /// Exact LLM proxy feature value. Consumers must reject an empty feature,
+    /// including when attribution_id is absent.
+    #[prost(string, tag = "1")]
+    pub feature: ::prost::alloc::string::String,
+    /// Attribution within the feature and the request's organization/time range.
+    /// Unset means all attribution for the feature; explicit 0 matches unknown
+    /// attribution. Signed IDs are preserved without a positive-only restriction.
+    #[prost(int64, optional, tag = "2")]
+    pub attribution_id: ::core::option::Option<i64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUsageRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
@@ -55,12 +86,18 @@ pub struct GetUsageRequest {
     pub start: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, optional, tag = "3")]
     pub end: ::core::option::Option<::prost_types::Timestamp>,
-    /// Optional filter for specific data categories.
-    /// When empty, usage for all categories is returned.
+    /// Category-only selection, supported alongside filterable_categories without
+    /// deprecation. Consumers must reject requests with both lists nonempty.
+    /// When both lists are empty, usage for all categories is returned.
     #[prost(enumeration = "super::super::super::DataCategory", repeated, tag = "4")]
     pub categories: ::prost::alloc::vec::Vec<i32>,
+    /// Selects exactly these categories, with optional per-category filters.
+    /// Consumers must reject duplicate categories and DATA_CATEGORY_UNSPECIFIED.
+    /// Requires consumer support; older services may ignore this field.
+    #[prost(message, repeated, tag = "5")]
+    pub filterable_categories: ::prost::alloc::vec::Vec<FilterableDataCategory>,
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetUsageByProjectRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
@@ -68,10 +105,16 @@ pub struct GetUsageByProjectRequest {
     pub start: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, optional, tag = "3")]
     pub end: ::core::option::Option<::prost_types::Timestamp>,
-    /// Optional filter for specific data categories.
-    /// When empty, usage for all categories is returned.
+    /// Category-only selection, supported alongside filterable_categories without
+    /// deprecation. Consumers must reject requests with both lists nonempty.
+    /// When both lists are empty, usage for all categories is returned.
     #[prost(enumeration = "super::super::super::DataCategory", repeated, tag = "4")]
     pub categories: ::prost::alloc::vec::Vec<i32>,
+    /// Selects exactly these categories, with optional per-category filters.
+    /// Consumers must reject duplicate categories and DATA_CATEGORY_UNSPECIFIED.
+    /// Requires consumer support; older services may ignore this field.
+    #[prost(message, repeated, tag = "5")]
+    pub filterable_categories: ::prost::alloc::vec::Vec<FilterableDataCategory>,
 }
 /// Usage for a single project, broken down by day and category.
 #[derive(Clone, PartialEq, ::prost::Message)]

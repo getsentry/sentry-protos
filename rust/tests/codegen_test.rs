@@ -22,8 +22,9 @@ use sentry_protos::billing::v1::services::contract::v1::{
 };
 use sentry_protos::billing::v1::services::package::v1::PackageConfig;
 use sentry_protos::billing::v1::services::usage::v1::{
-    CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage, GetUsageByProjectRequest,
-    GetUsageByProjectResponse, GetUsageRequest, GetUsageResponse, ProjectUsage,
+    filterable_data_category::Filter, CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage,
+    FilterableDataCategory, GetUsageByProjectRequest, GetUsageByProjectResponse, GetUsageRequest,
+    GetUsageResponse, ProjectUsage, SeerFilter,
 };
 use sentry_protos::sentry::v1::RetryState;
 
@@ -48,6 +49,21 @@ fn roundtrip_category_usage() {
             dropped: 50,
             ..Default::default()
         }),
+    });
+}
+
+#[test]
+fn roundtrip_usage_request_with_category_filter() {
+    assert_roundtrip(&GetUsageByProjectRequest {
+        organization_id: 42,
+        filterable_categories: vec![FilterableDataCategory {
+            category: DataCategory::BillableSeerCredits as i32,
+            filter: Some(Filter::SeerFilter(SeerFilter {
+                feature: "automations".into(),
+                attribution_id: Some(42),
+            })),
+        }],
+        ..Default::default()
     });
 }
 

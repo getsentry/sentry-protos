@@ -11,9 +11,15 @@ message GetUsageByProjectRequest {
   google.protobuf.Timestamp start = 2;
   google.protobuf.Timestamp end = 3;
 
-  // Optional filter for specific data categories.
-  // When empty, usage for all categories is returned.
+  // Category-only selection, supported alongside filterable_categories without
+  // deprecation. Consumers must reject requests with both lists nonempty.
+  // When both lists are empty, usage for all categories is returned.
   repeated DataCategory categories = 4;
+
+  // Selects exactly these categories, with optional per-category filters.
+  // Consumers must reject duplicate categories and DATA_CATEGORY_UNSPECIFIED.
+  // Requires consumer support; older services may ignore this field.
+  repeated FilterableDataCategory filterable_categories = 5;
 }
 
 // Usage for a single project, broken down by day and category.
