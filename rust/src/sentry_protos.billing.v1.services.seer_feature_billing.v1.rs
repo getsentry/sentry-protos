@@ -49,3 +49,26 @@ pub struct GetMappingResponse {
         i32,
     >,
 }
+/// Seer usage for one feature, optionally narrowed to one attribution.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSeerUsageRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub start: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "3")]
+    pub end: ::core::option::Option<::prost_types::Timestamp>,
+    /// A Seer feature string, as recorded in LLM proxy cost data. Required.
+    #[prost(string, tag = "4")]
+    pub feature_id: ::prost::alloc::string::String,
+    /// Attribution within the feature, scoped by organization_id and feature_id.
+    /// Unset means all attribution for the feature; 0 means unknown attribution.
+    #[prost(int64, optional, tag = "5")]
+    pub attribution_id: ::core::option::Option<i64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSeerUsageResponse {
+    /// Usage broken down by day, in the data categories the feature bills under.
+    #[prost(message, repeated, tag = "1")]
+    pub days: ::prost::alloc::vec::Vec<super::super::usage::v1::DailyUsage>,
+}

@@ -21,11 +21,12 @@ use sentry_protos::billing::v1::services::contract::v1::{
     Contract, GetContractRequest, RetentionConfig, RetentionOverride,
 };
 use sentry_protos::billing::v1::services::package::v1::PackageConfig;
-use sentry_protos::billing::v1::services::seer_feature_billing::v1::CheckSeerCreditsRequest;
+use sentry_protos::billing::v1::services::seer_feature_billing::v1::{
+    CheckSeerCreditsRequest, GetSeerUsageRequest, GetSeerUsageResponse,
+};
 use sentry_protos::billing::v1::services::usage::v1::{
-    filterable_data_category::Filter, CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage,
-    FilterableDataCategory, GetUsageByProjectRequest, GetUsageByProjectResponse, GetUsageRequest,
-    GetUsageResponse, ProjectUsage, SeerFilter,
+    CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage, GetUsageByProjectRequest,
+    GetUsageByProjectResponse, GetUsageRequest, GetUsageResponse, ProjectUsage,
 };
 use sentry_protos::sentry::v1::RetryState;
 
@@ -53,6 +54,32 @@ fn roundtrip_check_seer_credits_request() {
 }
 
 #[test]
+fn roundtrip_get_seer_usage() {
+    assert_roundtrip(&GetSeerUsageRequest {
+        organization_id: 7,
+        feature_id: "automations".into(),
+        attribution_id: Some(42),
+        ..Default::default()
+    });
+    assert_roundtrip(&GetSeerUsageResponse {
+        days: vec![DailyUsage {
+            date: Some(Date {
+                year: 2024,
+                month: 1,
+                day: 1,
+            }),
+            usage: vec![CategoryUsage {
+                category: DataCategory::BillableSeerCredits as i32,
+                data: Some(UsageData {
+                    total: 100,
+                    ..Default::default()
+                }),
+            }],
+        }],
+    });
+}
+
+#[test]
 fn roundtrip_category_usage() {
     assert_roundtrip(&CategoryUsage {
         category: DataCategory::Transaction as i32,
@@ -61,21 +88,6 @@ fn roundtrip_category_usage() {
             dropped: 50,
             ..Default::default()
         }),
-    });
-}
-
-#[test]
-fn roundtrip_usage_request_with_category_filter() {
-    assert_roundtrip(&GetUsageByProjectRequest {
-        organization_id: 42,
-        filterable_categories: vec![FilterableDataCategory {
-            category: DataCategory::BillableSeerCredits as i32,
-            filter: Some(Filter::SeerFilter(SeerFilter {
-                feature_id: "automations".into(),
-                attribution_id: Some(42),
-            })),
-        }],
-        ..Default::default()
     });
 }
 
