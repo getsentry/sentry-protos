@@ -10,10 +10,10 @@ pub struct CheckSeerCreditsRequest {
     pub predicted_credit_usage: u64,
     #[prost(bool, tag = "4")]
     pub take_lease: bool,
-    /// Attribution context scoped by organization_id and feature_id.
-    /// Omitted means no attribution supplied; 0 means unknown attribution.
-    /// This does not narrow the organization wallet's usage or enforce a
-    /// separate attribution-specific budget.
+    /// Attribution within the feature, scoped by organization_id and feature_id.
+    /// When set, the check covers only the budget allocated to this attribution:
+    /// has_enough_credits says whether that budget covers predicted_credit_usage.
+    /// Omitted checks the organization wallet. 0 means unknown attribution.
     #[prost(int64, optional, tag = "5")]
     pub attribution_id: ::core::option::Option<i64>,
 }
