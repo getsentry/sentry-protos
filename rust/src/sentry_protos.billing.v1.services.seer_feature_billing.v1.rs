@@ -43,3 +43,30 @@ pub struct GetMappingResponse {
         i32,
     >,
 }
+/// Reads the organization's prepaid Seer credit from its current contract.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSeerWalletBalanceRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SeerWallet {
+    /// The ledger account: the uid of the credit-only line item that meters Seer.
+    #[prost(string, tag = "1")]
+    pub account_id: ::prost::alloc::string::String,
+    /// Paid credit minus usage, rounded down to whole credits. Negative once
+    /// usage has outrun the paid credit.
+    #[prost(int64, tag = "2")]
+    pub balance_credits: i64,
+    /// The cost of one credit: the line item's PAYG rate on the rate card, in
+    /// the rate card's price units (10^-11 cents).
+    #[prost(uint64, tag = "3")]
+    pub credit_price: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSeerWalletBalanceResponse {
+    /// Unset when the current contract has no Seer wallet: no contract, no
+    /// enabled credit-only line item metering Seer, or an unlimited one.
+    #[prost(message, optional, tag = "1")]
+    pub wallet: ::core::option::Option<SeerWallet>,
+}
