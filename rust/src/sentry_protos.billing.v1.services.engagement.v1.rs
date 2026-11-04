@@ -713,6 +713,28 @@ pub struct GetEffectiveGrantsResponse {
     #[prost(message, repeated, tag = "1")]
     pub effective_grants: ::prost::alloc::vec::Vec<EffectiveGrant>,
 }
+/// Finds the subscription trials of all organizations by their last day.
+/// A subscription trial has a package_uid. Product trials do not, and are not returned.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetEndedSubscriptionTrialsRequest {
+    /// returns the subscription trials whose end_date is between \[start_date, end_date\] inclusive
+    #[prost(message, optional, tag = "1")]
+    pub start_date: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, optional, tag = "2")]
+    pub end_date: ::core::option::Option<super::super::super::Date>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OrganizationTrial {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub trial: ::core::option::Option<Trial>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetEndedSubscriptionTrialsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub trials: ::prost::alloc::vec::Vec<OrganizationTrial>,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetRecurringCreditsRequest {
     #[prost(uint64, tag = "1")]
