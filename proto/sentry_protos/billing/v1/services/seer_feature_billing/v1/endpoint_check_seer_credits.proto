@@ -8,6 +8,11 @@ message CheckSeerCreditsRequest {
   string feature_id = 2;
   uint64 predicted_credit_usage = 3;
   bool take_lease = 4;
+  // Attribution context scoped by organization_id and feature_id.
+  // Omitted means no attribution supplied; 0 means unknown attribution.
+  // This does not narrow the organization wallet's usage or enforce a
+  // separate attribution-specific budget.
+  optional int64 attribution_id = 5;
 }
 
 message CheckSeerCreditsResponse {

@@ -21,6 +21,7 @@ use sentry_protos::billing::v1::services::contract::v1::{
     Contract, GetContractRequest, RetentionConfig, RetentionOverride,
 };
 use sentry_protos::billing::v1::services::package::v1::PackageConfig;
+use sentry_protos::billing::v1::services::seer_feature_billing::v1::CheckSeerCreditsRequest;
 use sentry_protos::billing::v1::services::usage::v1::{
     filterable_data_category::Filter, CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage,
     FilterableDataCategory, GetUsageByProjectRequest, GetUsageByProjectResponse, GetUsageRequest,
@@ -41,6 +42,17 @@ fn assert_roundtrip<M: Message + Default + PartialEq + std::fmt::Debug>(msg: &M)
 // these won't compile.
 
 #[test]
+fn roundtrip_check_seer_credits_request() {
+    assert_roundtrip(&CheckSeerCreditsRequest {
+        organization_id: 7,
+        feature_id: "automations".into(),
+        predicted_credit_usage: 100,
+        take_lease: true,
+        attribution_id: Some(42),
+    });
+}
+
+#[test]
 fn roundtrip_category_usage() {
     assert_roundtrip(&CategoryUsage {
         category: DataCategory::Transaction as i32,
@@ -59,7 +71,7 @@ fn roundtrip_usage_request_with_category_filter() {
         filterable_categories: vec![FilterableDataCategory {
             category: DataCategory::BillableSeerCredits as i32,
             filter: Some(Filter::SeerFilter(SeerFilter {
-                feature: "automations".into(),
+                feature_id: "automations".into(),
                 attribution_id: Some(42),
             })),
         }],

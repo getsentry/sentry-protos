@@ -57,9 +57,9 @@ message FilterableDataCategory {
 }
 
 message SeerFilter {
-  // Exact LLM proxy feature value. Consumers must reject an empty feature,
+  // Exact LLM proxy feature value. Consumers must reject an empty feature_id,
   // including when attribution_id is absent.
-  string feature = 1;
+  string feature_id = 1;
 
   // Attribution within the feature and the request's organization/time range.
   // Unset means all attribution for the feature; explicit 0 matches unknown

@@ -10,6 +10,12 @@ pub struct CheckSeerCreditsRequest {
     pub predicted_credit_usage: u64,
     #[prost(bool, tag = "4")]
     pub take_lease: bool,
+    /// Attribution context scoped by organization_id and feature_id.
+    /// Omitted means no attribution supplied; 0 means unknown attribution.
+    /// This does not narrow the organization wallet's usage or enforce a
+    /// separate attribution-specific budget.
+    #[prost(int64, optional, tag = "5")]
+    pub attribution_id: ::core::option::Option<i64>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CheckSeerCreditsResponse {

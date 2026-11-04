@@ -119,7 +119,7 @@ def test_usage_request_filterable_categories_roundtrip(request_type):
             FilterableDataCategory(category=DataCategory.DATA_CATEGORY_ERROR),
             FilterableDataCategory(
                 category=DataCategory.DATA_CATEGORY_BILLABLE_SEER_CREDITS,
-                seer_filter=SeerFilter(feature="automations", attribution_id=42),
+                seer_filter=SeerFilter(feature_id="automations", attribution_id=42),
             ),
         ],
     )
@@ -133,7 +133,7 @@ def test_usage_request_filterable_categories_roundtrip(request_type):
 
 @pytest.mark.parametrize("attribution_id", [None, 0, -1, 1 << 40])
 def test_seer_filter_attribution_roundtrip(attribution_id):
-    seer_filter = SeerFilter(feature="automations")
+    seer_filter = SeerFilter(feature_id="automations")
     if attribution_id is not None:
         seer_filter.attribution_id = attribution_id
 

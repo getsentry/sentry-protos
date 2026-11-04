@@ -68,10 +68,10 @@ pub mod filterable_data_category {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SeerFilter {
-    /// Exact LLM proxy feature value. Consumers must reject an empty feature,
+    /// Exact LLM proxy feature value. Consumers must reject an empty feature_id,
     /// including when attribution_id is absent.
     #[prost(string, tag = "1")]
-    pub feature: ::prost::alloc::string::String,
+    pub feature_id: ::prost::alloc::string::String,
     /// Attribution within the feature and the request's organization/time range.
     /// Unset means all attribution for the feature; explicit 0 matches unknown
     /// attribution. Signed IDs are preserved without a positive-only restriction.
