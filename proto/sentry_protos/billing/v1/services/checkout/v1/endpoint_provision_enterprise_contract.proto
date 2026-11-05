@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.checkout.v1;
+
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+
+// When a sales-led enterprise change takes effect. Self-serve checkout infers
+// this from whether the change is an upgrade or a downgrade; a sales-led change
+// states it, because the deal terms fix it.
+enum EnterpriseProvisionTiming {
+  // Rejected. The caller must choose a timing.
+  ENTERPRISE_PROVISION_TIMING_UNSPECIFIED = 0;
+
+  // Apply now and keep the current term's dates. The month_interval cannot
+  // change, since a different interval is a different term.
+  ENTERPRISE_PROVISION_TIMING_COTERM = 1;
+
+  // Stage the change for the rollover that renews the current term.
+  ENTERPRISE_PROVISION_TIMING_AT_TERM_END = 2;
+
+  // Apply now and start a fresh term.
+  ENTERPRISE_PROVISION_TIMING_NEW_TERM = 3;
+}
+
+// Applies a sales-led change to an organization's enterprise contract. Unlike
+// ChangeContract, the caller chooses the timing, and the target may be any
+// enterprise package rather than only one the customer can buy. Both the
+// current and the target package must be enterprise packages. Any unset field
+// leaves the corresponding part of the contract unchanged.
+message ProvisionEnterpriseContractRequest {
+  uint64 organization_id = 1;
+
+  // The enterprise package the contract will switch to. If unset, the package
+  // is left unchanged.
+  optional string package_uid = 2;
+
+  // The contract month_interval the contract will switch to. Must be one of
+  // the package's supported_month_intervals. If unset, the month_interval is
+  // left unchanged.
+  optional uint32 month_interval = 3;
+
+  // The user configs (reservations with their negotiated prices, PAYG budgets,
+  // soft caps, activations) to apply to the contract. If empty, the user
+  // configs are left unchanged.
+  repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_configs = 4;
+
+  EnterpriseProvisionTiming timing = 5;
+}
+
+message ProvisionEnterpriseContractResponse {
+  // The invoice created when the change rolls the contract over now. Unset
+  // when the change is staged or amends the current contract in place.
+  optional uint64 invoice_id = 1;
+}

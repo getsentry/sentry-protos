@@ -111,3 +111,76 @@ pub struct PreviewChangeContractResponse {
         super::super::super::common::v1::PendingChange,
     >,
 }
+/// Applies a sales-led change to an organization's enterprise contract. Unlike
+/// ChangeContract, the caller chooses the timing, and the target may be any
+/// enterprise package rather than only one the customer can buy. Both the
+/// current and the target package must be enterprise packages. Any unset field
+/// leaves the corresponding part of the contract unchanged.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ProvisionEnterpriseContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The enterprise package the contract will switch to. If unset, the package
+    /// is left unchanged.
+    #[prost(string, optional, tag = "2")]
+    pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
+    /// The contract month_interval the contract will switch to. Must be one of
+    /// the package's supported_month_intervals. If unset, the month_interval is
+    /// left unchanged.
+    #[prost(uint32, optional, tag = "3")]
+    pub month_interval: ::core::option::Option<u32>,
+    /// The user configs (reservations with their negotiated prices, PAYG budgets,
+    /// soft caps, activations) to apply to the contract. If empty, the user
+    /// configs are left unchanged.
+    #[prost(message, repeated, tag = "4")]
+    pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
+    #[prost(enumeration = "EnterpriseProvisionTiming", tag = "5")]
+    pub timing: i32,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ProvisionEnterpriseContractResponse {
+    /// The invoice created when the change rolls the contract over now. Unset
+    /// when the change is staged or amends the current contract in place.
+    #[prost(uint64, optional, tag = "1")]
+    pub invoice_id: ::core::option::Option<u64>,
+}
+/// When a sales-led enterprise change takes effect. Self-serve checkout infers
+/// this from whether the change is an upgrade or a downgrade; a sales-led change
+/// states it, because the deal terms fix it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum EnterpriseProvisionTiming {
+    /// Rejected. The caller must choose a timing.
+    Unspecified = 0,
+    /// Apply now and keep the current term's dates. The month_interval cannot
+    /// change, since a different interval is a different term.
+    Coterm = 1,
+    /// Stage the change for the rollover that renews the current term.
+    AtTermEnd = 2,
+    /// Apply now and start a fresh term.
+    NewTerm = 3,
+}
+impl EnterpriseProvisionTiming {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "ENTERPRISE_PROVISION_TIMING_UNSPECIFIED",
+            Self::Coterm => "ENTERPRISE_PROVISION_TIMING_COTERM",
+            Self::AtTermEnd => "ENTERPRISE_PROVISION_TIMING_AT_TERM_END",
+            Self::NewTerm => "ENTERPRISE_PROVISION_TIMING_NEW_TERM",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ENTERPRISE_PROVISION_TIMING_UNSPECIFIED" => Some(Self::Unspecified),
+            "ENTERPRISE_PROVISION_TIMING_COTERM" => Some(Self::Coterm),
+            "ENTERPRISE_PROVISION_TIMING_AT_TERM_END" => Some(Self::AtTermEnd),
+            "ENTERPRISE_PROVISION_TIMING_NEW_TERM" => Some(Self::NewTerm),
+            _ => None,
+        }
+    }
+}
