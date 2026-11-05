@@ -11,7 +11,7 @@ message SetPendingBillingRequest {
   uint64 organization_id = 1;
 
   // The billing arrangement the next contract will have.
-  sentry_protos.billing.v1.common.v1.PendingBilling billing = 2;
+  sentry_protos.billing.v1.common.v1.PendingBillingType billing = 2;
 }
 
 message SetPendingBillingResponse {}

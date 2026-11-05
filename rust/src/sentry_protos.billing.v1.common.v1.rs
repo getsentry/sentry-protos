@@ -570,16 +570,16 @@ pub struct PendingChange {
     pub sponsored_type: ::core::option::Option<i32>,
     /// The next contract's billing arrangement. Unset leaves it unchanged.
     #[prost(message, optional, tag = "5")]
-    pub billing: ::core::option::Option<PendingBilling>,
+    pub billing: ::core::option::Option<PendingBillingType>,
 }
 /// The billing arrangement a pending change moves the next contract to.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct PendingBilling {
-    #[prost(oneof = "pending_billing::Billing", tags = "1, 2, 3")]
-    pub billing: ::core::option::Option<pending_billing::Billing>,
+pub struct PendingBillingType {
+    #[prost(oneof = "pending_billing_type::Billing", tags = "1, 2, 3")]
+    pub billing: ::core::option::Option<pending_billing_type::Billing>,
 }
-/// Nested message and enum types in `PendingBilling`.
-pub mod pending_billing {
+/// Nested message and enum types in `PendingBillingType`.
+pub mod pending_billing_type {
     #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum Billing {
         #[prost(message, tag = "1")]

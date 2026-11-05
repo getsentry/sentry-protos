@@ -33,11 +33,11 @@ message PendingChange {
   optional sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 4;
 
   // The next contract's billing arrangement. Unset leaves it unchanged.
-  optional PendingBilling billing = 5;
+  optional PendingBillingType billing = 5;
 }
 
 // The billing arrangement a pending change moves the next contract to.
-message PendingBilling {
+message PendingBillingType {
   oneof billing {
     CreditCardConfig credit_card = 1;
     InvoicedConfig invoiced = 2;

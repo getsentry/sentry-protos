@@ -61,7 +61,9 @@ pub struct SetPendingBillingRequest {
     pub organization_id: u64,
     /// The billing arrangement the next contract will have.
     #[prost(message, optional, tag = "2")]
-    pub billing: ::core::option::Option<super::super::super::common::v1::PendingBilling>,
+    pub billing: ::core::option::Option<
+        super::super::super::common::v1::PendingBillingType,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingBillingResponse {}

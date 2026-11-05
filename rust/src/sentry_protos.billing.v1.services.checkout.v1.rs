@@ -137,9 +137,10 @@ pub struct ProvisionEnterpriseContractRequest {
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
     #[prost(enumeration = "EnterpriseProvisionTiming", tag = "5")]
     pub timing: i32,
-    /// Moves a card-billed contract to invoiced billing with this config, at the
-    /// change's timing. Required when the contract is billed by card, and
-    /// rejected when it is already invoiced.
+    /// The invoiced config the contract will be billed with, at the change's
+    /// timing. A card-billed contract moves to invoiced billing. If unset, an
+    /// invoiced contract keeps its current config, and a card-billed contract
+    /// moves to invoiced billing with payg disabled.
     #[prost(message, optional, tag = "6")]
     pub invoiced: ::core::option::Option<super::super::contract::v2::InvoicedConfig>,
 }
