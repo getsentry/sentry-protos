@@ -149,10 +149,11 @@ pub struct UpdateHeartbeatRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UpdateHeartbeatResponse {}
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BatchUpdateHeartbeatRequest {
-    #[prost(message, repeated, tag = "1")]
-    pub updates: ::prost::alloc::vec::Vec<UpdateHeartbeatRequest>,
+    /// The ids of the activations being processed.
+    #[prost(string, repeated, tag = "1")]
+    pub ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BatchUpdateHeartbeatResponse {

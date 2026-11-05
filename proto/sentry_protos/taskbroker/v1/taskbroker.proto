@@ -176,7 +176,8 @@ message UpdateHeartbeatRequest {
 message UpdateHeartbeatResponse {}
 
 message BatchUpdateHeartbeatRequest {
-  repeated UpdateHeartbeatRequest updates = 1;
+  // The ids of the activations being processed.
+  repeated string ids = 1;
 }
 
 message BatchUpdateHeartbeatResponse {
