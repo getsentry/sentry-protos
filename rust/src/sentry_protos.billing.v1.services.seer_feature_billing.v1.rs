@@ -71,6 +71,12 @@ pub struct GetSeerUsageResponse {
     /// Usage broken down by day, in the data categories the feature bills under.
     #[prost(message, repeated, tag = "1")]
     pub days: ::prost::alloc::vec::Vec<super::super::usage::v1::DailyUsage>,
+    /// The latest timestamp of usage data included in this response (inclusive
+    /// — there is at least one row at exactly this timestamp). Unset when the
+    /// range has no usage. Callers resuming a query should start strictly after
+    /// this timestamp to avoid double-counting the boundary.
+    #[prost(message, optional, tag = "2")]
+    pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
 /// Reads the organization's prepaid Seer credit from its current contract.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]

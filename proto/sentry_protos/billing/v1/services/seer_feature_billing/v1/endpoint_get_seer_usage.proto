@@ -20,4 +20,10 @@ message GetSeerUsageRequest {
 message GetSeerUsageResponse {
   // Usage broken down by day, in the data categories the feature bills under.
   repeated sentry_protos.billing.v1.services.usage.v1.DailyUsage days = 1;
+
+  // The latest timestamp of usage data included in this response (inclusive
+  // — there is at least one row at exactly this timestamp). Unset when the
+  // range has no usage. Callers resuming a query should start strictly after
+  // this timestamp to avoid double-counting the boundary.
+  optional google.protobuf.Timestamp last_usage_ts = 2;
 }

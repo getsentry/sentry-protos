@@ -5,6 +5,7 @@ from sentry_protos.billing.v1.services.seer_feature_billing.v1.endpoint_check_se
 )
 from sentry_protos.billing.v1.services.seer_feature_billing.v1.endpoint_get_seer_usage_pb2 import (
     GetSeerUsageRequest,
+    GetSeerUsageResponse,
 )
 
 
@@ -35,3 +36,15 @@ def test_get_seer_usage_attribution_roundtrip(attribution_id):
 
     assert decoded == request
     assert decoded.HasField("attribution_id") == (attribution_id is not None)
+
+
+@pytest.mark.parametrize("last_usage_seconds", [None, 1_704_067_200])
+def test_get_seer_usage_response_last_usage_ts_roundtrip(last_usage_seconds):
+    response = GetSeerUsageResponse()
+    if last_usage_seconds is not None:
+        response.last_usage_ts.seconds = last_usage_seconds
+
+    decoded = GetSeerUsageResponse.FromString(response.SerializeToString())
+
+    assert decoded == response
+    assert decoded.HasField("last_usage_ts") == (last_usage_seconds is not None)

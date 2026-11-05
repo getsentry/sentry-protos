@@ -76,6 +76,10 @@ fn roundtrip_get_seer_usage() {
                 }),
             }],
         }],
+        last_usage_ts: Some(prost_types::Timestamp {
+            seconds: 1_704_067_200,
+            nanos: 0,
+        }),
     });
 }
 
