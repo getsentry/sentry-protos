@@ -108,6 +108,9 @@ service ConsumerService {
   // Signal that an activation is still being processed.
   // Returns NOT_FOUND if the activation is no longer processing.
   rpc UpdateHeartbeat(UpdateHeartbeatRequest) returns (UpdateHeartbeatResponse) {}
+
+  // Signal that multiple activations are still being processed.
+  rpc BatchUpdateHeartbeat(BatchUpdateHeartbeatRequest) returns (BatchUpdateHeartbeatResponse) {}
 }
 
 message GetTaskRequest {
@@ -171,6 +174,15 @@ message UpdateHeartbeatRequest {
 }
 
 message UpdateHeartbeatResponse {}
+
+message BatchUpdateHeartbeatRequest {
+  repeated UpdateHeartbeatRequest updates = 1;
+}
+
+message BatchUpdateHeartbeatResponse {
+  // Ids from the request that are no longer processing. The worker should stop sending heartbeats for them.
+  repeated string not_found_ids = 1;
+}
 
 service WorkerService {
   // Provide the worker with an activation to execute.
