@@ -1,3 +1,9 @@
+## 0.105.0
+
+### New Features ✨
+
+- (billing) Define auto top-up config protos by @volokluev with @getsantry in [#504](https://github.com/getsentry/sentry-protos/pull/504)
+
 ## 0.104.0
 
 ### New Features ✨
