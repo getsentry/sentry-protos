@@ -1,3 +1,9 @@
+## 0.103.0
+
+### New Features ✨
+
+- (billing) Add GetSeerWalletBalance to Seer feature billing by @volokluev with @sentry-junior and @getsantry in [#501](https://github.com/getsentry/sentry-protos/pull/501)
+
 ## 0.102.1
 
 ### Documentation 📚
