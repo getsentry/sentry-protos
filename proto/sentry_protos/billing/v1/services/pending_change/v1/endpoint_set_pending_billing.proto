@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.pending_change.v1;
+
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+
+// Sets the pending billing arrangement on the org's pending change. Creates a
+// pending change if none exists, or replaces the billing arrangement on the
+// existing one without modifying its other fields.
+message SetPendingBillingRequest {
+  uint64 organization_id = 1;
+
+  // The billing arrangement the next contract will have.
+  sentry_protos.billing.v1.common.v1.PendingBilling billing = 2;
+}
+
+message SetPendingBillingResponse {}

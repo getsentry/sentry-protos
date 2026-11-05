@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.checkout.v1;
 
 import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+import "sentry_protos/billing/v1/services/contract/v2/billing_config.proto";
 
 // When a sales-led enterprise change takes effect. Self-serve checkout infers
 // this from whether the change is an upgrade or a downgrade; a sales-led change
@@ -24,8 +25,9 @@ enum EnterpriseProvisionTiming {
 
 // Applies a sales-led change to an organization's enterprise contract. Unlike
 // ChangeContract, the caller chooses the timing, and the target may be any
-// enterprise package rather than only one the customer can buy. Both the
-// current and the target package must be enterprise packages. Any unset field
+// enterprise package rather than only one the customer can buy. The target
+// must be an enterprise package, but the current package can be any package,
+// so a self-serve contract can move onto an enterprise deal. Any unset field
 // leaves the corresponding part of the contract unchanged.
 message ProvisionEnterpriseContractRequest {
   uint64 organization_id = 1;
@@ -45,6 +47,11 @@ message ProvisionEnterpriseContractRequest {
   repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_configs = 4;
 
   EnterpriseProvisionTiming timing = 5;
+
+  // Moves a card-billed contract to invoiced billing with this config, at the
+  // change's timing. Required when the contract is billed by card, and
+  // rejected when it is already invoiced.
+  optional sentry_protos.billing.v1.services.contract.v2.InvoicedConfig invoiced = 6;
 }
 
 message ProvisionEnterpriseContractResponse {

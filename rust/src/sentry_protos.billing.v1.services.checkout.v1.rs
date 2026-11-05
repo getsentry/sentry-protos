@@ -113,8 +113,9 @@ pub struct PreviewChangeContractResponse {
 }
 /// Applies a sales-led change to an organization's enterprise contract. Unlike
 /// ChangeContract, the caller chooses the timing, and the target may be any
-/// enterprise package rather than only one the customer can buy. Both the
-/// current and the target package must be enterprise packages. Any unset field
+/// enterprise package rather than only one the customer can buy. The target
+/// must be an enterprise package, but the current package can be any package,
+/// so a self-serve contract can move onto an enterprise deal. Any unset field
 /// leaves the corresponding part of the contract unchanged.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ProvisionEnterpriseContractRequest {
@@ -136,6 +137,11 @@ pub struct ProvisionEnterpriseContractRequest {
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
     #[prost(enumeration = "EnterpriseProvisionTiming", tag = "5")]
     pub timing: i32,
+    /// Moves a card-billed contract to invoiced billing with this config, at the
+    /// change's timing. Required when the contract is billed by card, and
+    /// rejected when it is already invoiced.
+    #[prost(message, optional, tag = "6")]
+    pub invoiced: ::core::option::Option<super::super::contract::v2::InvoicedConfig>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ProvisionEnterpriseContractResponse {

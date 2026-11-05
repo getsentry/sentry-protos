@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.common.v1;
 
 import "google/protobuf/empty.proto";
+import "sentry_protos/billing/v1/common/v1/billing_arrangement.proto";
 import "sentry_protos/billing/v1/common/v1/soft_cap_type.proto";
 import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
 
@@ -30,6 +31,18 @@ message PendingChange {
   // Next contract's sponsored_type. SPONSORED_TYPE_UNSPECIFIED clears the
   // sponsorship; an unset field leaves it unchanged.
   optional sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 4;
+
+  // The next contract's billing arrangement. Unset leaves it unchanged.
+  optional PendingBilling billing = 5;
+}
+
+// The billing arrangement a pending change moves the next contract to.
+message PendingBilling {
+  oneof billing {
+    CreditCardConfig credit_card = 1;
+    InvoicedConfig invoiced = 2;
+    PartnerConfig partner = 3;
+  }
 }
 
 // Pending overrides for a set of line items. payg_budget and reservation are

@@ -119,6 +119,67 @@ impl Operator {
         }
     }
 }
+/// Pay-as-you-go configuration. The presence of this message means the org may
+/// incur payg usage; its absence means it may not.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PaygConfig {
+    /// Whether we charge payg spend ourselves, against a card on file. When
+    /// false, payg is still incurred but billed outside the platform.
+    #[prost(bool, tag = "1")]
+    pub charged: bool,
+}
+/// Billed directly by us, on a card the customer manages. Payg is always both
+/// permitted and charged, so there is nothing further to configure.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreditCardConfig {}
+/// Invoiced by us, under a sales-negotiated agreement.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct InvoicedConfig {
+    /// Absent means the org may not incur payg at all.
+    #[prost(message, optional, tag = "1")]
+    pub payg: ::core::option::Option<PaygConfig>,
+}
+/// Billed by a third-party marketplace.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PartnerConfig {
+    /// Whether the marketplace provisions through the channel flow, which leaves
+    /// the customer able to change their own plan.
+    #[prost(bool, tag = "1")]
+    pub self_serve: bool,
+    /// How is this customer invoiced?
+    #[prost(enumeration = "PartnerBillingStrategy", tag = "2")]
+    pub billing_strategy: i32,
+}
+/// The invoicing and collection behavior for a partner-billed contract.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PartnerBillingStrategy {
+    /// 3rd party bills the customer independently. The platform records a $0
+    /// invoice.
+    Unspecified = 0,
+    /// Platform calculates the invoice and submits it to Vercel.
+    Vercel = 1,
+}
+impl PartnerBillingStrategy {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PARTNER_BILLING_STRATEGY_UNSPECIFIED",
+            Self::Vercel => "PARTNER_BILLING_STRATEGY_VERCEL",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PARTNER_BILLING_STRATEGY_UNSPECIFIED" => Some(Self::Unspecified),
+            "PARTNER_BILLING_STRATEGY_VERCEL" => Some(Self::Vercel),
+            _ => None,
+        }
+    }
+}
 /// Billing interval for packages and contracts.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -507,6 +568,27 @@ pub struct PendingChange {
     /// sponsorship; an unset field leaves it unchanged.
     #[prost(enumeration = "SponsoredType", optional, tag = "4")]
     pub sponsored_type: ::core::option::Option<i32>,
+    /// The next contract's billing arrangement. Unset leaves it unchanged.
+    #[prost(message, optional, tag = "5")]
+    pub billing: ::core::option::Option<PendingBilling>,
+}
+/// The billing arrangement a pending change moves the next contract to.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PendingBilling {
+    #[prost(oneof = "pending_billing::Billing", tags = "1, 2, 3")]
+    pub billing: ::core::option::Option<pending_billing::Billing>,
+}
+/// Nested message and enum types in `PendingBilling`.
+pub mod pending_billing {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Billing {
+        #[prost(message, tag = "1")]
+        CreditCard(super::CreditCardConfig),
+        #[prost(message, tag = "2")]
+        Invoiced(super::InvoicedConfig),
+        #[prost(message, tag = "3")]
+        Partner(super::PartnerConfig),
+    }
 }
 /// Pending overrides for a set of line items. payg_budget and reservation are
 /// each independently optional - either, both, or neither may be set on a
