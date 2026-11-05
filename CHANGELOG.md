@@ -1,3 +1,9 @@
+## 0.104.0
+
+### New Features ✨
+
+- (taskbroker) Add activation heartbeat and UpdateHeartbeat RPC by @evanh in [#500](https://github.com/getsentry/sentry-protos/pull/500)
+
 ## 0.103.0
 
 ### New Features ✨
