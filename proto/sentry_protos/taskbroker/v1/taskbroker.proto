@@ -167,7 +167,7 @@ message UpdateHeartbeatRequest {
   string id = 1;
 
   // The heartbeat interval in seconds.
-  uint32 heartbeat_interval = 2;
+  uint64 heartbeat_interval = 2;
 }
 
 message UpdateHeartbeatResponse {}

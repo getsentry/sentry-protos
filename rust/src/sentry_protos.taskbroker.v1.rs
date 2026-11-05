@@ -144,8 +144,8 @@ pub struct UpdateHeartbeatRequest {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     /// The heartbeat interval in seconds.
-    #[prost(uint32, tag = "2")]
-    pub heartbeat_interval: u32,
+    #[prost(uint64, tag = "2")]
+    pub heartbeat_interval: u64,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UpdateHeartbeatResponse {}
