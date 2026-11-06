@@ -4,12 +4,20 @@ package sentry_protos.billing.v1.services.auto_top_up.v1;
 
 import "sentry_protos/billing/v1/services/auto_top_up/v1/auto_top_up_config.proto";
 
+// Deprecated: use sentry_protos.billing.v1.services.seer_wallet_config.v1,
+// which keeps the auto top-up and spend settings apart.
+option deprecated = true;
+
 message GetAutoTopUpConfigRequest {
+  option deprecated = true;
+
   uint64 organization_id = 1;
   Wallet wallet = 2;
 }
 
 message GetAutoTopUpConfigResponse {
+  option deprecated = true;
+
   // Unset when the organization never saved a config for the wallet.
   optional AutoTopUpConfig config = 1;
 }
