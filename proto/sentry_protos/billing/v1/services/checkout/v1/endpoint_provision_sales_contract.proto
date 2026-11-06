@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.checkout.v1;
 
+import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
 
 // When a sales-led change takes effect. The deal fixes this, so the service does
@@ -29,7 +30,12 @@ message ProvisionSalesContractRequest {
   // configuration.
   repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_configs = 4;
 
-  SalesContractTiming timing = 5;
+  oneof effective {
+    SalesContractTiming timing = 5;
+    // Ends the current term on this date and starts a new full term from it, as
+    // the deal's start date. Must fall between now and the current term's end.
+    google.protobuf.Timestamp new_term_start = 6;
+  }
 }
 
 message ProvisionSalesContractResponse {
