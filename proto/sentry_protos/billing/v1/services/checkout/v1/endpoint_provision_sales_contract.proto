@@ -4,6 +4,7 @@ package sentry_protos.billing.v1.services.checkout.v1;
 
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+import "sentry_protos/billing/v1/services/contract/v2/billing_config.proto";
 
 // When a sales-led change takes effect. The deal fixes this, so the service does
 // not infer it from whether the change is an upgrade or a downgrade.
@@ -35,6 +36,14 @@ message ProvisionSalesContractRequest {
     // Ends the current term on this date and starts a new full term from it, as
     // the deal's start date. Must fall between now and the current term's end.
     google.protobuf.Timestamp new_term_start = 6;
+  }
+
+  // The arrangement that bills the contract once the deal takes effect, which
+  // may differ from the current one, as when a card-billed customer signs an
+  // invoiced deal. Required.
+  oneof billing {
+    sentry_protos.billing.v1.services.contract.v2.CreditCardConfig credit_card = 7;
+    sentry_protos.billing.v1.services.contract.v2.InvoicedConfig invoiced = 8;
   }
 }
 
