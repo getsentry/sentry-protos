@@ -127,8 +127,20 @@ pub struct ProvisionSalesContractRequest {
     /// configuration.
     #[prost(message, repeated, tag = "4")]
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
-    #[prost(enumeration = "SalesContractTiming", tag = "5")]
-    pub timing: i32,
+    #[prost(oneof = "provision_sales_contract_request::Effective", tags = "5, 6")]
+    pub effective: ::core::option::Option<provision_sales_contract_request::Effective>,
+}
+/// Nested message and enum types in `ProvisionSalesContractRequest`.
+pub mod provision_sales_contract_request {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Effective {
+        #[prost(enumeration = "super::SalesContractTiming", tag = "5")]
+        Timing(i32),
+        /// Ends the current term on this date and starts a new full term from it, as
+        /// the deal's start date. Must fall between now and the current term's end.
+        #[prost(message, tag = "6")]
+        NewTermStart(::prost_types::Timestamp),
+    }
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ProvisionSalesContractResponse {
