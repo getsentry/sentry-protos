@@ -38,11 +38,8 @@ message ProvisionSalesContractRequest {
     google.protobuf.Timestamp new_term_start = 6;
   }
 
-  // The contract's billing type and config once the deal takes effect. Required.
-  oneof billing {
-    sentry_protos.billing.v1.services.contract.v2.CreditCardConfig credit_card = 7;
-    sentry_protos.billing.v1.services.contract.v2.InvoicedConfig invoiced = 8;
-  }
+  // The contract's invoiced config once the deal takes effect. Required.
+  sentry_protos.billing.v1.services.contract.v2.InvoicedConfig invoiced = 7;
 }
 
 message ProvisionSalesContractResponse {
