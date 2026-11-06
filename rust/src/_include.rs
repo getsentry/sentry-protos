@@ -120,6 +120,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.rate_card.v1.rs");
                     }
                 }
+                pub mod sales_contract {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.sales_contract.v1.rs");
+                    }
+                }
                 pub mod seat_activity {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.seat_activity.v1.rs");
