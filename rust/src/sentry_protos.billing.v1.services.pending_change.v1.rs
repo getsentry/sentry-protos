@@ -58,7 +58,9 @@ pub struct SetPendingBillingRequest {
     pub organization_id: u64,
     /// The arrangement that bills the contract from the next rollover. Required.
     #[prost(message, optional, tag = "2")]
-    pub billing: ::core::option::Option<super::super::super::common::v1::PendingBilling>,
+    pub billing: ::core::option::Option<
+        super::super::super::common::v1::PendingBillingConfig,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingBillingResponse {}
