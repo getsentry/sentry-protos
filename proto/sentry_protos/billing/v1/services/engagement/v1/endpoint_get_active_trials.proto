@@ -19,6 +19,8 @@ message Trial {
   sentry_protos.billing.v1.Date start_date = 2;
   sentry_protos.billing.v1.Date end_date = 3;
   optional string package_uid = 4;
+  // The user who started the trial. Not set when no user started it.
+  optional uint64 user_id = 5;
 }
 
 message GetActiveTrialsRequest {

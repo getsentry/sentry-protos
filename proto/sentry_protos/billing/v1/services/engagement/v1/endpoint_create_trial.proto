@@ -19,6 +19,9 @@ message CreateTrialRequest {
   // if dates are not provided, we'll create a Trial that starts immediately and lasts 14 days.
   optional sentry_protos.billing.v1.Date start_date = 5;
   optional sentry_protos.billing.v1.Date end_date = 6;
+
+  // The user who starts the trial. Not set when no user starts it.
+  optional uint64 user_id = 7;
 }
 
 message CreateTrialResponse {
