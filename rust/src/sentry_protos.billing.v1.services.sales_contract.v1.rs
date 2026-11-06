@@ -18,37 +18,12 @@ pub struct ProvisionSalesContractRequest {
     #[prost(enumeration = "SalesContractTiming", tag = "5")]
     pub timing: i32,
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct SalesContractRejection {
-    #[prost(enumeration = "SalesContractRejectionReason", tag = "1")]
-    pub reason: i32,
-    /// A message the caller can show to the person who entered the deal.
-    #[prost(string, tag = "2")]
-    pub message: ::prost::alloc::string::String,
-}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct SalesContractApplied {
-    /// Set when a coterm rolled the contract over and invoiced it.
+pub struct ProvisionSalesContractResponse {
+    /// The invoice a coterm created when it rolled the contract over. Unset for a
+    /// deal staged for renewal, or a coterm the contract already matched.
     #[prost(uint64, optional, tag = "1")]
     pub invoice_id: ::core::option::Option<u64>,
-    /// True when the contract already matched the request, so nothing was written.
-    #[prost(bool, tag = "2")]
-    pub no_op: bool,
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct ProvisionSalesContractResponse {
-    #[prost(oneof = "provision_sales_contract_response::Outcome", tags = "1, 2")]
-    pub outcome: ::core::option::Option<provision_sales_contract_response::Outcome>,
-}
-/// Nested message and enum types in `ProvisionSalesContractResponse`.
-pub mod provision_sales_contract_response {
-    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum Outcome {
-        #[prost(message, tag = "1")]
-        Applied(super::SalesContractApplied),
-        #[prost(message, tag = "2")]
-        Rejection(super::SalesContractRejection),
-    }
 }
 /// When a sales-led change takes effect. The deal fixes this, so the service does
 /// not infer it from whether the change is an upgrade or a downgrade.
@@ -79,65 +54,6 @@ impl SalesContractTiming {
             "SALES_CONTRACT_TIMING_UNSPECIFIED" => Some(Self::Unspecified),
             "SALES_CONTRACT_TIMING_COTERM" => Some(Self::Coterm),
             "SALES_CONTRACT_TIMING_AT_TERM_END" => Some(Self::AtTermEnd),
-            _ => None,
-        }
-    }
-}
-/// Why a provision was not applied. Each one leaves the contract unchanged.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum SalesContractRejectionReason {
-    Unspecified = 0,
-    NoContract = 1,
-    /// Only invoiced contracts can be provisioned for now.
-    NotInvoiced = 2,
-    Sponsored = 3,
-    NotEnterprisePackage = 4,
-    IntervalChangeOnCoterm = 5,
-    /// A user config sets something other than a single-line-item reservation.
-    UnsupportedUserConfig = 6,
-    MissingTiming = 7,
-}
-impl SalesContractRejectionReason {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "SALES_CONTRACT_REJECTION_REASON_UNSPECIFIED",
-            Self::NoContract => "SALES_CONTRACT_REJECTION_REASON_NO_CONTRACT",
-            Self::NotInvoiced => "SALES_CONTRACT_REJECTION_REASON_NOT_INVOICED",
-            Self::Sponsored => "SALES_CONTRACT_REJECTION_REASON_SPONSORED",
-            Self::NotEnterprisePackage => {
-                "SALES_CONTRACT_REJECTION_REASON_NOT_ENTERPRISE_PACKAGE"
-            }
-            Self::IntervalChangeOnCoterm => {
-                "SALES_CONTRACT_REJECTION_REASON_INTERVAL_CHANGE_ON_COTERM"
-            }
-            Self::UnsupportedUserConfig => {
-                "SALES_CONTRACT_REJECTION_REASON_UNSUPPORTED_USER_CONFIG"
-            }
-            Self::MissingTiming => "SALES_CONTRACT_REJECTION_REASON_MISSING_TIMING",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "SALES_CONTRACT_REJECTION_REASON_UNSPECIFIED" => Some(Self::Unspecified),
-            "SALES_CONTRACT_REJECTION_REASON_NO_CONTRACT" => Some(Self::NoContract),
-            "SALES_CONTRACT_REJECTION_REASON_NOT_INVOICED" => Some(Self::NotInvoiced),
-            "SALES_CONTRACT_REJECTION_REASON_SPONSORED" => Some(Self::Sponsored),
-            "SALES_CONTRACT_REJECTION_REASON_NOT_ENTERPRISE_PACKAGE" => {
-                Some(Self::NotEnterprisePackage)
-            }
-            "SALES_CONTRACT_REJECTION_REASON_INTERVAL_CHANGE_ON_COTERM" => {
-                Some(Self::IntervalChangeOnCoterm)
-            }
-            "SALES_CONTRACT_REJECTION_REASON_UNSUPPORTED_USER_CONFIG" => {
-                Some(Self::UnsupportedUserConfig)
-            }
-            "SALES_CONTRACT_REJECTION_REASON_MISSING_TIMING" => Some(Self::MissingTiming),
             _ => None,
         }
     }
