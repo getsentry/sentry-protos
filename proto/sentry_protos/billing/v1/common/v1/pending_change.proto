@@ -30,6 +30,33 @@ message PendingChange {
   // Next contract's sponsored_type. SPONSORED_TYPE_UNSPECIFIED clears the
   // sponsorship; an unset field leaves it unchanged.
   optional sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 4;
+
+  // The arrangement that bills the next contract, as when a card-billed
+  // customer signs an invoiced deal. Unset leaves the arrangement unchanged.
+  optional PendingBilling billing = 5;
+}
+
+// The arrangement a pending change moves the contract onto. Mirrors the
+// billing oneof of the contract service's BillingConfig, which this package
+// cannot import without a cycle.
+message PendingBilling {
+  oneof arrangement {
+    google.protobuf.Empty credit_card = 1;
+    PendingInvoicedBilling invoiced = 2;
+  }
+}
+
+// Mirrors contract.v2.InvoicedConfig.
+message PendingInvoicedBilling {
+  // Absent means the org may not incur payg at all.
+  optional PendingPaygBilling payg = 1;
+}
+
+// Mirrors contract.v2.PaygConfig.
+message PendingPaygBilling {
+  // Whether we charge payg spend ourselves. When false, payg is still
+  // incurred but billed outside the platform.
+  bool charged = 1;
 }
 
 // Pending overrides for a set of line items. payg_budget and reservation are
