@@ -8,7 +8,7 @@ message SetPendingBillingRequest {
   uint64 organization_id = 1;
 
   // The arrangement that bills the contract from the next rollover. Required.
-  sentry_protos.billing.v1.common.v1.PendingBilling billing = 2;
+  sentry_protos.billing.v1.common.v1.PendingBillingConfig billing = 2;
 }
 
 message SetPendingBillingResponse {}
