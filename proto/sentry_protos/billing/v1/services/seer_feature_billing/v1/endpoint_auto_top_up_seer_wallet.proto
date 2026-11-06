@@ -22,7 +22,8 @@ message AutoTopUpSeerWalletResponse {
     OUTCOME_ABOVE_THRESHOLD = 3;
     // Another top-up for the organization holds the charge lock.
     OUTCOME_LOCKED = 4;
-    // An earlier top-up invoice is still waiting to be paid.
+    // The last top-up invoice is unpaid, including when its charge failed.
+    // Top-ups resume once the customer pays it.
     OUTCOME_INVOICE_PENDING = 5;
     OUTCOME_BILLED = 6;
   }

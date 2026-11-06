@@ -44,7 +44,8 @@ pub mod auto_top_up_seer_wallet_response {
         AboveThreshold = 3,
         /// Another top-up for the organization holds the charge lock.
         Locked = 4,
-        /// An earlier top-up invoice is still waiting to be paid.
+        /// The last top-up invoice is unpaid, including when its charge failed.
+        /// Top-ups resume once the customer pays it.
         InvoicePending = 5,
         Billed = 6,
     }
