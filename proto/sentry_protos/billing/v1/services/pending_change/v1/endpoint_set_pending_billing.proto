@@ -7,7 +7,7 @@ import "sentry_protos/billing/v1/common/v1/pending_change.proto";
 message SetPendingBillingRequest {
   uint64 organization_id = 1;
 
-  // The arrangement that bills the contract from the next rollover. Required.
+  // The next contract's billing type and config. Required.
   sentry_protos.billing.v1.common.v1.PendingBillingConfig billing_config = 2;
 }
 

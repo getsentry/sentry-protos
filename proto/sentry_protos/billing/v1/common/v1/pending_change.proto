@@ -31,16 +31,14 @@ message PendingChange {
   // sponsorship; an unset field leaves it unchanged.
   optional sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 4;
 
-  // The arrangement that bills the next contract, as when a card-billed
-  // customer signs an invoiced deal. Unset leaves the arrangement unchanged.
+  // The next contract's billing type and config. Unset leaves them unchanged.
   optional PendingBillingConfig billing_config = 5;
 }
 
-// The arrangement a pending change moves the contract onto. Mirrors the
-// billing oneof of the contract service's BillingConfig, which this package
-// cannot import without a cycle.
+// The next contract's billing type and config. Mirrors the billing oneof of
+// contract.v2.BillingConfig, which this package cannot import without a cycle.
 message PendingBillingConfig {
-  oneof arrangement {
+  oneof billing {
     google.protobuf.Empty credit_card = 1;
     PendingInvoicedConfig invoiced = 2;
   }
