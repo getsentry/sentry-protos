@@ -21,6 +21,9 @@ use sentry_protos::billing::v1::services::contract::v1::{
     Contract, GetContractRequest, RetentionConfig, RetentionOverride,
 };
 use sentry_protos::billing::v1::services::package::v1::PackageConfig;
+use sentry_protos::billing::v1::services::seer_feature_billing::v1::{
+    CheckSeerCreditsRequest, GetSeerUsageRequest, GetSeerUsageResponse,
+};
 use sentry_protos::billing::v1::services::usage::v1::{
     CategorySeatUsage, CategoryUsage, DailySeatUsage, DailyUsage, GetUsageByProjectRequest,
     GetUsageByProjectResponse, GetUsageRequest, GetUsageResponse, ProjectUsage,
@@ -38,6 +41,47 @@ fn assert_roundtrip<M: Message + Default + PartialEq + std::fmt::Debug>(msg: &M)
 // from nested packages (usage::v1, contract::v1) reference types from
 // parent packages (billing::v1). If the module hierarchy is wrong,
 // these won't compile.
+
+#[test]
+fn roundtrip_check_seer_credits_request() {
+    assert_roundtrip(&CheckSeerCreditsRequest {
+        organization_id: 7,
+        feature_id: "automations".into(),
+        predicted_credit_usage: 100,
+        take_lease: true,
+        attribution_id: Some(42),
+    });
+}
+
+#[test]
+fn roundtrip_get_seer_usage() {
+    assert_roundtrip(&GetSeerUsageRequest {
+        organization_id: 7,
+        feature_id: "automations".into(),
+        attribution_id: Some(42),
+        ..Default::default()
+    });
+    assert_roundtrip(&GetSeerUsageResponse {
+        days: vec![DailyUsage {
+            date: Some(Date {
+                year: 2024,
+                month: 1,
+                day: 1,
+            }),
+            usage: vec![CategoryUsage {
+                category: DataCategory::BillableSeerCredits as i32,
+                data: Some(UsageData {
+                    total: 100,
+                    ..Default::default()
+                }),
+            }],
+        }],
+        last_usage_ts: Some(prost_types::Timestamp {
+            seconds: 1_704_067_200,
+            nanos: 0,
+        }),
+    });
+}
 
 #[test]
 fn roundtrip_category_usage() {

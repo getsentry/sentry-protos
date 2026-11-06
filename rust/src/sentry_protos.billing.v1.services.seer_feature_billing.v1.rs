@@ -10,6 +10,12 @@ pub struct CheckSeerCreditsRequest {
     pub predicted_credit_usage: u64,
     #[prost(bool, tag = "4")]
     pub take_lease: bool,
+    /// Attribution within the feature, scoped by organization_id and feature_id.
+    /// When set, the check covers only the budget allocated to this attribution:
+    /// has_enough_credits says whether that budget covers predicted_credit_usage.
+    /// Omitted checks the organization wallet. 0 means unknown attribution.
+    #[prost(int64, optional, tag = "5")]
+    pub attribution_id: ::core::option::Option<i64>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CheckSeerCreditsResponse {
@@ -42,6 +48,35 @@ pub struct GetMappingResponse {
         ::prost::alloc::string::String,
         i32,
     >,
+}
+/// Seer usage for one feature, optionally narrowed to one attribution.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSeerUsageRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub start: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "3")]
+    pub end: ::core::option::Option<::prost_types::Timestamp>,
+    /// A Seer feature string, as recorded in LLM proxy cost data. Required.
+    #[prost(string, tag = "4")]
+    pub feature_id: ::prost::alloc::string::String,
+    /// Attribution within the feature, scoped by organization_id and feature_id.
+    /// Unset means all attribution for the feature; 0 means unknown attribution.
+    #[prost(int64, optional, tag = "5")]
+    pub attribution_id: ::core::option::Option<i64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSeerUsageResponse {
+    /// Usage broken down by day, in the data categories the feature bills under.
+    #[prost(message, repeated, tag = "1")]
+    pub days: ::prost::alloc::vec::Vec<super::super::usage::v1::DailyUsage>,
+    /// The latest timestamp of usage data included in this response (inclusive
+    /// — there is at least one row at exactly this timestamp). Unset when the
+    /// range has no usage. Callers resuming a query should start strictly after
+    /// this timestamp to avoid double-counting the boundary.
+    #[prost(message, optional, tag = "2")]
+    pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
 /// Reads the organization's prepaid Seer credit from its current contract.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]

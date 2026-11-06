@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_feature_billing.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+
+// Seer usage for one feature, optionally narrowed to one attribution.
+message GetSeerUsageRequest {
+  uint64 organization_id = 1;
+  google.protobuf.Timestamp start = 2;
+  google.protobuf.Timestamp end = 3;
+  // A Seer feature string, as recorded in LLM proxy cost data. Required.
+  string feature_id = 4;
+  // Attribution within the feature, scoped by organization_id and feature_id.
+  // Unset means all attribution for the feature; 0 means unknown attribution.
+  optional int64 attribution_id = 5;
+}
+
+message GetSeerUsageResponse {
+  // Usage broken down by day, in the data categories the feature bills under.
+  repeated sentry_protos.billing.v1.services.usage.v1.DailyUsage days = 1;
+
+  // The latest timestamp of usage data included in this response (inclusive
+  // — there is at least one row at exactly this timestamp). Unset when the
+  // range has no usage. Callers resuming a query should start strictly after
+  // this timestamp to avoid double-counting the boundary.
+  optional google.protobuf.Timestamp last_usage_ts = 2;
+}

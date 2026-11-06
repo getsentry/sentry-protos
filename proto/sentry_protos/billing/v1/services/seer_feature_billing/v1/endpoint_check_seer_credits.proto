@@ -8,6 +8,11 @@ message CheckSeerCreditsRequest {
   string feature_id = 2;
   uint64 predicted_credit_usage = 3;
   bool take_lease = 4;
+  // Attribution within the feature, scoped by organization_id and feature_id.
+  // When set, the check covers only the budget allocated to this attribution:
+  // has_enough_credits says whether that budget covers predicted_credit_usage.
+  // Omitted checks the organization wallet. 0 means unknown attribution.
+  optional int64 attribution_id = 5;
 }
 
 message CheckSeerCreditsResponse {
