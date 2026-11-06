@@ -1,6 +1,8 @@
-minVersion: 2.14.0
-changelog: CHANGELOG.md
-changelogPolicy: auto
+minVersion: 3.9.0
+changelog:
+  filePath: CHANGELOG.md
+  policy: auto
+preReleaseCommand: bash scripts/bump-version.sh
 github:
   owner: getsentry
   repo: sentry-protos
