@@ -1,3 +1,9 @@
+## 0.106.0
+
+### New Features ✨
+
+- (taskbroker) Add BatchUpdateHeartbeat RPC by @evanh and @claude in [#503](https://github.com/getsentry/sentry-protos/pull/503)
+
 ## 0.105.0
 
 ### New Features ✨
