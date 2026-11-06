@@ -7,8 +7,12 @@ import "sentry_protos/billing/v1/common/v1/pending_change.proto";
 message SetPendingBillingRequest {
   uint64 organization_id = 1;
 
-  // The next contract's billing type and config. Required.
-  sentry_protos.billing.v1.common.v1.PendingBillingConfig billing_config = 2;
+  // The next contract's billing type. Required.
+  sentry_protos.billing.v1.common.v1.PendingBillingType billing_type = 2;
+
+  // The next contract's payg mode. Required with PENDING_BILLING_TYPE_INVOICED
+  // and PENDING_PAYG_MODE_UNSPECIFIED otherwise.
+  sentry_protos.billing.v1.common.v1.PendingPaygMode payg_mode = 3;
 }
 
 message SetPendingBillingResponse {}

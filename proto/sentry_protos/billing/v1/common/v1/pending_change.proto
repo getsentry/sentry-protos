@@ -31,30 +31,37 @@ message PendingChange {
   // sponsorship; an unset field leaves it unchanged.
   optional sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 4;
 
-  // The next contract's billing type and config. Unset leaves them unchanged.
-  optional PendingBillingConfig billing_config = 5;
+  // The next contract's billing type. Unset leaves it unchanged.
+  optional PendingBillingType billing_type = 5;
+
+  // The next contract's payg mode. Set only with PENDING_BILLING_TYPE_INVOICED,
+  // since a card-billed contract always charges payg.
+  optional PendingPaygMode payg_mode = 6;
 }
 
-// The next contract's billing type and config. Mirrors the billing oneof of
-// contract.v2.BillingConfig, which this package cannot import without a cycle.
-message PendingBillingConfig {
-  oneof billing {
-    google.protobuf.Empty credit_card = 1;
-    PendingInvoicedConfig invoiced = 2;
-  }
+// The billing type a pending change moves the next contract onto.
+enum PendingBillingType {
+  PENDING_BILLING_TYPE_UNSPECIFIED = 0;
+
+  // Billed directly by us, on a card the customer manages.
+  PENDING_BILLING_TYPE_CREDIT_CARD = 1;
+
+  // Invoiced by us, under a sales-negotiated agreement.
+  PENDING_BILLING_TYPE_INVOICED = 2;
 }
 
-// Mirrors contract.v2.InvoicedConfig.
-message PendingInvoicedConfig {
-  // Absent means the org may not incur payg at all.
-  optional PendingPaygConfig payg = 1;
-}
+// Whether an invoiced contract may incur payg, and who bills it.
+enum PendingPaygMode {
+  PENDING_PAYG_MODE_UNSPECIFIED = 0;
 
-// Mirrors contract.v2.PaygConfig.
-message PendingPaygConfig {
-  // Whether we charge payg spend ourselves. When false, payg is still
-  // incurred but billed outside the platform.
-  bool charged = 1;
+  // The org may not incur payg at all.
+  PENDING_PAYG_MODE_NONE = 1;
+
+  // The org incurs payg, but it is billed outside the platform.
+  PENDING_PAYG_MODE_MANUAL = 2;
+
+  // We charge payg spend ourselves.
+  PENDING_PAYG_MODE_CHARGED = 3;
 }
 
 // Pending overrides for a set of line items. payg_budget and reservation are
