@@ -1,3 +1,9 @@
+## 0.108.0
+
+### New Features ✨
+
+- (billing) Read trials by end date and store who started them by @dashed with @getsantry in [#499](https://github.com/getsentry/sentry-protos/pull/499)
+
 ## 0.107.0
 
 ### New Features ✨
