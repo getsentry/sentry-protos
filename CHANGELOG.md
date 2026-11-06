@@ -1,3 +1,9 @@
+## 0.109.0
+
+### New Features ✨
+
+- (billing) Stage a billing arrangement on pending changes by @hybrendan with @getsantry in [#508](https://github.com/getsentry/sentry-protos/pull/508)
+
 ## 0.108.0
 
 ### New Features ✨
