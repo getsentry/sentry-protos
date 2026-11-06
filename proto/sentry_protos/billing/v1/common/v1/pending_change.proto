@@ -42,18 +42,18 @@ message PendingChange {
 message PendingBillingConfig {
   oneof arrangement {
     google.protobuf.Empty credit_card = 1;
-    PendingInvoicedBilling invoiced = 2;
+    PendingInvoicedConfig invoiced = 2;
   }
 }
 
 // Mirrors contract.v2.InvoicedConfig.
-message PendingInvoicedBilling {
+message PendingInvoicedConfig {
   // Absent means the org may not incur payg at all.
-  optional PendingPaygBilling payg = 1;
+  optional PendingPaygConfig payg = 1;
 }
 
 // Mirrors contract.v2.PaygConfig.
-message PendingPaygBilling {
+message PendingPaygConfig {
   // Whether we charge payg spend ourselves. When false, payg is still
   // incurred but billed outside the platform.
   bool charged = 1;
