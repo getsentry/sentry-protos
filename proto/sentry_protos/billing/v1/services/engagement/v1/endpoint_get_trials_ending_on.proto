@@ -12,11 +12,14 @@ message GetTrialsEndingOnRequest {
   repeated sentry_protos.billing.v1.Date end_dates = 1;
 }
 
-message OrganizationTrial {
+// The trials of one organization.
+message OrganizationTrials {
   uint64 organization_id = 1;
-  Trial trial = 2;
+  // the organization's trials whose end_date is one of end_dates
+  repeated Trial trials = 2;
 }
 
 message GetTrialsEndingOnResponse {
-  repeated OrganizationTrial trials = 1;
+  // one entry for each organization that has a trial ending on one of end_dates
+  repeated OrganizationTrials organizations = 1;
 }

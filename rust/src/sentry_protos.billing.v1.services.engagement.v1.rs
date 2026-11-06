@@ -743,17 +743,20 @@ pub struct GetTrialsEndingOnRequest {
     #[prost(message, repeated, tag = "1")]
     pub end_dates: ::prost::alloc::vec::Vec<super::super::super::Date>,
 }
+/// The trials of one organization.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct OrganizationTrial {
+pub struct OrganizationTrials {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
-    #[prost(message, optional, tag = "2")]
-    pub trial: ::core::option::Option<Trial>,
+    /// the organization's trials whose end_date is one of end_dates
+    #[prost(message, repeated, tag = "2")]
+    pub trials: ::prost::alloc::vec::Vec<Trial>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetTrialsEndingOnResponse {
+    /// one entry for each organization that has a trial ending on one of end_dates
     #[prost(message, repeated, tag = "1")]
-    pub trials: ::prost::alloc::vec::Vec<OrganizationTrial>,
+    pub organizations: ::prost::alloc::vec::Vec<OrganizationTrials>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetTrialsForOrganizationRequest {
