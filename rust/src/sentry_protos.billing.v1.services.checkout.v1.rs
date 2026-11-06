@@ -129,6 +129,11 @@ pub struct ProvisionSalesContractRequest {
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
     #[prost(oneof = "provision_sales_contract_request::Effective", tags = "5, 6")]
     pub effective: ::core::option::Option<provision_sales_contract_request::Effective>,
+    /// The arrangement that bills the contract once the deal takes effect, which
+    /// may differ from the current one, as when a card-billed customer signs an
+    /// invoiced deal. Required.
+    #[prost(oneof = "provision_sales_contract_request::Billing", tags = "7, 8")]
+    pub billing: ::core::option::Option<provision_sales_contract_request::Billing>,
 }
 /// Nested message and enum types in `ProvisionSalesContractRequest`.
 pub mod provision_sales_contract_request {
@@ -140,6 +145,16 @@ pub mod provision_sales_contract_request {
         /// the deal's start date. Must fall between now and the current term's end.
         #[prost(message, tag = "6")]
         NewTermStart(::prost_types::Timestamp),
+    }
+    /// The arrangement that bills the contract once the deal takes effect, which
+    /// may differ from the current one, as when a card-billed customer signs an
+    /// invoiced deal. Required.
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Billing {
+        #[prost(message, tag = "7")]
+        CreditCard(super::super::super::contract::v2::CreditCardConfig),
+        #[prost(message, tag = "8")]
+        Invoiced(super::super::super::contract::v2::InvoicedConfig),
     }
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
