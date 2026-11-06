@@ -38,9 +38,7 @@ message ProvisionSalesContractRequest {
     google.protobuf.Timestamp new_term_start = 6;
   }
 
-  // The arrangement that bills the contract once the deal takes effect, which
-  // may differ from the current one, as when a card-billed customer signs an
-  // invoiced deal. Required.
+  // The contract's billing type and config once the deal takes effect. Required.
   oneof billing {
     sentry_protos.billing.v1.services.contract.v2.CreditCardConfig credit_card = 7;
     sentry_protos.billing.v1.services.contract.v2.InvoicedConfig invoiced = 8;
