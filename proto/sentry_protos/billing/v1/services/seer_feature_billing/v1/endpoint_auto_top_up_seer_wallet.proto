@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_feature_billing.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Buys the organization's configured top-up when its Seer wallet balance is
+// below the auto top-up threshold. Safe to repeat: calls with a current_ts in
+// the same five-minute window bill at most once.
+message AutoTopUpSeerWalletRequest {
+  uint64 organization_id = 1;
+  google.protobuf.Timestamp current_ts = 2;
+}
+
+message AutoTopUpSeerWalletResponse {
+  enum Outcome {
+    OUTCOME_UNSPECIFIED = 0;
+    // No auto top-up config, or it is disabled.
+    OUTCOME_NOT_ENABLED = 1;
+    // The current contract has no Seer wallet.
+    OUTCOME_NO_WALLET = 2;
+    OUTCOME_ABOVE_THRESHOLD = 3;
+    // Another top-up for the organization holds the charge lock.
+    OUTCOME_LOCKED = 4;
+    // An earlier top-up invoice is still waiting to be paid.
+    OUTCOME_INVOICE_PENDING = 5;
+    OUTCOME_BILLED = 6;
+  }
+  Outcome outcome = 1;
+  // Set when outcome is OUTCOME_BILLED.
+  optional uint64 invoice_id = 2;
+  // Whether the top-up invoice was paid. Only meaningful when outcome is
+  // OUTCOME_BILLED.
+  bool paid = 3;
+}
