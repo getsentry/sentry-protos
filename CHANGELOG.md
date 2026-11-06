@@ -1,3 +1,9 @@
+## 0.107.0
+
+### New Features ✨
+
+- (billing) Add SeerWalletConfig, deprecate auto top-up protos by @volokluev in [#506](https://github.com/getsentry/sentry-protos/pull/506)
+
 ## 0.106.0
 
 ### New Features ✨
