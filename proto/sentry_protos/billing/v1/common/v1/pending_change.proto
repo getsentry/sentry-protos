@@ -33,13 +33,13 @@ message PendingChange {
 
   // The arrangement that bills the next contract, as when a card-billed
   // customer signs an invoiced deal. Unset leaves the arrangement unchanged.
-  optional PendingBilling billing = 5;
+  optional PendingBillingConfig billing_config = 5;
 }
 
 // The arrangement a pending change moves the contract onto. Mirrors the
 // billing oneof of the contract service's BillingConfig, which this package
 // cannot import without a cycle.
-message PendingBilling {
+message PendingBillingConfig {
   oneof arrangement {
     google.protobuf.Empty credit_card = 1;
     PendingInvoicedBilling invoiced = 2;
