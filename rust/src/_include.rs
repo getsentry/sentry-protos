@@ -135,6 +135,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.seer_feature_billing.v1.rs");
                     }
                 }
+                pub mod seer_wallet_config {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.seer_wallet_config.v1.rs");
+                    }
+                }
                 pub mod trial {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.trial.v1.rs");
