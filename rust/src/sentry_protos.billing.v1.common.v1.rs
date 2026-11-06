@@ -527,19 +527,19 @@ pub mod pending_billing_config {
         #[prost(message, tag = "1")]
         CreditCard(()),
         #[prost(message, tag = "2")]
-        Invoiced(super::PendingInvoicedBilling),
+        Invoiced(super::PendingInvoicedConfig),
     }
 }
 /// Mirrors contract.v2.InvoicedConfig.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct PendingInvoicedBilling {
+pub struct PendingInvoicedConfig {
     /// Absent means the org may not incur payg at all.
     #[prost(message, optional, tag = "1")]
-    pub payg: ::core::option::Option<PendingPaygBilling>,
+    pub payg: ::core::option::Option<PendingPaygConfig>,
 }
 /// Mirrors contract.v2.PaygConfig.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct PendingPaygBilling {
+pub struct PendingPaygConfig {
     /// Whether we charge payg spend ourselves. When false, payg is still
     /// incurred but billed outside the platform.
     #[prost(bool, tag = "1")]
