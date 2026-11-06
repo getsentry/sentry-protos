@@ -32,36 +32,8 @@ message ProvisionSalesContractRequest {
   SalesContractTiming timing = 5;
 }
 
-// Why a provision was not applied. Each one leaves the contract unchanged.
-enum SalesContractRejectionReason {
-  SALES_CONTRACT_REJECTION_REASON_UNSPECIFIED = 0;
-  SALES_CONTRACT_REJECTION_REASON_NO_CONTRACT = 1;
-  // Only invoiced contracts can be provisioned for now.
-  SALES_CONTRACT_REJECTION_REASON_NOT_INVOICED = 2;
-  SALES_CONTRACT_REJECTION_REASON_SPONSORED = 3;
-  SALES_CONTRACT_REJECTION_REASON_NOT_ENTERPRISE_PACKAGE = 4;
-  SALES_CONTRACT_REJECTION_REASON_INTERVAL_CHANGE_ON_COTERM = 5;
-  // A user config sets something other than a single-line-item reservation.
-  SALES_CONTRACT_REJECTION_REASON_UNSUPPORTED_USER_CONFIG = 6;
-  SALES_CONTRACT_REJECTION_REASON_MISSING_TIMING = 7;
-}
-
-message SalesContractRejection {
-  SalesContractRejectionReason reason = 1;
-  // A message the caller can show to the person who entered the deal.
-  string message = 2;
-}
-
-message SalesContractApplied {
-  // Set when a coterm rolled the contract over and invoiced it.
-  optional uint64 invoice_id = 1;
-  // True when the contract already matched the request, so nothing was written.
-  bool no_op = 2;
-}
-
 message ProvisionSalesContractResponse {
-  oneof outcome {
-    SalesContractApplied applied = 1;
-    SalesContractRejection rejection = 2;
-  }
+  // The invoice a coterm created when it rolled the contract over. Unset for a
+  // deal staged for renewal, or a coterm the contract already matched.
+  optional uint64 invoice_id = 1;
 }
