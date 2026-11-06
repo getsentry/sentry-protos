@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.pending_change.v1;
+
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+
+message SetPendingBillingRequest {
+  uint64 organization_id = 1;
+
+  // The arrangement that bills the contract from the next rollover. Required.
+  sentry_protos.billing.v1.common.v1.PendingBilling billing = 2;
+}
+
+message SetPendingBillingResponse {}
