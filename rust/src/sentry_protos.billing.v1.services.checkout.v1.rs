@@ -129,9 +129,7 @@ pub struct ProvisionSalesContractRequest {
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
     #[prost(oneof = "provision_sales_contract_request::Effective", tags = "5, 6")]
     pub effective: ::core::option::Option<provision_sales_contract_request::Effective>,
-    /// The arrangement that bills the contract once the deal takes effect, which
-    /// may differ from the current one, as when a card-billed customer signs an
-    /// invoiced deal. Required.
+    /// The contract's billing type and config once the deal takes effect. Required.
     #[prost(oneof = "provision_sales_contract_request::Billing", tags = "7, 8")]
     pub billing: ::core::option::Option<provision_sales_contract_request::Billing>,
 }
@@ -146,9 +144,7 @@ pub mod provision_sales_contract_request {
         #[prost(message, tag = "6")]
         NewTermStart(::prost_types::Timestamp),
     }
-    /// The arrangement that bills the contract once the deal takes effect, which
-    /// may differ from the current one, as when a card-billed customer signs an
-    /// invoiced deal. Required.
+    /// The contract's billing type and config once the deal takes effect. Required.
     #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
     pub enum Billing {
         #[prost(message, tag = "7")]
