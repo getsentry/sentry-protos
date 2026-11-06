@@ -56,9 +56,9 @@ pub struct GetPendingChangeResponse {
 pub struct SetPendingBillingRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
-    /// The arrangement that bills the contract from the next rollover. Required.
+    /// The next contract's billing type and config. Required.
     #[prost(message, optional, tag = "2")]
-    pub billing: ::core::option::Option<
+    pub billing_config: ::core::option::Option<
         super::super::super::common::v1::PendingBillingConfig,
     >,
 }
