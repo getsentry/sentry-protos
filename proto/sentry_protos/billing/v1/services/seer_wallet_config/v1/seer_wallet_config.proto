@@ -26,8 +26,7 @@ message SpendConfig {
 // An organization's settings for its Seer wallet. Each section is unset until
 // the organization first saves it.
 message SeerWalletConfig {
-  uint64 id = 1;
-  uint64 organization_id = 2;
-  optional AutoTopUpConfig auto_top_up = 3;
-  optional SpendConfig spend = 4;
+  uint64 organization_id = 1;
+  optional AutoTopUpConfig auto_top_up = 2;
+  optional SpendConfig spend = 3;
 }
