@@ -507,23 +507,21 @@ pub struct PendingChange {
     /// sponsorship; an unset field leaves it unchanged.
     #[prost(enumeration = "SponsoredType", optional, tag = "4")]
     pub sponsored_type: ::core::option::Option<i32>,
-    /// The arrangement that bills the next contract, as when a card-billed
-    /// customer signs an invoiced deal. Unset leaves the arrangement unchanged.
+    /// The next contract's billing type and config. Unset leaves them unchanged.
     #[prost(message, optional, tag = "5")]
     pub billing_config: ::core::option::Option<PendingBillingConfig>,
 }
-/// The arrangement a pending change moves the contract onto. Mirrors the
-/// billing oneof of the contract service's BillingConfig, which this package
-/// cannot import without a cycle.
+/// The next contract's billing type and config. Mirrors the billing oneof of
+/// contract.v2.BillingConfig, which this package cannot import without a cycle.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PendingBillingConfig {
-    #[prost(oneof = "pending_billing_config::Arrangement", tags = "1, 2")]
-    pub arrangement: ::core::option::Option<pending_billing_config::Arrangement>,
+    #[prost(oneof = "pending_billing_config::Billing", tags = "1, 2")]
+    pub billing: ::core::option::Option<pending_billing_config::Billing>,
 }
 /// Nested message and enum types in `PendingBillingConfig`.
 pub mod pending_billing_config {
     #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum Arrangement {
+    pub enum Billing {
         #[prost(message, tag = "1")]
         CreditCard(()),
         #[prost(message, tag = "2")]
