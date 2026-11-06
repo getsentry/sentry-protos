@@ -2,8 +2,14 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.auto_top_up.v1;
 
+// Deprecated: use sentry_protos.billing.v1.services.seer_wallet_config.v1,
+// which keeps the auto top-up and spend settings apart.
+option deprecated = true;
+
 // A prepaid balance that auto top-up can refill.
 enum Wallet {
+  option deprecated = true;
+
   WALLET_UNSPECIFIED = 0;
   WALLET_SEER = 1;
 }
@@ -13,6 +19,8 @@ enum Wallet {
 // buys. Whether a top-up is in progress or has failed is not stored here; the
 // off-cycle invoices that bought the credit are the record of that.
 message AutoTopUpConfig {
+  option deprecated = true;
+
   uint64 id = 1;
   uint64 organization_id = 2;
   Wallet wallet = 3;
