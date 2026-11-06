@@ -30,6 +30,38 @@ message PendingChange {
   // Next contract's sponsored_type. SPONSORED_TYPE_UNSPECIFIED clears the
   // sponsorship; an unset field leaves it unchanged.
   optional sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 4;
+
+  // The next contract's billing type. Unset leaves it unchanged.
+  optional PendingBillingType billing_type = 5;
+
+  // The next contract's payg mode. Set only with PENDING_BILLING_TYPE_INVOICED,
+  // since a card-billed contract always charges payg.
+  optional PendingPaygMode payg_mode = 6;
+}
+
+// The billing type a pending change moves the next contract onto.
+enum PendingBillingType {
+  PENDING_BILLING_TYPE_UNSPECIFIED = 0;
+
+  // Billed directly by us, on a card the customer manages.
+  PENDING_BILLING_TYPE_CREDIT_CARD = 1;
+
+  // Invoiced by us, under a sales-negotiated agreement.
+  PENDING_BILLING_TYPE_INVOICED = 2;
+}
+
+// Whether an invoiced contract may incur payg, and who bills it.
+enum PendingPaygMode {
+  PENDING_PAYG_MODE_UNSPECIFIED = 0;
+
+  // The org may not incur payg at all.
+  PENDING_PAYG_MODE_NONE = 1;
+
+  // The org incurs payg, but it is billed outside the platform.
+  PENDING_PAYG_MODE_MANUAL = 2;
+
+  // We charge payg spend ourselves.
+  PENDING_PAYG_MODE_CHARGED = 3;
 }
 
 // Pending overrides for a set of line items. payg_budget and reservation are
