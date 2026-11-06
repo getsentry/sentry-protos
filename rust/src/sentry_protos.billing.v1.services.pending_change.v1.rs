@@ -52,6 +52,16 @@ pub struct GetPendingChangeResponse {
         super::super::super::common::v1::PendingChange,
     >,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetPendingBillingRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The arrangement that bills the contract from the next rollover. Required.
+    #[prost(message, optional, tag = "2")]
+    pub billing: ::core::option::Option<super::super::super::common::v1::PendingBilling>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetPendingBillingResponse {}
 /// Sets the pending month_interval on the org's pending change. Creates a
 /// pending change if none exists, or updates the month_interval on the
 /// existing one without modifying its other fields. Used to schedule a
