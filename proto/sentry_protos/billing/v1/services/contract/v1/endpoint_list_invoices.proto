@@ -20,6 +20,9 @@ message ListInvoicesRequest {
   // When true, omit invoices with hide_from_customer_receipts=true so the
   // response (and total) match what customers should see on receipts.
   bool customer_receipts_only = 4;
+
+  // When set, only off-cycle invoices requested by this client are returned.
+  optional string client_id = 5;
 }
 
 message ListInvoicesResponse {

@@ -46,6 +46,26 @@ pub struct GetSeerWalletConfigResponse {
     #[prost(message, optional, tag = "1")]
     pub config: ::core::option::Option<SeerWalletConfig>,
 }
+/// Lists the organizations whose auto top-up is enabled, in ascending
+/// organization_id order.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListAutoTopUpOrganizationsRequest {
+    /// Only organizations with a larger id are returned. Pass the last id of the
+    /// previous page to read the next one.
+    #[prost(uint64, tag = "1")]
+    pub after_organization_id: u64,
+    /// Must be positive.
+    #[prost(uint32, tag = "2")]
+    pub max_items: u32,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListAutoTopUpOrganizationsResponse {
+    #[prost(uint64, repeated, tag = "1")]
+    pub organization_ids: ::prost::alloc::vec::Vec<u64>,
+    /// True when more organizations follow the last one returned.
+    #[prost(bool, tag = "2")]
+    pub truncated: bool,
+}
 /// Creates the organization's config, or replaces the sections the request
 /// sets. A section left unset keeps its stored value, so the auto top-up and
 /// spend settings can be saved independently.
