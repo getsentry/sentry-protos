@@ -144,7 +144,7 @@ pub struct SalesLineItemPricing {
     #[prost(string, tag = "1")]
     pub line_item_uid: ::prost::alloc::string::String,
     /// The price of the reservation for this line item over one billing term.
-    /// If this field is absent, the reservation uses the package price.
+    /// If this field is absent, the price is $0.
     #[prost(uint64, optional, tag = "2")]
     pub reserved_price_cents: ::core::option::Option<u64>,
     /// The PAYG rate for this line item. It replaces the package PAYG rate. If
