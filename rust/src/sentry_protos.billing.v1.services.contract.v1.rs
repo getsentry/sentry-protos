@@ -384,7 +384,7 @@ pub struct SharedSkuBudget {
 pub struct PaygBudget {
     #[prost(uint64, tag = "1")]
     pub budget_cents: u64,
-    /// Deprecated: use SalesLineItemPricing.payg_rate in Contract.sales_config.
+    /// Deprecated: use contract.v2.SalesLineItemPricing.payg_rate in Contract.sales_config.
     /// A customer can send UserConfig, so it must not carry a price.
     #[deprecated]
     #[prost(message, optional, tag = "2")]
@@ -394,7 +394,7 @@ pub struct PaygBudget {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Reservation {
-    /// Deprecated: use SalesLineItemPricing.reserved_price_cents in
+    /// Deprecated: use contract.v2.SalesLineItemPricing.reserved_price_cents in
     /// Contract.sales_config. A customer can send UserConfig, so it must not carry
     /// a price.
     #[deprecated]
@@ -1334,30 +1334,4 @@ pub struct StartManualPaymentRequest {
 pub struct StartManualPaymentResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
-}
-/// The pricing Sentry staff set for one line item of a contract.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SalesLineItemPricing {
-    /// The line item this pricing applies to. A contract has one entry for each
-    /// line item at most.
-    #[prost(string, tag = "1")]
-    pub line_item_uid: ::prost::alloc::string::String,
-    /// The price of the reservation for this line item over one billing term.
-    /// If this field is absent, the reservation uses the package price.
-    #[prost(uint64, optional, tag = "2")]
-    pub reserved_price_cents: ::core::option::Option<u64>,
-    /// The PAYG rate for this line item. It replaces the package PAYG rate. If
-    /// this field is absent, the package PAYG rate applies.
-    #[prost(message, optional, tag = "3")]
-    pub payg_rate: ::core::option::Option<
-        super::super::super::common::v1::TieredPricingRate,
-    >,
-}
-/// The contract settings that only Sentry staff set, through sales and
-/// provisioning. It is the counterpart to the customer-configurable UserConfig,
-/// so a customer change to the contract can never set or clear these values.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SalesConfig {
-    #[prost(message, repeated, tag = "1")]
-    pub pricing: ::prost::alloc::vec::Vec<SalesLineItemPricing>,
 }

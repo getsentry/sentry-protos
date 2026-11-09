@@ -57,13 +57,13 @@ message SharedSKUBudget {
 message PAYGBudget {
   uint64 budget_cents = 1;
 
-  // Deprecated: use SalesLineItemPricing.payg_rate in Contract.sales_config.
+  // Deprecated: use contract.v2.SalesLineItemPricing.payg_rate in Contract.sales_config.
   // A customer can send UserConfig, so it must not carry a price.
   optional sentry_protos.billing.v1.common.v1.TieredPricingRate custom_payg_rate = 2 [deprecated = true];
 }
 
 message Reservation {
-  // Deprecated: use SalesLineItemPricing.reserved_price_cents in
+  // Deprecated: use contract.v2.SalesLineItemPricing.reserved_price_cents in
   // Contract.sales_config. A customer can send UserConfig, so it must not carry
   // a price.
   uint64 reserved_price_cents = 1 [deprecated = true];
