@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_wallet_config.v1;
+
+// Lists the organizations whose auto top-up is enabled, in ascending
+// organization_id order.
+message ListAutoTopUpOrganizationsRequest {
+  // Only organizations with a larger id are returned. Pass the last id of the
+  // previous page to read the next one.
+  uint64 after_organization_id = 1;
+  // Must be positive.
+  uint32 max_items = 2;
+}
+
+message ListAutoTopUpOrganizationsResponse {
+  repeated uint64 organization_ids = 1;
+  // True when more organizations follow the last one returned.
+  bool truncated = 2;
+}

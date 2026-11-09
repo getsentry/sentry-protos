@@ -1103,7 +1103,7 @@ pub struct GetUninvoicedContractsResponse {
     #[prost(uint64, repeated, tag = "3")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ListInvoicesRequest {
     /// Only invoices owned by this organization are returned.
     #[prost(uint64, tag = "1")]
@@ -1121,6 +1121,9 @@ pub struct ListInvoicesRequest {
     /// response (and total) match what customers should see on receipts.
     #[prost(bool, tag = "4")]
     pub customer_receipts_only: bool,
+    /// When set, only off-cycle invoices requested by this client are returned.
+    #[prost(string, optional, tag = "5")]
+    pub client_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListInvoicesResponse {
