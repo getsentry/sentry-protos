@@ -1335,19 +1335,18 @@ pub struct StartManualPaymentResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
-/// The pricing Sentry staff set for some line items of a contract.
+/// The pricing Sentry staff set for one line item of a contract.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SalesLineItemPricing {
-    /// The line items this pricing applies to. It uses the same scope as the
-    /// Reservation or PAYGBudget it prices. A contract has one entry for each
-    /// scope at most.
-    #[prost(message, optional, tag = "1")]
-    pub line_items: ::core::option::Option<LineItemUids>,
-    /// The price of the reservation for these line items over one billing term.
+    /// The line item this pricing applies to. A contract has one entry for each
+    /// line item at most.
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    /// The price of the reservation for this line item over one billing term.
     /// If this field is absent, the reservation uses the package price.
     #[prost(uint64, optional, tag = "2")]
     pub reserved_price_cents: ::core::option::Option<u64>,
-    /// The PAYG rate for these line items. It replaces the package PAYG rate. If
+    /// The PAYG rate for this line item. It replaces the package PAYG rate. If
     /// this field is absent, the package PAYG rate applies.
     #[prost(message, optional, tag = "3")]
     pub payg_rate: ::core::option::Option<
