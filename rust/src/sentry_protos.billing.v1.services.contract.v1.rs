@@ -384,7 +384,9 @@ pub struct SharedSkuBudget {
 pub struct PaygBudget {
     #[prost(uint64, tag = "1")]
     pub budget_cents: u64,
-    /// Overrides package's PAYG rates; only enterprise customers can set custom PAYG rates
+    /// Deprecated: use contract.v2.SalesLineItemPricing.payg_rate in Contract.sales_config.
+    /// A customer can send UserConfig, so it must not carry a price.
+    #[deprecated]
     #[prost(message, optional, tag = "2")]
     pub custom_payg_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
@@ -392,6 +394,10 @@ pub struct PaygBudget {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Reservation {
+    /// Deprecated: use contract.v2.SalesLineItemPricing.reserved_price_cents in
+    /// Contract.sales_config. A customer can send UserConfig, so it must not carry
+    /// a price.
+    #[deprecated]
     #[prost(uint64, tag = "1")]
     pub reserved_price_cents: u64,
     #[prost(oneof = "reservation::ReservedUnits", tags = "2, 3")]
