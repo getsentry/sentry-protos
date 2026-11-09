@@ -1,3 +1,13 @@
+## 0.110.0
+
+### New Features ✨
+
+- (billing) Add ProvisionSalesContract request and response by @hybrendan with @getsantry in [#510](https://github.com/getsentry/sentry-protos/pull/510)
+
+### Other
+
+- seer wallet autotop up configuration by @volokluev with @sentry-junior in [#509](https://github.com/getsentry/sentry-protos/pull/509)
+
 ## 0.109.0
 
 ### New Features ✨
