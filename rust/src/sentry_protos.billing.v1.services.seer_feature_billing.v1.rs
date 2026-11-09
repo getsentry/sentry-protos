@@ -9,7 +9,7 @@ pub struct AutoTopUpSeerWalletRequest {
     #[prost(message, optional, tag = "2")]
     pub current_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct AutoTopUpSeerWalletResponse {
     #[prost(enumeration = "auto_top_up_seer_wallet_response::Outcome", tag = "1")]
     pub outcome: i32,
@@ -20,6 +20,18 @@ pub struct AutoTopUpSeerWalletResponse {
     /// OUTCOME_BILLED.
     #[prost(bool, tag = "3")]
     pub paid: bool,
+    /// Set when Stripe could not complete the top-up charge.
+    #[prost(string, tag = "4")]
+    pub failure_code: ::prost::alloc::string::String,
+    /// Set when the customer must complete a 3D Secure challenge.
+    #[prost(message, optional, tag = "5")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
+    /// Set when outcome is OUTCOME_BILLED. The browser uses this to confirm a
+    /// completed 3D Secure challenge with the payment endpoint.
+    #[prost(string, optional, tag = "6")]
+    pub invoice_guid: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// Nested message and enum types in `AutoTopUpSeerWalletResponse`.
 pub mod auto_top_up_seer_wallet_response {
@@ -98,6 +110,34 @@ pub struct CheckSeerCreditsResponse {
     pub has_enough_credits: bool,
     #[prost(string, optional, tag = "2")]
     pub lease_id: ::core::option::Option<::prost::alloc::string::String>,
+}
+/// Replaces an organization's Seer wallet settings. When the request turns
+/// auto top-up on, the response includes the synchronous top-up check.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ConfigureSeerWalletAutoTopUpRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub auto_top_up: ::core::option::Option<
+        super::super::seer_wallet_config::v1::AutoTopUpConfig,
+    >,
+    #[prost(message, optional, tag = "3")]
+    pub spend: ::core::option::Option<super::super::seer_wallet_config::v1::SpendConfig>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ConfigureSeerWalletAutoTopUpResponse {
+    /// Unset when the organization had not previously saved wallet settings.
+    #[prost(message, optional, tag = "1")]
+    pub previous_config: ::core::option::Option<
+        super::super::seer_wallet_config::v1::SeerWalletConfig,
+    >,
+    #[prost(message, optional, tag = "2")]
+    pub config: ::core::option::Option<
+        super::super::seer_wallet_config::v1::SeerWalletConfig,
+    >,
+    /// Set only when this request turns auto top-up on.
+    #[prost(message, optional, tag = "3")]
+    pub synchronous_top_up: ::core::option::Option<AutoTopUpSeerWalletResponse>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetIsFreeSeerFeatureRequest {
