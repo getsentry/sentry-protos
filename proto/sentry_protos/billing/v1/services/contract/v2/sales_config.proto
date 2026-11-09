@@ -6,8 +6,6 @@ import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
 
 // The pricing Sentry staff set for one line item of a contract.
 message SalesLineItemPricing {
-  // The line item this pricing applies to. A contract has one entry for each
-  // line item at most.
   string line_item_uid = 1;
 
   // The price of the reservation for this line item over one billing term.

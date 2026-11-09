@@ -139,8 +139,6 @@ pub struct PricingConfig {
 /// The pricing Sentry staff set for one line item of a contract.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SalesLineItemPricing {
-    /// The line item this pricing applies to. A contract has one entry for each
-    /// line item at most.
     #[prost(string, tag = "1")]
     pub line_item_uid: ::prost::alloc::string::String,
     /// The price of the reservation for this line item over one billing term.
