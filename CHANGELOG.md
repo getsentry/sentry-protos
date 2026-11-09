@@ -1,3 +1,9 @@
+## 0.111.0
+
+### New Features ✨
+
+- (billing) Add SalesConfig to the contract by @hybrendan in [#512](https://github.com/getsentry/sentry-protos/pull/512)
+
 ## 0.110.0
 
 ### New Features ✨
