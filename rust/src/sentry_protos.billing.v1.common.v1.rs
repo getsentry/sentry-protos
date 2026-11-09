@@ -507,43 +507,13 @@ pub struct PendingChange {
     /// sponsorship; an unset field leaves it unchanged.
     #[prost(enumeration = "SponsoredType", optional, tag = "4")]
     pub sponsored_type: ::core::option::Option<i32>,
-    /// The arrangement that bills the next contract, as when a card-billed
-    /// customer signs an invoiced deal. Unset leaves the arrangement unchanged.
-    #[prost(message, optional, tag = "5")]
-    pub billing_config: ::core::option::Option<PendingBillingConfig>,
-}
-/// The arrangement a pending change moves the contract onto. Mirrors the
-/// billing oneof of the contract service's BillingConfig, which this package
-/// cannot import without a cycle.
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct PendingBillingConfig {
-    #[prost(oneof = "pending_billing_config::Arrangement", tags = "1, 2")]
-    pub arrangement: ::core::option::Option<pending_billing_config::Arrangement>,
-}
-/// Nested message and enum types in `PendingBillingConfig`.
-pub mod pending_billing_config {
-    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum Arrangement {
-        #[prost(message, tag = "1")]
-        CreditCard(()),
-        #[prost(message, tag = "2")]
-        Invoiced(super::PendingInvoicedBilling),
-    }
-}
-/// Mirrors contract.v2.InvoicedConfig.
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct PendingInvoicedBilling {
-    /// Absent means the org may not incur payg at all.
-    #[prost(message, optional, tag = "1")]
-    pub payg: ::core::option::Option<PendingPaygBilling>,
-}
-/// Mirrors contract.v2.PaygConfig.
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct PendingPaygBilling {
-    /// Whether we charge payg spend ourselves. When false, payg is still
-    /// incurred but billed outside the platform.
-    #[prost(bool, tag = "1")]
-    pub charged: bool,
+    /// The next contract's billing type. Unset leaves it unchanged.
+    #[prost(enumeration = "PendingBillingType", optional, tag = "5")]
+    pub billing_type: ::core::option::Option<i32>,
+    /// The next contract's payg mode. Set only with PENDING_BILLING_TYPE_INVOICED,
+    /// since a card-billed contract always charges payg.
+    #[prost(enumeration = "PendingPaygMode", optional, tag = "6")]
+    pub payg_mode: ::core::option::Option<i32>,
 }
 /// Pending overrides for a set of line items. payg_budget and reservation are
 /// each independently optional - either, both, or neither may be set on a
@@ -620,6 +590,74 @@ pub struct SoftCap {
 pub struct LineItemUids {
     #[prost(string, repeated, tag = "1")]
     pub uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+/// The billing type a pending change moves the next contract onto.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PendingBillingType {
+    Unspecified = 0,
+    /// Billed directly by us, on a card the customer manages.
+    CreditCard = 1,
+    /// Invoiced by us, under a sales-negotiated agreement.
+    Invoiced = 2,
+}
+impl PendingBillingType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PENDING_BILLING_TYPE_UNSPECIFIED",
+            Self::CreditCard => "PENDING_BILLING_TYPE_CREDIT_CARD",
+            Self::Invoiced => "PENDING_BILLING_TYPE_INVOICED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PENDING_BILLING_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "PENDING_BILLING_TYPE_CREDIT_CARD" => Some(Self::CreditCard),
+            "PENDING_BILLING_TYPE_INVOICED" => Some(Self::Invoiced),
+            _ => None,
+        }
+    }
+}
+/// Whether an invoiced contract may incur payg, and who bills it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PendingPaygMode {
+    Unspecified = 0,
+    /// The org may not incur payg at all.
+    None = 1,
+    /// The org incurs payg, but it is billed outside the platform.
+    Manual = 2,
+    /// We charge payg spend ourselves.
+    Charged = 3,
+}
+impl PendingPaygMode {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PENDING_PAYG_MODE_UNSPECIFIED",
+            Self::None => "PENDING_PAYG_MODE_NONE",
+            Self::Manual => "PENDING_PAYG_MODE_MANUAL",
+            Self::Charged => "PENDING_PAYG_MODE_CHARGED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PENDING_PAYG_MODE_UNSPECIFIED" => Some(Self::Unspecified),
+            "PENDING_PAYG_MODE_NONE" => Some(Self::None),
+            "PENDING_PAYG_MODE_MANUAL" => Some(Self::Manual),
+            "PENDING_PAYG_MODE_CHARGED" => Some(Self::Charged),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PricingTier {
