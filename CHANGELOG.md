@@ -1,3 +1,9 @@
+## 0.112.0
+
+### New Features ✨
+
+- (billing) Configure Seer wallet auto top-up by @volokluev with @getsantry in [#511](https://github.com/getsentry/sentry-protos/pull/511)
+
 ## 0.111.0
 
 ### New Features ✨
