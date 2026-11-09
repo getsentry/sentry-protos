@@ -28,6 +28,9 @@ pub struct Trial {
     pub end_date: ::core::option::Option<super::super::super::Date>,
     #[prost(string, optional, tag = "4")]
     pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
+    /// The user who started the trial. Not set when no user started it.
+    #[prost(uint64, optional, tag = "5")]
+    pub user_id: ::core::option::Option<u64>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetActiveTrialsRequest {
@@ -536,6 +539,9 @@ pub struct CreateTrialRequest {
     pub start_date: ::core::option::Option<super::super::super::Date>,
     #[prost(message, optional, tag = "6")]
     pub end_date: ::core::option::Option<super::super::super::Date>,
+    /// The user who starts the trial. Not set when no user starts it.
+    #[prost(uint64, optional, tag = "7")]
+    pub user_id: ::core::option::Option<u64>,
     #[prost(oneof = "create_trial_request::Scope", tags = "2, 3")]
     pub scope: ::core::option::Option<create_trial_request::Scope>,
 }
@@ -729,6 +735,29 @@ pub struct GetRecurringCreditsResponse {
     #[prost(message, repeated, tag = "1")]
     pub recurring_credits: ::prost::alloc::vec::Vec<RecurringCredit>,
 }
+/// Finds the trials of all organizations by their last day.
+/// Returns subscription trials (package_uid is set) and product trials (package_uid is not set).
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetTrialsEndingOnRequest {
+    /// returns the trials whose end_date is one of end_dates
+    #[prost(message, repeated, tag = "1")]
+    pub end_dates: ::prost::alloc::vec::Vec<super::super::super::Date>,
+}
+/// The trials of one organization.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct OrganizationTrials {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// the organization's trials whose end_date is one of end_dates
+    #[prost(message, repeated, tag = "2")]
+    pub trials: ::prost::alloc::vec::Vec<Trial>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetTrialsEndingOnResponse {
+    /// one entry for each organization that has a trial ending on one of end_dates
+    #[prost(message, repeated, tag = "1")]
+    pub organizations: ::prost::alloc::vec::Vec<OrganizationTrials>,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetTrialsForOrganizationRequest {
     #[prost(uint64, tag = "1")]
@@ -832,6 +861,9 @@ pub struct StartTrialRequest {
     /// defaults to start_date plus 14 days
     #[prost(message, optional, tag = "5")]
     pub end_date: ::core::option::Option<super::super::super::Date>,
+    /// The user who starts the trial. Not set when no user starts it.
+    #[prost(uint64, optional, tag = "6")]
+    pub user_id: ::core::option::Option<u64>,
     #[prost(oneof = "start_trial_request::Scope", tags = "2, 3")]
     pub scope: ::core::option::Option<start_trial_request::Scope>,
 }

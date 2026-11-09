@@ -507,6 +507,43 @@ pub struct PendingChange {
     /// sponsorship; an unset field leaves it unchanged.
     #[prost(enumeration = "SponsoredType", optional, tag = "4")]
     pub sponsored_type: ::core::option::Option<i32>,
+    /// The arrangement that bills the next contract, as when a card-billed
+    /// customer signs an invoiced deal. Unset leaves the arrangement unchanged.
+    #[prost(message, optional, tag = "5")]
+    pub billing_config: ::core::option::Option<PendingBillingConfig>,
+}
+/// The arrangement a pending change moves the contract onto. Mirrors the
+/// billing oneof of the contract service's BillingConfig, which this package
+/// cannot import without a cycle.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PendingBillingConfig {
+    #[prost(oneof = "pending_billing_config::Arrangement", tags = "1, 2")]
+    pub arrangement: ::core::option::Option<pending_billing_config::Arrangement>,
+}
+/// Nested message and enum types in `PendingBillingConfig`.
+pub mod pending_billing_config {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Arrangement {
+        #[prost(message, tag = "1")]
+        CreditCard(()),
+        #[prost(message, tag = "2")]
+        Invoiced(super::PendingInvoicedBilling),
+    }
+}
+/// Mirrors contract.v2.InvoicedConfig.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PendingInvoicedBilling {
+    /// Absent means the org may not incur payg at all.
+    #[prost(message, optional, tag = "1")]
+    pub payg: ::core::option::Option<PendingPaygBilling>,
+}
+/// Mirrors contract.v2.PaygConfig.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PendingPaygBilling {
+    /// Whether we charge payg spend ourselves. When false, payg is still
+    /// incurred but billed outside the platform.
+    #[prost(bool, tag = "1")]
+    pub charged: bool,
 }
 /// Pending overrides for a set of line items. payg_budget and reservation are
 /// each independently optional - either, both, or neither may be set on a

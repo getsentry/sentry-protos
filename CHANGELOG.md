@@ -1,3 +1,21 @@
+## 0.109.0
+
+### New Features ✨
+
+- (billing) Stage a billing arrangement on pending changes by @hybrendan with @getsantry in [#508](https://github.com/getsentry/sentry-protos/pull/508)
+
+## 0.108.0
+
+### New Features ✨
+
+- (billing) Read trials by end date and store who started them by @dashed with @getsantry in [#499](https://github.com/getsentry/sentry-protos/pull/499)
+
+## 0.107.0
+
+### New Features ✨
+
+- (billing) Add SeerWalletConfig, deprecate auto top-up protos by @volokluev in [#506](https://github.com/getsentry/sentry-protos/pull/506)
+
 ## 0.106.0
 
 ### New Features ✨

@@ -19,6 +19,9 @@ message StartTrialRequest {
 
   // defaults to start_date plus 14 days
   optional sentry_protos.billing.v1.Date end_date = 5;
+
+  // The user who starts the trial. Not set when no user starts it.
+  optional uint64 user_id = 6;
 }
 
 message StartTrialResponse {}
