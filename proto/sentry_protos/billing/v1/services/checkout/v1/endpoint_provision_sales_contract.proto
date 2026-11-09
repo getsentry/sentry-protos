@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.checkout.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
+import "sentry_protos/billing/v1/services/contract/v2/billing_config.proto";
+
+// When a sales-led change takes effect. The deal fixes this, so the service does
+// not infer it from whether the change is an upgrade or a downgrade.
+enum SalesContractTiming {
+  SALES_CONTRACT_TIMING_UNSPECIFIED = 0;
+  // Apply now and finish out the contract's current term.
+  SALES_CONTRACT_TIMING_COTERM = 1;
+  // Apply when the current term renews.
+  SALES_CONTRACT_TIMING_AT_TERM_END = 2;
+}
+
+// Moves an organization's contract onto a sales-negotiated enterprise deal.
+message ProvisionSalesContractRequest {
+  uint64 organization_id = 1;
+
+  // The enterprise package the contract moves to.
+  string package_uid = 2;
+
+  // The contract's month_interval after the change. A coterm cannot change it.
+  uint32 month_interval = 3;
+
+  // Reservation overrides, each on a single line item, with the deal's price for
+  // the term in reserved_price_cents. Line items not named keep their current
+  // configuration.
+  repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_configs = 4;
+
+  oneof effective {
+    SalesContractTiming timing = 5;
+    // Ends the current term on this date and starts a new full term from it, as
+    // the deal's start date. Must fall between now and the current term's end.
+    google.protobuf.Timestamp new_term_start = 6;
+  }
+
+  // The contract's invoiced config once the deal takes effect. Required.
+  sentry_protos.billing.v1.services.contract.v2.InvoicedConfig invoiced = 7;
+}
+
+message ProvisionSalesContractResponse {
+  // The invoice a coterm created when it rolled the contract over. Unset for a
+  // deal staged for renewal, or a coterm the contract already matched.
+  optional uint64 invoice_id = 1;
+}
