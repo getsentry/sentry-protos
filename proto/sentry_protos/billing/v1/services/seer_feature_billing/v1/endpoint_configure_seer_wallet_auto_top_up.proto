@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_feature_billing.v1;
+
+import "sentry_protos/billing/v1/services/seer_feature_billing/v1/endpoint_auto_top_up_seer_wallet.proto";
+import "sentry_protos/billing/v1/services/seer_wallet_config/v1/seer_wallet_config.proto";
+
+// Replaces an organization's Seer wallet settings. When the request turns
+// auto top-up on, the response includes the synchronous top-up check.
+message ConfigureSeerWalletAutoTopUpRequest {
+  uint64 organization_id = 1;
+  sentry_protos.billing.v1.services.seer_wallet_config.v1.AutoTopUpConfig auto_top_up = 2;
+  sentry_protos.billing.v1.services.seer_wallet_config.v1.SpendConfig spend = 3;
+}
+
+message ConfigureSeerWalletAutoTopUpResponse {
+  // Unset when the organization had not previously saved wallet settings.
+  optional sentry_protos.billing.v1.services.seer_wallet_config.v1.SeerWalletConfig previous_config = 1;
+  sentry_protos.billing.v1.services.seer_wallet_config.v1.SeerWalletConfig config = 2;
+  // Set only when this request turns auto top-up on.
+  optional AutoTopUpSeerWalletResponse synchronous_top_up = 3;
+}

@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.seer_feature_billing.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/stripe_verification.proto";
 
 // Buys the organization's configured top-up when its Seer wallet balance is
 // below the auto top-up threshold. Safe to repeat: calls with a current_ts in
@@ -33,4 +34,11 @@ message AutoTopUpSeerWalletResponse {
   // Whether the top-up invoice was paid. Only meaningful when outcome is
   // OUTCOME_BILLED.
   bool paid = 3;
+  // Set when Stripe could not complete the top-up charge.
+  string failure_code = 4;
+  // Set when the customer must complete a 3D Secure challenge.
+  optional sentry_protos.billing.v1.common.v1.StripeVerification verification = 5;
+  // Set when outcome is OUTCOME_BILLED. The browser uses this to confirm a
+  // completed 3D Secure challenge with the payment endpoint.
+  optional string invoice_guid = 6;
 }
