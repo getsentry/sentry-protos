@@ -146,6 +146,8 @@ pub struct Contract {
     pub pricing_config: ::core::option::Option<PricingConfig>,
     #[prost(message, optional, tag = "4")]
     pub retention_config: ::core::option::Option<super::v1::RetentionConfig>,
+    #[prost(message, optional, tag = "5")]
+    pub sales_config: ::core::option::Option<super::v1::SalesConfig>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateContractRequest {

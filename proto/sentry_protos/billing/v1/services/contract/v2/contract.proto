@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v2;
 
 import "sentry_protos/billing/v1/services/contract/v1/retention_config.proto";
+import "sentry_protos/billing/v1/services/contract/v1/sales_config.proto";
 import "sentry_protos/billing/v1/services/contract/v2/billing_config.proto";
 import "sentry_protos/billing/v1/services/contract/v2/contract_metadata.proto";
 import "sentry_protos/billing/v1/services/contract/v2/pricing_config.proto";
@@ -12,4 +13,5 @@ message Contract {
   BillingConfig billing_config = 2;
   PricingConfig pricing_config = 3;
   sentry_protos.billing.v1.services.contract.v1.RetentionConfig retention_config = 4;
+  sentry_protos.billing.v1.services.contract.v1.SalesConfig sales_config = 5;
 }
