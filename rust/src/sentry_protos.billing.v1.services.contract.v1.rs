@@ -1044,6 +1044,11 @@ pub struct GetContractsOpenedByExhaustedInvoicesRequest {
     pub max_items: u32,
     #[prost(uint32, optional, tag = "3")]
     pub offset: ::core::option::Option<u32>,
+    /// Only invoices added after this time are returned. Contracts roll over
+    /// monthly, so an older opening invoice no longer opens a current contract
+    /// and this bound keeps the scan small.
+    #[prost(message, optional, tag = "4")]
+    pub created_after: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ContractOpenedByExhaustedInvoice {
