@@ -31,10 +31,6 @@ pub struct LineItemConfig {
     pub can_product_trial: bool,
     #[prost(enumeration = "super::super::super::common::v1::BillingType", tag = "13")]
     pub billing_type: i32,
-    /// Whether this LineItem is sold only as included (reserved) units, never pay-as-you-go (ie size analyses).
-    /// Usage past the included units does not draw on a PAYG budget; only a grant or trial adds capacity.
-    #[prost(bool, tag = "14")]
-    pub reserved_only: bool,
     /// how many of this lineitem are included in the package, the customer can reserve more on their contract
     #[prost(oneof = "line_item_config::IncludedReservedUnits", tags = "5, 6")]
     pub included_reserved_units: ::core::option::Option<

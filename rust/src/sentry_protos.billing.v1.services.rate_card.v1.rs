@@ -22,10 +22,6 @@ pub struct RateCardLineItem {
     pub is_enabled: bool,
     #[prost(enumeration = "super::super::super::common::v1::BillingType", tag = "8")]
     pub billing_type: i32,
-    /// Whether usage past the reserved units can never draw on a PAYG budget. This is the package's
-    /// LineItemConfig.reserved_only after contract overrides have been resolved.
-    #[prost(bool, tag = "9")]
-    pub reserved_only: bool,
     /// The following values are the effective values *after* contract overrides have been resolved. If there are no
     /// contract overrides, the default package values are used.
     #[prost(oneof = "rate_card_line_item::ReservedUnits", tags = "2, 3")]
