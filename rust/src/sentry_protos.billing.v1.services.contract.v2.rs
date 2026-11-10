@@ -105,6 +105,30 @@ impl PartnerBillingStrategy {
         }
     }
 }
+/// The pricing Sentry staff set for one line item of a contract.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SalesLineItemPricing {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    /// The price of the reservation for this line item over one billing term.
+    /// If this field is absent, the price is $0.
+    #[prost(uint64, optional, tag = "2")]
+    pub reserved_price_cents: ::core::option::Option<u64>,
+    /// The PAYG rate for this line item. It replaces the package PAYG rate. If
+    /// this field is absent, the package PAYG rate applies.
+    #[prost(message, optional, tag = "3")]
+    pub payg_rate: ::core::option::Option<
+        super::super::super::common::v1::TieredPricingRate,
+    >,
+}
+/// The contract settings that only Sentry staff set, through sales and
+/// provisioning. It is the counterpart to the customer-configurable UserConfig,
+/// so a customer change to the contract can never set or clear these values.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SalesConfig {
+    #[prost(message, repeated, tag = "1")]
+    pub pricing: ::prost::alloc::vec::Vec<SalesLineItemPricing>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ContractMetadata {
     #[prost(uint64, tag = "1")]
@@ -135,30 +159,6 @@ pub struct PricingConfig {
     pub usage_watermark_ts: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, repeated, tag = "6")]
     pub user_config: ::prost::alloc::vec::Vec<super::v1::UserConfig>,
-}
-/// The pricing Sentry staff set for one line item of a contract.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SalesLineItemPricing {
-    #[prost(string, tag = "1")]
-    pub line_item_uid: ::prost::alloc::string::String,
-    /// The price of the reservation for this line item over one billing term.
-    /// If this field is absent, the price is $0.
-    #[prost(uint64, optional, tag = "2")]
-    pub reserved_price_cents: ::core::option::Option<u64>,
-    /// The PAYG rate for this line item. It replaces the package PAYG rate. If
-    /// this field is absent, the package PAYG rate applies.
-    #[prost(message, optional, tag = "3")]
-    pub payg_rate: ::core::option::Option<
-        super::super::super::common::v1::TieredPricingRate,
-    >,
-}
-/// The contract settings that only Sentry staff set, through sales and
-/// provisioning. It is the counterpart to the customer-configurable UserConfig,
-/// so a customer change to the contract can never set or clear these values.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SalesConfig {
-    #[prost(message, repeated, tag = "1")]
-    pub pricing: ::prost::alloc::vec::Vec<SalesLineItemPricing>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Contract {
