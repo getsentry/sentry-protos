@@ -17,6 +17,11 @@ message GetContractsOpenedByExhaustedInvoicesRequest {
   uint32 max_items = 2;
 
   optional uint32 offset = 3;
+
+  // Only invoices added after this time are returned. Contracts roll over
+  // monthly, so an older opening invoice no longer opens a current contract
+  // and this bound keeps the scan small.
+  google.protobuf.Timestamp created_after = 4;
 }
 
 message ContractOpenedByExhaustedInvoice {
