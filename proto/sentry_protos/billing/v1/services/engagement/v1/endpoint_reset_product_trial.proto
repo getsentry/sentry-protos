@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+// Clears an organization's ended product trials for one line item so it can start another.
+message ResetProductTrialRequest {
+  uint64 organization_id = 1;
+  string line_item_uid = 2;
+}
+
+message ResetProductTrialResponse {
+  // Whether any ended product trial was cleared.
+  bool reset = 1;
+}
