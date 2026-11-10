@@ -122,14 +122,19 @@ pub struct ProvisionSalesContractRequest {
     /// The contract's month_interval after the change. A coterm cannot change it.
     #[prost(uint32, tag = "3")]
     pub month_interval: u32,
-    /// Reservation overrides, each on a single line item, with the deal's price for
-    /// the term in reserved_price_cents. Line items not named keep their current
-    /// configuration.
+    /// Reservation overrides, each on a single line item. Line items not named keep
+    /// their current configuration. The deal's prices go in sales_config, since a
+    /// UserConfig must not carry a price.
     #[prost(message, repeated, tag = "4")]
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
     /// The contract's invoiced config once the deal takes effect. Required.
     #[prost(message, optional, tag = "7")]
     pub invoiced: ::core::option::Option<super::super::contract::v2::InvoicedConfig>,
+    /// The deal's prices. When set, it replaces the contract's whole sales config
+    /// when the deal takes effect, and an empty SalesConfig clears it. Unset keeps
+    /// the current prices.
+    #[prost(message, optional, tag = "8")]
+    pub sales_config: ::core::option::Option<super::super::contract::v2::SalesConfig>,
     #[prost(oneof = "provision_sales_contract_request::Effective", tags = "5, 6")]
     pub effective: ::core::option::Option<provision_sales_contract_request::Effective>,
 }

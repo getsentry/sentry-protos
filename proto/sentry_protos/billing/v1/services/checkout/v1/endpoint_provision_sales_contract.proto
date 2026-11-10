@@ -5,6 +5,7 @@ package sentry_protos.billing.v1.services.checkout.v1;
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
 import "sentry_protos/billing/v1/services/contract/v2/billing_config.proto";
+import "sentry_protos/billing/v1/services/contract/v2/sales_config.proto";
 
 // When a sales-led change takes effect. The deal fixes this, so the service does
 // not infer it from whether the change is an upgrade or a downgrade.
@@ -26,9 +27,9 @@ message ProvisionSalesContractRequest {
   // The contract's month_interval after the change. A coterm cannot change it.
   uint32 month_interval = 3;
 
-  // Reservation overrides, each on a single line item, with the deal's price for
-  // the term in reserved_price_cents. Line items not named keep their current
-  // configuration.
+  // Reservation overrides, each on a single line item. Line items not named keep
+  // their current configuration. The deal's prices go in sales_config, since a
+  // UserConfig must not carry a price.
   repeated sentry_protos.billing.v1.services.contract.v1.UserConfig user_configs = 4;
 
   oneof effective {
@@ -40,6 +41,11 @@ message ProvisionSalesContractRequest {
 
   // The contract's invoiced config once the deal takes effect. Required.
   sentry_protos.billing.v1.services.contract.v2.InvoicedConfig invoiced = 7;
+
+  // The deal's prices. When set, it replaces the contract's whole sales config
+  // when the deal takes effect, and an empty SalesConfig clears it. Unset keeps
+  // the current prices.
+  optional sentry_protos.billing.v1.services.contract.v2.SalesConfig sales_config = 8;
 }
 
 message ProvisionSalesContractResponse {
