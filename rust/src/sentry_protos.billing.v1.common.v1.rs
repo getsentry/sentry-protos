@@ -412,6 +412,24 @@ pub mod payment_config {
         Stripe(super::StripePaymentData),
     }
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PricingTier {
+    #[prost(int64, tag = "1")]
+    pub start: i64,
+    #[deprecated]
+    #[prost(int64, tag = "2")]
+    pub end: i64,
+    #[deprecated]
+    #[prost(int64, tag = "3")]
+    pub rate_per_unit_cpe: i64,
+    #[prost(message, optional, tag = "4")]
+    pub price: ::core::option::Option<FlexiblePrice>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TieredPricingRate {
+    #[prost(message, repeated, tag = "1")]
+    pub tiers: ::prost::alloc::vec::Vec<PricingTier>,
+}
 /// Soft-cap behavior.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -520,6 +538,29 @@ pub struct PendingChange {
     /// since a card-billed contract always charges payg.
     #[prost(enumeration = "PendingPaygMode", optional, tag = "6")]
     pub payg_mode: ::core::option::Option<i32>,
+    /// Replaces the next contract's whole sales config, so an empty
+    /// PendingSalesConfig clears it. Unset carries the current sales config over
+    /// unchanged.
+    #[prost(message, optional, tag = "7")]
+    pub sales_config: ::core::option::Option<PendingSalesConfig>,
+}
+/// Mirrors contract.v2.SalesConfig field for field, since common.v1 cannot
+/// import contract.v2 without a package cycle. The two must stay
+/// wire-compatible.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PendingSalesConfig {
+    #[prost(message, repeated, tag = "1")]
+    pub pricing: ::prost::alloc::vec::Vec<PendingSalesLineItemPricing>,
+}
+/// Mirrors contract.v2.SalesLineItemPricing.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PendingSalesLineItemPricing {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    #[prost(uint64, optional, tag = "2")]
+    pub reserved_price_cents: ::core::option::Option<u64>,
+    #[prost(message, optional, tag = "3")]
+    pub payg_rate: ::core::option::Option<TieredPricingRate>,
 }
 /// Pending overrides for a set of line items. payg_budget and reservation are
 /// each independently optional - either, both, or neither may be set on a
@@ -664,24 +705,6 @@ impl PendingPaygMode {
             _ => None,
         }
     }
-}
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct PricingTier {
-    #[prost(int64, tag = "1")]
-    pub start: i64,
-    #[deprecated]
-    #[prost(int64, tag = "2")]
-    pub end: i64,
-    #[deprecated]
-    #[prost(int64, tag = "3")]
-    pub rate_per_unit_cpe: i64,
-    #[prost(message, optional, tag = "4")]
-    pub price: ::core::option::Option<FlexiblePrice>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct TieredPricingRate {
-    #[prost(message, repeated, tag = "1")]
-    pub tiers: ::prost::alloc::vec::Vec<PricingTier>,
 }
 /// Retention settings for one data category.
 ///

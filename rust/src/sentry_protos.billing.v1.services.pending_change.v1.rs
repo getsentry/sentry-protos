@@ -97,6 +97,19 @@ pub struct SetPendingPackageRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingPackageResponse {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetPendingSalesConfigRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Replaces the whole sales config at rollover, so send every line item's
+    /// pricing. An empty PendingSalesConfig clears it.
+    #[prost(message, optional, tag = "2")]
+    pub sales_config: ::core::option::Option<
+        super::super::super::common::v1::PendingSalesConfig,
+    >,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetPendingSalesConfigResponse {}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingSponsoredTypeRequest {
     #[prost(uint64, tag = "1")]

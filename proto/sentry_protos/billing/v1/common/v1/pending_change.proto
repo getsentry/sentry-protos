@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.common.v1;
 
 import "google/protobuf/empty.proto";
+import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
 import "sentry_protos/billing/v1/common/v1/soft_cap_type.proto";
 import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
 
@@ -37,6 +38,25 @@ message PendingChange {
   // The next contract's payg mode. Set only with PENDING_BILLING_TYPE_INVOICED,
   // since a card-billed contract always charges payg.
   optional PendingPaygMode payg_mode = 6;
+
+  // Replaces the next contract's whole sales config, so an empty
+  // PendingSalesConfig clears it. Unset carries the current sales config over
+  // unchanged.
+  optional PendingSalesConfig sales_config = 7;
+}
+
+// Mirrors contract.v2.SalesConfig field for field, since common.v1 cannot
+// import contract.v2 without a package cycle. The two must stay
+// wire-compatible.
+message PendingSalesConfig {
+  repeated PendingSalesLineItemPricing pricing = 1;
+}
+
+// Mirrors contract.v2.SalesLineItemPricing.
+message PendingSalesLineItemPricing {
+  string line_item_uid = 1;
+  optional uint64 reserved_price_cents = 2;
+  optional sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 3;
 }
 
 // The billing type a pending change moves the next contract onto.
