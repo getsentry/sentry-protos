@@ -1,3 +1,12 @@
+## 0.114.0
+
+### New Features ✨
+
+#### Billing
+
+- Accept a sales config when provisioning a sales contract by @hybrendan with @getsantry in [#516](https://github.com/getsentry/sentry-protos/pull/516)
+- Stage a sales config on pending changes by @hybrendan in [#515](https://github.com/getsentry/sentry-protos/pull/515)
+
 ## 0.113.0
 
 ### New Features ✨
