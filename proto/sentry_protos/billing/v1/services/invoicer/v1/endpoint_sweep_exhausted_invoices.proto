@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.invoicer.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Downgrades organizations that are still on a paid package after the
+// subscription invoice that opened their current contract ran out of charge
+// retries.
+message SweepExhaustedInvoicesRequest {
+  // The current time, used to decide which exhausted invoices the charge path
+  // has had time to finish with.
+  google.protobuf.Timestamp current_ts = 1;
+}
+
+message SweepExhaustedInvoicesResponse {
+  // Number of organizations a downgrade was scheduled for.
+  uint64 scheduled_count = 1;
+}
