@@ -1,3 +1,9 @@
+## 0.116.0
+
+### New Features ✨
+
+- (billing) Report uncapped spend separately in LineItemUsageSummary by @hybrendan with @sentry-junior and @getsantry in [#522](https://github.com/getsentry/sentry-protos/pull/522)
+
 ## 0.115.0
 
 ### New Features ✨
