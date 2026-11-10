@@ -1,3 +1,9 @@
+## 0.113.0
+
+### New Features ✨
+
+- (billing) Add a reserved-only billing type for line items by @dashed with @getsantry in [#514](https://github.com/getsentry/sentry-protos/pull/514)
+
 ## 0.112.0
 
 ### New Features ✨
