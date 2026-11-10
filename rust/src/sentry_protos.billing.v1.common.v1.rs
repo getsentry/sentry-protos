@@ -799,6 +799,157 @@ impl SeatStatus {
         }
     }
 }
+/// Identifies the feature responsible for Seer usage, independently of the
+/// program executing the work. Whether usage is chargeable is billing policy.
+/// Set by trusted server entrypoints; persisted attribution is preserved for
+/// subsequent operations on the same run.
+/// For concrete values, the billing/proxy label is the lowercase enum name
+/// with the SEER_BILLING_FEATURE\_ prefix removed.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SeerBillingFeature {
+    /// Missing attribution, not a real feature or a billing exemption.
+    /// New runs must provide a concrete feature. Legacy runs need an explicit
+    /// compatibility fallback in the consuming application.
+    Unspecified = 0,
+    AutofixWeb = 1,
+    AutofixHeadless = 2,
+    AutofixIntegrations = 3,
+    AutofixAgenticTriage = 4,
+    AutofixPostProcess = 5,
+    SeerAgent = 6,
+    SeerAgentSlack = 7,
+    SeerAgentSuggestions = 8,
+    AgenticTriage = 9,
+    RunQuestions = 10,
+    Investigations = 11,
+    SmartAssignment = 12,
+    MonitorCleanup = 13,
+    ImpactAssessment = 14,
+    DashboardGeneration = 15,
+    ContextIndexing = 16,
+    IssueSummary = 17,
+    Fixability = 18,
+    UserFeedback = 19,
+    ReplaySummary = 20,
+    IssueViewTitle = 21,
+    ExternalIssueDetails = 22,
+    UptimeAssertions = 23,
+    IssueDetection = 24,
+    LowValueSpans = 25,
+    MaliciousIssueDetection = 26,
+    CodeReview = 27,
+    PrMetrics = 28,
+    AssistedQuery = 29,
+    Evals = 30,
+    AiMonitoring = 31,
+    InboundFilters = 32,
+    Severity = 33,
+    Grouping = 34,
+    ModelTraining = 35,
+}
+impl SeerBillingFeature {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SEER_BILLING_FEATURE_UNSPECIFIED",
+            Self::AutofixWeb => "SEER_BILLING_FEATURE_AUTOFIX_WEB",
+            Self::AutofixHeadless => "SEER_BILLING_FEATURE_AUTOFIX_HEADLESS",
+            Self::AutofixIntegrations => "SEER_BILLING_FEATURE_AUTOFIX_INTEGRATIONS",
+            Self::AutofixAgenticTriage => "SEER_BILLING_FEATURE_AUTOFIX_AGENTIC_TRIAGE",
+            Self::AutofixPostProcess => "SEER_BILLING_FEATURE_AUTOFIX_POST_PROCESS",
+            Self::SeerAgent => "SEER_BILLING_FEATURE_SEER_AGENT",
+            Self::SeerAgentSlack => "SEER_BILLING_FEATURE_SEER_AGENT_SLACK",
+            Self::SeerAgentSuggestions => "SEER_BILLING_FEATURE_SEER_AGENT_SUGGESTIONS",
+            Self::AgenticTriage => "SEER_BILLING_FEATURE_AGENTIC_TRIAGE",
+            Self::RunQuestions => "SEER_BILLING_FEATURE_RUN_QUESTIONS",
+            Self::Investigations => "SEER_BILLING_FEATURE_INVESTIGATIONS",
+            Self::SmartAssignment => "SEER_BILLING_FEATURE_SMART_ASSIGNMENT",
+            Self::MonitorCleanup => "SEER_BILLING_FEATURE_MONITOR_CLEANUP",
+            Self::ImpactAssessment => "SEER_BILLING_FEATURE_IMPACT_ASSESSMENT",
+            Self::DashboardGeneration => "SEER_BILLING_FEATURE_DASHBOARD_GENERATION",
+            Self::ContextIndexing => "SEER_BILLING_FEATURE_CONTEXT_INDEXING",
+            Self::IssueSummary => "SEER_BILLING_FEATURE_ISSUE_SUMMARY",
+            Self::Fixability => "SEER_BILLING_FEATURE_FIXABILITY",
+            Self::UserFeedback => "SEER_BILLING_FEATURE_USER_FEEDBACK",
+            Self::ReplaySummary => "SEER_BILLING_FEATURE_REPLAY_SUMMARY",
+            Self::IssueViewTitle => "SEER_BILLING_FEATURE_ISSUE_VIEW_TITLE",
+            Self::ExternalIssueDetails => "SEER_BILLING_FEATURE_EXTERNAL_ISSUE_DETAILS",
+            Self::UptimeAssertions => "SEER_BILLING_FEATURE_UPTIME_ASSERTIONS",
+            Self::IssueDetection => "SEER_BILLING_FEATURE_ISSUE_DETECTION",
+            Self::LowValueSpans => "SEER_BILLING_FEATURE_LOW_VALUE_SPANS",
+            Self::MaliciousIssueDetection => {
+                "SEER_BILLING_FEATURE_MALICIOUS_ISSUE_DETECTION"
+            }
+            Self::CodeReview => "SEER_BILLING_FEATURE_CODE_REVIEW",
+            Self::PrMetrics => "SEER_BILLING_FEATURE_PR_METRICS",
+            Self::AssistedQuery => "SEER_BILLING_FEATURE_ASSISTED_QUERY",
+            Self::Evals => "SEER_BILLING_FEATURE_EVALS",
+            Self::AiMonitoring => "SEER_BILLING_FEATURE_AI_MONITORING",
+            Self::InboundFilters => "SEER_BILLING_FEATURE_INBOUND_FILTERS",
+            Self::Severity => "SEER_BILLING_FEATURE_SEVERITY",
+            Self::Grouping => "SEER_BILLING_FEATURE_GROUPING",
+            Self::ModelTraining => "SEER_BILLING_FEATURE_MODEL_TRAINING",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SEER_BILLING_FEATURE_UNSPECIFIED" => Some(Self::Unspecified),
+            "SEER_BILLING_FEATURE_AUTOFIX_WEB" => Some(Self::AutofixWeb),
+            "SEER_BILLING_FEATURE_AUTOFIX_HEADLESS" => Some(Self::AutofixHeadless),
+            "SEER_BILLING_FEATURE_AUTOFIX_INTEGRATIONS" => {
+                Some(Self::AutofixIntegrations)
+            }
+            "SEER_BILLING_FEATURE_AUTOFIX_AGENTIC_TRIAGE" => {
+                Some(Self::AutofixAgenticTriage)
+            }
+            "SEER_BILLING_FEATURE_AUTOFIX_POST_PROCESS" => Some(Self::AutofixPostProcess),
+            "SEER_BILLING_FEATURE_SEER_AGENT" => Some(Self::SeerAgent),
+            "SEER_BILLING_FEATURE_SEER_AGENT_SLACK" => Some(Self::SeerAgentSlack),
+            "SEER_BILLING_FEATURE_SEER_AGENT_SUGGESTIONS" => {
+                Some(Self::SeerAgentSuggestions)
+            }
+            "SEER_BILLING_FEATURE_AGENTIC_TRIAGE" => Some(Self::AgenticTriage),
+            "SEER_BILLING_FEATURE_RUN_QUESTIONS" => Some(Self::RunQuestions),
+            "SEER_BILLING_FEATURE_INVESTIGATIONS" => Some(Self::Investigations),
+            "SEER_BILLING_FEATURE_SMART_ASSIGNMENT" => Some(Self::SmartAssignment),
+            "SEER_BILLING_FEATURE_MONITOR_CLEANUP" => Some(Self::MonitorCleanup),
+            "SEER_BILLING_FEATURE_IMPACT_ASSESSMENT" => Some(Self::ImpactAssessment),
+            "SEER_BILLING_FEATURE_DASHBOARD_GENERATION" => {
+                Some(Self::DashboardGeneration)
+            }
+            "SEER_BILLING_FEATURE_CONTEXT_INDEXING" => Some(Self::ContextIndexing),
+            "SEER_BILLING_FEATURE_ISSUE_SUMMARY" => Some(Self::IssueSummary),
+            "SEER_BILLING_FEATURE_FIXABILITY" => Some(Self::Fixability),
+            "SEER_BILLING_FEATURE_USER_FEEDBACK" => Some(Self::UserFeedback),
+            "SEER_BILLING_FEATURE_REPLAY_SUMMARY" => Some(Self::ReplaySummary),
+            "SEER_BILLING_FEATURE_ISSUE_VIEW_TITLE" => Some(Self::IssueViewTitle),
+            "SEER_BILLING_FEATURE_EXTERNAL_ISSUE_DETAILS" => {
+                Some(Self::ExternalIssueDetails)
+            }
+            "SEER_BILLING_FEATURE_UPTIME_ASSERTIONS" => Some(Self::UptimeAssertions),
+            "SEER_BILLING_FEATURE_ISSUE_DETECTION" => Some(Self::IssueDetection),
+            "SEER_BILLING_FEATURE_LOW_VALUE_SPANS" => Some(Self::LowValueSpans),
+            "SEER_BILLING_FEATURE_MALICIOUS_ISSUE_DETECTION" => {
+                Some(Self::MaliciousIssueDetection)
+            }
+            "SEER_BILLING_FEATURE_CODE_REVIEW" => Some(Self::CodeReview),
+            "SEER_BILLING_FEATURE_PR_METRICS" => Some(Self::PrMetrics),
+            "SEER_BILLING_FEATURE_ASSISTED_QUERY" => Some(Self::AssistedQuery),
+            "SEER_BILLING_FEATURE_EVALS" => Some(Self::Evals),
+            "SEER_BILLING_FEATURE_AI_MONITORING" => Some(Self::AiMonitoring),
+            "SEER_BILLING_FEATURE_INBOUND_FILTERS" => Some(Self::InboundFilters),
+            "SEER_BILLING_FEATURE_SEVERITY" => Some(Self::Severity),
+            "SEER_BILLING_FEATURE_GROUPING" => Some(Self::Grouping),
+            "SEER_BILLING_FEATURE_MODEL_TRAINING" => Some(Self::ModelTraining),
+            _ => None,
+        }
+    }
+}
 /// Card payment method details.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Card {
