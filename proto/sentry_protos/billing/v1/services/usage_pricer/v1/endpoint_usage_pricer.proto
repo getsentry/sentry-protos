@@ -61,6 +61,7 @@ message LineItemUsageSummary {
   string line_item_uid = 1;
 
   // Net cents consumed by this line item in the billing period (after credits/trials applied).
+  // Counts toward the PAYG budget. 0 for uncapped line items; see uncapped_spend_cents.
   uint64 payg_spend_cents = 2;
 
   // How much of the line item was consumed by PAYG (in the line item's units)
@@ -99,6 +100,11 @@ message LineItemUsageSummary {
   // For example, a $1 allocation against a $1 budget returns false.
   // For an all-items budget, compares the total spend across its line items.
   bool exceeded_payg_budget = 10;
+
+  // Net cents billed for this line item in the billing period that do not count
+  // toward the PAYG budget, because the line item is priced with an uncapped
+  // rate (e.g. Seer seats). 0 for line items without an uncapped rate.
+  uint64 uncapped_spend_cents = 11;
 }
 
 message SharedLineItemUsageSummary {
