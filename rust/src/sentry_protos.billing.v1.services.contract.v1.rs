@@ -1029,6 +1029,40 @@ pub struct GetContractResponse {
     #[prost(message, optional, tag = "1")]
     pub contract: ::core::option::Option<Contract>,
 }
+/// Lists current contracts whose opening invoice charged the subscription fee
+/// and was closed unpaid after every scheduled charge retry failed.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetContractsOpenedByExhaustedInvoicesRequest {
+    /// Only invoices added before this time are returned, so callers can leave
+    /// the charge path time to finish acting on a just-exhausted invoice.
+    #[prost(message, optional, tag = "1")]
+    pub created_before: ::core::option::Option<::prost_types::Timestamp>,
+    /// Maximum number of contracts to return in the response. If more contracts
+    /// match the request than this limit, the response will have truncated set
+    /// to true.
+    #[prost(uint32, tag = "2")]
+    pub max_items: u32,
+    #[prost(uint32, optional, tag = "3")]
+    pub offset: ::core::option::Option<u32>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ContractOpenedByExhaustedInvoice {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub contract_id: u64,
+    #[prost(uint64, tag = "3")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetContractsOpenedByExhaustedInvoicesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub contracts: ::prost::alloc::vec::Vec<ContractOpenedByExhaustedInvoice>,
+    /// True if additional matching contracts existed beyond max_items and were
+    /// not included in this response.
+    #[prost(bool, tag = "2")]
+    pub truncated: bool,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetInvoiceRequest {
     #[prost(uint64, tag = "1")]

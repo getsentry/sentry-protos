@@ -349,3 +349,19 @@ pub struct PreviewNextInvoiceResponse {
     #[prost(uint64, tag = "2")]
     pub amount_billed_cents: u64,
 }
+/// Downgrades organizations that are still on a paid package after the
+/// subscription invoice that opened their current contract ran out of charge
+/// retries.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SweepExhaustedInvoicesRequest {
+    /// The current time, used to decide which exhausted invoices the charge path
+    /// has had time to finish with.
+    #[prost(message, optional, tag = "1")]
+    pub current_ts: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SweepExhaustedInvoicesResponse {
+    /// Number of organizations a downgrade was scheduled for.
+    #[prost(uint64, tag = "1")]
+    pub scheduled_count: u64,
+}
