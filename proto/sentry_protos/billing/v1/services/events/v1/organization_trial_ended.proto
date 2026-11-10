@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.events.v1;
+
+// Published after a subscription trial expires. The package identifies the
+// trial's former feature set after it is no longer part of the active state.
+message OrganizationTrialEnded {
+  string package_uid = 1;
+}
