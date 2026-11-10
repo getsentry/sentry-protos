@@ -32,12 +32,13 @@ pub struct OrganizationPackageChanged {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationPaygChanged {}
-/// Published after a subscription trial expires. The package identifies the
-/// trial's former feature set after it is no longer part of the active state.
+/// Published after a subscription trial expires.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationTrialEnded {
     #[prost(string, tag = "1")]
-    pub package_uid: ::prost::alloc::string::String,
+    pub trial_package_uid: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub returned_package_uid: ::prost::alloc::string::String,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationTrialStarted {}
