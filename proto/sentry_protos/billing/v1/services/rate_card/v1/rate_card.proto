@@ -23,10 +23,6 @@ message RateCardLineItem {
   bool is_enabled = 7;
 
   sentry_protos.billing.v1.common.v1.BillingType billing_type = 8;
-
-  // Whether usage past the reserved units can never draw on a PAYG budget. This is the package's
-  // LineItemConfig.reserved_only after contract overrides have been resolved.
-  bool reserved_only = 9;
 }
 
 message SharedRateCardLineItem {

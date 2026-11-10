@@ -40,10 +40,6 @@ message LineItemConfig {
   bool can_product_trial = 12;
 
   sentry_protos.billing.v1.common.v1.BillingType billing_type = 13;
-
-  // Whether this LineItem is sold only as included (reserved) units, never pay-as-you-go (ie size analyses).
-  // Usage past the included units does not draw on a PAYG budget; only a grant or trial adds capacity.
-  bool reserved_only = 14;
 }
 
 // Represents a budget included in a package that is collectively used by one or more line items,

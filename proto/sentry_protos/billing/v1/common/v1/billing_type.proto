@@ -12,4 +12,9 @@ enum BillingType {
 
   // Usage is settled by a prepaid credit balance.
   BILLING_TYPE_CREDIT_ONLY = 2;
+
+  // Usage is covered only by the line item's reserved (included) units, never pay-as-you-go (ie size analyses).
+  // The reserved units are still charged on the invoice cycle. Usage past them does not draw on a PAYG budget;
+  // only a grant or trial adds capacity.
+  BILLING_TYPE_RESERVED_ONLY = 3;
 }
