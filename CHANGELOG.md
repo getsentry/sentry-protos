@@ -1,3 +1,9 @@
+## 0.115.0
+
+### New Features ✨
+
+- (billing) Share Seer billing feature identifiers by @sehr-m with @getsantry in [#521](https://github.com/getsentry/sentry-protos/pull/521)
+
 ## 0.114.0
 
 ### New Features ✨
