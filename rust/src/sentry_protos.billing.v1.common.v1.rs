@@ -161,6 +161,10 @@ pub enum BillingType {
     InvoiceCycle = 1,
     /// Usage is settled by a prepaid credit balance.
     CreditOnly = 2,
+    /// Usage is covered only by the line item's reserved (included) units, never pay-as-you-go (ie size analyses).
+    /// The reserved units are still charged on the invoice cycle. Usage past them does not draw on a PAYG budget;
+    /// only a grant or trial adds capacity.
+    ReservedOnly = 3,
 }
 impl BillingType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -172,6 +176,7 @@ impl BillingType {
             Self::Unspecified => "BILLING_TYPE_UNSPECIFIED",
             Self::InvoiceCycle => "BILLING_TYPE_INVOICE_CYCLE",
             Self::CreditOnly => "BILLING_TYPE_CREDIT_ONLY",
+            Self::ReservedOnly => "BILLING_TYPE_RESERVED_ONLY",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -180,6 +185,7 @@ impl BillingType {
             "BILLING_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
             "BILLING_TYPE_INVOICE_CYCLE" => Some(Self::InvoiceCycle),
             "BILLING_TYPE_CREDIT_ONLY" => Some(Self::CreditOnly),
+            "BILLING_TYPE_RESERVED_ONLY" => Some(Self::ReservedOnly),
             _ => None,
         }
     }
