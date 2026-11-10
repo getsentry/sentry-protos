@@ -820,6 +820,8 @@ pub enum SeerBillingFeature {
     SeerAgent = 6,
     SeerAgentSlack = 7,
     SeerAgentSuggestions = 8,
+    /// Refers to the actual triage process whereas AutofixAgenticTriage 
+    /// is the Autofix run started after triaging
     AgenticTriage = 9,
     RunQuestions = 10,
     Investigations = 11,
