@@ -38,7 +38,7 @@ pub struct OrganizationTrialEnded {
     #[prost(string, tag = "1")]
     pub trial_package_uid: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
-    pub returned_package_uid: ::prost::alloc::string::String,
+    pub post_trial_contract_package_uid: ::prost::alloc::string::String,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OrganizationTrialStarted {}
