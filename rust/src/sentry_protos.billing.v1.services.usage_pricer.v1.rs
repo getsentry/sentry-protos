@@ -117,6 +117,7 @@ pub struct LineItemUsageSummary {
     #[prost(string, tag = "1")]
     pub line_item_uid: ::prost::alloc::string::String,
     /// Net cents consumed by this line item in the billing period (after credits/trials applied).
+    /// Counts toward the PAYG budget. 0 for uncapped line items; see uncapped_spend_cents.
     #[prost(uint64, tag = "2")]
     pub payg_spend_cents: u64,
     /// How much of the line item was consumed by PAYG (in the line item's units)
@@ -158,6 +159,11 @@ pub struct LineItemUsageSummary {
     /// For an all-items budget, compares the total spend across its line items.
     #[prost(bool, tag = "10")]
     pub exceeded_payg_budget: bool,
+    /// Net cents billed for this line item in the billing period that do not count
+    /// toward the PAYG budget, because the line item is priced with an uncapped
+    /// rate (e.g. Seer seats). 0 for line items without an uncapped rate.
+    #[prost(uint64, tag = "11")]
+    pub uncapped_spend_cents: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SharedLineItemUsageSummary {
