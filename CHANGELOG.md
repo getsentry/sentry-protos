@@ -1,3 +1,9 @@
+## 0.117.0
+
+### New Features ✨
+
+- (events) Add subscription trial expiry event by @volokluev with @getsantry in [#520](https://github.com/getsentry/sentry-protos/pull/520)
+
 ## 0.116.0
 
 ### New Features ✨
