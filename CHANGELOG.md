@@ -1,3 +1,9 @@
+## 0.118.0
+
+### New Features ✨
+
+- (billing) Report why a Seer credit check denies credit by @volokluev with @sentry-junior and @getsantry in [#524](https://github.com/getsentry/sentry-protos/pull/524)
+
 ## 0.117.0
 
 ### New Features ✨
