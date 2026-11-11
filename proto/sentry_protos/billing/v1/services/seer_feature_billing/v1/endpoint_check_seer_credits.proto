@@ -11,6 +11,16 @@ message CheckSeerCreditsRequest {
 }
 
 message CheckSeerCreditsResponse {
+  enum DenialReason {
+    DENIAL_REASON_UNSPECIFIED = 0;
+    // The wallet balance does not cover the usage so far plus the predicted usage.
+    DENIAL_REASON_NOT_ENOUGH_CREDITS = 1;
+    // Today's usage plus the predicted usage costs more than the organization's
+    // daily spend cap.
+    DENIAL_REASON_DAILY_CAP_EXCEEDED = 2;
+  }
   bool has_enough_credits = 1;
   optional string lease_id = 2;
+  // Why has_enough_credits is false. Unspecified when it is true.
+  DenialReason denial_reason = 3;
 }

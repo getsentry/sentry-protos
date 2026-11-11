@@ -110,6 +110,54 @@ pub struct CheckSeerCreditsResponse {
     pub has_enough_credits: bool,
     #[prost(string, optional, tag = "2")]
     pub lease_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// Why has_enough_credits is false. Unspecified when it is true.
+    #[prost(enumeration = "check_seer_credits_response::DenialReason", tag = "3")]
+    pub denial_reason: i32,
+}
+/// Nested message and enum types in `CheckSeerCreditsResponse`.
+pub mod check_seer_credits_response {
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
+    #[repr(i32)]
+    pub enum DenialReason {
+        Unspecified = 0,
+        /// The wallet balance does not cover the usage so far plus the predicted usage.
+        NotEnoughCredits = 1,
+        /// Today's usage plus the predicted usage costs more than the organization's
+        /// daily spend cap.
+        DailyCapExceeded = 2,
+    }
+    impl DenialReason {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Self::Unspecified => "DENIAL_REASON_UNSPECIFIED",
+                Self::NotEnoughCredits => "DENIAL_REASON_NOT_ENOUGH_CREDITS",
+                Self::DailyCapExceeded => "DENIAL_REASON_DAILY_CAP_EXCEEDED",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "DENIAL_REASON_UNSPECIFIED" => Some(Self::Unspecified),
+                "DENIAL_REASON_NOT_ENOUGH_CREDITS" => Some(Self::NotEnoughCredits),
+                "DENIAL_REASON_DAILY_CAP_EXCEEDED" => Some(Self::DailyCapExceeded),
+                _ => None,
+            }
+        }
+    }
 }
 /// Replaces an organization's Seer wallet settings. When the request turns
 /// auto top-up on, the response includes the synchronous top-up check.
