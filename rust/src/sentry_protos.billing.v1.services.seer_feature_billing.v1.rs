@@ -240,6 +240,10 @@ pub struct SeerWallet {
     /// Included credits used this billing period. At most included_credits.
     #[prost(uint64, tag = "5")]
     pub included_credits_used: u64,
+    /// Purchased credits expire twelve months after the latest ledger deposit.
+    /// Unset when the wallet has never received a deposit.
+    #[prost(message, optional, tag = "6")]
+    pub expires_at: ::core::option::Option<super::super::super::Date>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetSeerWalletBalanceResponse {

@@ -60,6 +60,10 @@ pub struct GetLedgerBalanceResponse {
     /// Deposits whose invoices are not paid yet. Not part of balance_cents.
     #[prost(int64, tag = "2")]
     pub pending_deposit_cents: i64,
+    /// Creation time of the most recent deposit, whether or not its invoice has
+    /// been paid. Unset when the account has no deposits.
+    #[prost(message, optional, tag = "3")]
+    pub latest_deposit_at: ::core::option::Option<::prost_types::Timestamp>,
 }
 /// One row of an account's transaction history. Entries are append-only.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
