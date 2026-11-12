@@ -1,3 +1,9 @@
+## 0.120.0
+
+### New Features ✨
+
+- (billing) Add ResetProductTrial engagement protos by @dashed with @getsantry in [#519](https://github.com/getsentry/sentry-protos/pull/519)
+
 ## 0.119.0
 
 ### New Features ✨
