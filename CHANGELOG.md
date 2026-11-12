@@ -1,3 +1,13 @@
+## 0.119.0
+
+### New Features ✨
+
+- (billing) Add trial package lookups to the package service by @hybrendan and @claude with @getsantry in [#526](https://github.com/getsentry/sentry-protos/pull/526)
+
+### Bug Fixes 🐛
+
+- (devenv) Escape % in the Python download URLs by @mchen-sentry with @sentry-junior in [#525](https://github.com/getsentry/sentry-protos/pull/525)
+
 ## 0.118.0
 
 ### New Features ✨
