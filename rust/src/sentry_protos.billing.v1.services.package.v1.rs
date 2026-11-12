@@ -214,6 +214,22 @@ pub struct GetAllPackagesResponse {
     #[prost(message, repeated, tag = "1")]
     pub package_configs: ::prost::alloc::vec::Vec<PackageConfig>,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetDefaultTrialPackageRequest {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetDefaultTrialPackageResponse {
+    /// The package a self-serve subscription trial runs on.
+    #[prost(message, optional, tag = "1")]
+    pub package_config: ::core::option::Option<PackageConfig>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetEnterpriseTrialPackageRequest {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetEnterpriseTrialPackageResponse {
+    /// The package a new enterprise subscription trial runs on.
+    #[prost(message, optional, tag = "1")]
+    pub package_config: ::core::option::Option<PackageConfig>,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetPackageRequest {
     #[prost(string, tag = "1")]
