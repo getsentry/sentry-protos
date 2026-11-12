@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.package.v1;
+
+import "sentry_protos/billing/v1/services/package/v1/package.proto";
+
+message GetEnterpriseTrialPackageRequest {}
+
+message GetEnterpriseTrialPackageResponse {
+  // The package a new enterprise subscription trial runs on.
+  PackageConfig package_config = 1;
+}
