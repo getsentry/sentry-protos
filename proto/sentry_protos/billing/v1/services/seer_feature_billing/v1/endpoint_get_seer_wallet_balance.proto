@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.seer_feature_billing.v1;
 
+import "sentry_protos/billing/v1/date.proto";
+
 // Reads the organization's prepaid Seer credit from its current contract.
 message GetSeerWalletBalanceRequest {
   uint64 organization_id = 1;
@@ -23,6 +25,9 @@ message SeerWallet {
   uint64 included_credits = 4;
   // Included credits used this billing period. At most included_credits.
   uint64 included_credits_used = 5;
+  // Purchased credits expire twelve months after the latest ledger deposit.
+  // Unset when the wallet has never received a deposit.
+  optional sentry_protos.billing.v1.Date expires_at = 6;
 }
 
 message GetSeerWalletBalanceResponse {
