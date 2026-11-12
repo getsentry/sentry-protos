@@ -13,6 +13,10 @@ message BillingAlertConfig {
     LineItemUids specific_items = 3;
     google.protobuf.Empty all_items = 4;
   }
+
+  // The project whose spend allocation the alert watches. Set only for
+  // BILLING_ALERT_BUDGET_TYPE_SPEND_ALLOCATION, with exactly one specific item.
+  uint64 project_id = 5;
 }
 
 message BillingAlert {
@@ -30,4 +34,6 @@ enum BillingAlertBudgetType {
   BILLING_ALERT_BUDGET_TYPE_UNSPECIFIED = 0;
   BILLING_ALERT_BUDGET_TYPE_RESERVED = 1;
   BILLING_ALERT_BUDGET_TYPE_PAYG = 2;
+  // Reserved volume that a spend allocation sets aside for one project.
+  BILLING_ALERT_BUDGET_TYPE_SPEND_ALLOCATION = 3;
 }
