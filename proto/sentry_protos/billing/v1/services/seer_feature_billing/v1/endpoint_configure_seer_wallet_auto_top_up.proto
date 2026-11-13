@@ -16,6 +16,9 @@ message ConfigureSeerWalletAutoTopUpRequest {
 message ConfigureSeerWalletAutoTopUpResponse {
   // Unset when the organization had not previously saved wallet settings.
   optional sentry_protos.billing.v1.services.seer_wallet_config.v1.SeerWalletConfig previous_config = 1;
+  // The settings saved after the request. When turning auto top-up on leaves
+  // the synchronous top-up unpaid, or another top-up holds the charge lock,
+  // these are the previous settings with auto top-up off.
   sentry_protos.billing.v1.services.seer_wallet_config.v1.SeerWalletConfig config = 2;
   // Set only when this request turns auto top-up on.
   optional AutoTopUpSeerWalletResponse synchronous_top_up = 3;

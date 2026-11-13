@@ -29,7 +29,8 @@ message AutoTopUpSeerWalletResponse {
     OUTCOME_BILLED = 6;
   }
   Outcome outcome = 1;
-  // Set when outcome is OUTCOME_BILLED.
+  // Set when outcome is OUTCOME_BILLED or OUTCOME_INVOICE_PENDING. For
+  // OUTCOME_INVOICE_PENDING, it is the unpaid invoice that blocks top-ups.
   optional uint64 invoice_id = 2;
   // Whether the top-up invoice was paid. Only meaningful when outcome is
   // OUTCOME_BILLED.
@@ -38,7 +39,8 @@ message AutoTopUpSeerWalletResponse {
   string failure_code = 4;
   // Set when the customer must complete a 3D Secure challenge.
   optional sentry_protos.billing.v1.common.v1.StripeVerification verification = 5;
-  // Set when outcome is OUTCOME_BILLED. The browser uses this to confirm a
-  // completed 3D Secure challenge with the payment endpoint.
+  // Set when outcome is OUTCOME_BILLED or OUTCOME_INVOICE_PENDING. The browser
+  // uses this to pay the invoice: it confirms a completed 3D Secure challenge,
+  // or pays an unpaid invoice with the payment endpoint.
   optional string invoice_guid = 6;
 }
