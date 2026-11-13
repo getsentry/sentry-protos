@@ -41,6 +41,7 @@ message LineItemConfig {
 
   // Whether staff can start a product trial of this LineItem, though customers cannot (ie Size Analysis).
   // Staff can also start a product trial of any LineItem with can_product_trial set.
+  // Set at most one of can_product_trial and can_admin_product_trial.
   bool can_admin_product_trial = 14;
 
   sentry_protos.billing.v1.common.v1.BillingType billing_type = 13;
@@ -82,6 +83,7 @@ message SharedLineItemPool {
 
   // Whether staff can start a product trial of this pool, though customers cannot.
   // Staff can also start a product trial of any pool with can_product_trial set.
+  // Set at most one of can_product_trial and can_admin_product_trial.
   bool can_admin_product_trial = 12;
 }
 
