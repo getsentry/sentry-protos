@@ -39,6 +39,10 @@ message LineItemConfig {
   // Whether this LineItem is eligible for a product trial.
   bool can_product_trial = 12;
 
+  // Whether staff can start a product trial of this LineItem, though customers cannot (ie Size Analysis).
+  // Staff can also start a product trial of any LineItem with can_product_trial set.
+  bool can_admin_product_trial = 14;
+
   sentry_protos.billing.v1.common.v1.BillingType billing_type = 13;
 }
 
@@ -75,6 +79,10 @@ message SharedLineItemPool {
 
   // Whether this LineItem is eligible for a product trial.
   bool can_product_trial = 11;
+
+  // Whether staff can start a product trial of this pool, though customers cannot.
+  // Staff can also start a product trial of any pool with can_product_trial set.
+  bool can_admin_product_trial = 12;
 }
 
 // Non-volume feature limits tied to a package tier (dashboards, metric
