@@ -127,7 +127,9 @@ pub struct ProvisionSalesContractRequest {
     /// UserConfig must not carry a price.
     #[prost(message, repeated, tag = "4")]
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
-    /// The contract's invoiced config once the deal takes effect. Required.
+    /// How the contract is billed once the deal takes effect: set exactly one of
+    /// invoiced and credit_card. They are separate fields rather than a oneof
+    /// because invoiced was published on its own.
     #[prost(message, optional, tag = "7")]
     pub invoiced: ::core::option::Option<super::super::contract::v2::InvoicedConfig>,
     /// The deal's prices. When set, it replaces the contract's whole sales config
@@ -135,6 +137,11 @@ pub struct ProvisionSalesContractRequest {
     /// the current prices.
     #[prost(message, optional, tag = "8")]
     pub sales_config: ::core::option::Option<super::super::contract::v2::SalesConfig>,
+    /// Bills the deal to the customer's card on file instead of invoicing it.
+    #[prost(message, optional, tag = "9")]
+    pub credit_card: ::core::option::Option<
+        super::super::contract::v2::CreditCardConfig,
+    >,
     #[prost(oneof = "provision_sales_contract_request::Effective", tags = "5, 6")]
     pub effective: ::core::option::Option<provision_sales_contract_request::Effective>,
 }
