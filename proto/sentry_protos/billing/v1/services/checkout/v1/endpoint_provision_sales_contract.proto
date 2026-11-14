@@ -39,13 +39,18 @@ message ProvisionSalesContractRequest {
     google.protobuf.Timestamp new_term_start = 6;
   }
 
-  // The contract's invoiced config once the deal takes effect. Required.
+  // How the contract is billed once the deal takes effect: set exactly one of
+  // invoiced and credit_card. They are separate fields rather than a oneof
+  // because invoiced was published on its own.
   sentry_protos.billing.v1.services.contract.v2.InvoicedConfig invoiced = 7;
 
   // The deal's prices. When set, it replaces the contract's whole sales config
   // when the deal takes effect, and an empty SalesConfig clears it. Unset keeps
   // the current prices.
   optional sentry_protos.billing.v1.services.contract.v2.SalesConfig sales_config = 8;
+
+  // Bills the deal to the customer's card on file instead of invoicing it.
+  sentry_protos.billing.v1.services.contract.v2.CreditCardConfig credit_card = 9;
 }
 
 message ProvisionSalesContractResponse {
