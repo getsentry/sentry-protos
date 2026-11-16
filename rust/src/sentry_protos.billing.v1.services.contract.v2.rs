@@ -400,6 +400,22 @@ pub struct GetUninvoicedContractsResponse {
     #[prost(uint64, repeated, tag = "2")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
+/// Ends an open contract's billing term early, on term_end. The contract's
+/// current on-demand period is cut to end no later than term_end, and the
+/// rollover that reaches term_end renews the contract: it applies the staged
+/// pending change and starts a new full term on term_end.
+///
+/// term_end must be midnight UTC, after now, and no later than the end of the
+/// current term. Setting it again replaces the earlier override.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct OverrideTermEndRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub term_end: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct OverrideTermEndResponse {}
 /// Releases the open-contract lock acquired by
 /// GetCurrentContractForOrganizationWithLock. An empty, unknown, or
 /// already-released lease leaves the lock alone. So does a lease from a call
