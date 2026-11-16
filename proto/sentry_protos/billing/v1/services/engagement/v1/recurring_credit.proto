@@ -32,4 +32,9 @@ message RecurringCredit {
   optional string line_item_uid = 1;
   RecurringCreditType type = 2;
   uint64 amount = 3;
+  uint64 id = 4;
+  // The contract the credit was granted on.
+  uint64 initial_contract_id = 5;
+  // Periods the credit still covers, counting the requested contract's period.
+  uint32 remaining_periods = 6;
 }

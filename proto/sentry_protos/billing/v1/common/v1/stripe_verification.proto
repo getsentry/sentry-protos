@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.common.v1;
+
+// A bank can ask the customer to verify a payment before it releases the money.
+// This carries that request and what the browser needs to answer it.
+message StripeVerification {
+  // The bank wants the customer to verify this payment.
+  bool required = 1;
+
+  // The Stripe payment that waits for the customer.
+  optional string payment_intent_id = 2;
+
+  // The key the browser needs to show the bank's question.
+  optional string client_secret = 3;
+}

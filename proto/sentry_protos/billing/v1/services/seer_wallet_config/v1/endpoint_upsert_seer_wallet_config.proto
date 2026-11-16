@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_wallet_config.v1;
+
+import "sentry_protos/billing/v1/services/seer_wallet_config/v1/seer_wallet_config.proto";
+
+// Creates the organization's config, or replaces the sections the request
+// sets. A section left unset keeps its stored value, so the auto top-up and
+// spend settings can be saved independently.
+message UpsertSeerWalletConfigRequest {
+  uint64 organization_id = 1;
+  optional AutoTopUpConfig auto_top_up = 2;
+  optional SpendConfig spend = 3;
+}
+
+message UpsertSeerWalletConfigResponse {
+  SeerWalletConfig config = 1;
+}

@@ -151,6 +151,75 @@ impl BillingInterval {
         }
     }
 }
+/// How a line item's usage is settled.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum BillingType {
+    /// The producer did not set a billing type. Consumers treat this as invoice-cycle billing.
+    Unspecified = 0,
+    /// Usage is charged on the invoice cycle.
+    InvoiceCycle = 1,
+    /// Usage is settled by a prepaid credit balance.
+    CreditOnly = 2,
+    /// Usage is covered only by the line item's reserved (included) units, never pay-as-you-go (ie size analyses).
+    /// The reserved units are still charged on the invoice cycle. Usage past them does not draw on a PAYG budget;
+    /// only a grant or trial adds capacity.
+    ReservedOnly = 3,
+}
+impl BillingType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "BILLING_TYPE_UNSPECIFIED",
+            Self::InvoiceCycle => "BILLING_TYPE_INVOICE_CYCLE",
+            Self::CreditOnly => "BILLING_TYPE_CREDIT_ONLY",
+            Self::ReservedOnly => "BILLING_TYPE_RESERVED_ONLY",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "BILLING_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "BILLING_TYPE_INVOICE_CYCLE" => Some(Self::InvoiceCycle),
+            "BILLING_TYPE_CREDIT_ONLY" => Some(Self::CreditOnly),
+            "BILLING_TYPE_RESERVED_ONLY" => Some(Self::ReservedOnly),
+            _ => None,
+        }
+    }
+}
+/// The external provider responsible for collecting payment for an invoice.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ExternalBillingProvider {
+    Unspecified = 0,
+    Stripe = 1,
+    Vercel = 2,
+}
+impl ExternalBillingProvider {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "EXTERNAL_BILLING_PROVIDER_UNSPECIFIED",
+            Self::Stripe => "EXTERNAL_BILLING_PROVIDER_STRIPE",
+            Self::Vercel => "EXTERNAL_BILLING_PROVIDER_VERCEL",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "EXTERNAL_BILLING_PROVIDER_UNSPECIFIED" => Some(Self::Unspecified),
+            "EXTERNAL_BILLING_PROVIDER_STRIPE" => Some(Self::Stripe),
+            "EXTERNAL_BILLING_PROVIDER_VERCEL" => Some(Self::Vercel),
+            _ => None,
+        }
+    }
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct FlexiblePrice {
     #[prost(uint64, tag = "1")]
@@ -164,6 +233,44 @@ pub mod flexible_price {
     pub enum AnnualPrice {
         #[prost(uint64, tag = "2")]
         Fixed(u64),
+    }
+}
+/// Tags assigned to a line item.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct LineItemTags {
+    #[prost(enumeration = "LineItemTag", repeated, tag = "1")]
+    pub tags: ::prost::alloc::vec::Vec<i32>,
+}
+/// A tag describing a line item.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum LineItemTag {
+    Unspecified = 0,
+    /// this line item allows the usage of the seer product and sentry gen-ai features
+    GenAiUsage = 1,
+    /// this line item uses dynamic sampling at ingestion
+    IsDynamicallySampled = 2,
+}
+impl LineItemTag {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "LINE_ITEM_TAG_UNSPECIFIED",
+            Self::GenAiUsage => "LINE_ITEM_TAG_GEN_AI_USAGE",
+            Self::IsDynamicallySampled => "LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "LINE_ITEM_TAG_UNSPECIFIED" => Some(Self::Unspecified),
+            "LINE_ITEM_TAG_GEN_AI_USAGE" => Some(Self::GenAiUsage),
+            "LINE_ITEM_TAG_IS_DYNAMICALLY_SAMPLED" => Some(Self::IsDynamicallySampled),
+            _ => None,
+        }
     }
 }
 /// Unit information for measurement and conversion.
@@ -259,11 +366,17 @@ pub struct LineItemDetails {
     /// The invoice line item type strings for this line item.
     #[prost(message, optional, tag = "8")]
     pub invoice_data: ::core::option::Option<InvoiceMetadataTags>,
+    /// Tags assigned to this line item.
+    /// A way to label a line item with semantic information about itself.
+    /// Anytime you find yourself wanting to hardcode a line item uid somewhere,
+    /// Add a line item tag instead
+    #[prost(message, optional, tag = "9")]
+    pub line_item_tags: ::core::option::Option<LineItemTags>,
     /// Whether the customer-facing usage UI shows a per-usage-category breakdown
     /// for this line item, e.g. splitting a spans line item into the transaction
     /// and profile usage that rolls up into it. Lets consumers select the lines to
     /// break down from the package instead of hardcoding billed categories.
-    #[prost(bool, tag = "9")]
+    #[prost(bool, tag = "10")]
     pub show_event_breakdown: bool,
 }
 /// Stripe-specific payment information for an organization.
@@ -304,6 +417,24 @@ pub mod payment_config {
         #[prost(message, tag = "1")]
         Stripe(super::StripePaymentData),
     }
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PricingTier {
+    #[prost(int64, tag = "1")]
+    pub start: i64,
+    #[deprecated]
+    #[prost(int64, tag = "2")]
+    pub end: i64,
+    #[deprecated]
+    #[prost(int64, tag = "3")]
+    pub rate_per_unit_cpe: i64,
+    #[prost(message, optional, tag = "4")]
+    pub price: ::core::option::Option<FlexiblePrice>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TieredPricingRate {
+    #[prost(message, repeated, tag = "1")]
+    pub tiers: ::prost::alloc::vec::Vec<PricingTier>,
 }
 /// Soft-cap behavior.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -406,6 +537,36 @@ pub struct PendingChange {
     /// sponsorship; an unset field leaves it unchanged.
     #[prost(enumeration = "SponsoredType", optional, tag = "4")]
     pub sponsored_type: ::core::option::Option<i32>,
+    /// The next contract's billing type. Unset leaves it unchanged.
+    #[prost(enumeration = "PendingBillingType", optional, tag = "5")]
+    pub billing_type: ::core::option::Option<i32>,
+    /// The next contract's payg mode. Set only with PENDING_BILLING_TYPE_INVOICED,
+    /// since a card-billed contract always charges payg.
+    #[prost(enumeration = "PendingPaygMode", optional, tag = "6")]
+    pub payg_mode: ::core::option::Option<i32>,
+    /// Replaces the next contract's whole sales config, so an empty
+    /// PendingSalesConfig clears it. Unset carries the current sales config over
+    /// unchanged.
+    #[prost(message, optional, tag = "7")]
+    pub sales_config: ::core::option::Option<PendingSalesConfig>,
+}
+/// Mirrors contract.v2.SalesConfig field for field, since common.v1 cannot
+/// import contract.v2 without a package cycle. The two must stay
+/// wire-compatible.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PendingSalesConfig {
+    #[prost(message, repeated, tag = "1")]
+    pub pricing: ::prost::alloc::vec::Vec<PendingSalesLineItemPricing>,
+}
+/// Mirrors contract.v2.SalesLineItemPricing.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PendingSalesLineItemPricing {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    #[prost(uint64, optional, tag = "2")]
+    pub reserved_price_cents: ::core::option::Option<u64>,
+    #[prost(message, optional, tag = "3")]
+    pub payg_rate: ::core::option::Option<TieredPricingRate>,
 }
 /// Pending overrides for a set of line items. payg_budget and reservation are
 /// each independently optional - either, both, or neither may be set on a
@@ -483,23 +644,73 @@ pub struct LineItemUids {
     #[prost(string, repeated, tag = "1")]
     pub uids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct PricingTier {
-    #[prost(int64, tag = "1")]
-    pub start: i64,
-    #[deprecated]
-    #[prost(int64, tag = "2")]
-    pub end: i64,
-    #[deprecated]
-    #[prost(int64, tag = "3")]
-    pub rate_per_unit_cpe: i64,
-    #[prost(message, optional, tag = "4")]
-    pub price: ::core::option::Option<FlexiblePrice>,
+/// The billing type a pending change moves the next contract onto.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PendingBillingType {
+    Unspecified = 0,
+    /// Billed directly by us, on a card the customer manages.
+    CreditCard = 1,
+    /// Invoiced by us, under a sales-negotiated agreement.
+    Invoiced = 2,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct TieredPricingRate {
-    #[prost(message, repeated, tag = "1")]
-    pub tiers: ::prost::alloc::vec::Vec<PricingTier>,
+impl PendingBillingType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PENDING_BILLING_TYPE_UNSPECIFIED",
+            Self::CreditCard => "PENDING_BILLING_TYPE_CREDIT_CARD",
+            Self::Invoiced => "PENDING_BILLING_TYPE_INVOICED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PENDING_BILLING_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "PENDING_BILLING_TYPE_CREDIT_CARD" => Some(Self::CreditCard),
+            "PENDING_BILLING_TYPE_INVOICED" => Some(Self::Invoiced),
+            _ => None,
+        }
+    }
+}
+/// Whether an invoiced contract may incur payg, and who bills it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PendingPaygMode {
+    Unspecified = 0,
+    /// The org may not incur payg at all.
+    None = 1,
+    /// The org incurs payg, but it is billed outside the platform.
+    Manual = 2,
+    /// We charge payg spend ourselves.
+    Charged = 3,
+}
+impl PendingPaygMode {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PENDING_PAYG_MODE_UNSPECIFIED",
+            Self::None => "PENDING_PAYG_MODE_NONE",
+            Self::Manual => "PENDING_PAYG_MODE_MANUAL",
+            Self::Charged => "PENDING_PAYG_MODE_CHARGED",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PENDING_PAYG_MODE_UNSPECIFIED" => Some(Self::Unspecified),
+            "PENDING_PAYG_MODE_NONE" => Some(Self::None),
+            "PENDING_PAYG_MODE_MANUAL" => Some(Self::Manual),
+            "PENDING_PAYG_MODE_CHARGED" => Some(Self::Charged),
+            _ => None,
+        }
+    }
 }
 /// Retention settings for one data category.
 ///
@@ -550,6 +761,202 @@ pub struct SeatObject {
     pub external_product_display_name: ::prost::alloc::string::String,
     #[prost(string, tag = "5")]
     pub external_product_identifier: ::prost::alloc::string::String,
+}
+/// Lifecycle status of a billing seat. Shared by both the seat_activity and
+/// seats services.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SeatStatus {
+    Unspecified = 0,
+    /// Seat is active and counting toward the billing period.
+    Active = 1,
+    /// Seat is disabled; it still counts toward the period total but new
+    /// activity (e.g. check-ins) is dropped.
+    Disabled = 2,
+    /// Seat was created but exceeds reserved+PAYG capacity. Treated as
+    /// DISABLED by external consumers (the distinction is internal only).
+    OverQuota = 3,
+    /// Seat does not exist (removed or never created).
+    Dne = 4,
+}
+impl SeatStatus {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SEAT_STATUS_UNSPECIFIED",
+            Self::Active => "SEAT_STATUS_ACTIVE",
+            Self::Disabled => "SEAT_STATUS_DISABLED",
+            Self::OverQuota => "SEAT_STATUS_OVER_QUOTA",
+            Self::Dne => "SEAT_STATUS_DNE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SEAT_STATUS_UNSPECIFIED" => Some(Self::Unspecified),
+            "SEAT_STATUS_ACTIVE" => Some(Self::Active),
+            "SEAT_STATUS_DISABLED" => Some(Self::Disabled),
+            "SEAT_STATUS_OVER_QUOTA" => Some(Self::OverQuota),
+            "SEAT_STATUS_DNE" => Some(Self::Dne),
+            _ => None,
+        }
+    }
+}
+/// Identifies the feature responsible for Seer usage, independently of the
+/// program executing the work. Whether usage is chargeable is billing policy.
+/// Set by trusted server entrypoints; persisted attribution is preserved for
+/// subsequent operations on the same run.
+/// For concrete values, the billing/proxy label is the lowercase enum name
+/// with the SEER_BILLING_FEATURE\_ prefix removed.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SeerBillingFeature {
+    /// Missing attribution, not a real feature or a billing exemption.
+    /// New runs must provide a concrete feature. Legacy runs need an explicit
+    /// compatibility fallback in the consuming application.
+    Unspecified = 0,
+    AutofixWeb = 1,
+    AutofixHeadless = 2,
+    AutofixIntegrations = 3,
+    AutofixAgenticTriage = 4,
+    AutofixPostProcess = 5,
+    SeerAgent = 6,
+    SeerAgentSlack = 7,
+    SeerAgentSuggestions = 8,
+    /// Refers to the actual triage process, whereas AUTOFIX_AGENTIC_TRIAGE
+    /// is the Autofix run started after triaging.
+    AgenticTriage = 9,
+    RunQuestions = 10,
+    Investigations = 11,
+    SmartAssignment = 12,
+    MonitorCleanup = 13,
+    ImpactAssessment = 14,
+    DashboardGeneration = 15,
+    ContextIndexing = 16,
+    IssueSummary = 17,
+    Fixability = 18,
+    UserFeedback = 19,
+    ReplaySummary = 20,
+    IssueViewTitle = 21,
+    ExternalIssueDetails = 22,
+    UptimeAssertions = 23,
+    IssueDetection = 24,
+    LowValueSpans = 25,
+    MaliciousIssueDetection = 26,
+    CodeReview = 27,
+    PrMetrics = 28,
+    AssistedQuery = 29,
+    Evals = 30,
+    AiMonitoring = 31,
+    InboundFilters = 32,
+    Severity = 33,
+    Grouping = 34,
+    ModelTraining = 35,
+}
+impl SeerBillingFeature {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SEER_BILLING_FEATURE_UNSPECIFIED",
+            Self::AutofixWeb => "SEER_BILLING_FEATURE_AUTOFIX_WEB",
+            Self::AutofixHeadless => "SEER_BILLING_FEATURE_AUTOFIX_HEADLESS",
+            Self::AutofixIntegrations => "SEER_BILLING_FEATURE_AUTOFIX_INTEGRATIONS",
+            Self::AutofixAgenticTriage => "SEER_BILLING_FEATURE_AUTOFIX_AGENTIC_TRIAGE",
+            Self::AutofixPostProcess => "SEER_BILLING_FEATURE_AUTOFIX_POST_PROCESS",
+            Self::SeerAgent => "SEER_BILLING_FEATURE_SEER_AGENT",
+            Self::SeerAgentSlack => "SEER_BILLING_FEATURE_SEER_AGENT_SLACK",
+            Self::SeerAgentSuggestions => "SEER_BILLING_FEATURE_SEER_AGENT_SUGGESTIONS",
+            Self::AgenticTriage => "SEER_BILLING_FEATURE_AGENTIC_TRIAGE",
+            Self::RunQuestions => "SEER_BILLING_FEATURE_RUN_QUESTIONS",
+            Self::Investigations => "SEER_BILLING_FEATURE_INVESTIGATIONS",
+            Self::SmartAssignment => "SEER_BILLING_FEATURE_SMART_ASSIGNMENT",
+            Self::MonitorCleanup => "SEER_BILLING_FEATURE_MONITOR_CLEANUP",
+            Self::ImpactAssessment => "SEER_BILLING_FEATURE_IMPACT_ASSESSMENT",
+            Self::DashboardGeneration => "SEER_BILLING_FEATURE_DASHBOARD_GENERATION",
+            Self::ContextIndexing => "SEER_BILLING_FEATURE_CONTEXT_INDEXING",
+            Self::IssueSummary => "SEER_BILLING_FEATURE_ISSUE_SUMMARY",
+            Self::Fixability => "SEER_BILLING_FEATURE_FIXABILITY",
+            Self::UserFeedback => "SEER_BILLING_FEATURE_USER_FEEDBACK",
+            Self::ReplaySummary => "SEER_BILLING_FEATURE_REPLAY_SUMMARY",
+            Self::IssueViewTitle => "SEER_BILLING_FEATURE_ISSUE_VIEW_TITLE",
+            Self::ExternalIssueDetails => "SEER_BILLING_FEATURE_EXTERNAL_ISSUE_DETAILS",
+            Self::UptimeAssertions => "SEER_BILLING_FEATURE_UPTIME_ASSERTIONS",
+            Self::IssueDetection => "SEER_BILLING_FEATURE_ISSUE_DETECTION",
+            Self::LowValueSpans => "SEER_BILLING_FEATURE_LOW_VALUE_SPANS",
+            Self::MaliciousIssueDetection => {
+                "SEER_BILLING_FEATURE_MALICIOUS_ISSUE_DETECTION"
+            }
+            Self::CodeReview => "SEER_BILLING_FEATURE_CODE_REVIEW",
+            Self::PrMetrics => "SEER_BILLING_FEATURE_PR_METRICS",
+            Self::AssistedQuery => "SEER_BILLING_FEATURE_ASSISTED_QUERY",
+            Self::Evals => "SEER_BILLING_FEATURE_EVALS",
+            Self::AiMonitoring => "SEER_BILLING_FEATURE_AI_MONITORING",
+            Self::InboundFilters => "SEER_BILLING_FEATURE_INBOUND_FILTERS",
+            Self::Severity => "SEER_BILLING_FEATURE_SEVERITY",
+            Self::Grouping => "SEER_BILLING_FEATURE_GROUPING",
+            Self::ModelTraining => "SEER_BILLING_FEATURE_MODEL_TRAINING",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SEER_BILLING_FEATURE_UNSPECIFIED" => Some(Self::Unspecified),
+            "SEER_BILLING_FEATURE_AUTOFIX_WEB" => Some(Self::AutofixWeb),
+            "SEER_BILLING_FEATURE_AUTOFIX_HEADLESS" => Some(Self::AutofixHeadless),
+            "SEER_BILLING_FEATURE_AUTOFIX_INTEGRATIONS" => {
+                Some(Self::AutofixIntegrations)
+            }
+            "SEER_BILLING_FEATURE_AUTOFIX_AGENTIC_TRIAGE" => {
+                Some(Self::AutofixAgenticTriage)
+            }
+            "SEER_BILLING_FEATURE_AUTOFIX_POST_PROCESS" => Some(Self::AutofixPostProcess),
+            "SEER_BILLING_FEATURE_SEER_AGENT" => Some(Self::SeerAgent),
+            "SEER_BILLING_FEATURE_SEER_AGENT_SLACK" => Some(Self::SeerAgentSlack),
+            "SEER_BILLING_FEATURE_SEER_AGENT_SUGGESTIONS" => {
+                Some(Self::SeerAgentSuggestions)
+            }
+            "SEER_BILLING_FEATURE_AGENTIC_TRIAGE" => Some(Self::AgenticTriage),
+            "SEER_BILLING_FEATURE_RUN_QUESTIONS" => Some(Self::RunQuestions),
+            "SEER_BILLING_FEATURE_INVESTIGATIONS" => Some(Self::Investigations),
+            "SEER_BILLING_FEATURE_SMART_ASSIGNMENT" => Some(Self::SmartAssignment),
+            "SEER_BILLING_FEATURE_MONITOR_CLEANUP" => Some(Self::MonitorCleanup),
+            "SEER_BILLING_FEATURE_IMPACT_ASSESSMENT" => Some(Self::ImpactAssessment),
+            "SEER_BILLING_FEATURE_DASHBOARD_GENERATION" => {
+                Some(Self::DashboardGeneration)
+            }
+            "SEER_BILLING_FEATURE_CONTEXT_INDEXING" => Some(Self::ContextIndexing),
+            "SEER_BILLING_FEATURE_ISSUE_SUMMARY" => Some(Self::IssueSummary),
+            "SEER_BILLING_FEATURE_FIXABILITY" => Some(Self::Fixability),
+            "SEER_BILLING_FEATURE_USER_FEEDBACK" => Some(Self::UserFeedback),
+            "SEER_BILLING_FEATURE_REPLAY_SUMMARY" => Some(Self::ReplaySummary),
+            "SEER_BILLING_FEATURE_ISSUE_VIEW_TITLE" => Some(Self::IssueViewTitle),
+            "SEER_BILLING_FEATURE_EXTERNAL_ISSUE_DETAILS" => {
+                Some(Self::ExternalIssueDetails)
+            }
+            "SEER_BILLING_FEATURE_UPTIME_ASSERTIONS" => Some(Self::UptimeAssertions),
+            "SEER_BILLING_FEATURE_ISSUE_DETECTION" => Some(Self::IssueDetection),
+            "SEER_BILLING_FEATURE_LOW_VALUE_SPANS" => Some(Self::LowValueSpans),
+            "SEER_BILLING_FEATURE_MALICIOUS_ISSUE_DETECTION" => {
+                Some(Self::MaliciousIssueDetection)
+            }
+            "SEER_BILLING_FEATURE_CODE_REVIEW" => Some(Self::CodeReview),
+            "SEER_BILLING_FEATURE_PR_METRICS" => Some(Self::PrMetrics),
+            "SEER_BILLING_FEATURE_ASSISTED_QUERY" => Some(Self::AssistedQuery),
+            "SEER_BILLING_FEATURE_EVALS" => Some(Self::Evals),
+            "SEER_BILLING_FEATURE_AI_MONITORING" => Some(Self::AiMonitoring),
+            "SEER_BILLING_FEATURE_INBOUND_FILTERS" => Some(Self::InboundFilters),
+            "SEER_BILLING_FEATURE_SEVERITY" => Some(Self::Severity),
+            "SEER_BILLING_FEATURE_GROUPING" => Some(Self::Grouping),
+            "SEER_BILLING_FEATURE_MODEL_TRAINING" => Some(Self::ModelTraining),
+            _ => None,
+        }
+    }
 }
 /// Card payment method details.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -614,4 +1021,18 @@ pub struct StripeCharge {
     /// webhook was emitted.
     #[prost(message, repeated, tag = "9")]
     pub refunds: ::prost::alloc::vec::Vec<StripeRefund>,
+}
+/// A bank can ask the customer to verify a payment before it releases the money.
+/// This carries that request and what the browser needs to answer it.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct StripeVerification {
+    /// The bank wants the customer to verify this payment.
+    #[prost(bool, tag = "1")]
+    pub required: bool,
+    /// The Stripe payment that waits for the customer.
+    #[prost(string, optional, tag = "2")]
+    pub payment_intent_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// The key the browser needs to show the bank's question.
+    #[prost(string, optional, tag = "3")]
+    pub client_secret: ::core::option::Option<::prost::alloc::string::String>,
 }

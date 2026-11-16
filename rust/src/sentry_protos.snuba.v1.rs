@@ -350,6 +350,8 @@ pub struct AttributeAggregation {
     pub label: ::prost::alloc::string::String,
     #[prost(enumeration = "ExtrapolationMode", tag = "4")]
     pub extrapolation_mode: i32,
+    #[prost(enumeration = "InterpolationMode", tag = "8")]
+    pub interpolation_mode: i32,
     #[prost(message, optional, tag = "7")]
     pub ranked_by: ::core::option::Option<RankedBy>,
     #[prost(oneof = "attribute_aggregation::DefaultValue", tags = "5, 6")]
@@ -470,6 +472,38 @@ impl ExtrapolationMode {
             "EXTRAPOLATION_MODE_SAMPLE_WEIGHTED" => Some(Self::SampleWeighted),
             "EXTRAPOLATION_MODE_CLIENT_ONLY" => Some(Self::ClientOnly),
             "EXTRAPOLATION_MODE_SERVER_ONLY" => Some(Self::ServerOnly),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum InterpolationMode {
+    /// unspecified = NONE
+    Unspecified = 0,
+    /// real or empty
+    None = 1,
+    /// last observation carried forward
+    Locf = 2,
+}
+impl InterpolationMode {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "INTERPOLATION_MODE_UNSPECIFIED",
+            Self::None => "INTERPOLATION_MODE_NONE",
+            Self::Locf => "INTERPOLATION_MODE_LOCF",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "INTERPOLATION_MODE_UNSPECIFIED" => Some(Self::Unspecified),
+            "INTERPOLATION_MODE_NONE" => Some(Self::None),
+            "INTERPOLATION_MODE_LOCF" => Some(Self::Locf),
             _ => None,
         }
     }
@@ -736,6 +770,8 @@ pub struct AttributeConditionalAggregation {
     pub label: ::prost::alloc::string::String,
     #[prost(enumeration = "ExtrapolationMode", tag = "4")]
     pub extrapolation_mode: i32,
+    #[prost(enumeration = "InterpolationMode", tag = "10")]
+    pub interpolation_mode: i32,
     #[prost(message, optional, tag = "5")]
     pub filter: ::core::option::Option<TraceItemFilter>,
     #[prost(message, optional, tag = "9")]
@@ -1077,6 +1113,8 @@ pub enum TraceItemType {
     Preprod = 11,
     UserSession = 12,
     ProcessingError = 13,
+    WorkflowEngineEvaluation = 14,
+    EnrichmentAttributes = 15,
 }
 impl TraceItemType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -1099,6 +1137,10 @@ impl TraceItemType {
             Self::Preprod => "TRACE_ITEM_TYPE_PREPROD",
             Self::UserSession => "TRACE_ITEM_TYPE_USER_SESSION",
             Self::ProcessingError => "TRACE_ITEM_TYPE_PROCESSING_ERROR",
+            Self::WorkflowEngineEvaluation => {
+                "TRACE_ITEM_TYPE_WORKFLOW_ENGINE_EVALUATION"
+            }
+            Self::EnrichmentAttributes => "TRACE_ITEM_TYPE_ENRICHMENT_ATTRIBUTES",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -1118,6 +1160,10 @@ impl TraceItemType {
             "TRACE_ITEM_TYPE_PREPROD" => Some(Self::Preprod),
             "TRACE_ITEM_TYPE_USER_SESSION" => Some(Self::UserSession),
             "TRACE_ITEM_TYPE_PROCESSING_ERROR" => Some(Self::ProcessingError),
+            "TRACE_ITEM_TYPE_WORKFLOW_ENGINE_EVALUATION" => {
+                Some(Self::WorkflowEngineEvaluation)
+            }
+            "TRACE_ITEM_TYPE_ENRICHMENT_ATTRIBUTES" => Some(Self::EnrichmentAttributes),
             _ => None,
         }
     }
@@ -1282,6 +1328,9 @@ pub struct DataPoint {
     /// the sample count for this data point
     #[prost(int64, tag = "6")]
     pub sample_count: i64,
+    /// how this point was filled
+    #[prost(enumeration = "InterpolationMode", tag = "7")]
+    pub interpolated: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TimeSeries {

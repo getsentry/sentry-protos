@@ -1,6 +1,6 @@
 [package]
 name = "sentry_protos"
-version = "0.72.0"
+version = "0.120.0"
 edition = "2021"
 readme = "README.md"
 description = "Rust bindings for sentry-protos"
@@ -10,6 +10,7 @@ repository = "https://github.com/getsentry/sentry-protos"
 
 [lints.clippy]
 large_enum_variant = "allow" # Auto generated code
+double_must_use = "allow" # Auto-generated async trait methods
 
 [dependencies]
 tonic = "0.14"

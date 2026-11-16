@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Moves the organization's current contract off partner invoicing onto credit
+// card billing, effective immediately.
+message EndPartnerBillingRequest {
+  uint64 organization_id = 1;
+}
+
+message EndPartnerBillingResponse {
+  // True if the current contract was partner-invoiced and has been moved.
+  bool updated = 1;
+}

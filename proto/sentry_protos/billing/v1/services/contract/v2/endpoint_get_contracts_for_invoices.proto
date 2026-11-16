@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "sentry_protos/billing/v1/services/contract/v2/contract.proto";
+
+// Batch-resolves PlatformInvoice ids to the Contract each one created, i.e.
+// the Contract whose created_invoice it is. Ids that created no Contract, such
+// as off-cycle invoices, are silently omitted from the response.
+message GetContractsForInvoicesRequest {
+  repeated uint64 invoice_ids = 1;
+}
+
+message GetContractsForInvoicesResponse {
+  // Mapping from invoice id to the Contract it created for every invoice that
+  // created one. Empty when the request supplied no ids or none of them matched.
+  map<uint64, Contract> contracts = 1;
+}

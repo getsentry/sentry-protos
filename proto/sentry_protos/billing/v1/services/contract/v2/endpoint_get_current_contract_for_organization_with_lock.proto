@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "sentry_protos/billing/v1/services/contract/v2/contract.proto";
+
+// Reads the open contract after acquiring the organization lock that
+// rollover and checkout share. The lock outlives this call; release it
+// with ReleaseContractLock.
+message GetCurrentContractForOrganizationWithLockRequest {
+  uint64 organization_id = 1;
+
+  // Names the caller in the lock hold-time metric.
+  string referrer = 2;
+}
+
+message GetCurrentContractForOrganizationWithLockResponse {
+  // Unset when the organization has no open contract.
+  Contract contract = 1;
+
+  // Always set. Releasing a lease from a call that did not take the lock
+  // (the lock is disabled, or this task already holds the organization)
+  // leaves the outer hold in place.
+  string lease_id = 2;
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.ledger.v1;
+
+// Credit that a contract's usage invoice uses up for credit-only usage. The
+// withdrawal is written in the same transaction as the invoice, so a crash can
+// not leave usage invoiced as prepaid without taking it from the balance. The
+// full amount is withdrawn even when that makes the balance negative.
+message LedgerWithdrawal {
+  // 1 to 64 characters.
+  string account_id = 1;
+  // Must be positive.
+  uint64 amount_cents = 2;
+  // At most 256 characters.
+  optional string description = 3;
+}

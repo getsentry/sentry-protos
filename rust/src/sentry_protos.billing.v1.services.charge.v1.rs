@@ -97,6 +97,8 @@ pub struct CaptureChargeRequest {
     pub stripe_charge: ::core::option::Option<
         super::super::super::common::v1::StripeCharge,
     >,
+    #[prost(string, optional, tag = "10")]
+    pub payment_intent: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CaptureChargeResponse {
@@ -104,6 +106,11 @@ pub struct CaptureChargeResponse {
     pub paid: bool,
     #[prost(string, optional, tag = "2")]
     pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// Set when the bank wants the customer to verify the payment.
+    #[prost(message, optional, tag = "3")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
 }
 /// How the charge should be executed against the payment provider.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -121,6 +128,8 @@ pub enum ChargeMethod {
     Stripe = 2,
     /// Record an already-succeeded Stripe charge without calling Stripe.
     StripePaymentIntent = 3,
+    /// Submit the invoice to Vercel for collection.
+    Vercel = 4,
 }
 impl ChargeMethod {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -133,6 +142,7 @@ impl ChargeMethod {
             Self::None => "CHARGE_METHOD_NONE",
             Self::Stripe => "CHARGE_METHOD_STRIPE",
             Self::StripePaymentIntent => "CHARGE_METHOD_STRIPE_PAYMENT_INTENT",
+            Self::Vercel => "CHARGE_METHOD_VERCEL",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -142,6 +152,7 @@ impl ChargeMethod {
             "CHARGE_METHOD_NONE" => Some(Self::None),
             "CHARGE_METHOD_STRIPE" => Some(Self::Stripe),
             "CHARGE_METHOD_STRIPE_PAYMENT_INTENT" => Some(Self::StripePaymentIntent),
+            "CHARGE_METHOD_VERCEL" => Some(Self::Vercel),
             _ => None,
         }
     }
@@ -186,6 +197,24 @@ pub struct GetChargeByStripeIdResponse {
     /// Unset when no platform charge with the given stripe_id exists.
     #[prost(message, optional, tag = "1")]
     pub charge: ::core::option::Option<PlatformCharge>,
+}
+/// Looks up the PaymentIntent an invoice is currently waiting on, if any.
+///
+/// An invoice is "waiting" when its most recent charge attempt stopped at 3D
+/// Secure: the issuer asked for authentication, nobody has provided it yet, and
+/// the intent is still sitting in requires_action on Stripe's side.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetResumablePaymentIntentRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetResumablePaymentIntentResponse {
+    /// Unset when the invoice is not waiting on authentication -- it was paid, it
+    /// failed for some other reason, or it has never been charged. Callers treat
+    /// an unset id as "start a fresh charge".
+    #[prost(string, optional, tag = "1")]
+    pub payment_intent_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Charge {
@@ -278,6 +307,56 @@ pub struct RecordChargeRefundsResponse {
     /// than `charge.refunds`. Empty when the payload carried nothing new.
     #[prost(message, repeated, tag = "2")]
     pub new_refunds: ::prost::alloc::vec::Vec<PlatformRefund>,
+}
+/// Records a charge that an external billing provider has already collected.
+/// The charge is upserted by invoice id; this service does not contact the
+/// provider or collect payment itself.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordPaidChargeRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub invoice_id: u64,
+    #[prost(uint64, tag = "3")]
+    pub amount_cents: u64,
+    #[prost(string, tag = "4")]
+    pub description: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordPaidChargeResponse {
+    /// True when this call inserted a new charge; false when it updated the
+    /// existing charge for the invoice.
+    #[prost(bool, tag = "1")]
+    pub created: bool,
+}
+/// Records a refund that an external billing provider has already issued. If
+/// the paid charge has not been recorded yet, the request also provides enough
+/// information to create it before attaching the refund.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordRefundedChargeRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(uint64, tag = "2")]
+    pub invoice_id: u64,
+    /// The total amount of the original charge, not the amount being refunded.
+    #[prost(uint64, tag = "3")]
+    pub charge_amount_cents: u64,
+    #[prost(string, tag = "4")]
+    pub description: ::prost::alloc::string::String,
+    /// Provider-issued identifier used to make webhook redelivery idempotent.
+    #[prost(string, tag = "5")]
+    pub external_refund_id: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "6")]
+    pub reason: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(uint64, tag = "7")]
+    pub refund_amount_cents: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RecordRefundedChargeResponse {
+    /// True when this call inserted a new refund; false when a refund with the
+    /// same external_refund_id was already recorded.
+    #[prost(bool, tag = "1")]
+    pub created: bool,
 }
 /// Synchronizes a stored platform charge with the latest snapshot from
 /// Stripe. The charge is identified by `stripe_charge.id`. Fields like

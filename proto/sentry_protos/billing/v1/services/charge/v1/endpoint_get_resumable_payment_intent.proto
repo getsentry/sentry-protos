@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+// Looks up the PaymentIntent an invoice is currently waiting on, if any.
+//
+// An invoice is "waiting" when its most recent charge attempt stopped at 3D
+// Secure: the issuer asked for authentication, nobody has provided it yet, and
+// the intent is still sitting in requires_action on Stripe's side.
+message GetResumablePaymentIntentRequest {
+  uint64 invoice_id = 1;
+}
+
+message GetResumablePaymentIntentResponse {
+  // Unset when the invoice is not waiting on authentication -- it was paid, it
+  // failed for some other reason, or it has never been charged. Callers treat
+  // an unset id as "start a fresh charge".
+  optional string payment_intent_id = 1;
+}

@@ -52,6 +52,23 @@ pub struct GetPendingChangeResponse {
         super::super::super::common::v1::PendingChange,
     >,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetPendingBillingRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The next contract's billing type. Required.
+    #[prost(
+        enumeration = "super::super::super::common::v1::PendingBillingType",
+        tag = "2"
+    )]
+    pub billing_type: i32,
+    /// The next contract's payg mode. Required with PENDING_BILLING_TYPE_INVOICED
+    /// and PENDING_PAYG_MODE_UNSPECIFIED otherwise.
+    #[prost(enumeration = "super::super::super::common::v1::PendingPaygMode", tag = "3")]
+    pub payg_mode: i32,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetPendingBillingResponse {}
 /// Sets the pending month_interval on the org's pending change. Creates a
 /// pending change if none exists, or updates the month_interval on the
 /// existing one without modifying its other fields. Used to schedule a
@@ -80,6 +97,19 @@ pub struct SetPendingPackageRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingPackageResponse {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetPendingSalesConfigRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Replaces the whole sales config at rollover, so send every line item's
+    /// pricing. An empty PendingSalesConfig clears it.
+    #[prost(message, optional, tag = "2")]
+    pub sales_config: ::core::option::Option<
+        super::super::super::common::v1::PendingSalesConfig,
+    >,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetPendingSalesConfigResponse {}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SetPendingSponsoredTypeRequest {
     #[prost(uint64, tag = "1")]

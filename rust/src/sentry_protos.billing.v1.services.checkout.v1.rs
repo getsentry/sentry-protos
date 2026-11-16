@@ -18,32 +18,48 @@ pub struct CancelContractRequest {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CancelContractResponse {}
 /// Changes an organization's contract to a new configuration. Any unset field
-/// leaves the corresponding part of the contract unchanged.
+/// leaves the corresponding part of the contract unchanged, except when a
+/// sponsorship supplies its package, interval, and allowances.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ChangeContractRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
     /// The package the contract will switch to. If unset, the package is left
-    /// unchanged.
+    /// unchanged unless selected by the sponsorship.
     #[prost(string, optional, tag = "2")]
     pub package_uid: ::core::option::Option<::prost::alloc::string::String>,
     /// The contract month_interval the subscription will switch to. Must be one
     /// of the package's supported_month_intervals. If unset, the month_interval
-    /// is left unchanged.
+    /// is left unchanged unless selected by the sponsorship.
     #[prost(uint32, optional, tag = "3")]
     pub month_interval: ::core::option::Option<u32>,
     /// The new user configs (PAYG budgets and/or reservation overrides) to apply
-    /// to the contract. If empty, the user configs are left unchanged.
+    /// to the contract. If empty, the user configs are left unchanged unless
+    /// replaced by the sponsorship's allowances.
     #[prost(message, repeated, tag = "4")]
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
+    /// The sponsorship to apply. Unset leaves sponsorship unchanged;
+    /// SPONSORED_TYPE_UNSPECIFIED removes it. Applying a sponsorship selects its
+    /// package, interval, and allowances; conflicting explicit values are invalid.
+    #[prost(
+        enumeration = "super::super::super::common::v1::SponsoredType",
+        optional,
+        tag = "5"
+    )]
+    pub sponsored_type: ::core::option::Option<i32>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ChangeContractResponse {
     /// The invoice created for an immediate change (a prorated upgrade charge).
     /// Unset when the change is deferred to the next billing period or applies no
     /// charge (e.g. a PAYG-only change), which the caller returns as an empty 204.
     #[prost(uint64, optional, tag = "1")]
     pub invoice_id: ::core::option::Option<u64>,
+    /// Set when the bank wants the customer to verify the payment.
+    #[prost(message, optional, tag = "2")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
 }
 /// Previews the effect of a contract change without committing it.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -94,4 +110,83 @@ pub struct PreviewChangeContractResponse {
     pub pending_change: ::core::option::Option<
         super::super::super::common::v1::PendingChange,
     >,
+}
+/// Moves an organization's contract onto a sales-negotiated enterprise deal.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ProvisionSalesContractRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The enterprise package the contract moves to.
+    #[prost(string, tag = "2")]
+    pub package_uid: ::prost::alloc::string::String,
+    /// The contract's month_interval after the change. A coterm cannot change it.
+    #[prost(uint32, tag = "3")]
+    pub month_interval: u32,
+    /// Reservation overrides, each on a single line item. Line items not named keep
+    /// their current configuration. The deal's prices go in sales_config, since a
+    /// UserConfig must not carry a price.
+    #[prost(message, repeated, tag = "4")]
+    pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
+    /// The contract's invoiced config once the deal takes effect. Required.
+    #[prost(message, optional, tag = "7")]
+    pub invoiced: ::core::option::Option<super::super::contract::v2::InvoicedConfig>,
+    /// The deal's prices. When set, it replaces the contract's whole sales config
+    /// when the deal takes effect, and an empty SalesConfig clears it. Unset keeps
+    /// the current prices.
+    #[prost(message, optional, tag = "8")]
+    pub sales_config: ::core::option::Option<super::super::contract::v2::SalesConfig>,
+    #[prost(oneof = "provision_sales_contract_request::Effective", tags = "5, 6")]
+    pub effective: ::core::option::Option<provision_sales_contract_request::Effective>,
+}
+/// Nested message and enum types in `ProvisionSalesContractRequest`.
+pub mod provision_sales_contract_request {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum Effective {
+        #[prost(enumeration = "super::SalesContractTiming", tag = "5")]
+        Timing(i32),
+        /// Ends the current term on this date and starts a new full term from it, as
+        /// the deal's start date. Must fall between now and the current term's end.
+        #[prost(message, tag = "6")]
+        NewTermStart(::prost_types::Timestamp),
+    }
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ProvisionSalesContractResponse {
+    /// The invoice a coterm created when it rolled the contract over. Unset for a
+    /// deal staged for renewal, or a coterm the contract already matched.
+    #[prost(uint64, optional, tag = "1")]
+    pub invoice_id: ::core::option::Option<u64>,
+}
+/// When a sales-led change takes effect. The deal fixes this, so the service does
+/// not infer it from whether the change is an upgrade or a downgrade.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SalesContractTiming {
+    Unspecified = 0,
+    /// Apply now and finish out the contract's current term.
+    Coterm = 1,
+    /// Apply when the current term renews.
+    AtTermEnd = 2,
+}
+impl SalesContractTiming {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SALES_CONTRACT_TIMING_UNSPECIFIED",
+            Self::Coterm => "SALES_CONTRACT_TIMING_COTERM",
+            Self::AtTermEnd => "SALES_CONTRACT_TIMING_AT_TERM_END",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SALES_CONTRACT_TIMING_UNSPECIFIED" => Some(Self::Unspecified),
+            "SALES_CONTRACT_TIMING_COTERM" => Some(Self::Coterm),
+            "SALES_CONTRACT_TIMING_AT_TERM_END" => Some(Self::AtTermEnd),
+            _ => None,
+        }
+    }
 }

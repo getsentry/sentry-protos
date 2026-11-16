@@ -3,7 +3,10 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.usage_pricer.v1;
 
 import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/common/v1/line_item_details.proto";
 import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage_by_project.proto";
+import "sentry_protos/billing/v1/services/usage_pricer/v1/endpoint_get_daily_breakdown.proto";
 import "sentry_protos/billing/v1/sku.proto";
 
 message UsagePricerRequest {
@@ -26,6 +29,9 @@ message GetPriceForContractRequest {
   // Paired with override_package_uid: price at this billing interval instead of the
   // contract's own, for an upgrade that also changes the interval.
   optional uint32 override_month_interval = 5;
+  // Per-project usage for the same window as the priced usage. When set,
+  // the response's ``project_daily_breakdowns`` is populated from it.
+  optional sentry_protos.billing.v1.services.usage.v1.GetUsageByProjectResponse usage_by_project = 6;
 }
 
 message SKUUsageSummary {
@@ -55,20 +61,21 @@ message LineItemUsageSummary {
   string line_item_uid = 1;
 
   // Net cents consumed by this line item in the billing period (after credits/trials applied).
+  // Counts toward the PAYG budget. 0 for uncapped line items; see uncapped_spend_cents.
   uint64 payg_spend_cents = 2;
 
   // How much of the line item was consumed by PAYG (in the line item's units)
   uint64 quantity = 3;
 
   // Whether the usage pricer had to cap the spend based on the budget set by the contract
-  bool payg_budget_exhausted = 4;
+  bool payg_budget_exhausted = 4 [deprecated = true];
 
   // false when this line item still has reserved quantity left.
   // It's possible that PAYG is exhausted whereas reserved is not.
   // Example: there's an overall PAYG budget of $10, a customer sends $10 worth of errors
   // the payg_budget_exhausted field is true for all line items
   // however, the plan still includes 5GB of free logs, so reserved_budget_exhausted is false for logs.
-  bool reserved_budget_exhausted = 5;
+  bool reserved_budget_exhausted = 5 [deprecated = true];
 
   // Total units consumed by this line item in the billing period, including
   // both reserved and PAYG usage (in the line item's units). Unlike `quantity`,
@@ -83,6 +90,21 @@ message LineItemUsageSummary {
   // True when this line item can continue accepting usage from any capacity
   // source, including reserved, PAYG, or granted capacity.
   bool has_remaining_capacity = 8;
+
+  // Total units consumed by this line item in the billing period after unit
+  // grants are applied, but before reserved quantity is deducted. This includes
+  // both reserved and PAYG usage (in the line item's units).
+  uint64 non_granted_quantity = 9;
+
+  // True when PAYG spend is greater than the budget.
+  // For example, a $1 allocation against a $1 budget returns false.
+  // For an all-items budget, compares the total spend across its line items.
+  bool exceeded_payg_budget = 10;
+
+  // Net cents billed for this line item in the billing period that do not count
+  // toward the PAYG budget, because the line item is priced with an uncapped
+  // rate (e.g. Seer seats). 0 for line items without an uncapped rate.
+  uint64 uncapped_spend_cents = 11;
 }
 
 message SharedLineItemUsageSummary {
@@ -93,13 +115,23 @@ message SharedLineItemUsageSummary {
   repeated LineItemUsageSummary line_item_summaries = 2;
 
   // Whether the usage pricer had to cap the spend based on the budget set by the contract
-  bool payg_budget_exhausted = 3;
+  bool payg_budget_exhausted = 3 [deprecated = true];
 
   // false when this pool still has reserved quantity left.
-  bool reserved_budget_exhausted = 4;
+  bool reserved_budget_exhausted = 4 [deprecated = true];
 
   // True when any member of this pool can continue accepting usage.
   bool has_remaining_capacity = 5;
+
+  // True when any member's PAYG spend is greater than its budget.
+  bool exceeded_payg_budget = 6;
+}
+
+// One project's per-day outcomes. Only days and line items with usage
+// are present; anything missing had no usage.
+message ProjectDailyBreakdown {
+  uint64 project_id = 1;
+  repeated DailyLineItemOutcomes days = 2;
 }
 
 message UsagePricerResponse {
@@ -114,4 +146,19 @@ message UsagePricerResponse {
   repeated SharedLineItemUsageSummary shared_line_item_summaries = 4;
 
   google.protobuf.Timestamp last_usage_ts = 5;
+
+  // Raw (pre-grant) per-day outcomes for every metered line item, one
+  // entry per day of the contract's on-demand period, as evaluated
+  // while pricing. Matches ``GetDailyBreakdownResponse.days`` for the
+  // same usage.
+  repeated DailyLineItemOutcomes daily_breakdown = 6;
+
+  // Details (name, units, ...) of every line item in ``daily_breakdown``
+  // and ``project_daily_breakdowns``, so the breakdowns can be rendered
+  // without resolving the package.
+  repeated sentry_protos.billing.v1.common.v1.LineItemDetails line_items = 7;
+
+  // Per-project equivalent of ``daily_breakdown``, evaluated from the
+  // request's ``usage_by_project``. Empty when that was not provided.
+  repeated ProjectDailyBreakdown project_daily_breakdowns = 8;
 }

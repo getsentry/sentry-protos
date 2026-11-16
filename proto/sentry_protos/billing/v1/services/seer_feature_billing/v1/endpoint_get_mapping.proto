@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_feature_billing.v1;
+
+import "sentry_protos/billing/v1/data_category.proto";
+
+message GetMappingRequest {}
+
+message GetMappingResponse {
+  // Maps a Seer feature string, as recorded in LLM proxy cost data, to the
+  // data category its usage is billed under. Features absent from the map
+  // have no billing data category.
+  map<string, sentry_protos.billing.v1.DataCategory> data_category_by_feature = 1;
+}

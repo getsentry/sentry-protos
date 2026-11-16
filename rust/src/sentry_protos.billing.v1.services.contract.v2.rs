@@ -40,6 +40,9 @@ pub struct PartnerConfig {
     /// the customer able to change their own plan.
     #[prost(bool, tag = "1")]
     pub self_serve: bool,
+    /// How is this customer invoiced?
+    #[prost(enumeration = "PartnerBillingStrategy", tag = "2")]
+    pub billing_strategy: i32,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillingConfig {
@@ -71,6 +74,60 @@ pub mod billing_config {
         #[prost(message, tag = "4")]
         Partner(super::PartnerConfig),
     }
+}
+/// The invoicing and collection behavior for a partner-billed contract.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PartnerBillingStrategy {
+    /// 3rd party bills the customer independently. The platform records a $0
+    /// invoice.
+    Unspecified = 0,
+    /// Platform calculates the invoice and submits it to Vercel.
+    Vercel = 1,
+}
+impl PartnerBillingStrategy {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "PARTNER_BILLING_STRATEGY_UNSPECIFIED",
+            Self::Vercel => "PARTNER_BILLING_STRATEGY_VERCEL",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PARTNER_BILLING_STRATEGY_UNSPECIFIED" => Some(Self::Unspecified),
+            "PARTNER_BILLING_STRATEGY_VERCEL" => Some(Self::Vercel),
+            _ => None,
+        }
+    }
+}
+/// The pricing Sentry staff set for one line item of a contract.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SalesLineItemPricing {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    /// The price of the reservation for this line item over one billing term.
+    /// If this field is absent, the price is $0.
+    #[prost(uint64, optional, tag = "2")]
+    pub reserved_price_cents: ::core::option::Option<u64>,
+    /// The PAYG rate for this line item. It replaces the package PAYG rate. If
+    /// this field is absent, the package PAYG rate applies.
+    #[prost(message, optional, tag = "3")]
+    pub payg_rate: ::core::option::Option<
+        super::super::super::common::v1::TieredPricingRate,
+    >,
+}
+/// The contract settings that only Sentry staff set, through sales and
+/// provisioning. It is the counterpart to the customer-configurable UserConfig,
+/// so a customer change to the contract can never set or clear these values.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SalesConfig {
+    #[prost(message, repeated, tag = "1")]
+    pub pricing: ::prost::alloc::vec::Vec<SalesLineItemPricing>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ContractMetadata {
@@ -113,6 +170,8 @@ pub struct Contract {
     pub pricing_config: ::core::option::Option<PricingConfig>,
     #[prost(message, optional, tag = "4")]
     pub retention_config: ::core::option::Option<super::v1::RetentionConfig>,
+    #[prost(message, optional, tag = "5")]
+    pub sales_config: ::core::option::Option<SalesConfig>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateContractRequest {
@@ -151,6 +210,11 @@ pub struct CreateContractRequest {
     /// Whether the tax provider placed this invoice under reverse charge.
     #[prost(bool, tag = "12")]
     pub is_reverse_charge: bool,
+    /// When true, the created invoice is marked hide_from_customer_receipts so
+    /// it is omitted from customer-facing receipt lists (e.g. the $0 migration
+    /// provisioning stub). Default false leaves the invoice visible.
+    #[prost(bool, tag = "14")]
+    pub hide_from_customer_receipts: bool,
     /// Which arrangement bills the contract. Each arrangement carries only the
     /// configuration that applies to it. Unset defaults to credit-card.
     #[prost(oneof = "create_contract_request::Billing", tags = "7, 8, 13")]
@@ -183,6 +247,57 @@ pub struct CreateContractResponse {
     #[prost(uint64, tag = "5")]
     pub amount_billed: u64,
 }
+/// Writes an organization-scoped invoice outside of any contract, ready for the
+/// caller to charge right away. The charge claim is taken at creation so the
+/// charge sweep leaves the invoice alone while the caller charges it; if the
+/// caller never does, the claim expires and the sweep charges it as a normal
+/// attempt. The billing provider is derived from the organization's current
+/// contract; the request is rejected when that provider can't collect a
+/// off-cycle charge (e.g. Vercel, or invoiced billing with no provider). No
+/// contract is changed.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateOffCycleInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The requesting service. Required when failure_policy is
+    /// FAILURE_POLICY_RETRY_ONLY, since nothing else acts on non-payment.
+    #[prost(string, tag = "2")]
+    pub client_id: ::prost::alloc::string::String,
+    /// Unique per organization and client_id. A repeated key writes nothing and
+    /// returns the existing invoice with created=false.
+    #[prost(string, tag = "3")]
+    pub idempotency_key: ::prost::alloc::string::String,
+    #[prost(enumeration = "super::v1::FailurePolicy", tag = "4")]
+    pub failure_policy: i32,
+    /// Already includes the sales-tax line, if any, and every line's type.
+    #[prost(message, repeated, tag = "5")]
+    pub line_items: ::prost::alloc::vec::Vec<super::v1::InvoiceLineItem>,
+    #[prost(message, optional, tag = "6")]
+    pub address: ::core::option::Option<super::super::super::common::v1::Address>,
+    #[prost(string, optional, tag = "7")]
+    pub tax_number: ::core::option::Option<::prost::alloc::string::String>,
+    /// The tax document the provider opened for this invoice, if any.
+    #[prost(string, optional, tag = "8")]
+    pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(bool, tag = "9")]
+    pub is_reverse_charge: bool,
+    /// Required. The credit the invoice buys. A repeated idempotency_key returns
+    /// the existing invoice and writes no second deposit.
+    #[prost(message, optional, tag = "10")]
+    pub ledger_deposit: ::core::option::Option<super::ledger::v1::LedgerDeposit>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CreateOffCycleInvoiceResponse {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub amount_billed: u64,
+    /// False when the idempotency key matched an existing invoice.
+    #[prost(bool, tag = "4")]
+    pub created: bool,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetAllContractsForOrganizationRequest {
     #[prost(uint64, tag = "1")]
@@ -190,6 +305,20 @@ pub struct GetAllContractsForOrganizationRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetAllContractsForOrganizationResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub contracts: ::prost::alloc::vec::Vec<Contract>,
+}
+/// Returns each organization's current annual contract whose billing term ends
+/// on one of the requested dates.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnnualContractsEndingTermRequest {
+    /// Exclusive term ends to match, i.e. the first day of the next term, the
+    /// same convention as PricingConfig.billing_period_end_date.
+    #[prost(message, repeated, tag = "1")]
+    pub term_end_dates: ::prost::alloc::vec::Vec<super::v1::Date>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetAnnualContractsEndingTermResponse {
     #[prost(message, repeated, tag = "1")]
     pub contracts: ::prost::alloc::vec::Vec<Contract>,
 }
@@ -210,6 +339,43 @@ pub struct GetSpecificContractRequest {
 pub struct GetContractResponse {
     #[prost(message, optional, tag = "1")]
     pub contract: ::core::option::Option<Contract>,
+}
+/// Batch-resolves PlatformInvoice ids to the Contract each one created, i.e.
+/// the Contract whose created_invoice it is. Ids that created no Contract, such
+/// as off-cycle invoices, are silently omitted from the response.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetContractsForInvoicesRequest {
+    #[prost(uint64, repeated, tag = "1")]
+    pub invoice_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetContractsForInvoicesResponse {
+    /// Mapping from invoice id to the Contract it created for every invoice that
+    /// created one. Empty when the request supplied no ids or none of them matched.
+    #[prost(map = "uint64, message", tag = "1")]
+    pub contracts: ::std::collections::HashMap<u64, Contract>,
+}
+/// Reads the open contract after acquiring the organization lock that
+/// rollover and checkout share. The lock outlives this call; release it
+/// with ReleaseContractLock.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetCurrentContractForOrganizationWithLockRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Names the caller in the lock hold-time metric.
+    #[prost(string, tag = "2")]
+    pub referrer: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetCurrentContractForOrganizationWithLockResponse {
+    /// Unset when the organization has no open contract.
+    #[prost(message, optional, tag = "1")]
+    pub contract: ::core::option::Option<Contract>,
+    /// Always set. Releasing a lease from a call that did not take the lock
+    /// (the lock is disabled, or this task already holds the organization)
+    /// leaves the outer hold in place.
+    #[prost(string, tag = "2")]
+    pub lease_id: ::prost::alloc::string::String,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUninvoicedContractsRequest {
@@ -233,4 +399,24 @@ pub struct GetUninvoicedContractsResponse {
     pub truncated: bool,
     #[prost(uint64, repeated, tag = "2")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
+}
+/// Releases the open-contract lock acquired by
+/// GetCurrentContractForOrganizationWithLock. An empty, unknown, or
+/// already-released lease leaves the lock alone. So does a lease from a call
+/// that did not take the lock. A Redis error while deleting the key also leaves
+/// it held, and the same lease id can be released again.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseContractLockRequest {
+    #[prost(string, tag = "1")]
+    pub lease_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ReleaseContractLockResponse {
+    /// True when the lease is dropped: its key was deleted, or the key had already
+    /// expired or been taken by a newer holder. False when the lease was empty,
+    /// unknown, already released, or returned by a call that did not take the
+    /// lock. Also false on a Redis error while deleting the key: that lease id
+    /// still owns the key until a later release deletes it or the lease expires.
+    #[prost(bool, tag = "1")]
+    pub released: bool,
 }

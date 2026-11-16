@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_wallet_config.v1;
+
+// When and how much credit to buy once the Seer wallet runs low. Amounts are
+// in credits before tax, because credits are what the customer buys. Whether a
+// top-up is in progress or has failed is not stored here; the off-cycle
+// invoices that bought the credit are the record of that.
+message AutoTopUpConfig {
+  // Set only by the customer.
+  bool enabled = 1;
+  // A top-up starts when the balance is below this.
+  uint64 threshold_credits = 2;
+  // The credits each top-up buys. Must be positive.
+  uint64 top_up_credits = 3;
+}
+
+// Limits on how much the organization spends from the Seer wallet, whether or
+// not auto top-up is on. Amounts are in cents before tax.
+message SpendConfig {
+  // The most the organization spends in any 24 hours, in cents before tax.
+  // Unset means no cap.
+  optional uint64 daily_cap_cents = 1;
+}
+
+// An organization's settings for its Seer wallet. Each section is unset until
+// the organization first saves it.
+message SeerWalletConfig {
+  uint64 organization_id = 1;
+  optional AutoTopUpConfig auto_top_up = 2;
+  optional SpendConfig spend = 3;
+}

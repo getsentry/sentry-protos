@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.rate_card.v1;
 
+import "sentry_protos/billing/v1/common/v1/billing_type.proto";
 import "sentry_protos/billing/v1/common/v1/line_item_details.proto";
 import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
 
@@ -20,6 +21,8 @@ message RateCardLineItem {
 
   // Whether this line item is currently enabled
   bool is_enabled = 7;
+
+  sentry_protos.billing.v1.common.v1.BillingType billing_type = 8;
 }
 
 message SharedRateCardLineItem {

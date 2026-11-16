@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+// Clears an organization's ended subscription trials so it can start another.
+message ResetSubscriptionTrialRequest {
+  uint64 organization_id = 1;
+}
+
+message ResetSubscriptionTrialResponse {
+  // Whether any ended subscription trial was cleared.
+  bool reset = 1;
+}

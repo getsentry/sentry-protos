@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.ledger.v1;
+
+import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_entry.proto";
+
+// Lists an account's entries, newest first.
+message ListLedgerEntriesRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+  // Return only entries older than this one. Pass next_cursor from the
+  // previous page.
+  optional uint64 before_entry_id = 3;
+  // Defaults to 100 when zero; capped at 1000.
+  uint32 limit = 4;
+}
+
+message ListLedgerEntriesResponse {
+  repeated LedgerEntry entries = 1;
+  // Unset on the last page.
+  optional uint64 next_cursor = 2;
+}

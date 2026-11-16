@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.billing_alert.v1;
+
+import "sentry_protos/billing/v1/services/billing_alert/v1/billing_alert.proto";
+
+message GetBillingAlertsRequest {
+  uint64 organization_id = 1;
+  uint64 contract_id = 2;
+  reserved 3;
+}
+
+message GetBillingAlertsResponse {
+  repeated BillingAlert alerts = 1;
+}

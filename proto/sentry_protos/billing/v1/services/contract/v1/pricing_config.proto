@@ -57,12 +57,16 @@ message SharedSKUBudget {
 message PAYGBudget {
   uint64 budget_cents = 1;
 
-  // Overrides package's PAYG rates; only enterprise customers can set custom PAYG rates
-  optional sentry_protos.billing.v1.common.v1.TieredPricingRate custom_payg_rate = 2;
+  // Deprecated: use contract.v2.SalesLineItemPricing.payg_rate in Contract.sales_config.
+  // A customer can send UserConfig, so it must not carry a price.
+  optional sentry_protos.billing.v1.common.v1.TieredPricingRate custom_payg_rate = 2 [deprecated = true];
 }
 
 message Reservation {
-  uint64 reserved_price_cents = 1;
+  // Deprecated: use contract.v2.SalesLineItemPricing.reserved_price_cents in
+  // Contract.sales_config. A customer can send UserConfig, so it must not carry
+  // a price.
+  uint64 reserved_price_cents = 1 [deprecated = true];
   oneof reserved_units {
     bool is_unlimited = 2;
     uint64 num_reserved_units = 3;

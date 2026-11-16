@@ -100,6 +100,9 @@ message DataPoint {
 
   // the sample count for this data point
   int64 sample_count = 6;
+
+  // how this point was filled
+  InterpolationMode interpolated = 7;
 }
 
 message TimeSeries {

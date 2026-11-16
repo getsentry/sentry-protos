@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_feature_billing.v1;
+
+// Reads the organization's prepaid Seer credit from its current contract.
+message GetSeerWalletBalanceRequest {
+  uint64 organization_id = 1;
+}
+
+message SeerWallet {
+  // The ledger account: the uid of the credit-only line item that meters Seer.
+  string account_id = 1;
+  // Purchased credits left: paid credit minus the usage it has paid for,
+  // rounded down to whole credits. Usage draws on included credits first, so
+  // this only drops once they run out. Negative once usage has outrun the
+  // paid credit.
+  int64 balance_credits = 2;
+  // The cost of one credit: the line item's PAYG rate on the rate card, in
+  // the rate card's price units (10^-11 cents).
+  uint64 credit_price = 3;
+  // Credits the package includes each billing period: the line item's
+  // reserved units on the rate card.
+  uint64 included_credits = 4;
+  // Included credits used this billing period. At most included_credits.
+  uint64 included_credits_used = 5;
+}
+
+message GetSeerWalletBalanceResponse {
+  // Unset when the current contract has no Seer wallet: no contract, no
+  // enabled credit-only line item metering Seer, or an unlimited one.
+  optional SeerWallet wallet = 1;
+}

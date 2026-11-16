@@ -384,7 +384,9 @@ pub struct SharedSkuBudget {
 pub struct PaygBudget {
     #[prost(uint64, tag = "1")]
     pub budget_cents: u64,
-    /// Overrides package's PAYG rates; only enterprise customers can set custom PAYG rates
+    /// Deprecated: use contract.v2.SalesLineItemPricing.payg_rate in Contract.sales_config.
+    /// A customer can send UserConfig, so it must not carry a price.
+    #[deprecated]
     #[prost(message, optional, tag = "2")]
     pub custom_payg_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
@@ -392,6 +394,10 @@ pub struct PaygBudget {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct Reservation {
+    /// Deprecated: use contract.v2.SalesLineItemPricing.reserved_price_cents in
+    /// Contract.sales_config. A customer can send UserConfig, so it must not carry
+    /// a price.
+    #[deprecated]
     #[prost(uint64, tag = "1")]
     pub reserved_price_cents: u64,
     #[prost(oneof = "reservation::ReservedUnits", tags = "2, 3")]
@@ -580,6 +586,67 @@ pub struct Invoice {
     /// provider; reversals are recorded against it.
     #[prost(string, optional, tag = "12")]
     pub tax_transaction_code: ::core::option::Option<::prost::alloc::string::String>,
+    /// The external provider responsible for collecting payment for this invoice. It may be none if this invoice is billed manually (ie enterprise).
+    #[prost(
+        enumeration = "super::super::super::common::v1::ExternalBillingProvider",
+        optional,
+        tag = "13"
+    )]
+    pub external_billing_provider: ::core::option::Option<i32>,
+    /// The invoice ID assigned by the external billing provider.
+    #[prost(string, optional, tag = "14")]
+    pub external_invoice_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// When true, this invoice should be omitted from customer-facing receipts
+    /// (e.g. pre-migration shadow rollovers and the $0 migration stub). Default
+    /// false means the invoice is visible on receipts.
+    #[prost(bool, tag = "15")]
+    pub hide_from_customer_receipts: bool,
+    #[prost(enumeration = "FailurePolicy", tag = "16")]
+    pub failure_policy: i32,
+    /// Caller-supplied key that makes off-cycle invoice creation safe to retry.
+    /// Unique per organization and client_id; unset on contract invoices.
+    #[prost(string, optional, tag = "17")]
+    pub idempotency_key: ::core::option::Option<::prost::alloc::string::String>,
+    /// Identifies the service that requested the invoice, which reads the
+    /// invoice to learn its outcome and maps idempotency_key back to its own
+    /// records. Unset on contract invoices.
+    #[prost(string, optional, tag = "18")]
+    pub client_id: ::core::option::Option<::prost::alloc::string::String>,
+}
+/// What paying, or failing to pay, an invoice does to the organization's
+/// account status. Retries and payment emails apply under every policy.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum FailurePolicy {
+    /// Account dunning: a failed payment makes the account past due and, once
+    /// retries run out, downgrades it or disables on-demand; a successful payment
+    /// reactivates it. Every invoice written before policies existed has this.
+    Unspecified = 0,
+    /// Payment state never changes account status, in either direction. The
+    /// service that requested the invoice (client_id) owns the consequences of
+    /// non-payment and reads the outcome from the invoice, so an invoice with
+    /// this policy always has a client_id.
+    RetryOnly = 1,
+}
+impl FailurePolicy {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "FAILURE_POLICY_UNSPECIFIED",
+            Self::RetryOnly => "FAILURE_POLICY_RETRY_ONLY",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "FAILURE_POLICY_UNSPECIFIED" => Some(Self::Unspecified),
+            "FAILURE_POLICY_RETRY_ONLY" => Some(Self::RetryOnly),
+            _ => None,
+        }
+    }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct OptionValue {
@@ -801,11 +868,24 @@ pub struct CloseInvoiceResponse {
     #[prost(message, optional, tag = "2")]
     pub invoice: ::core::option::Option<Invoice>,
     /// Whether the organization still has other invoices awaiting payment
-    /// (needs_charged), ignoring the one just closed and any already closed.
+    /// (needs_charged), ignoring the one just closed, any already closed, and any
+    /// with FAILURE_POLICY_RETRY_ONLY, which can't make the account past due.
     /// Lets a caller decide whether the org has stopped being past due.
     /// Meaningless when updated is false.
     #[prost(bool, tag = "3")]
     pub has_other_invoices_awaiting_payment: bool,
+}
+/// Stops every unpaid invoice for an organization from being charged.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CloseOpenInvoicesRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CloseOpenInvoicesResponse {
+    /// Number of open invoices that were closed.
+    #[prost(uint64, tag = "1")]
+    pub closed_count: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateContractRequest {
@@ -879,6 +959,19 @@ pub struct EndContractImmediatelyRequest {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct EndContractImmediatelyResponse {
     /// True if a matching contract was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+}
+/// Moves the organization's current contract off partner invoicing onto credit
+/// card billing, effective immediately.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EndPartnerBillingRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EndPartnerBillingResponse {
+    /// True if the current contract was partner-invoiced and has been moved.
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
@@ -1016,7 +1109,7 @@ pub struct GetUninvoicedContractsResponse {
     #[prost(uint64, repeated, tag = "3")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ListInvoicesRequest {
     /// Only invoices owned by this organization are returned.
     #[prost(uint64, tag = "1")]
@@ -1030,6 +1123,13 @@ pub struct ListInvoicesRequest {
     /// through results.
     #[prost(uint32, optional, tag = "3")]
     pub offset: ::core::option::Option<u32>,
+    /// When true, omit invoices with hide_from_customer_receipts=true so the
+    /// response (and total) match what customers should see on receipts.
+    #[prost(bool, tag = "4")]
+    pub customer_receipts_only: bool,
+    /// When set, only off-cycle invoices requested by this client are returned.
+    #[prost(string, optional, tag = "5")]
+    pub client_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListInvoicesResponse {
@@ -1131,6 +1231,22 @@ pub struct RetryChargeResponse {
     #[prost(bool, tag = "1")]
     pub updated: bool,
 }
+/// Reschedules the organization's most recent failed charge, e.g. after the
+/// customer adds a new payment method.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetryFailedChargeRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RetryFailedChargeResponse {
+    /// True if an invoice with a failed charge attempt was found and rescheduled.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
+    /// Guid of the rescheduled invoice. Only set when updated is true.
+    #[prost(string, optional, tag = "2")]
+    pub invoice_guid: ::core::option::Option<::prost::alloc::string::String>,
+}
 /// Creates a new contract for a new billing period. Closes out the current contract by
 /// creating an invoice and setting the last usage date
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1168,6 +1284,12 @@ pub struct RolloverContractRequest {
     /// Whether the tax provider placed this invoice under reverse charge.
     #[prost(bool, tag = "11")]
     pub is_reverse_charge: bool,
+    /// Credit that the new invoice's credit-only usage takes from the ledger. At
+    /// most one per account_id. Written atomically with the invoice.
+    #[prost(message, repeated, tag = "12")]
+    pub ledger_withdrawals: ::prost::alloc::vec::Vec<
+        super::ledger::v1::LedgerWithdrawal,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverContractResponse {
@@ -1179,6 +1301,20 @@ pub struct RolloverContractResponse {
     pub amount_billed: u64,
     #[prost(uint64, tag = "4")]
     pub new_contract_id: u64,
+}
+/// Sets or clears the external invoice identifier for an invoice.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetExternalInvoiceIdRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, optional, tag = "2")]
+    pub external_invoice_id: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetExternalInvoiceIdResponse {
+    /// True if a matching invoice was found and updated.
+    #[prost(bool, tag = "1")]
+    pub updated: bool,
 }
 /// DEPRECATED: replaced by ClaimChargeLockRequest / ClaimChargeLockResponse
 /// in endpoint_claim_charge_lock.proto. The rename generalized the

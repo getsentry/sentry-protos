@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+// Records a charge that an external billing provider has already collected.
+// The charge is upserted by invoice id; this service does not contact the
+// provider or collect payment itself.
+message RecordPaidChargeRequest {
+  uint64 organization_id = 1;
+  uint64 invoice_id = 2;
+  uint64 amount_cents = 3;
+  string description = 4;
+}
+
+message RecordPaidChargeResponse {
+  // True when this call inserted a new charge; false when it updated the
+  // existing charge for the invoice.
+  bool created = 1;
+}
