@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "google/protobuf/timestamp.proto";
+
+// Ends an open contract's billing term early, on term_end. The contract's
+// current on-demand period is cut to end no later than term_end, and the
+// rollover that reaches term_end renews the contract: it applies the staged
+// pending change and starts a new full term on term_end.
+//
+// term_end must be midnight UTC, after now, and no later than the end of the
+// current term. Setting it again replaces the earlier override.
+message OverrideTermEndRequest {
+  uint64 contract_id = 1;
+  google.protobuf.Timestamp term_end = 2;
+}
+
+message OverrideTermEndResponse {}
