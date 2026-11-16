@@ -29,8 +29,9 @@ message AutoTopUpSeerWalletResponse {
     OUTCOME_BILLED = 6;
   }
   Outcome outcome = 1;
-  // Set when outcome is OUTCOME_BILLED.
-  optional uint64 invoice_id = 2;
+  // Deprecated: identify the invoice by invoice_guid, which the payment
+  // endpoints take.
+  optional uint64 invoice_id = 2 [deprecated = true];
   // Whether the top-up invoice was paid. Only meaningful when outcome is
   // OUTCOME_BILLED.
   bool paid = 3;
