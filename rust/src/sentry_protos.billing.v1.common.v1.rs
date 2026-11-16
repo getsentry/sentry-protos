@@ -551,6 +551,8 @@ pub struct PendingChange {
 pub struct PendingSalesConfig {
     #[prost(message, repeated, tag = "1")]
     pub pricing: ::prost::alloc::vec::Vec<PendingSalesLineItemPricing>,
+    #[prost(message, repeated, tag = "2")]
+    pub soft_caps: ::prost::alloc::vec::Vec<PendingSalesLineItemSoftCap>,
 }
 /// Mirrors contract.v2.SalesLineItemPricing.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -561,6 +563,14 @@ pub struct PendingSalesLineItemPricing {
     pub reserved_price_cents: ::core::option::Option<u64>,
     #[prost(message, optional, tag = "3")]
     pub payg_rate: ::core::option::Option<TieredPricingRate>,
+}
+/// Mirrors contract.v2.SalesLineItemSoftCap.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PendingSalesLineItemSoftCap {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    #[prost(enumeration = "SoftCapType", tag = "2")]
+    pub r#type: i32,
 }
 /// Pending overrides for a set of line items. payg_budget and reservation are
 /// each independently optional - either, both, or neither may be set on a
@@ -575,7 +585,8 @@ pub struct PendingUserConfig {
     /// Unset means the reservation is not changing.
     #[prost(message, optional, tag = "2")]
     pub reservation: ::core::option::Option<Reservation>,
-    /// Pending soft-cap override.
+    /// Deprecated: stage soft caps in PendingChange.sales_config instead.
+    #[deprecated]
     #[prost(message, optional, tag = "5")]
     pub soft_cap: ::core::option::Option<SoftCap>,
     /// The line items this config applies to.
