@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v2;
 
 import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
+import "sentry_protos/billing/v1/common/v1/soft_cap_type.proto";
 
 // The pricing Sentry staff set for one line item of a contract.
 message SalesLineItemPricing {
@@ -17,9 +18,19 @@ message SalesLineItemPricing {
   optional sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 3;
 }
 
+// A soft cap Sentry staff set for one line item. Usage past the line item's
+// reserved volume is allowed instead of hard-stopping ingestion.
+message SalesLineItemSoftCap {
+  string line_item_uid = 1;
+  sentry_protos.billing.v1.common.v1.SoftCapType type = 2;
+}
+
 // The contract settings that only Sentry staff set, through sales and
 // provisioning. It is the counterpart to the customer-configurable UserConfig,
 // so a customer change to the contract can never set or clear these values.
 message SalesConfig {
   repeated SalesLineItemPricing pricing = 1;
+
+  // A line item without an entry has no soft cap.
+  repeated SalesLineItemSoftCap soft_caps = 2;
 }

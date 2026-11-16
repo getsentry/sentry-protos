@@ -121,6 +121,15 @@ pub struct SalesLineItemPricing {
         super::super::super::common::v1::TieredPricingRate,
     >,
 }
+/// A soft cap Sentry staff set for one line item. Usage past the line item's
+/// reserved volume is allowed instead of hard-stopping ingestion.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SalesLineItemSoftCap {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    #[prost(enumeration = "super::super::super::common::v1::SoftCapType", tag = "2")]
+    pub r#type: i32,
+}
 /// The contract settings that only Sentry staff set, through sales and
 /// provisioning. It is the counterpart to the customer-configurable UserConfig,
 /// so a customer change to the contract can never set or clear these values.
@@ -128,6 +137,9 @@ pub struct SalesLineItemPricing {
 pub struct SalesConfig {
     #[prost(message, repeated, tag = "1")]
     pub pricing: ::prost::alloc::vec::Vec<SalesLineItemPricing>,
+    /// A line item without an entry has no soft cap.
+    #[prost(message, repeated, tag = "2")]
+    pub soft_caps: ::prost::alloc::vec::Vec<SalesLineItemSoftCap>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ContractMetadata {

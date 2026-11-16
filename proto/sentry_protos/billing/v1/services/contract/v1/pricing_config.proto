@@ -108,7 +108,9 @@ message UserConfig {
     google.protobuf.Empty all_items = 4;
   }
   Activation activation = 5;
-  SoftCap soft_cap = 6;
+  // Deprecated: use contract.v2.SalesConfig.soft_caps in Contract.sales_config.
+  // A customer can send UserConfig, so it must not set a soft cap.
+  SoftCap soft_cap = 6 [deprecated = true];
   SpendAllocation spend_allocation = 7;
 }
 

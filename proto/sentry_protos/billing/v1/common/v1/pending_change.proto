@@ -50,6 +50,7 @@ message PendingChange {
 // wire-compatible.
 message PendingSalesConfig {
   repeated PendingSalesLineItemPricing pricing = 1;
+  repeated PendingSalesLineItemSoftCap soft_caps = 2;
 }
 
 // Mirrors contract.v2.SalesLineItemPricing.
@@ -57,6 +58,12 @@ message PendingSalesLineItemPricing {
   string line_item_uid = 1;
   optional uint64 reserved_price_cents = 2;
   optional sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 3;
+}
+
+// Mirrors contract.v2.SalesLineItemSoftCap.
+message PendingSalesLineItemSoftCap {
+  string line_item_uid = 1;
+  SoftCapType type = 2;
 }
 
 // The billing type a pending change moves the next contract onto.
@@ -107,8 +114,8 @@ message PendingUserConfig {
     google.protobuf.Empty all_items = 4;
   }
 
-  // Pending soft-cap override.
-  optional SoftCap soft_cap = 5;
+  // Deprecated: stage soft caps in PendingChange.sales_config instead.
+  optional SoftCap soft_cap = 5 [deprecated = true];
 }
 
 message PAYGBudget {
