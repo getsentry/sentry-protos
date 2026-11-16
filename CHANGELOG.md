@@ -1,3 +1,9 @@
+## 0.120.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Move soft caps into SalesConfig by @hybrendan and @claude with @getsantry in [#535](https://github.com/getsentry/sentry-protos/pull/535)
+
 ## 0.120.0
 
 ### New Features ✨
