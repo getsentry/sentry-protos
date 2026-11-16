@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_wallet_config.v1;
+
+import "sentry_protos/billing/v1/services/seer_wallet_config/v1/seer_wallet_config.proto";
+
+message GetSeerWalletConfigRequest {
+  uint64 organization_id = 1;
+}
+
+message GetSeerWalletConfigResponse {
+  // Unset when the organization never saved a config.
+  optional SeerWalletConfig config = 1;
+}

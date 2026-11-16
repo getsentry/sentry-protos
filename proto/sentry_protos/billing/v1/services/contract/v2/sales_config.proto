@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
+
+// The pricing Sentry staff set for one line item of a contract.
+message SalesLineItemPricing {
+  string line_item_uid = 1;
+
+  // The price of the reservation for this line item over one billing term.
+  // If this field is absent, the price is $0.
+  optional uint64 reserved_price_cents = 2;
+
+  // The PAYG rate for this line item. It replaces the package PAYG rate. If
+  // this field is absent, the package PAYG rate applies.
+  optional sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 3;
+}
+
+// The contract settings that only Sentry staff set, through sales and
+// provisioning. It is the counterpart to the customer-configurable UserConfig,
+// so a customer change to the contract can never set or clear these values.
+message SalesConfig {
+  repeated SalesLineItemPricing pricing = 1;
+}

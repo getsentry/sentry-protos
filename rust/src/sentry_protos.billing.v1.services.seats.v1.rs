@@ -137,6 +137,35 @@ impl ExternalProductSeatStatus {
     }
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct Seat {
+    #[prost(string, tag = "1")]
+    pub external_product_identifier: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub external_product_display_name: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    pub project_id: u64,
+    #[prost(enumeration = "super::super::super::common::v1::SeatStatus", tag = "4")]
+    pub status: i32,
+    /// When the seat was first recorded on the contract.
+    #[prost(message, optional, tag = "5")]
+    pub created_at: ::core::option::Option<::prost_types::Timestamp>,
+}
+/// Lists every seat in a category that has activity on the organization's
+/// current contract, including seats removed during the contract (status DNE).
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListSeatsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(enumeration = "super::super::super::SeatCategory", tag = "2")]
+    pub seat_category: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListSeatsResponse {
+    /// Newest first, by created_at.
+    #[prost(message, repeated, tag = "1")]
+    pub seats: ::prost::alloc::vec::Vec<Seat>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RemoveSeatRequest {
     #[prost(message, optional, tag = "1")]
     pub seat_object: ::core::option::Option<super::super::super::common::v1::SeatObject>,

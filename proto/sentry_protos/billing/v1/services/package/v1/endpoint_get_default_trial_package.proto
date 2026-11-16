@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.package.v1;
+
+import "sentry_protos/billing/v1/services/package/v1/package.proto";
+
+message GetDefaultTrialPackageRequest {}
+
+message GetDefaultTrialPackageResponse {
+  // The package a self-serve subscription trial runs on.
+  PackageConfig package_config = 1;
+}

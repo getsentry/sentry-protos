@@ -1,3 +1,363 @@
+## 0.120.0
+
+### New Features ✨
+
+- (billing) Add ResetProductTrial engagement protos by @dashed with @getsantry in [#519](https://github.com/getsentry/sentry-protos/pull/519)
+
+## 0.119.0
+
+### New Features ✨
+
+- (billing) Add trial package lookups to the package service by @hybrendan and @claude with @getsantry in [#526](https://github.com/getsentry/sentry-protos/pull/526)
+
+### Bug Fixes 🐛
+
+- (devenv) Escape % in the Python download URLs by @mchen-sentry with @sentry-junior in [#525](https://github.com/getsentry/sentry-protos/pull/525)
+
+## 0.118.0
+
+### New Features ✨
+
+- (billing) Report why a Seer credit check denies credit by @volokluev with @sentry-junior and @getsantry in [#524](https://github.com/getsentry/sentry-protos/pull/524)
+
+## 0.117.0
+
+### New Features ✨
+
+- (events) Add subscription trial expiry event by @volokluev with @getsantry in [#520](https://github.com/getsentry/sentry-protos/pull/520)
+
+## 0.116.0
+
+### New Features ✨
+
+- (billing) Report uncapped spend separately in LineItemUsageSummary by @hybrendan with @sentry-junior and @getsantry in [#522](https://github.com/getsentry/sentry-protos/pull/522)
+
+## 0.115.0
+
+### New Features ✨
+
+- (billing) Share Seer billing feature identifiers by @sehr-m with @getsantry in [#521](https://github.com/getsentry/sentry-protos/pull/521)
+
+## 0.114.0
+
+### New Features ✨
+
+#### Billing
+
+- Accept a sales config when provisioning a sales contract by @hybrendan with @getsantry in [#516](https://github.com/getsentry/sentry-protos/pull/516)
+- Stage a sales config on pending changes by @hybrendan in [#515](https://github.com/getsentry/sentry-protos/pull/515)
+
+## 0.113.0
+
+### New Features ✨
+
+- (billing) Add a reserved-only billing type for line items by @dashed with @getsantry in [#514](https://github.com/getsentry/sentry-protos/pull/514)
+
+## 0.112.0
+
+### New Features ✨
+
+- (billing) Configure Seer wallet auto top-up by @volokluev with @getsantry in [#511](https://github.com/getsentry/sentry-protos/pull/511)
+
+## 0.111.0
+
+### New Features ✨
+
+- (billing) Add SalesConfig to the contract by @hybrendan in [#512](https://github.com/getsentry/sentry-protos/pull/512)
+
+## 0.110.0
+
+### New Features ✨
+
+- (billing) Add ProvisionSalesContract request and response by @hybrendan with @getsantry in [#510](https://github.com/getsentry/sentry-protos/pull/510)
+
+### Other
+
+- seer wallet autotop up configuration by @volokluev with @sentry-junior in [#509](https://github.com/getsentry/sentry-protos/pull/509)
+
+## 0.109.0
+
+### New Features ✨
+
+- (billing) Stage a billing arrangement on pending changes by @hybrendan with @getsantry in [#508](https://github.com/getsentry/sentry-protos/pull/508)
+
+## 0.108.0
+
+### New Features ✨
+
+- (billing) Read trials by end date and store who started them by @dashed with @getsantry in [#499](https://github.com/getsentry/sentry-protos/pull/499)
+
+## 0.107.0
+
+### New Features ✨
+
+- (billing) Add SeerWalletConfig, deprecate auto top-up protos by @volokluev in [#506](https://github.com/getsentry/sentry-protos/pull/506)
+
+## 0.106.0
+
+### New Features ✨
+
+- (taskbroker) Add BatchUpdateHeartbeat RPC by @evanh and @claude in [#503](https://github.com/getsentry/sentry-protos/pull/503)
+
+## 0.105.0
+
+### New Features ✨
+
+- (billing) Define auto top-up config protos by @volokluev with @getsantry in [#504](https://github.com/getsentry/sentry-protos/pull/504)
+
+## 0.104.0
+
+### New Features ✨
+
+- (taskbroker) Add activation heartbeat and UpdateHeartbeat RPC by @evanh in [#500](https://github.com/getsentry/sentry-protos/pull/500)
+
+## 0.103.0
+
+### New Features ✨
+
+- (billing) Add GetSeerWalletBalance to Seer feature billing by @volokluev with @sentry-junior and @getsantry in [#501](https://github.com/getsentry/sentry-protos/pull/501)
+
+## 0.102.1
+
+### Documentation 📚
+
+- (billing) Document release outcomes for the contract lock by @armenzg with @sentry-junior in [#498](https://github.com/getsentry/sentry-protos/pull/498)
+
+## 0.102.0
+
+### New Features ✨
+
+- (billing) Add open-contract lock endpoint messages by @armenzg and @cursoragent with @getsantry in [#492](https://github.com/getsentry/sentry-protos/pull/492)
+
+## 0.101.0
+
+### New Features ✨
+
+- (billing) Define internal ledger deposit invoices by @volokluev in [#491](https://github.com/getsentry/sentry-protos/pull/491)
+
+## 0.100.0
+
+### New Features ✨
+
+- (eap) Add enrichment attributes trace item type by @vgrozdanic with @getsantry in [#487](https://github.com/getsentry/sentry-protos/pull/487)
+
+## 0.99.0
+
+### New Features ✨
+
+- (billing) Add CheckSeerCredits request and response by @srest2021 with @getsantry and @sentry-junior in [#490](https://github.com/getsentry/sentry-protos/pull/490)
+
+## 0.98.0
+
+### New Features ✨
+
+- (billing) Withdraw credit-only usage on contract rollover by @volokluev with @getsantry in [#488](https://github.com/getsentry/sentry-protos/pull/488)
+
+## 0.97.0
+
+### New Features ✨
+
+- (billing) Declare line-item billing types by @volokluev with @getsantry in [#485](https://github.com/getsentry/sentry-protos/pull/485)
+
+## 0.96.0
+
+### New Features ✨
+
+- (billing) Add deposit ledger protos to the contract service by @volokluev with @getsantry in [#480](https://github.com/getsentry/sentry-protos/pull/480)
+
+## 0.95.0
+
+### New Features ✨
+
+- (billing) Add sponsored checkout and package resolution by @hybrendan with @getsantry in [#484](https://github.com/getsentry/sentry-protos/pull/484)
+
+## 0.94.0
+
+### New Features ✨
+
+- (billing) Expose when PAYG spend exceeds its budget by @hybrendan in [#482](https://github.com/getsentry/sentry-protos/pull/482)
+
+## 0.93.0
+
+### New Features ✨
+
+- (billing) Add ResetSubscriptionTrial engagement protos by @hybrendan in [#481](https://github.com/getsentry/sentry-protos/pull/481)
+
+## 0.92.0
+
+### New Features ✨
+
+- (billing) Add snapshot image data category by @noahsmartin in [#483](https://github.com/getsentry/sentry-protos/pull/483)
+
+## 0.91.0
+
+### New Features ✨
+
+- (billing) Add seer feature billing service protos by @volokluev in [#477](https://github.com/getsentry/sentry-protos/pull/477)
+
+### Bug Fixes 🐛
+
+- (ci) Authenticate setup-protoc to avoid GitHub API rate limits by @volokluev in [#478](https://github.com/getsentry/sentry-protos/pull/478)
+
+## 0.90.0
+
+### New Features ✨
+
+- (billing) Add contract ids to ContractRolledOver by @noahsmartin in [#475](https://github.com/getsentry/sentry-protos/pull/475)
+
+## 0.89.0
+
+### New Features ✨
+
+- (billing) Add customer presentation proto by @hybrendan in [#469](https://github.com/getsentry/sentry-protos/pull/469)
+- Add contracts for invoices batch by @noahsmartin in [#473](https://github.com/getsentry/sentry-protos/pull/473)
+
+### Internal Changes 🔧
+
+- Bump Python to 3.11.17 by @hybrendan in [#474](https://github.com/getsentry/sentry-protos/pull/474)
+
+## 0.87.0
+
+### New Features ✨
+
+- (billing) Return daily usage breakdowns from the usage pricer by @noahsmartin in [#472](https://github.com/getsentry/sentry-protos/pull/472)
+
+## 0.86.0
+
+### New Features ✨
+
+- (billing) Add non-granted usage quantity by @brendanhsentry in [#468](https://github.com/getsentry/sentry-protos/pull/468)
+
+## 0.85.0
+
+### New Features ✨
+
+- (billing) Add off-cycle invoice protos by @volokluev in [#463](https://github.com/getsentry/sentry-protos/pull/463)
+
+## 0.84.0
+
+### New Features ✨
+
+- (billing-platform) Add GetOrgsWithoutActiveSeatContract to seat activity service by @volokluev in [#467](https://github.com/getsentry/sentry-protos/pull/467)
+
+## 0.83.0
+
+### New Features ✨
+
+- (billing-platform) Add ListSeats endpoint to seats service by @volokluev in [#465](https://github.com/getsentry/sentry-protos/pull/465)
+
+## 0.82.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Share priced usage with quota consumers by @brendanhsentry in [#464](https://github.com/getsentry/sentry-protos/pull/464)
+
+## 0.82.0
+
+### New Features ✨
+
+- (billing) Define BillingAlert protos by @brendanhsentry in [#462](https://github.com/getsentry/sentry-protos/pull/462)
+
+## 0.81.1
+
+### Internal Changes 🔧
+
+- (billing) Add marketplace service protobufs by @brendanhsentry in [#458](https://github.com/getsentry/sentry-protos/pull/458)
+
+## 0.81.0
+
+### New Features ✨
+
+- (billing) Add invoice customer-receipt visibility fields by @armenzg in [#456](https://github.com/getsentry/sentry-protos/pull/456)
+
+## 0.80.0
+
+### New Features ✨
+
+- (snuba) Add InterpolationMode to TimeSeries RPC by @pbhandari in [#455](https://github.com/getsentry/sentry-protos/pull/455)
+
+## 0.79.0
+
+### New Features ✨
+
+- (billing) Expose external invoice ID by @brendanhsentry in [#454](https://github.com/getsentry/sentry-protos/pull/454)
+
+## 0.78.0
+
+### New Features ✨
+
+- (workflow_engine) Add the TraceItemType for Workflow Engine Evaluations by @saponifi3d in [#451](https://github.com/getsentry/sentry-protos/pull/451)
+
+### Internal Changes 🔧
+
+- Add package change event by @noahsmartin in [#452](https://github.com/getsentry/sentry-protos/pull/452)
+
+## 0.77.0
+
+### New Features ✨
+
+- (billing) Add retry failed charge endpoint protos by @noahsmartin in [#449](https://github.com/getsentry/sentry-protos/pull/449)
+
+## 0.76.1
+
+### Documentation 📚
+
+- (billing) Drop AM2 from blended sample-rate proto comments by @armenzg in [#448](https://github.com/getsentry/sentry-protos/pull/448)
+
+## 0.76.0
+
+### New Features ✨
+
+- (billing) Add AM2 blended sample-rate service boundaries by @armenzg in [#444](https://github.com/getsentry/sentry-protos/pull/444)
+
+## 0.75.3
+
+### Internal Changes 🔧
+
+- Add recurring credit fields for API by @noahsmartin in [#447](https://github.com/getsentry/sentry-protos/pull/447)
+
+## 0.75.2
+
+### Internal Changes 🔧
+
+- (billing-platform) Add vercel charge method by @brendanhsentry in [#445](https://github.com/getsentry/sentry-protos/pull/445)
+
+## 0.75.1
+
+### Internal Changes 🔧
+
+- (billing-platform) External billing provider by @brendanhsentry in [#441](https://github.com/getsentry/sentry-protos/pull/441)
+
+## 0.75.0
+
+### New Features ✨
+
+- (billing) Add request/response for annual contracts ending term by @noahsmartin in [#442](https://github.com/getsentry/sentry-protos/pull/442)
+
+## 0.74.1
+
+### Internal Changes 🔧
+
+- Add new request/response for ending partner billing by @noahsmartin in [#440](https://github.com/getsentry/sentry-protos/pull/440)
+
+## 0.74.0
+
+### New Features ✨
+
+- (billing) Expose product entitlements on line items by @volokluev in [#439](https://github.com/getsentry/sentry-protos/pull/439)
+
+## 0.73.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Add partner billing strategy to billing config by @brendanhsentry in [#438](https://github.com/getsentry/sentry-protos/pull/438)
+
+## 0.73.0
+
+### New Features ✨
+
+- (billing) Add fields for 3D Secure card payments by @skonves in [#430](https://github.com/getsentry/sentry-protos/pull/430)
+
 ## 0.72.0
 
 ### New Features ✨

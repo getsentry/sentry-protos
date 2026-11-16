@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.partner_account.v1;
+
+import "sentry_protos/billing/v1/services/partner_account/v1/partner_account.proto";
+
+message GetPartnerAccountRequest {
+  uint64 organization_id = 1;
+}
+
+message GetPartnerAccountResponse {
+  // Unset when the organization does not have a partner account.
+  optional PartnerAccount partner_account = 1;
+}

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.ledger.v1;
+
+import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_deposit.proto";
+
+// Records an internal credit grant. The invoice and deposit are written in one
+// transaction and the invoice is already paid, so the credit is immediately
+// available without a payment attempt.
+message CreateLedgerDepositInvoiceRequest {
+  uint64 organization_id = 1;
+  // Names the admin flow or job that requested the grant.
+  string client_id = 2;
+  // Unique per organization and client_id. A repeated key returns the first
+  // call's invoice without recording a second deposit.
+  string idempotency_key = 3;
+  // The credit grant. Its description is also shown on the invoice.
+  LedgerDeposit ledger_deposit = 4;
+}
+
+message CreateLedgerDepositInvoiceResponse {
+  uint64 invoice_id = 1;
+  string invoice_guid = 2;
+  uint64 amount_billed = 3;
+  // False when the idempotency key matched an existing invoice.
+  bool created = 4;
+}

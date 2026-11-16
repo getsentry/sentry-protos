@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.ledger.v1;
+
+message GetLedgerBalanceRequest {
+  uint64 organization_id = 1;
+  string account_id = 2;
+}
+
+message GetLedgerBalanceResponse {
+  // Paid deposits minus withdrawals. Zero for an account with no entries.
+  int64 balance_cents = 1;
+  // Deposits whose invoices are not paid yet. Not part of balance_cents.
+  int64 pending_deposit_cents = 2;
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.engagement.v1;
+
+import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/engagement/v1/endpoint_get_active_trials.proto";
+
+// Finds the trials of all organizations by their last day.
+// Returns subscription trials (package_uid is set) and product trials (package_uid is not set).
+message GetTrialsEndingOnRequest {
+  // returns the trials whose end_date is one of end_dates
+  repeated sentry_protos.billing.v1.Date end_dates = 1;
+}
+
+// The trials of one organization.
+message OrganizationTrials {
+  uint64 organization_id = 1;
+  // the organization's trials whose end_date is one of end_dates
+  repeated Trial trials = 2;
+}
+
+message GetTrialsEndingOnResponse {
+  // one entry for each organization that has a trial ending on one of end_dates
+  repeated OrganizationTrials organizations = 1;
+}

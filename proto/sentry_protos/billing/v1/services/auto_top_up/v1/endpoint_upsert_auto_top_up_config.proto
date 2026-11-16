@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.auto_top_up.v1;
+
+import "sentry_protos/billing/v1/services/auto_top_up/v1/auto_top_up_config.proto";
+
+// Deprecated: use sentry_protos.billing.v1.services.seer_wallet_config.v1,
+// which keeps the auto top-up and spend settings apart.
+option deprecated = true;
+
+// Replaces the organization's config for the wallet, or creates it.
+message UpsertAutoTopUpConfigRequest {
+  option deprecated = true;
+
+  uint64 organization_id = 1;
+  Wallet wallet = 2;
+  bool enabled = 3;
+  uint64 threshold_credits = 4;
+  // Must be positive.
+  uint64 top_up_credits = 5;
+  // Must cover at least one top-up when enabled is set.
+  uint64 daily_cap_credits = 6;
+}
+
+message UpsertAutoTopUpConfigResponse {
+  option deprecated = true;
+
+  AutoTopUpConfig config = 1;
+}

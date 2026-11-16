@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.common.v1;
 
 import "google/protobuf/empty.proto";
+import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
 import "sentry_protos/billing/v1/common/v1/soft_cap_type.proto";
 import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
 
@@ -30,6 +31,57 @@ message PendingChange {
   // Next contract's sponsored_type. SPONSORED_TYPE_UNSPECIFIED clears the
   // sponsorship; an unset field leaves it unchanged.
   optional sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 4;
+
+  // The next contract's billing type. Unset leaves it unchanged.
+  optional PendingBillingType billing_type = 5;
+
+  // The next contract's payg mode. Set only with PENDING_BILLING_TYPE_INVOICED,
+  // since a card-billed contract always charges payg.
+  optional PendingPaygMode payg_mode = 6;
+
+  // Replaces the next contract's whole sales config, so an empty
+  // PendingSalesConfig clears it. Unset carries the current sales config over
+  // unchanged.
+  optional PendingSalesConfig sales_config = 7;
+}
+
+// Mirrors contract.v2.SalesConfig field for field, since common.v1 cannot
+// import contract.v2 without a package cycle. The two must stay
+// wire-compatible.
+message PendingSalesConfig {
+  repeated PendingSalesLineItemPricing pricing = 1;
+}
+
+// Mirrors contract.v2.SalesLineItemPricing.
+message PendingSalesLineItemPricing {
+  string line_item_uid = 1;
+  optional uint64 reserved_price_cents = 2;
+  optional sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 3;
+}
+
+// The billing type a pending change moves the next contract onto.
+enum PendingBillingType {
+  PENDING_BILLING_TYPE_UNSPECIFIED = 0;
+
+  // Billed directly by us, on a card the customer manages.
+  PENDING_BILLING_TYPE_CREDIT_CARD = 1;
+
+  // Invoiced by us, under a sales-negotiated agreement.
+  PENDING_BILLING_TYPE_INVOICED = 2;
+}
+
+// Whether an invoiced contract may incur payg, and who bills it.
+enum PendingPaygMode {
+  PENDING_PAYG_MODE_UNSPECIFIED = 0;
+
+  // The org may not incur payg at all.
+  PENDING_PAYG_MODE_NONE = 1;
+
+  // The org incurs payg, but it is billed outside the platform.
+  PENDING_PAYG_MODE_MANUAL = 2;
+
+  // We charge payg spend ourselves.
+  PENDING_PAYG_MODE_CHARGED = 3;
 }
 
 // Pending overrides for a set of line items. payg_budget and reservation are

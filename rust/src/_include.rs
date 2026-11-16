@@ -14,6 +14,16 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.account_status.v1.rs");
                     }
                 }
+                pub mod auto_top_up {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.auto_top_up.v1.rs");
+                    }
+                }
+                pub mod billing_alert {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.billing_alert.v1.rs");
+                    }
+                }
                 pub mod billing_details {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.billing_details.v1.rs");
@@ -30,6 +40,11 @@ pub mod sentry_protos {
                     }
                 }
                 pub mod contract {
+                    pub mod ledger {
+                        pub mod v1 {
+                            include!("sentry_protos.billing.v1.services.contract.ledger.v1.rs");
+                        }
+                    }
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.contract.v1.rs");
                     }
@@ -45,6 +60,16 @@ pub mod sentry_protos {
                 pub mod contract_usage_snapshot {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.contract_usage_snapshot.v1.rs");
+                    }
+                }
+                pub mod customer_presentation {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.customer_presentation.v1.rs");
+                    }
+                }
+                pub mod dynamic_sampling {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.dynamic_sampling.v1.rs");
                     }
                 }
                 pub mod engagement {
@@ -70,6 +95,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.package.v1.rs");
                     }
                 }
+                pub mod partner_account {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.partner_account.v1.rs");
+                    }
+                }
                 pub mod pending_change {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.pending_change.v1.rs");
@@ -90,9 +120,24 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.rate_card.v1.rs");
                     }
                 }
+                pub mod seat_activity {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.seat_activity.v1.rs");
+                    }
+                }
                 pub mod seats {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.seats.v1.rs");
+                    }
+                }
+                pub mod seer_feature_billing {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.seer_feature_billing.v1.rs");
+                    }
+                }
+                pub mod seer_wallet_config {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.seer_wallet_config.v1.rs");
                     }
                 }
                 pub mod trial {

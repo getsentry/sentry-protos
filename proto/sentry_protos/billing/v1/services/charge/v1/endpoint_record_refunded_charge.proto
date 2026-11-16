@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.charge.v1;
+
+// Records a refund that an external billing provider has already issued. If
+// the paid charge has not been recorded yet, the request also provides enough
+// information to create it before attaching the refund.
+message RecordRefundedChargeRequest {
+  uint64 organization_id = 1;
+  uint64 invoice_id = 2;
+  // The total amount of the original charge, not the amount being refunded.
+  uint64 charge_amount_cents = 3;
+  string description = 4;
+  // Provider-issued identifier used to make webhook redelivery idempotent.
+  string external_refund_id = 5;
+  optional string reason = 6;
+  uint64 refund_amount_cents = 7;
+}
+
+message RecordRefundedChargeResponse {
+  // True when this call inserted a new refund; false when a refund with the
+  // same external_refund_id was already recorded.
+  bool created = 1;
+}

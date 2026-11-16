@@ -27,11 +27,70 @@ pub struct BillContractChangeRequest {
     #[prost(bool, tag = "4")]
     pub start_new_term: bool,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct BillContractChangeResponse {
     /// The invoice that settles the change (and closes the previous contract).
     #[prost(uint64, tag = "1")]
     pub invoice_id: u64,
+    /// Set when the bank wants the customer to verify the payment.
+    #[prost(message, optional, tag = "2")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
+}
+/// Bills an organization for line items another service has priced, outside of
+/// its contract: adds sales tax, writes an invoice with the caller's failure
+/// policy and charges it right away. Only migrated, credit-card billed organizations are
+/// eligible. The requesting service learns the outcome from the response, and
+/// afterwards by reading the invoice.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BillOffCycleInvoiceRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Names the requesting service, which owns what non-payment means.
+    #[prost(string, tag = "2")]
+    pub client_id: ::prost::alloc::string::String,
+    /// Unique per organization and client_id. A repeated key returns the first
+    /// call's invoice without charging again.
+    #[prost(string, tag = "3")]
+    pub idempotency_key: ::prost::alloc::string::String,
+    /// Each line needs amount_cents and description; the platform sets every
+    /// line's type, so type must be unset.
+    #[prost(message, repeated, tag = "4")]
+    pub line_items: ::prost::alloc::vec::Vec<
+        super::super::contract::v1::InvoiceLineItem,
+    >,
+    /// Stripe charge description.
+    #[prost(string, optional, tag = "5")]
+    pub description: ::core::option::Option<::prost::alloc::string::String>,
+    /// What paying, or failing to pay, the invoice does to account status. The
+    /// requesting service chooses: FAILURE_POLICY_RETRY_ONLY leaves account
+    /// status alone and makes the service responsible for non-payment.
+    #[prost(enumeration = "super::super::contract::v1::FailurePolicy", tag = "6")]
+    pub failure_policy: i32,
+    /// Required. The credit the invoice buys. The deposit exists before the
+    /// charge starts.
+    #[prost(message, optional, tag = "7")]
+    pub ledger_deposit: ::core::option::Option<
+        super::super::contract::ledger::v1::LedgerDeposit,
+    >,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct BillOffCycleInvoiceResponse {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub invoice_guid: ::prost::alloc::string::String,
+    #[prost(bool, tag = "3")]
+    pub paid: bool,
+    /// Empty when paid, or when the key matched an existing invoice.
+    #[prost(string, tag = "4")]
+    pub failure_code: ::prost::alloc::string::String,
+    /// Set when Stripe requires 3D Secure; finish it with ConfirmInvoicePayment.
+    #[prost(message, optional, tag = "5")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ChargeInvoicesRequest {
@@ -42,6 +101,22 @@ pub struct ChargeInvoicesRequest {
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ChargeInvoicesResponse {}
+/// Collects payment for an invoice using a PaymentIntent the customer has just
+/// authenticated with 3D Secure.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ConfirmInvoicePaymentRequest {
+    #[prost(uint64, tag = "1")]
+    pub invoice_id: u64,
+    #[prost(string, tag = "2")]
+    pub payment_intent: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ConfirmInvoicePaymentResponse {
+    #[prost(bool, tag = "1")]
+    pub paid: bool,
+    #[prost(string, optional, tag = "2")]
+    pub failure_code: ::core::option::Option<::prost::alloc::string::String>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateAndBillContractRequest {
     #[prost(uint64, tag = "1")]
@@ -53,10 +128,17 @@ pub struct CreateAndBillContractRequest {
     #[prost(uint32, tag = "4")]
     pub month_interval: u32,
 }
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateAndBillContractResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
+    #[prost(uint64, optional, tag = "2")]
+    pub invoice_id: ::core::option::Option<u64>,
+    /// Set when the bank wants the customer to verify the payment.
+    #[prost(message, optional, tag = "3")]
+    pub verification: ::core::option::Option<
+        super::super::super::common::v1::StripeVerification,
+    >,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateInvoicesRequest {

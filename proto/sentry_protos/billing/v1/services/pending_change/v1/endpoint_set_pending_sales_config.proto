@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.pending_change.v1;
+
+import "sentry_protos/billing/v1/common/v1/pending_change.proto";
+
+message SetPendingSalesConfigRequest {
+  uint64 organization_id = 1;
+
+  // Replaces the whole sales config at rollover, so send every line item's
+  // pricing. An empty PendingSalesConfig clears it.
+  sentry_protos.billing.v1.common.v1.PendingSalesConfig sales_config = 2;
+}
+
+message SetPendingSalesConfigResponse {}

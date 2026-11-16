@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.events.v1;
+
+// Published after a subscription trial expires.
+message OrganizationTrialEnded {
+  string trial_package_uid = 1;
+  string post_trial_contract_package_uid = 2;
+}
