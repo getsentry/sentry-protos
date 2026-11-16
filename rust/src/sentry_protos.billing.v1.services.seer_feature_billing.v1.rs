@@ -28,8 +28,9 @@ pub struct AutoTopUpSeerWalletResponse {
     pub verification: ::core::option::Option<
         super::super::super::common::v1::StripeVerification,
     >,
-    /// Set when outcome is OUTCOME_BILLED. The browser uses this to confirm a
-    /// completed 3D Secure challenge with the payment endpoint.
+    /// Set when outcome is OUTCOME_BILLED or OUTCOME_INVOICE_PENDING. The browser
+    /// uses this to pay the invoice: it confirms a completed 3D Secure challenge,
+    /// or pays an unpaid invoice with the payment endpoint.
     #[prost(string, optional, tag = "6")]
     pub invoice_guid: ::core::option::Option<::prost::alloc::string::String>,
 }
@@ -179,6 +180,9 @@ pub struct ConfigureSeerWalletAutoTopUpResponse {
     pub previous_config: ::core::option::Option<
         super::super::seer_wallet_config::v1::SeerWalletConfig,
     >,
+    /// The settings saved after the request. When turning auto top-up on leaves
+    /// the synchronous top-up unpaid, or another top-up holds the charge lock,
+    /// these are the previous settings with auto top-up off.
     #[prost(message, optional, tag = "2")]
     pub config: ::core::option::Option<
         super::super::seer_wallet_config::v1::SeerWalletConfig,
