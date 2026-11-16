@@ -13,7 +13,9 @@ pub struct AutoTopUpSeerWalletRequest {
 pub struct AutoTopUpSeerWalletResponse {
     #[prost(enumeration = "auto_top_up_seer_wallet_response::Outcome", tag = "1")]
     pub outcome: i32,
-    /// Set when outcome is OUTCOME_BILLED.
+    /// Deprecated: identify the invoice by invoice_guid, which the payment
+    /// endpoints take.
+    #[deprecated]
     #[prost(uint64, optional, tag = "2")]
     pub invoice_id: ::core::option::Option<u64>,
     /// Whether the top-up invoice was paid. Only meaningful when outcome is
