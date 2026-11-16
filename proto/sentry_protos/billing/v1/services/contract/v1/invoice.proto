@@ -5,6 +5,7 @@ package sentry_protos.billing.v1.services.contract.v1;
 import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/common/v1/address.proto";
 import "sentry_protos/billing/v1/common/v1/external_billing_provider.proto";
+import "sentry_protos/billing/v1/services/contract/v1/billing_config.proto";
 
 // What paying, or failing to pay, an invoice does to the organization's
 // account status. Retries and payment emails apply under every policy.
@@ -77,4 +78,11 @@ message Invoice {
   // invoice to learn its outcome and maps idempotency_key back to its own
   // records. Unset on contract invoices.
   optional string client_id = 18;
+
+  // First and last day, both inclusive, of the billing term the invoice
+  // starts, which is the term its subscription charges cover. Receipts show
+  // it as the period the invoice applies to. Unset on invoices that start no
+  // term, such as off-cycle and ledger deposit invoices.
+  Date period_start = 19;
+  Date period_end = 20;
 }

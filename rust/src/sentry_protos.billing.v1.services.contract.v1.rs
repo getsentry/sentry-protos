@@ -612,6 +612,14 @@ pub struct Invoice {
     /// records. Unset on contract invoices.
     #[prost(string, optional, tag = "18")]
     pub client_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// First and last day, both inclusive, of the billing term the invoice
+    /// starts, which is the term its subscription charges cover. Receipts show
+    /// it as the period the invoice applies to. Unset on invoices that start no
+    /// term, such as off-cycle and ledger deposit invoices.
+    #[prost(message, optional, tag = "19")]
+    pub period_start: ::core::option::Option<Date>,
+    #[prost(message, optional, tag = "20")]
+    pub period_end: ::core::option::Option<Date>,
 }
 /// What paying, or failing to pay, an invoice does to the organization's
 /// account status. Retries and payment emails apply under every policy.
