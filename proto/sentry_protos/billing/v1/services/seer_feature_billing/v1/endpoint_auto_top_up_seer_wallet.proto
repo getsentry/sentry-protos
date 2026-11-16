@@ -29,8 +29,7 @@ message AutoTopUpSeerWalletResponse {
     OUTCOME_BILLED = 6;
   }
   Outcome outcome = 1;
-  // Set when outcome is OUTCOME_BILLED or OUTCOME_INVOICE_PENDING. For
-  // OUTCOME_INVOICE_PENDING, it is the unpaid invoice that blocks top-ups.
+  // Set when outcome is OUTCOME_BILLED.
   optional uint64 invoice_id = 2;
   // Whether the top-up invoice was paid. Only meaningful when outcome is
   // OUTCOME_BILLED.
