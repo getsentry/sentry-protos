@@ -122,9 +122,11 @@ pub struct ProvisionSalesContractRequest {
     /// The contract's month_interval after the change. A coterm cannot change it.
     #[prost(uint32, tag = "3")]
     pub month_interval: u32,
-    /// Reservation overrides, each on a single line item. Line items not named keep
-    /// their current configuration. The deal's prices go in sales_config, since a
-    /// UserConfig must not carry a price.
+    /// Reservation and soft-cap overrides, each on a single line item. A UserConfig
+    /// sets either a reservation or a soft cap, not both. A soft cap of
+    /// SOFT_CAP_TYPE_UNSPECIFIED removes the line item's soft cap. Line items not
+    /// named keep their current configuration. The deal's prices go in sales_config,
+    /// since a UserConfig must not carry a price.
     #[prost(message, repeated, tag = "4")]
     pub user_configs: ::prost::alloc::vec::Vec<super::super::contract::v1::UserConfig>,
     /// The contract's invoiced config once the deal takes effect. Required.
