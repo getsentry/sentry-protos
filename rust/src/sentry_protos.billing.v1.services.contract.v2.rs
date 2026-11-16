@@ -412,6 +412,16 @@ pub struct GetUninvoicedContractsResponse {
     #[prost(uint64, repeated, tag = "2")]
     pub contract_ids: ::prost::alloc::vec::Vec<u64>,
 }
+/// Sets the contract's override_term_end_ts and end_date_ts to term_end.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct OverrideTermEndRequest {
+    #[prost(uint64, tag = "1")]
+    pub contract_id: u64,
+    #[prost(message, optional, tag = "2")]
+    pub term_end: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct OverrideTermEndResponse {}
 /// Releases the open-contract lock acquired by
 /// GetCurrentContractForOrganizationWithLock. An empty, unknown, or
 /// already-released lease leaves the lock alone. So does a lease from a call

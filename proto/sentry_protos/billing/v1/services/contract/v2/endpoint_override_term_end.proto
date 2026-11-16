@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "google/protobuf/timestamp.proto";
+
+// Sets the contract's override_term_end_ts and end_date_ts to term_end.
+message OverrideTermEndRequest {
+  uint64 contract_id = 1;
+  google.protobuf.Timestamp term_end = 2;
+}
+
+message OverrideTermEndResponse {}
