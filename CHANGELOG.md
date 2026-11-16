@@ -1,3 +1,9 @@
+## 0.121.0
+
+### New Features ✨
+
+- (billing) Add OverrideTermEnd to the contract service by @hybrendan and @claude with @getsantry in [#533](https://github.com/getsentry/sentry-protos/pull/533)
+
 ## 0.120.1
 
 ### Internal Changes 🔧
