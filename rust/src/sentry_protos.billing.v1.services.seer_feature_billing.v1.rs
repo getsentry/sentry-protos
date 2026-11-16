@@ -13,8 +13,7 @@ pub struct AutoTopUpSeerWalletRequest {
 pub struct AutoTopUpSeerWalletResponse {
     #[prost(enumeration = "auto_top_up_seer_wallet_response::Outcome", tag = "1")]
     pub outcome: i32,
-    /// Set when outcome is OUTCOME_BILLED or OUTCOME_INVOICE_PENDING. For
-    /// OUTCOME_INVOICE_PENDING, it is the unpaid invoice that blocks top-ups.
+    /// Set when outcome is OUTCOME_BILLED.
     #[prost(uint64, optional, tag = "2")]
     pub invoice_id: ::core::option::Option<u64>,
     /// Whether the top-up invoice was paid. Only meaningful when outcome is
