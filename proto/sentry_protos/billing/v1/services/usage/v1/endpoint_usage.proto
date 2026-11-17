@@ -46,6 +46,9 @@ message GetUsageResponse {
 
 message GetUsageRequest {
   uint64 organization_id = 1;
+  // The usage window is half-open: [start, end). Usage at or after `end` is
+  // not returned, so a period's exclusive end date (for example a contract's
+  // ondemand_period_end_date) can be passed as `end` unchanged.
   google.protobuf.Timestamp start = 2;
   google.protobuf.Timestamp end = 3;
 

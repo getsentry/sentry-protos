@@ -51,6 +51,9 @@ pub struct GetUsageResponse {
 pub struct GetUsageRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
+    /// The usage window is half-open: \[start, end). Usage at or after `end` is
+    /// not returned, so a period's exclusive end date (for example a contract's
+    /// ondemand_period_end_date) can be passed as `end` unchanged.
     #[prost(message, optional, tag = "2")]
     pub start: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, optional, tag = "3")]
@@ -64,6 +67,9 @@ pub struct GetUsageRequest {
 pub struct GetUsageByProjectRequest {
     #[prost(uint64, tag = "1")]
     pub organization_id: u64,
+    /// The usage window is half-open: \[start, end). Usage at or after `end` is
+    /// not returned, so a period's exclusive end date (for example a contract's
+    /// ondemand_period_end_date) can be passed as `end` unchanged.
     #[prost(message, optional, tag = "2")]
     pub start: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, optional, tag = "3")]
@@ -109,6 +115,9 @@ pub mod page_token {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetOrgsWithUsageRequest {
+    /// The usage window is half-open: \[start, end). Usage at or after `end` is
+    /// not returned, so a period's exclusive end date (for example a contract's
+    /// ondemand_period_end_date) can be passed as `end` unchanged.
     #[prost(message, optional, tag = "1")]
     pub start: ::core::option::Option<::prost_types::Timestamp>,
     #[prost(message, optional, tag = "2")]
