@@ -29,6 +29,11 @@ pub struct LineItemConfig {
     /// Whether this LineItem is eligible for a product trial.
     #[prost(bool, tag = "12")]
     pub can_product_trial: bool,
+    /// Whether staff can start a product trial of this LineItem, though customers cannot (ie Size Analysis).
+    /// Staff can also start a product trial of any LineItem with can_product_trial set.
+    /// Set at most one of can_product_trial and can_admin_product_trial.
+    #[prost(bool, tag = "14")]
+    pub can_admin_product_trial: bool,
     #[prost(enumeration = "super::super::super::common::v1::BillingType", tag = "13")]
     pub billing_type: i32,
     /// how many of this lineitem are included in the package, the customer can reserve more on their contract
@@ -107,6 +112,11 @@ pub struct SharedLineItemPool {
     /// Whether this LineItem is eligible for a product trial.
     #[prost(bool, tag = "11")]
     pub can_product_trial: bool,
+    /// Whether staff can start a product trial of this pool, though customers cannot.
+    /// Staff can also start a product trial of any pool with can_product_trial set.
+    /// Set at most one of can_product_trial and can_admin_product_trial.
+    #[prost(bool, tag = "12")]
+    pub can_admin_product_trial: bool,
     /// How many units are available for a PackageConfig during a subscription trial? For packages that are not eligible for trials,
     /// this field will be unset for all line items.
     #[prost(oneof = "shared_line_item_pool::TrialUnits", tags = "9, 10")]
