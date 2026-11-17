@@ -130,7 +130,7 @@ pub struct SalesLineItemSoftCap {
     #[prost(enumeration = "super::super::super::common::v1::SoftCapType", tag = "2")]
     pub r#type: i32,
 }
-/// The price Sentry staff set for one feature of a contract.
+/// This message contains priced features in a sales contract that are NOT tied to line items.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SalesFeaturePricing {
     #[prost(enumeration = "super::super::super::common::v1::SalesFeature", tag = "1")]
