@@ -4,6 +4,7 @@ package sentry_protos.billing.v1.common.v1;
 
 import "google/protobuf/empty.proto";
 import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
+import "sentry_protos/billing/v1/common/v1/sales_feature.proto";
 import "sentry_protos/billing/v1/common/v1/soft_cap_type.proto";
 import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
 
@@ -51,6 +52,7 @@ message PendingChange {
 message PendingSalesConfig {
   repeated PendingSalesLineItemPricing pricing = 1;
   repeated PendingSalesLineItemSoftCap soft_caps = 2;
+  repeated PendingSalesFeaturePricing feature_pricing = 3;
 }
 
 // Mirrors contract.v2.SalesLineItemPricing.
@@ -64,6 +66,12 @@ message PendingSalesLineItemPricing {
 message PendingSalesLineItemSoftCap {
   string line_item_uid = 1;
   SoftCapType type = 2;
+}
+
+// Mirrors contract.v2.SalesFeaturePricing.
+message PendingSalesFeaturePricing {
+  SalesFeature feature = 1;
+  uint64 price_cents = 2;
 }
 
 // The billing type a pending change moves the next contract onto.
