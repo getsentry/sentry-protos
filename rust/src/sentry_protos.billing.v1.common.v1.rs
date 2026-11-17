@@ -860,6 +860,9 @@ pub enum SeerBillingFeature {
     Severity = 33,
     Grouping = 34,
     ModelTraining = 35,
+    InternalTooling = 39,
+    IssueAutoResolution = 40,
+    TelemetryClassifiers = 42,
 }
 impl SeerBillingFeature {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -906,6 +909,9 @@ impl SeerBillingFeature {
             Self::Severity => "SEER_BILLING_FEATURE_SEVERITY",
             Self::Grouping => "SEER_BILLING_FEATURE_GROUPING",
             Self::ModelTraining => "SEER_BILLING_FEATURE_MODEL_TRAINING",
+            Self::InternalTooling => "SEER_BILLING_FEATURE_INTERNAL_TOOLING",
+            Self::IssueAutoResolution => "SEER_BILLING_FEATURE_ISSUE_AUTO_RESOLUTION",
+            Self::TelemetryClassifiers => "SEER_BILLING_FEATURE_TELEMETRY_CLASSIFIERS",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -959,6 +965,13 @@ impl SeerBillingFeature {
             "SEER_BILLING_FEATURE_SEVERITY" => Some(Self::Severity),
             "SEER_BILLING_FEATURE_GROUPING" => Some(Self::Grouping),
             "SEER_BILLING_FEATURE_MODEL_TRAINING" => Some(Self::ModelTraining),
+            "SEER_BILLING_FEATURE_INTERNAL_TOOLING" => Some(Self::InternalTooling),
+            "SEER_BILLING_FEATURE_ISSUE_AUTO_RESOLUTION" => {
+                Some(Self::IssueAutoResolution)
+            }
+            "SEER_BILLING_FEATURE_TELEMETRY_CLASSIFIERS" => {
+                Some(Self::TelemetryClassifiers)
+            }
             _ => None,
         }
     }
