@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "google/protobuf/timestamp.proto";
+
+// Lists the contracts that a rollover made at or after rolled_over_since, oldest first.
+// A rollover makes the new contract and the invoice that bills the old contract in one
+// transaction, so the rollover time is the time that this invoice was made. It is not
+// the start date of the new contract: an immediate change keeps the start date of the
+// contract that it replaces.
+//
+// To read the next page, send the rolled_over_at of the last contract as
+// rolled_over_since. The next page starts with the contracts made at that time again.
+message GetContractsRolledOverSinceRequest {
+  google.protobuf.Timestamp rolled_over_since = 1;
+  // Maximum number of contracts to return. Defaults to 5000 when unset.
+  uint32 limit = 2;
+}
+
+message RolledOverContract {
+  uint64 organization_id = 1;
+  // The contract that the rollover made.
+  uint64 contract_id = 2;
+  // The contract that rolled over to contract_id.
+  uint64 previous_contract_id = 3;
+  google.protobuf.Timestamp rolled_over_at = 4;
+}
+
+message GetContractsRolledOverSinceResponse {
+  repeated RolledOverContract contracts = 1;
+  // True if more contracts match the request than limit.
+  bool truncated = 2;
+}
