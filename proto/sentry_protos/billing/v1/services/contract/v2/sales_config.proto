@@ -26,7 +26,7 @@ message SalesLineItemSoftCap {
   sentry_protos.billing.v1.common.v1.SoftCapType type = 2;
 }
 
-// The price Sentry staff set for one feature of a contract.
+// This message contains priced features in a sales contract that are NOT tied to line items.
 message SalesFeaturePricing {
   sentry_protos.billing.v1.common.v1.SalesFeature feature = 1;
 
