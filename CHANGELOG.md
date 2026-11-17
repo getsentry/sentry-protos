@@ -1,3 +1,9 @@
+## 0.122.0
+
+### New Features ✨
+
+- (billing) Add Seer proxy feature labels for three callers by @sehr-m with @getsantry in [#538](https://github.com/getsentry/sentry-protos/pull/538)
+
 ## 0.121.0
 
 ### New Features ✨
