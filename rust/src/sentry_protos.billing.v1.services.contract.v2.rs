@@ -158,6 +158,8 @@ pub struct ContractMetadata {
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PricingConfig {
     /// Determines when to reset quotas and charge the subscription price.
+    /// Every period is half-open: the start date is the first day of the period
+    /// and the end date is exclusive, the first day of the next period.
     #[prost(message, optional, tag = "1")]
     pub billing_period_start_date: ::core::option::Option<super::v1::Date>,
     #[prost(message, optional, tag = "2")]
