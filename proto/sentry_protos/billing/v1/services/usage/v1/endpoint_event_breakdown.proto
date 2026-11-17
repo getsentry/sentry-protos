@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.usage.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/data_category.proto";
+import "sentry_protos/billing/v1/usage_data.proto";
+
+// Usage for the line items a package flags with show_event_breakdown, summed
+// over a period and broken out by the raw usage categories that roll up into
+// them. Lets a caller render "this line item is made up of these categories"
+// without walking the package's billable metric expressions itself.
+message GetEventBreakdownRequest {
+  int64 organization_id = 1;
+
+  // Package whose show_event_breakdown line items define the categories to sum.
+  string package_uid = 2;
+
+  google.protobuf.Timestamp start = 3;
+  google.protobuf.Timestamp end = 4;
+}
+
+message EventBreakdownCategoryUsage {
+  DataCategory category = 1;
+
+  // Totals for the period. Categories billed in units other than the one they
+  // are ingested in are already converted, so callers sum these as-is.
+  UsageData totals = 2;
+}
+
+message GetEventBreakdownResponse {
+  repeated EventBreakdownCategoryUsage categories = 1;
+}
