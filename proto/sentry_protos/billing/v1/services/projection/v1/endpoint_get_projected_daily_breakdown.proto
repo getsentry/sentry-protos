@@ -19,7 +19,7 @@ message GetProjectedDailyBreakdownRequest {
 
   // The day the projection is made from. Days up to and including this one
   // are sampled; days strictly after it are projected, through the
-  // contract's on-demand period end.
+  // contract's last on-demand day (the day before ondemand_period_end_date).
   sentry_protos.billing.v1.Date current_date = 2;
 }
 
@@ -47,8 +47,9 @@ message ProjectedDailyOutcomes {
 
 message GetProjectedDailyBreakdownResponse {
   // Projected days in ascending date order, one per day between
-  // ``current_date`` (exclusive) and the contract's on-demand period end
-  // (inclusive). Empty when the period has already ended.
+  // ``current_date`` (exclusive) and the contract's last on-demand day, which
+  // is the day before ``ondemand_period_end_date`` (that end date is exclusive).
+  // Empty when the period has already ended.
   //
   // Every projected day repeats the same estimate, because the estimate is a
   // single weighted average per line item rather than a per-day forecast.

@@ -8,6 +8,8 @@ import "sentry_protos/billing/v1/services/contract/v1/pricing_config.proto";
 
 message PricingConfig {
   // Determines when to reset quotas and charge the subscription price.
+  // Every period is half-open: the start date is the first day of the period
+  // and the end date is exclusive, the first day of the next period.
   sentry_protos.billing.v1.services.contract.v1.Date billing_period_start_date = 1;
   sentry_protos.billing.v1.services.contract.v1.Date billing_period_end_date = 2;
 

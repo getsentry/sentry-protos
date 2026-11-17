@@ -12,6 +12,9 @@ message PageToken {
 }
 
 message GetOrgsWithUsageRequest {
+  // The usage window is half-open: [start, end). Usage at or after `end` is
+  // not returned, so a period's exclusive end date (for example a contract's
+  // ondemand_period_end_date) can be passed as `end` unchanged.
   google.protobuf.Timestamp start = 1;
   google.protobuf.Timestamp end = 2;
 
