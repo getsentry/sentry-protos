@@ -860,9 +860,9 @@ pub enum SeerBillingFeature {
     Severity = 33,
     Grouping = 34,
     ModelTraining = 35,
-    InternalTooling = 39,
-    IssueAutoResolution = 40,
-    TelemetryClassifiers = 42,
+    InternalTooling = 36,
+    IssueAutoResolution = 37,
+    TelemetryClassifiers = 38,
 }
 impl SeerBillingFeature {
     /// String value of the enum field names used in the ProtoBuf definition.
