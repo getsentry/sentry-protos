@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seat_activity.v1;
+
+// Tells which of the requested contracts have a seat contract state, and which of
+// those states have seat actions. The seat repair uses it to find a contract that has
+// no seat state while the contract before it has seats.
+message GetContractsWithSeatStateRequest {
+  // At most 1000 contract ids.
+  repeated uint64 contract_ids = 1;
+}
+
+message GetContractsWithSeatStateResponse {
+  // The requested contracts that have a seat contract state.
+  repeated uint64 with_seat_state = 1;
+  // The requested contracts whose seat contract state has at least one seat action.
+  repeated uint64 with_seat_actions = 2;
+}

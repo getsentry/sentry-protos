@@ -367,6 +367,43 @@ pub struct GetContractsForInvoicesResponse {
     #[prost(map = "uint64, message", tag = "1")]
     pub contracts: ::std::collections::HashMap<u64, Contract>,
 }
+/// Lists the contracts that a rollover made at or after rolled_over_since, oldest first.
+/// A rollover makes the new contract and the invoice that bills the old contract in one
+/// transaction, so the rollover time is the time that this invoice was made. It is not
+/// the start date of the new contract: an immediate change keeps the start date of the
+/// contract that it replaces.
+///
+/// To read the next page, send the rolled_over_at of the last contract as
+/// rolled_over_since. The next page starts with the contracts made at that time again.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetContractsRolledOverSinceRequest {
+    #[prost(message, optional, tag = "1")]
+    pub rolled_over_since: ::core::option::Option<::prost_types::Timestamp>,
+    /// Maximum number of contracts to return. Defaults to 5000 when unset.
+    #[prost(uint32, tag = "2")]
+    pub limit: u32,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RolledOverContract {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The contract that the rollover made.
+    #[prost(uint64, tag = "2")]
+    pub contract_id: u64,
+    /// The contract that rolled over to contract_id.
+    #[prost(uint64, tag = "3")]
+    pub previous_contract_id: u64,
+    #[prost(message, optional, tag = "4")]
+    pub rolled_over_at: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetContractsRolledOverSinceResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub contracts: ::prost::alloc::vec::Vec<RolledOverContract>,
+    /// True if more contracts match the request than limit.
+    #[prost(bool, tag = "2")]
+    pub truncated: bool,
+}
 /// Reads the open contract after acquiring the organization lock that
 /// rollover and checkout share. The lock outlives this call; release it
 /// with ReleaseContractLock.

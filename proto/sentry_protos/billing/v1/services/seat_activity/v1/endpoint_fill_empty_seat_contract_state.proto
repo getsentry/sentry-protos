@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seat_activity.v1;
+
+import "sentry_protos/billing/v1/common/v1/seat_object.proto";
+import "sentry_protos/billing/v1/common/v1/seat_status.proto";
+
+// Writes the first seat actions of a contract, for the seat repair. It creates the
+// contract's seat contract state, or it writes to an existing state that is ACTIVE and
+// has no seat actions. A rollover from a contract without seat state makes such an
+// empty state.
+message FillEmptySeatContractStateRequest {
+  uint64 contract_id = 1;
+  // Recorded on the seat contract state when the request creates it.
+  uint64 organization_id = 2;
+  // At most one seat action for each seat (project and external product identifier).
+  repeated SeatAction seat_actions = 3;
+}
+
+message SeatAction {
+  sentry_protos.billing.v1.common.v1.SeatObject seat_object = 1;
+  sentry_protos.billing.v1.common.v1.SeatStatus status = 2;
+}
+
+message FillEmptySeatContractStateResponse {
+  // False when the contract has a seat contract state that is not ACTIVE or that has
+  // seat actions. The request then writes nothing.
+  bool written = 1;
+}

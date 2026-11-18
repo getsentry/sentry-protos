@@ -173,6 +173,97 @@ pub struct RemoveSeatRequest {
     #[prost(uint64, optional, tag = "2")]
     pub contract_id: ::core::option::Option<u64>,
 }
+/// Gives an organization's current contract, and the contracts before it, the seat
+/// states that clean rollovers would have given them. The hourly seat repair calls it
+/// for an organization with a contract that has no seat state while the contract before
+/// it has seats.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RepairMissingSeatContractStatesRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RepairMissingSeatContractStatesResponse {
+    #[prost(enumeration = "MissingSeatStateRepairOutcome", tag = "1")]
+    pub outcome: i32,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum MissingSeatStateRepairOutcome {
+    Unspecified = 0,
+    /// Wrote the current contract's seat state, and the states of the contracts before it
+    /// that had none.
+    RolledOver = 1,
+    /// The current contract's seat state has seat actions, so the repair did not change it.
+    /// Only the contracts before it got a seat state.
+    CurrentContractHasSeats = 2,
+    /// A rollover or a seat write reached the current contract's seat state first.
+    AlreadyRolledOver = 3,
+    NoCurrentContract = 4,
+    /// No contract after the nearest contract with seat actions is without seat state.
+    NothingToRepair = 5,
+    /// No contract before the contracts without seat state has seat actions.
+    NoSeatStateInChain = 6,
+    /// Too many contracts without seat actions are between the current contract and the
+    /// nearest contract with seat actions.
+    TooManyContractsWithoutSeats = 7,
+}
+impl MissingSeatStateRepairOutcome {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "MISSING_SEAT_STATE_REPAIR_OUTCOME_UNSPECIFIED",
+            Self::RolledOver => "MISSING_SEAT_STATE_REPAIR_OUTCOME_ROLLED_OVER",
+            Self::CurrentContractHasSeats => {
+                "MISSING_SEAT_STATE_REPAIR_OUTCOME_CURRENT_CONTRACT_HAS_SEATS"
+            }
+            Self::AlreadyRolledOver => {
+                "MISSING_SEAT_STATE_REPAIR_OUTCOME_ALREADY_ROLLED_OVER"
+            }
+            Self::NoCurrentContract => {
+                "MISSING_SEAT_STATE_REPAIR_OUTCOME_NO_CURRENT_CONTRACT"
+            }
+            Self::NothingToRepair => {
+                "MISSING_SEAT_STATE_REPAIR_OUTCOME_NOTHING_TO_REPAIR"
+            }
+            Self::NoSeatStateInChain => {
+                "MISSING_SEAT_STATE_REPAIR_OUTCOME_NO_SEAT_STATE_IN_CHAIN"
+            }
+            Self::TooManyContractsWithoutSeats => {
+                "MISSING_SEAT_STATE_REPAIR_OUTCOME_TOO_MANY_CONTRACTS_WITHOUT_SEATS"
+            }
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "MISSING_SEAT_STATE_REPAIR_OUTCOME_UNSPECIFIED" => Some(Self::Unspecified),
+            "MISSING_SEAT_STATE_REPAIR_OUTCOME_ROLLED_OVER" => Some(Self::RolledOver),
+            "MISSING_SEAT_STATE_REPAIR_OUTCOME_CURRENT_CONTRACT_HAS_SEATS" => {
+                Some(Self::CurrentContractHasSeats)
+            }
+            "MISSING_SEAT_STATE_REPAIR_OUTCOME_ALREADY_ROLLED_OVER" => {
+                Some(Self::AlreadyRolledOver)
+            }
+            "MISSING_SEAT_STATE_REPAIR_OUTCOME_NO_CURRENT_CONTRACT" => {
+                Some(Self::NoCurrentContract)
+            }
+            "MISSING_SEAT_STATE_REPAIR_OUTCOME_NOTHING_TO_REPAIR" => {
+                Some(Self::NothingToRepair)
+            }
+            "MISSING_SEAT_STATE_REPAIR_OUTCOME_NO_SEAT_STATE_IN_CHAIN" => {
+                Some(Self::NoSeatStateInChain)
+            }
+            "MISSING_SEAT_STATE_REPAIR_OUTCOME_TOO_MANY_CONTRACTS_WITHOUT_SEATS" => {
+                Some(Self::TooManyContractsWithoutSeats)
+            }
+            _ => None,
+        }
+    }
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RolloverSeatsToNewContractRequest {
     #[prost(uint64, tag = "1")]

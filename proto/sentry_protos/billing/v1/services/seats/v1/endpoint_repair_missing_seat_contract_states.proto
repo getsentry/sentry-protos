@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+// Gives an organization's current contract, and the contracts before it, the seat
+// states that clean rollovers would have given them. The hourly seat repair calls it
+// for an organization with a contract that has no seat state while the contract before
+// it has seats.
+message RepairMissingSeatContractStatesRequest {
+  uint64 organization_id = 1;
+}
+
+enum MissingSeatStateRepairOutcome {
+  MISSING_SEAT_STATE_REPAIR_OUTCOME_UNSPECIFIED = 0;
+  // Wrote the current contract's seat state, and the states of the contracts before it
+  // that had none.
+  MISSING_SEAT_STATE_REPAIR_OUTCOME_ROLLED_OVER = 1;
+  // The current contract's seat state has seat actions, so the repair did not change it.
+  // Only the contracts before it got a seat state.
+  MISSING_SEAT_STATE_REPAIR_OUTCOME_CURRENT_CONTRACT_HAS_SEATS = 2;
+  // A rollover or a seat write reached the current contract's seat state first.
+  MISSING_SEAT_STATE_REPAIR_OUTCOME_ALREADY_ROLLED_OVER = 3;
+  MISSING_SEAT_STATE_REPAIR_OUTCOME_NO_CURRENT_CONTRACT = 4;
+  // No contract after the nearest contract with seat actions is without seat state.
+  MISSING_SEAT_STATE_REPAIR_OUTCOME_NOTHING_TO_REPAIR = 5;
+  // No contract before the contracts without seat state has seat actions.
+  MISSING_SEAT_STATE_REPAIR_OUTCOME_NO_SEAT_STATE_IN_CHAIN = 6;
+  // Too many contracts without seat actions are between the current contract and the
+  // nearest contract with seat actions.
+  MISSING_SEAT_STATE_REPAIR_OUTCOME_TOO_MANY_CONTRACTS_WITHOUT_SEATS = 7;
+}
+
+message RepairMissingSeatContractStatesResponse {
+  MissingSeatStateRepairOutcome outcome = 1;
+}
