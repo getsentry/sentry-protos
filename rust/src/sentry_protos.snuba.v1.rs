@@ -352,6 +352,8 @@ pub struct AttributeAggregation {
     pub extrapolation_mode: i32,
     #[prost(enumeration = "InterpolationMode", tag = "8")]
     pub interpolation_mode: i32,
+    #[prost(enumeration = "HistogramMode", tag = "9")]
+    pub histogram_mode: i32,
     #[prost(message, optional, tag = "7")]
     pub ranked_by: ::core::option::Option<RankedBy>,
     #[prost(oneof = "attribute_aggregation::DefaultValue", tags = "5, 6")]
@@ -504,6 +506,39 @@ impl InterpolationMode {
             "INTERPOLATION_MODE_UNSPECIFIED" => Some(Self::Unspecified),
             "INTERPOLATION_MODE_NONE" => Some(Self::None),
             "INTERPOLATION_MODE_LOCF" => Some(Self::Locf),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum HistogramMode {
+    /// unspecified = NONE
+    Unspecified = 0,
+    /// every row is one observation of its value
+    None = 1,
+    /// rows can hold a pre-aggregated histogram bucket (for example from OTLP),
+    /// which counts as its bucket count; exemplar rows are skipped
+    Buckets = 2,
+}
+impl HistogramMode {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "HISTOGRAM_MODE_UNSPECIFIED",
+            Self::None => "HISTOGRAM_MODE_NONE",
+            Self::Buckets => "HISTOGRAM_MODE_BUCKETS",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "HISTOGRAM_MODE_UNSPECIFIED" => Some(Self::Unspecified),
+            "HISTOGRAM_MODE_NONE" => Some(Self::None),
+            "HISTOGRAM_MODE_BUCKETS" => Some(Self::Buckets),
             _ => None,
         }
     }
@@ -772,6 +807,8 @@ pub struct AttributeConditionalAggregation {
     pub extrapolation_mode: i32,
     #[prost(enumeration = "InterpolationMode", tag = "10")]
     pub interpolation_mode: i32,
+    #[prost(enumeration = "HistogramMode", tag = "11")]
+    pub histogram_mode: i32,
     #[prost(message, optional, tag = "5")]
     pub filter: ::core::option::Option<TraceItemFilter>,
     #[prost(message, optional, tag = "9")]

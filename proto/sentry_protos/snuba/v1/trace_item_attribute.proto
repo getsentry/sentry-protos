@@ -164,6 +164,16 @@ enum InterpolationMode {
   INTERPOLATION_MODE_LOCF = 2;
 }
 
+enum HistogramMode {
+  // unspecified = NONE
+  HISTOGRAM_MODE_UNSPECIFIED = 0;
+  // every row is one observation of its value
+  HISTOGRAM_MODE_NONE = 1;
+  // rows can hold a pre-aggregated histogram bucket (for example from OTLP),
+  // which counts as its bucket count; exemplar rows are skipped
+  HISTOGRAM_MODE_BUCKETS = 2;
+}
+
 // Ranking key for order-dependent aggregates (e.g. FUNCTION_FIRST).
 message RankedBy {
   enum Sort {
@@ -189,6 +199,7 @@ message AttributeAggregation {
   string label = 3;
   ExtrapolationMode extrapolation_mode = 4;
   InterpolationMode interpolation_mode = 8;
+  HistogramMode histogram_mode = 9;
   oneof default_value {
     double default_value_double = 5;
     int64 default_value_int64 = 6;
