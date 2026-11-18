@@ -30,6 +30,16 @@ message SalesLineItemSoftCap {
   sentry_protos.billing.v1.common.v1.SoftCapType type = 2;
 }
 
+// This message contains priced features in a sales contract that are NOT tied to line items.
+message SalesFeaturePricing {
+  // What the feature is, e.g. "Premium Customer Success Service".
+  string title = 1;
+
+  // The price of this feature over one billing term. Zero means it is
+  // included at no charge.
+  uint64 price_cents = 2;
+}
+
 // The contract settings that only Sentry staff set, through sales and
 // provisioning. It is the counterpart to the customer-configurable UserConfig,
 // so a customer change to the contract can never set or clear these values.
@@ -38,4 +48,6 @@ message SalesConfig {
 
   // A line item without an entry has no soft cap.
   repeated SalesLineItemSoftCap soft_caps = 2;
+
+  repeated SalesFeaturePricing feature_pricing = 3;
 }
