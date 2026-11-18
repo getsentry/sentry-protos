@@ -63,6 +63,21 @@ pub struct CheckAssignSeatsResponse {
     #[prost(string, tag = "2")]
     pub reason: ::prost::alloc::string::String,
 }
+/// Makes OVER_QUOTA the ACTIVE cron and uptime seats of the organization's current contract
+/// that its reserved seats and today's grants do not cover, for example when a trial ends. The
+/// seats that the seat rollover ranks last lose their capacity first. OVER_QUOTA and DISABLED
+/// seats do not change.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct DemoteSeatsOverCapacityRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct DemoteSeatsOverCapacityResponse {
+    /// The number of seats that became OVER_QUOTA.
+    #[prost(uint32, tag = "1")]
+    pub over_quota_count: u32,
+}
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct DisableSeatRequest {
     #[prost(message, optional, tag = "1")]
@@ -164,6 +179,20 @@ pub struct ListSeatsResponse {
     /// Newest first, by created_at.
     #[prost(message, repeated, tag = "1")]
     pub seats: ::prost::alloc::vec::Vec<Seat>,
+}
+/// Gives the OVER_QUOTA cron and uptime seats of the organization's current contract the
+/// capacity that the contract has now, for example when a trial starts. The seats compete in
+/// the order of the seat rollover. ACTIVE seats do not change.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RedecideOverQuotaSeatsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RedecideOverQuotaSeatsResponse {
+    /// The number of seats that became ACTIVE.
+    #[prost(uint32, tag = "1")]
+    pub activated_count: u32,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct RemoveSeatRequest {

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+// Makes OVER_QUOTA the ACTIVE cron and uptime seats of the organization's current contract
+// that its reserved seats and today's grants do not cover, for example when a trial ends. The
+// seats that the seat rollover ranks last lose their capacity first. OVER_QUOTA and DISABLED
+// seats do not change.
+message DemoteSeatsOverCapacityRequest {
+  uint64 organization_id = 1;
+}
+
+message DemoteSeatsOverCapacityResponse {
+  // The number of seats that became OVER_QUOTA.
+  uint32 over_quota_count = 1;
+}
