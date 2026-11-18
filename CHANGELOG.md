@@ -1,3 +1,9 @@
+## 0.123.0
+
+### New Features ✨
+
+- (billing) Add feature pricing to SalesConfig by @hybrendan and @claude with @getsantry in [#539](https://github.com/getsentry/sentry-protos/pull/539)
+
 ## 0.122.0
 
 ### New Features ✨
