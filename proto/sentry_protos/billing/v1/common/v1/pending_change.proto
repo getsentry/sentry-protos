@@ -4,7 +4,6 @@ package sentry_protos.billing.v1.common.v1;
 
 import "google/protobuf/empty.proto";
 import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
-import "sentry_protos/billing/v1/common/v1/sales_feature.proto";
 import "sentry_protos/billing/v1/common/v1/soft_cap_type.proto";
 import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
 
@@ -70,7 +69,7 @@ message PendingSalesLineItemSoftCap {
 
 // Mirrors contract.v2.SalesFeaturePricing.
 message PendingSalesFeaturePricing {
-  SalesFeature feature = 1;
+  string title = 1;
   uint64 price_cents = 2;
 }
 

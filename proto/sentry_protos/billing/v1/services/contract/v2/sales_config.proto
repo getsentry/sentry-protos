@@ -3,7 +3,6 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.contract.v2;
 
 import "sentry_protos/billing/v1/common/v1/pricing_tier.proto";
-import "sentry_protos/billing/v1/common/v1/sales_feature.proto";
 import "sentry_protos/billing/v1/common/v1/soft_cap_type.proto";
 
 // The pricing Sentry staff set for one line item of a contract.
@@ -28,7 +27,8 @@ message SalesLineItemSoftCap {
 
 // This message contains priced features in a sales contract that are NOT tied to line items.
 message SalesFeaturePricing {
-  sentry_protos.billing.v1.common.v1.SalesFeature feature = 1;
+  // What the feature is, e.g. "Premium Customer Success Service".
+  string title = 1;
 
   // The price of this feature over one billing term. Zero means it is
   // included at no charge.
@@ -44,7 +44,5 @@ message SalesConfig {
   // A line item without an entry has no soft cap.
   repeated SalesLineItemSoftCap soft_caps = 2;
 
-  // At most one entry per feature. A feature without an entry is not part of
-  // the contract.
   repeated SalesFeaturePricing feature_pricing = 3;
 }
