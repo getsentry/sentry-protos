@@ -553,6 +553,8 @@ pub struct PendingSalesConfig {
     pub pricing: ::prost::alloc::vec::Vec<PendingSalesLineItemPricing>,
     #[prost(message, repeated, tag = "2")]
     pub soft_caps: ::prost::alloc::vec::Vec<PendingSalesLineItemSoftCap>,
+    #[prost(message, repeated, tag = "3")]
+    pub feature_pricing: ::prost::alloc::vec::Vec<PendingSalesFeaturePricing>,
 }
 /// Mirrors contract.v2.SalesLineItemPricing.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -563,6 +565,8 @@ pub struct PendingSalesLineItemPricing {
     pub reserved_price_cents: ::core::option::Option<u64>,
     #[prost(message, optional, tag = "3")]
     pub payg_rate: ::core::option::Option<TieredPricingRate>,
+    #[prost(message, optional, tag = "4")]
+    pub reserved_rate: ::core::option::Option<TieredPricingRate>,
 }
 /// Mirrors contract.v2.SalesLineItemSoftCap.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -571,6 +575,14 @@ pub struct PendingSalesLineItemSoftCap {
     pub line_item_uid: ::prost::alloc::string::String,
     #[prost(enumeration = "SoftCapType", tag = "2")]
     pub r#type: i32,
+}
+/// Mirrors contract.v2.SalesFeaturePricing.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PendingSalesFeaturePricing {
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub price_cents: u64,
 }
 /// Pending overrides for a set of line items. payg_budget and reservation are
 /// each independently optional - either, both, or neither may be set on a
