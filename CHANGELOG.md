@@ -1,3 +1,9 @@
+## 0.124.0
+
+### New Features ✨
+
+- (billing) Add a reserved rate to sales line item pricing by @hybrendan and @claude with @getsantry in [#541](https://github.com/getsentry/sentry-protos/pull/541)
+
 ## 0.123.0
 
 ### New Features ✨
