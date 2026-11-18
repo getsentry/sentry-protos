@@ -130,6 +130,17 @@ pub struct SalesLineItemSoftCap {
     #[prost(enumeration = "super::super::super::common::v1::SoftCapType", tag = "2")]
     pub r#type: i32,
 }
+/// This message contains priced features in a sales contract that are NOT tied to line items.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SalesFeaturePricing {
+    /// What the feature is, e.g. "Premium Customer Success Service".
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    /// The price of this feature over one billing term. Zero means it is
+    /// included at no charge.
+    #[prost(uint64, tag = "2")]
+    pub price_cents: u64,
+}
 /// The contract settings that only Sentry staff set, through sales and
 /// provisioning. It is the counterpart to the customer-configurable UserConfig,
 /// so a customer change to the contract can never set or clear these values.
@@ -140,6 +151,8 @@ pub struct SalesConfig {
     /// A line item without an entry has no soft cap.
     #[prost(message, repeated, tag = "2")]
     pub soft_caps: ::prost::alloc::vec::Vec<SalesLineItemSoftCap>,
+    #[prost(message, repeated, tag = "3")]
+    pub feature_pricing: ::prost::alloc::vec::Vec<SalesFeaturePricing>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ContractMetadata {
