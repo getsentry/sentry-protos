@@ -131,10 +131,11 @@ pub struct SalesLineItemSoftCap {
     pub r#type: i32,
 }
 /// This message contains priced features in a sales contract that are NOT tied to line items.
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SalesFeaturePricing {
-    #[prost(enumeration = "super::super::super::common::v1::SalesFeature", tag = "1")]
-    pub feature: i32,
+    /// What the feature is, e.g. "Premium Customer Success Service".
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
     /// The price of this feature over one billing term. Zero means it is
     /// included at no charge.
     #[prost(uint64, tag = "2")]
@@ -150,8 +151,6 @@ pub struct SalesConfig {
     /// A line item without an entry has no soft cap.
     #[prost(message, repeated, tag = "2")]
     pub soft_caps: ::prost::alloc::vec::Vec<SalesLineItemSoftCap>,
-    /// At most one entry per feature. A feature without an entry is not part of
-    /// the contract.
     #[prost(message, repeated, tag = "3")]
     pub feature_pricing: ::prost::alloc::vec::Vec<SalesFeaturePricing>,
 }

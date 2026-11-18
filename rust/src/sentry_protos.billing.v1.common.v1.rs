@@ -430,35 +430,6 @@ pub struct TieredPricingRate {
     #[prost(message, repeated, tag = "1")]
     pub tiers: ::prost::alloc::vec::Vec<PricingTier>,
 }
-/// Something a sales contract includes that is not a line item, so it has no
-/// units, usage or rate, only a price.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum SalesFeature {
-    Unspecified = 0,
-    /// Premium Customer Success Service (PCSS in the legacy billing system).
-    CustomerSuccess = 1,
-}
-impl SalesFeature {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "SALES_FEATURE_UNSPECIFIED",
-            Self::CustomerSuccess => "SALES_FEATURE_CUSTOMER_SUCCESS",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "SALES_FEATURE_UNSPECIFIED" => Some(Self::Unspecified),
-            "SALES_FEATURE_CUSTOMER_SUCCESS" => Some(Self::CustomerSuccess),
-            _ => None,
-        }
-    }
-}
 /// Soft-cap behavior.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -604,10 +575,10 @@ pub struct PendingSalesLineItemSoftCap {
     pub r#type: i32,
 }
 /// Mirrors contract.v2.SalesFeaturePricing.
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PendingSalesFeaturePricing {
-    #[prost(enumeration = "SalesFeature", tag = "1")]
-    pub feature: i32,
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
     pub price_cents: u64,
 }
