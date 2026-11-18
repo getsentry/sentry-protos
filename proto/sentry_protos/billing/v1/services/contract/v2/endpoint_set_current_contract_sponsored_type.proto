@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v2;
+
+import "sentry_protos/billing/v1/common/v1/sponsored_type.proto";
+import "sentry_protos/billing/v1/services/contract/v2/contract.proto";
+
+// Sets the sponsored type stored on the organization's open contract, in
+// place. There is no checkout, invoice, proration, or rollover, and the
+// package and user parameters do not change. Use it to repair contracts, not
+// to start or end a sponsorship.
+//
+// The write is a compare-and-set: it happens only when the open contract is
+// contract_id and stores expected_sponsored_type. Callers hold the
+// open-contract lock (GetCurrentContractForOrganizationWithLock) around the
+// checks they make before this call and the call itself.
+message SetCurrentContractSponsoredTypeRequest {
+  uint64 organization_id = 1;
+
+  // The open contract that the caller read and checked.
+  uint64 contract_id = 2;
+
+  // The stored value that the caller expects. Unset expects no sponsored type
+  // (NULL). SPONSORED_TYPE_UNSPECIFIED expects the stored value 0.
+  optional sentry_protos.billing.v1.common.v1.SponsoredType expected_sponsored_type = 3;
+
+  // The value to store. Unset stores no sponsored type (NULL).
+  // SPONSORED_TYPE_UNSPECIFIED stores the value 0.
+  optional sentry_protos.billing.v1.common.v1.SponsoredType sponsored_type = 4;
+
+  // Check and report the result without writing.
+  bool validate_only = 5;
+}
+
+message SetCurrentContractSponsoredTypeResponse {
+  enum Result {
+    RESULT_UNSPECIFIED = 0;
+    // The contract stored expected_sponsored_type and now stores
+    // sponsored_type. With validate_only, the write would happen.
+    RESULT_UPDATED = 1;
+    // The contract already stores sponsored_type. Nothing was written.
+    RESULT_ALREADY_SET = 2;
+    // The contract stores a value that is neither expected_sponsored_type nor
+    // sponsored_type. Nothing was written.
+    RESULT_UNEXPECTED_SPONSORED_TYPE = 3;
+    // The open contract is not contract_id. Nothing was written.
+    RESULT_CONTRACT_CHANGED = 4;
+    // The organization has no open contract. Nothing was written.
+    RESULT_NO_OPEN_CONTRACT = 5;
+  }
+
+  Result result = 1;
+
+  // The open contract after the call. With validate_only and RESULT_UPDATED,
+  // the contract as the write would leave it. Unset when the organization has
+  // no open contract.
+  Contract contract = 2;
+
+  // The value stored before the call. Unset when it was NULL or when the
+  // organization has no open contract.
+  optional sentry_protos.billing.v1.common.v1.SponsoredType stored_sponsored_type = 3;
+}

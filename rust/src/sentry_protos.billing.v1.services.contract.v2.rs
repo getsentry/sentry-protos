@@ -462,3 +462,118 @@ pub struct ReleaseContractLockResponse {
     #[prost(bool, tag = "1")]
     pub released: bool,
 }
+/// Sets the sponsored type stored on the organization's open contract, in
+/// place. There is no checkout, invoice, proration, or rollover, and the
+/// package and user parameters do not change. Use it to repair contracts, not
+/// to start or end a sponsorship.
+///
+/// The write is a compare-and-set: it happens only when the open contract is
+/// contract_id and stores expected_sponsored_type. Callers hold the
+/// open-contract lock (GetCurrentContractForOrganizationWithLock) around the
+/// checks they make before this call and the call itself.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SetCurrentContractSponsoredTypeRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// The open contract that the caller read and checked.
+    #[prost(uint64, tag = "2")]
+    pub contract_id: u64,
+    /// The stored value that the caller expects. Unset expects no sponsored type
+    /// (NULL). SPONSORED_TYPE_UNSPECIFIED expects the stored value 0.
+    #[prost(
+        enumeration = "super::super::super::common::v1::SponsoredType",
+        optional,
+        tag = "3"
+    )]
+    pub expected_sponsored_type: ::core::option::Option<i32>,
+    /// The value to store. Unset stores no sponsored type (NULL).
+    /// SPONSORED_TYPE_UNSPECIFIED stores the value 0.
+    #[prost(
+        enumeration = "super::super::super::common::v1::SponsoredType",
+        optional,
+        tag = "4"
+    )]
+    pub sponsored_type: ::core::option::Option<i32>,
+    /// Check and report the result without writing.
+    #[prost(bool, tag = "5")]
+    pub validate_only: bool,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SetCurrentContractSponsoredTypeResponse {
+    #[prost(
+        enumeration = "set_current_contract_sponsored_type_response::Result",
+        tag = "1"
+    )]
+    pub result: i32,
+    /// The open contract after the call. With validate_only and RESULT_UPDATED,
+    /// the contract as the write would leave it. Unset when the organization has
+    /// no open contract.
+    #[prost(message, optional, tag = "2")]
+    pub contract: ::core::option::Option<Contract>,
+    /// The value stored before the call. Unset when it was NULL or when the
+    /// organization has no open contract.
+    #[prost(
+        enumeration = "super::super::super::common::v1::SponsoredType",
+        optional,
+        tag = "3"
+    )]
+    pub stored_sponsored_type: ::core::option::Option<i32>,
+}
+/// Nested message and enum types in `SetCurrentContractSponsoredTypeResponse`.
+pub mod set_current_contract_sponsored_type_response {
+    #[derive(
+        Clone,
+        Copy,
+        Debug,
+        PartialEq,
+        Eq,
+        Hash,
+        PartialOrd,
+        Ord,
+        ::prost::Enumeration
+    )]
+    #[repr(i32)]
+    pub enum Result {
+        Unspecified = 0,
+        /// The contract stored expected_sponsored_type and now stores
+        /// sponsored_type. With validate_only, the write would happen.
+        Updated = 1,
+        /// The contract already stores sponsored_type. Nothing was written.
+        AlreadySet = 2,
+        /// The contract stores a value that is neither expected_sponsored_type nor
+        /// sponsored_type. Nothing was written.
+        UnexpectedSponsoredType = 3,
+        /// The open contract is not contract_id. Nothing was written.
+        ContractChanged = 4,
+        /// The organization has no open contract. Nothing was written.
+        NoOpenContract = 5,
+    }
+    impl Result {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                Self::Unspecified => "RESULT_UNSPECIFIED",
+                Self::Updated => "RESULT_UPDATED",
+                Self::AlreadySet => "RESULT_ALREADY_SET",
+                Self::UnexpectedSponsoredType => "RESULT_UNEXPECTED_SPONSORED_TYPE",
+                Self::ContractChanged => "RESULT_CONTRACT_CHANGED",
+                Self::NoOpenContract => "RESULT_NO_OPEN_CONTRACT",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "RESULT_UNSPECIFIED" => Some(Self::Unspecified),
+                "RESULT_UPDATED" => Some(Self::Updated),
+                "RESULT_ALREADY_SET" => Some(Self::AlreadySet),
+                "RESULT_UNEXPECTED_SPONSORED_TYPE" => Some(Self::UnexpectedSponsoredType),
+                "RESULT_CONTRACT_CHANGED" => Some(Self::ContractChanged),
+                "RESULT_NO_OPEN_CONTRACT" => Some(Self::NoOpenContract),
+                _ => None,
+            }
+        }
+    }
+}
