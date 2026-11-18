@@ -120,6 +120,13 @@ pub struct SalesLineItemPricing {
     pub payg_rate: ::core::option::Option<
         super::super::super::common::v1::TieredPricingRate,
     >,
+    /// The rate at which this line item draws down its shared pool's reserved
+    /// budget. It replaces the package reserved rate, and only applies to line
+    /// items in a shared pool. If this field is absent, the package rate applies.
+    #[prost(message, optional, tag = "4")]
+    pub reserved_rate: ::core::option::Option<
+        super::super::super::common::v1::TieredPricingRate,
+    >,
 }
 /// A soft cap Sentry staff set for one line item. Usage past the line item's
 /// reserved volume is allowed instead of hard-stopping ingestion.

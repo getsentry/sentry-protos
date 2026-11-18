@@ -565,6 +565,8 @@ pub struct PendingSalesLineItemPricing {
     pub reserved_price_cents: ::core::option::Option<u64>,
     #[prost(message, optional, tag = "3")]
     pub payg_rate: ::core::option::Option<TieredPricingRate>,
+    #[prost(message, optional, tag = "4")]
+    pub reserved_rate: ::core::option::Option<TieredPricingRate>,
 }
 /// Mirrors contract.v2.SalesLineItemSoftCap.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]

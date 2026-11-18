@@ -59,6 +59,7 @@ message PendingSalesLineItemPricing {
   string line_item_uid = 1;
   optional uint64 reserved_price_cents = 2;
   optional sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 3;
+  optional sentry_protos.billing.v1.common.v1.TieredPricingRate reserved_rate = 4;
 }
 
 // Mirrors contract.v2.SalesLineItemSoftCap.

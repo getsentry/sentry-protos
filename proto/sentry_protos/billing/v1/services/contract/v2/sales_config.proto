@@ -16,6 +16,11 @@ message SalesLineItemPricing {
   // The PAYG rate for this line item. It replaces the package PAYG rate. If
   // this field is absent, the package PAYG rate applies.
   optional sentry_protos.billing.v1.common.v1.TieredPricingRate payg_rate = 3;
+
+  // The rate at which this line item draws down its shared pool's reserved
+  // budget. It replaces the package reserved rate, and only applies to line
+  // items in a shared pool. If this field is absent, the package rate applies.
+  optional sentry_protos.billing.v1.common.v1.TieredPricingRate reserved_rate = 4;
 }
 
 // A soft cap Sentry staff set for one line item. Usage past the line item's
