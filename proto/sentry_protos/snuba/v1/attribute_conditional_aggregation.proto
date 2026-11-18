@@ -12,6 +12,7 @@ message AttributeConditionalAggregation {
   string label = 3;
   ExtrapolationMode extrapolation_mode = 4;
   InterpolationMode interpolation_mode = 10;
+  HistogramMode histogram_mode = 11;
   TraceItemFilter filter = 5;
   oneof default_value {
     double default_value_double = 7;
