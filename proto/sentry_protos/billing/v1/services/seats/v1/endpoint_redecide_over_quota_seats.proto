@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seats.v1;
+
+// Gives the OVER_QUOTA cron and uptime seats of the organization's current contract the
+// capacity that the contract has now, for example when a trial starts. The seats compete in
+// the order of the seat rollover. ACTIVE seats do not change.
+message RedecideOverQuotaSeatsRequest {
+  uint64 organization_id = 1;
+}
+
+message RedecideOverQuotaSeatsResponse {
+  // The number of seats that became ACTIVE.
+  uint32 activated_count = 1;
+}
