@@ -1,3 +1,9 @@
+## 0.124.1
+
+### Internal Changes 🔧
+
+- (billing) Add GetSpendAllocationState to the spend allocation service by @hybrendan and @claude with @getsantry in [#544](https://github.com/getsentry/sentry-protos/pull/544)
+
 ## 0.124.0
 
 ### New Features ✨
