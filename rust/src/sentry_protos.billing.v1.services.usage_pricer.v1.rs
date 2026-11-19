@@ -14,6 +14,11 @@ pub struct GetDailyBreakdownRequest {
     /// The contracts whose daily breakdowns should be returned.
     #[prost(string, repeated, tag = "1")]
     pub contract_ids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// When true, also return the raw per-category usage the evaluation
+    /// consumed (`GetDailyBreakdownResponse.raw_usage`). Off by default
+    /// so callers that only need the projected view pay nothing extra.
+    #[prost(bool, tag = "2")]
+    pub include_raw_usage: bool,
 }
 /// One line item's projected per-outcome quantities on a given date.
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
@@ -50,6 +55,13 @@ pub struct GetDailyBreakdownResponse {
     /// request that do not resolve contribute no rows.
     #[prost(message, repeated, tag = "1")]
     pub days: ::prost::alloc::vec::Vec<DailyLineItemOutcomes>,
+    /// The raw per-day, per-category usage that `days` was evaluated
+    /// from, exactly as `BillingUsageService` returned it, clipped to the
+    /// same calendar dates as `days`. Only populated when the request set
+    /// `include_raw_usage`. Lets a presentation caller show the unweighted
+    /// categories behind a line item without a second usage query.
+    #[prost(message, repeated, tag = "2")]
+    pub raw_usage: ::prost::alloc::vec::Vec<super::super::usage::v1::DailyUsage>,
 }
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UsagePricerRequest {
