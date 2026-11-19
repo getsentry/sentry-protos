@@ -23,7 +23,7 @@ pub struct GetSpendAllocationStateRequest {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetSpendAllocationStateResponse {
-    /// Empty when the contract has no spend allocations or no on-demand period.
+    /// Empty when the contract has no spend allocations.
     #[prost(message, repeated, tag = "1")]
     pub usages: ::prost::alloc::vec::Vec<SpendAllocationUsage>,
 }
