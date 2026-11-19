@@ -11,6 +11,6 @@ message GetSpendAllocationStateRequest {
 }
 
 message GetSpendAllocationStateResponse {
-  // Empty when the contract has no spend allocations or no on-demand period.
+  // Empty when the contract has no spend allocations.
   repeated SpendAllocationUsage usages = 1;
 }
