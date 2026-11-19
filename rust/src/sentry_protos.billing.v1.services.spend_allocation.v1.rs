@@ -16,10 +16,20 @@ pub struct SpendAllocationUsage {
 }
 /// Gets a contract's spend allocations and how much each project used in the
 /// contract's on-demand period.
-#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetSpendAllocationStateRequest {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
+    /// Usage to price instead of fetching it, such as an invoice's usage snapshot.
+    /// The allocations' unused units are added to it on the period's last day.
+    #[prost(message, optional, tag = "2")]
+    pub usage: ::core::option::Option<super::super::usage::v1::GetUsageResponse>,
+    /// Per-project usage to measure the allocations against instead of fetching it.
+    /// Only days inside the contract's on-demand period count.
+    #[prost(message, optional, tag = "3")]
+    pub usage_by_project: ::core::option::Option<
+        super::super::usage::v1::GetUsageByProjectResponse,
+    >,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetSpendAllocationStateResponse {
@@ -27,8 +37,8 @@ pub struct GetSpendAllocationStateResponse {
     #[prost(message, repeated, tag = "1")]
     pub usages: ::prost::alloc::vec::Vec<SpendAllocationUsage>,
     /// The organization's usage this period, with each allocation's unused units
-    /// added as accepted usage on the current day, or the period's last day once it
-    /// has passed.
+    /// added as accepted usage on the current day, or on the period's last day once
+    /// it has passed or when the request sets usage.
     #[prost(message, optional, tag = "2")]
     pub simulated_usage: ::core::option::Option<
         super::super::usage::v1::GetUsageResponse,
