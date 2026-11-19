@@ -4,11 +4,20 @@ package sentry_protos.billing.v1.services.spend_allocation.v1;
 
 import "sentry_protos/billing/v1/services/spend_allocation/v1/spend_allocation_usage.proto";
 import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage_by_project.proto";
 
 // Gets a contract's spend allocations and how much each project used in the
 // contract's on-demand period.
 message GetSpendAllocationStateRequest {
   uint64 contract_id = 1;
+
+  // Usage to price instead of fetching it, such as an invoice's usage snapshot.
+  // The allocations' unused units are added to it on the period's last day.
+  optional sentry_protos.billing.v1.services.usage.v1.GetUsageResponse usage = 2;
+
+  // Per-project usage to measure the allocations against instead of fetching it.
+  // Only days inside the contract's on-demand period count.
+  optional sentry_protos.billing.v1.services.usage.v1.GetUsageByProjectResponse usage_by_project = 3;
 }
 
 message GetSpendAllocationStateResponse {
@@ -16,7 +25,7 @@ message GetSpendAllocationStateResponse {
   repeated SpendAllocationUsage usages = 1;
 
   // The organization's usage this period, with each allocation's unused units
-  // added as accepted usage on the current day, or the period's last day once it
-  // has passed.
+  // added as accepted usage on the current day, or on the period's last day once
+  // it has passed or when the request sets usage.
   sentry_protos.billing.v1.services.usage.v1.GetUsageResponse simulated_usage = 2;
 }
