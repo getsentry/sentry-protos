@@ -4,49 +4,31 @@ package sentry_protos.billing.v1.services.spend_allocation.v1;
 
 import "sentry_protos/billing/v1/date.proto";
 
-// Gets the spend allocations on an organization's current contract, with the
-// reserved volume and usage of each line item they divide up.
+// Gets the spend allocations on an organization's current contract, with how
+// much each project used this period.
 message GetSpendAllocationsRequest {
   uint64 organization_id = 1;
 }
 
 message GetSpendAllocationsResponse {
-  // The on-demand period the allocations and usage cover. Unset when the
-  // organization has no current contract.
+  // The on-demand period the allocations cover. Unset when the organization has
+  // no current contract.
   sentry_protos.billing.v1.Date period_start = 1;
   // Exclusive.
   sentry_protos.billing.v1.Date period_end = 2;
 
-  // One entry per line item with a finite reservation.
-  repeated LineItemSpendAllocations line_items = 3;
+  repeated SpendAllocationUsage allocations = 3;
 }
 
-// A line item's reserved volume and how projects divide it.
-message LineItemSpendAllocations {
-  string line_item_uid = 1;
-
-  // Reserved units for the period, in the line item's units.
-  uint64 reserved_units = 2;
-
-  // Price of one reserved unit at this reserved volume, in the units of
-  // PricingTier.price.base.
-  int64 reserved_unit_price = 3;
-
-  // Units used this period that no project allocation covered: usage by
-  // projects without an allocation, and usage beyond an allocation.
-  uint64 unallocated_used = 4;
-
-  repeated ProjectSpendAllocation projects = 5;
-}
-
-// A project's share of a line item's reserved volume.
-message ProjectSpendAllocation {
+// A project's allocation of a line item's reserved volume.
+message SpendAllocationUsage {
   uint64 project_id = 1;
+  string line_item_uid = 2;
 
   // Reserved units set aside for the project.
-  uint64 allocated = 2;
+  uint64 allocated = 3;
 
   // Units the project used this period, in the line item's units. Can exceed
   // allocated.
-  uint64 used = 3;
+  uint64 used = 4;
 }
