@@ -3,6 +3,7 @@ syntax = "proto3";
 package sentry_protos.billing.v1.services.usage_pricer.v1;
 
 import "sentry_protos/billing/v1/date.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
 import "sentry_protos/billing/v1/usage_data.proto";
 
 // Compiles per-day, per-line-item usage breakdowns spanning one or more
@@ -18,6 +19,11 @@ import "sentry_protos/billing/v1/usage_data.proto";
 message GetDailyBreakdownRequest {
   // The contracts whose daily breakdowns should be returned.
   repeated string contract_ids = 1;
+
+  // When true, also return the raw per-category usage the evaluation
+  // consumed (``GetDailyBreakdownResponse.raw_usage``). Off by default
+  // so callers that only need the projected view pay nothing extra.
+  bool include_raw_usage = 2;
 }
 
 // One line item's projected per-outcome quantities on a given date.
@@ -51,4 +57,11 @@ message GetDailyBreakdownResponse {
   // row carrying the day's full outcomes). Contract ids from the
   // request that do not resolve contribute no rows.
   repeated DailyLineItemOutcomes days = 1;
+
+  // The raw per-day, per-category usage that ``days`` was evaluated
+  // from, exactly as ``BillingUsageService`` returned it, clipped to the
+  // same calendar dates as ``days``. Only populated when the request set
+  // ``include_raw_usage``. Lets a presentation caller show the unweighted
+  // categories behind a line item without a second usage query.
+  repeated sentry_protos.billing.v1.services.usage.v1.DailyUsage raw_usage = 2;
 }
