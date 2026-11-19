@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.spend_allocation.v1;
+
+// A project's allocation of a line item's reserved volume.
+message SpendAllocationUsage {
+  uint64 project_id = 1;
+  string line_item_uid = 2;
+
+  // Reserved units set aside for the project.
+  uint64 allocated = 3;
+
+  // Units the project used this period, in the line item's units. Can exceed
+  // allocated.
+  uint64 used = 4;
+}
