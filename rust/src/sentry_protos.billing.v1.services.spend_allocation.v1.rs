@@ -26,4 +26,11 @@ pub struct GetSpendAllocationStateResponse {
     /// Empty when the contract has no spend allocations.
     #[prost(message, repeated, tag = "1")]
     pub usages: ::prost::alloc::vec::Vec<SpendAllocationUsage>,
+    /// The organization's usage this period, with each allocation's unused units
+    /// added as accepted usage on the current day, or the period's last day once it
+    /// has passed.
+    #[prost(message, optional, tag = "2")]
+    pub simulated_usage: ::core::option::Option<
+        super::super::usage::v1::GetUsageResponse,
+    >,
 }
