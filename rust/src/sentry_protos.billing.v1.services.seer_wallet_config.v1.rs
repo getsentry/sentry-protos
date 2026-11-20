@@ -19,7 +19,7 @@ pub struct AutoTopUpConfig {
 /// not auto top-up is on. Amounts are in cents before tax.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct SpendConfig {
-    /// The most the organization spends in any 24 hours, in cents before tax.
+    /// The most the organization spends in a UTC day, in cents before tax.
     /// Unset means no cap.
     #[prost(uint64, optional, tag = "1")]
     pub daily_cap_cents: ::core::option::Option<u64>,
