@@ -33,9 +33,8 @@ pub struct GetSpendAllocationStateResponse {
     pub usages: ::prost::alloc::vec::Vec<SpendAllocationUsage>,
     /// The organization's usage this period, with each allocation's unused units
     /// added as accepted usage on the current day, or the period's last day once it
-    /// has passed. With a snapshot_id, the snapshot's organization usage with the
-    /// unused units added on the period's last day, or that usage unchanged when the
-    /// contract has no spend allocations.
+    /// has passed. With a snapshot_id, the base is the snapshot's organization usage,
+    /// returned unchanged when the contract has no spend allocations.
     #[prost(message, optional, tag = "2")]
     pub simulated_usage: ::core::option::Option<
         super::super::usage::v1::GetUsageResponse,
