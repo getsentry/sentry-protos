@@ -18,7 +18,7 @@ message AutoTopUpConfig {
 // Limits on how much the organization spends from the Seer wallet, whether or
 // not auto top-up is on. Amounts are in cents before tax.
 message SpendConfig {
-  // The most the organization spends in any 24 hours, in cents before tax.
+  // The most the organization spends in a UTC day, in cents before tax.
   // Unset means no cap.
   optional uint64 daily_cap_cents = 1;
 }
