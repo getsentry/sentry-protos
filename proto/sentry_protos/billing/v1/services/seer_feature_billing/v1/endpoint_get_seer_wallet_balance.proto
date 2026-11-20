@@ -28,6 +28,13 @@ message SeerWallet {
   // Purchased credits expire twelve months after the latest ledger deposit.
   // Unset when the wallet has never received a deposit.
   optional sentry_protos.billing.v1.Date expires_at = 6;
+  // Credits used today, the UTC day the daily usage limit counts. Included and
+  // purchased credits both count.
+  uint64 credits_used_today = 7;
+  // The organization's daily usage limit in credits, rounded down so a
+  // partial credit never counts as a whole one. Unset when the organization
+  // has no daily usage limit.
+  optional uint64 daily_limit_credits = 8;
 }
 
 message GetSeerWalletBalanceResponse {
