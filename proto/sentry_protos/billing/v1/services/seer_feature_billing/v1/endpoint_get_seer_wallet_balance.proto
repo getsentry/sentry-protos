@@ -29,14 +29,11 @@ message SeerWallet {
   // Unset when the wallet has never received a deposit.
   optional sentry_protos.billing.v1.Date expires_at = 6;
   // Credits used today, the UTC day the daily usage limit counts. Included and
-  // purchased credits both count. Can exceed daily_limit_credits: the credit
-  // check admits usage on its prediction, and the limit can be lowered after
+  // purchased credits both count. Can exceed the daily usage limit
+  // (SpendConfig.daily_cap_cents in the Seer wallet config): the credit check
+  // admits usage on its prediction, and the limit can be lowered after
   // today's usage.
   uint64 credits_used_today = 7;
-  // The organization's daily usage limit in credits, rounded down so a
-  // partial credit never counts as a whole one. Unset when the organization
-  // has no daily usage limit.
-  optional uint64 daily_limit_credits = 8;
 }
 
 message GetSeerWalletBalanceResponse {
