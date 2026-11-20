@@ -6,6 +6,10 @@ pub struct BillingAlertConfig {
     pub threshold_percent: u32,
     #[prost(enumeration = "BillingAlertBudgetType", tag = "2")]
     pub budget_type: i32,
+    /// The project whose spend allocation the alert watches. Set only for
+    /// BILLING_ALERT_BUDGET_TYPE_SPEND_ALLOCATION, with exactly one specific item.
+    #[prost(uint64, tag = "5")]
+    pub project_id: u64,
     #[prost(oneof = "billing_alert_config::LineItems", tags = "3, 4")]
     pub line_items: ::core::option::Option<billing_alert_config::LineItems>,
 }
@@ -41,6 +45,8 @@ pub enum BillingAlertBudgetType {
     Unspecified = 0,
     Reserved = 1,
     Payg = 2,
+    /// Reserved volume that a spend allocation sets aside for one project.
+    SpendAllocation = 3,
 }
 impl BillingAlertBudgetType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -52,6 +58,7 @@ impl BillingAlertBudgetType {
             Self::Unspecified => "BILLING_ALERT_BUDGET_TYPE_UNSPECIFIED",
             Self::Reserved => "BILLING_ALERT_BUDGET_TYPE_RESERVED",
             Self::Payg => "BILLING_ALERT_BUDGET_TYPE_PAYG",
+            Self::SpendAllocation => "BILLING_ALERT_BUDGET_TYPE_SPEND_ALLOCATION",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -60,6 +67,7 @@ impl BillingAlertBudgetType {
             "BILLING_ALERT_BUDGET_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
             "BILLING_ALERT_BUDGET_TYPE_RESERVED" => Some(Self::Reserved),
             "BILLING_ALERT_BUDGET_TYPE_PAYG" => Some(Self::Payg),
+            "BILLING_ALERT_BUDGET_TYPE_SPEND_ALLOCATION" => Some(Self::SpendAllocation),
             _ => None,
         }
     }
