@@ -1,3 +1,9 @@
+## 0.125.0
+
+### New Features ✨
+
+- (billing) Add Seer wallet expiry by @volokluev with @getsantry and @sentry-junior in [#527](https://github.com/getsentry/sentry-protos/pull/527)
+
 ## 0.124.1
 
 ### Internal Changes 🔧
