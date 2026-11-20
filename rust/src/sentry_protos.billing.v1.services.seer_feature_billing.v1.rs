@@ -244,6 +244,13 @@ pub struct SeerWallet {
     /// Unset when the wallet has never received a deposit.
     #[prost(message, optional, tag = "6")]
     pub expires_at: ::core::option::Option<super::super::super::Date>,
+    /// Credits used today, the UTC day the daily usage limit counts. Included and
+    /// purchased credits both count. Can exceed the daily usage limit
+    /// (SpendConfig.daily_cap_cents in the Seer wallet config): the credit check
+    /// admits usage on its prediction, and the limit can be lowered after
+    /// today's usage.
+    #[prost(uint64, tag = "7")]
+    pub credits_used_today: u64,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetSeerWalletBalanceResponse {
