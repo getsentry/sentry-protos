@@ -8,6 +8,9 @@ message CreateSubscriptionRequest {
   TimeSeriesRequest time_series_request = 1;
   uint32 time_window_secs = 2;
   uint32 resolution_secs = 3;
+  // Whether this subscription was generated automatically rather than created
+  // explicitly by a user. An omitted value is treated as false.
+  optional bool auto_generated = 4;
 }
 
 message CreateSubscriptionResponse {
