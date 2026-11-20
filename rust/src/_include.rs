@@ -140,6 +140,11 @@ pub mod sentry_protos {
                         include!("sentry_protos.billing.v1.services.seer_wallet_config.v1.rs");
                     }
                 }
+                pub mod spend_allocation {
+                    pub mod v1 {
+                        include!("sentry_protos.billing.v1.services.spend_allocation.v1.rs");
+                    }
+                }
                 pub mod trial {
                     pub mod v1 {
                         include!("sentry_protos.billing.v1.services.trial.v1.rs");

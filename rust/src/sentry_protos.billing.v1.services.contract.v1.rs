@@ -488,6 +488,9 @@ pub struct UserConfig {
     pub reservation: ::core::option::Option<Reservation>,
     #[prost(message, optional, tag = "5")]
     pub activation: ::core::option::Option<Activation>,
+    /// Deprecated: use contract.v2.SalesConfig.soft_caps in Contract.sales_config.
+    /// A customer can send UserConfig, so it must not set a soft cap.
+    #[deprecated]
     #[prost(message, optional, tag = "6")]
     pub soft_cap: ::core::option::Option<SoftCap>,
     #[prost(message, optional, tag = "7")]

@@ -130,9 +130,9 @@ pub struct ProvisionSalesContractRequest {
     /// The contract's invoiced config once the deal takes effect. Required.
     #[prost(message, optional, tag = "7")]
     pub invoiced: ::core::option::Option<super::super::contract::v2::InvoicedConfig>,
-    /// The deal's prices. When set, it replaces the contract's whole sales config
-    /// when the deal takes effect, and an empty SalesConfig clears it. Unset keeps
-    /// the current prices.
+    /// The deal's prices and soft caps. When set, it replaces the contract's whole
+    /// sales config when the deal takes effect, and an empty SalesConfig clears it.
+    /// Unset keeps the current prices and soft caps.
     #[prost(message, optional, tag = "8")]
     pub sales_config: ::core::option::Option<super::super::contract::v2::SalesConfig>,
     #[prost(oneof = "provision_sales_contract_request::Effective", tags = "5, 6")]

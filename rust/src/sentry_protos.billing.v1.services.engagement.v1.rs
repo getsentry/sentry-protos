@@ -807,6 +807,20 @@ pub struct RedeemPromoCodeResponse {
     #[prost(string, optional, tag = "6")]
     pub campaign: ::core::option::Option<::prost::alloc::string::String>,
 }
+/// Clears an organization's ended product trials for one line item so it can start another.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ResetProductTrialRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    #[prost(string, tag = "2")]
+    pub line_item_uid: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ResetProductTrialResponse {
+    /// Whether any ended product trial was cleared.
+    #[prost(bool, tag = "1")]
+    pub reset: bool,
+}
 /// Clears an organization's ended subscription trials so it can start another.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct ResetSubscriptionTrialRequest {

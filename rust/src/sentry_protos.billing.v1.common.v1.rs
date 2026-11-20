@@ -551,6 +551,10 @@ pub struct PendingChange {
 pub struct PendingSalesConfig {
     #[prost(message, repeated, tag = "1")]
     pub pricing: ::prost::alloc::vec::Vec<PendingSalesLineItemPricing>,
+    #[prost(message, repeated, tag = "2")]
+    pub soft_caps: ::prost::alloc::vec::Vec<PendingSalesLineItemSoftCap>,
+    #[prost(message, repeated, tag = "3")]
+    pub feature_pricing: ::prost::alloc::vec::Vec<PendingSalesFeaturePricing>,
 }
 /// Mirrors contract.v2.SalesLineItemPricing.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -561,6 +565,24 @@ pub struct PendingSalesLineItemPricing {
     pub reserved_price_cents: ::core::option::Option<u64>,
     #[prost(message, optional, tag = "3")]
     pub payg_rate: ::core::option::Option<TieredPricingRate>,
+    #[prost(message, optional, tag = "4")]
+    pub reserved_rate: ::core::option::Option<TieredPricingRate>,
+}
+/// Mirrors contract.v2.SalesLineItemSoftCap.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PendingSalesLineItemSoftCap {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    #[prost(enumeration = "SoftCapType", tag = "2")]
+    pub r#type: i32,
+}
+/// Mirrors contract.v2.SalesFeaturePricing.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct PendingSalesFeaturePricing {
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub price_cents: u64,
 }
 /// Pending overrides for a set of line items. payg_budget and reservation are
 /// each independently optional - either, both, or neither may be set on a
@@ -575,7 +597,8 @@ pub struct PendingUserConfig {
     /// Unset means the reservation is not changing.
     #[prost(message, optional, tag = "2")]
     pub reservation: ::core::option::Option<Reservation>,
-    /// Pending soft-cap override.
+    /// Deprecated: stage soft caps in PendingChange.sales_config instead.
+    #[deprecated]
     #[prost(message, optional, tag = "5")]
     pub soft_cap: ::core::option::Option<SoftCap>,
     /// The line items this config applies to.
@@ -849,6 +872,9 @@ pub enum SeerBillingFeature {
     Severity = 33,
     Grouping = 34,
     ModelTraining = 35,
+    InternalTooling = 36,
+    IssueAutoResolution = 37,
+    TelemetryClassifiers = 38,
 }
 impl SeerBillingFeature {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -895,6 +921,9 @@ impl SeerBillingFeature {
             Self::Severity => "SEER_BILLING_FEATURE_SEVERITY",
             Self::Grouping => "SEER_BILLING_FEATURE_GROUPING",
             Self::ModelTraining => "SEER_BILLING_FEATURE_MODEL_TRAINING",
+            Self::InternalTooling => "SEER_BILLING_FEATURE_INTERNAL_TOOLING",
+            Self::IssueAutoResolution => "SEER_BILLING_FEATURE_ISSUE_AUTO_RESOLUTION",
+            Self::TelemetryClassifiers => "SEER_BILLING_FEATURE_TELEMETRY_CLASSIFIERS",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -948,6 +977,13 @@ impl SeerBillingFeature {
             "SEER_BILLING_FEATURE_SEVERITY" => Some(Self::Severity),
             "SEER_BILLING_FEATURE_GROUPING" => Some(Self::Grouping),
             "SEER_BILLING_FEATURE_MODEL_TRAINING" => Some(Self::ModelTraining),
+            "SEER_BILLING_FEATURE_INTERNAL_TOOLING" => Some(Self::InternalTooling),
+            "SEER_BILLING_FEATURE_ISSUE_AUTO_RESOLUTION" => {
+                Some(Self::IssueAutoResolution)
+            }
+            "SEER_BILLING_FEATURE_TELEMETRY_CLASSIFIERS" => {
+                Some(Self::TelemetryClassifiers)
+            }
             _ => None,
         }
     }

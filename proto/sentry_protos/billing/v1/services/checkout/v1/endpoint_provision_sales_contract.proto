@@ -42,9 +42,9 @@ message ProvisionSalesContractRequest {
   // The contract's invoiced config once the deal takes effect. Required.
   sentry_protos.billing.v1.services.contract.v2.InvoicedConfig invoiced = 7;
 
-  // The deal's prices. When set, it replaces the contract's whole sales config
-  // when the deal takes effect, and an empty SalesConfig clears it. Unset keeps
-  // the current prices.
+  // The deal's prices and soft caps. When set, it replaces the contract's whole
+  // sales config when the deal takes effect, and an empty SalesConfig clears it.
+  // Unset keeps the current prices and soft caps.
   optional sentry_protos.billing.v1.services.contract.v2.SalesConfig sales_config = 8;
 }
 

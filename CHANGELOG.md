@@ -1,3 +1,45 @@
+## 0.124.1
+
+### Internal Changes 🔧
+
+- (billing) Add GetSpendAllocationState to the spend allocation service by @hybrendan and @claude with @getsantry in [#544](https://github.com/getsentry/sentry-protos/pull/544)
+
+## 0.124.0
+
+### New Features ✨
+
+- (billing) Add a reserved rate to sales line item pricing by @hybrendan and @claude with @getsantry in [#541](https://github.com/getsentry/sentry-protos/pull/541)
+
+## 0.123.0
+
+### New Features ✨
+
+- (billing) Add feature pricing to SalesConfig by @hybrendan and @claude with @getsantry in [#539](https://github.com/getsentry/sentry-protos/pull/539)
+
+## 0.122.0
+
+### New Features ✨
+
+- (billing) Add Seer proxy feature labels for three callers by @sehr-m with @getsantry in [#538](https://github.com/getsentry/sentry-protos/pull/538)
+
+## 0.121.0
+
+### New Features ✨
+
+- (billing) Add OverrideTermEnd to the contract service by @hybrendan and @claude with @getsantry in [#533](https://github.com/getsentry/sentry-protos/pull/533)
+
+## 0.120.1
+
+### Internal Changes 🔧
+
+- (billing-platform) Move soft caps into SalesConfig by @hybrendan and @claude with @getsantry in [#535](https://github.com/getsentry/sentry-protos/pull/535)
+
+## 0.120.0
+
+### New Features ✨
+
+- (billing) Add ResetProductTrial engagement protos by @dashed with @getsantry in [#519](https://github.com/getsentry/sentry-protos/pull/519)
+
 ## 0.119.0
 
 ### New Features ✨
