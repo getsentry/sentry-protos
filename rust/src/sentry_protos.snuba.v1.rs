@@ -1373,6 +1373,10 @@ pub struct CreateSubscriptionRequest {
     pub time_window_secs: u32,
     #[prost(uint32, tag = "3")]
     pub resolution_secs: u32,
+    /// Whether this subscription was generated automatically rather than created
+    /// explicitly by a user. An omitted value is treated as false.
+    #[prost(bool, optional, tag = "4")]
+    pub auto_generated: ::core::option::Option<bool>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateSubscriptionResponse {
