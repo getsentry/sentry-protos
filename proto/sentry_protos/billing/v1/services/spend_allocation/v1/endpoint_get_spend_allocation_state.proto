@@ -9,6 +9,11 @@ import "sentry_protos/billing/v1/services/usage/v1/endpoint_usage.proto";
 // contract's on-demand period.
 message GetSpendAllocationStateRequest {
   uint64 contract_id = 1;
+
+  // When set, measure the allocations against this usage snapshot's frozen usage
+  // instead of fetching the on-demand period's usage. The snapshot must belong to
+  // the contract. Used to invoice a closed period.
+  optional uint64 snapshot_id = 2;
 }
 
 message GetSpendAllocationStateResponse {
@@ -17,6 +22,7 @@ message GetSpendAllocationStateResponse {
 
   // The organization's usage this period, with each allocation's unused units
   // added as accepted usage on the current day, or the period's last day once it
-  // has passed.
+  // has passed. With a snapshot_id, the base is the snapshot's organization usage,
+  // returned unchanged when the contract has no spend allocations.
   sentry_protos.billing.v1.services.usage.v1.GetUsageResponse simulated_usage = 2;
 }

@@ -20,6 +20,11 @@ pub struct SpendAllocationUsage {
 pub struct GetSpendAllocationStateRequest {
     #[prost(uint64, tag = "1")]
     pub contract_id: u64,
+    /// When set, measure the allocations against this usage snapshot's frozen usage
+    /// instead of fetching the on-demand period's usage. The snapshot must belong to
+    /// the contract. Used to invoice a closed period.
+    #[prost(uint64, optional, tag = "2")]
+    pub snapshot_id: ::core::option::Option<u64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetSpendAllocationStateResponse {
@@ -28,7 +33,9 @@ pub struct GetSpendAllocationStateResponse {
     pub usages: ::prost::alloc::vec::Vec<SpendAllocationUsage>,
     /// The organization's usage this period, with each allocation's unused units
     /// added as accepted usage on the current day, or the period's last day once it
-    /// has passed.
+    /// has passed. With a snapshot_id, the snapshot's organization usage with the
+    /// unused units added on the period's last day, or that usage unchanged when the
+    /// contract has no spend allocations.
     #[prost(message, optional, tag = "2")]
     pub simulated_usage: ::core::option::Option<
         super::super::usage::v1::GetUsageResponse,
