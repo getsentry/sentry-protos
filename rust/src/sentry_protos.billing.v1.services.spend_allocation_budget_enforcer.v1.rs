@@ -23,7 +23,6 @@ pub struct SpendAllocationBudgetContext {
     >,
     #[prost(message, optional, tag = "3")]
     pub package_config: ::core::option::Option<super::super::package::v1::PackageConfig>,
-    /// Read for its soft caps, which exempt line items from quotas.
     #[prost(message, optional, tag = "4")]
     pub contract: ::core::option::Option<super::super::contract::v2::Contract>,
 }

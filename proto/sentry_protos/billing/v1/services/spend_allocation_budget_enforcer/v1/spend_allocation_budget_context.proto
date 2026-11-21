@@ -11,6 +11,5 @@ message SpendAllocationBudgetContext {
   repeated sentry_protos.billing.v1.services.spend_allocation.v1.SpendAllocationUsage usages = 1;
   sentry_protos.billing.v1.services.usage_pricer.v1.UsagePricerResponse priced_usage = 2;
   sentry_protos.billing.v1.services.package.v1.PackageConfig package_config = 3;
-  // Read for its soft caps, which exempt line items from quotas.
   sentry_protos.billing.v1.services.contract.v2.Contract contract = 4;
 }
