@@ -11,18 +11,3 @@ pub struct CalculateSpendAllocationBudgetQuotasResponse {
     #[prost(message, repeated, tag = "1")]
     pub quotas: ::prost::alloc::vec::Vec<super::super::super::QuotaConfig>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SpendAllocationBudgetContext {
-    #[prost(message, repeated, tag = "1")]
-    pub usages: ::prost::alloc::vec::Vec<
-        super::super::spend_allocation::v1::SpendAllocationUsage,
-    >,
-    #[prost(message, optional, tag = "2")]
-    pub priced_usage: ::core::option::Option<
-        super::super::usage_pricer::v1::UsagePricerResponse,
-    >,
-    #[prost(message, optional, tag = "3")]
-    pub package_config: ::core::option::Option<super::super::package::v1::PackageConfig>,
-    #[prost(message, optional, tag = "4")]
-    pub contract: ::core::option::Option<super::super::contract::v2::Contract>,
-}
