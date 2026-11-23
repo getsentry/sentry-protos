@@ -1062,6 +1062,22 @@ pub struct GetInvoiceGuidsForIdsResponse {
     #[prost(map = "uint64, string", tag = "1")]
     pub invoice_guids: ::std::collections::HashMap<u64, ::prost::alloc::string::String>,
 }
+/// Filters organizations down to those with an invoice awaiting payment: unpaid
+/// and still needs_charged, so neither closed nor out of retries. Invoices with
+/// FAILURE_POLICY_RETRY_ONLY are ignored because they can't make the account
+/// past due, matching CloseInvoiceResponse.has_other_invoices_awaiting_payment.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrganizationsAwaitingPaymentRequest {
+    #[prost(uint64, repeated, tag = "1")]
+    pub organization_ids: ::prost::alloc::vec::Vec<u64>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetOrganizationsAwaitingPaymentResponse {
+    /// The subset of the requested organization_ids with an invoice awaiting
+    /// payment, in no particular order.
+    #[prost(uint64, repeated, tag = "1")]
+    pub organization_ids: ::prost::alloc::vec::Vec<u64>,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUnchargedInvoicesRequest {
     /// Returns Invoices whose current billing period ends before this time and

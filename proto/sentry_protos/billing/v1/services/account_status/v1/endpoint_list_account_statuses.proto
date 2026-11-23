@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.account_status.v1;
+
+import "sentry_protos/billing/v1/services/account_status/v1/account_status.proto";
+
+// Lists account statuses with a given status, ordered by organization_id.
+message ListAccountStatusesRequest {
+  Status status = 1;
+
+  // Keyset cursor: only returns organizations with a greater id. Pass the
+  // last organization_id of the previous page.
+  optional uint64 after_organization_id = 2;
+
+  uint32 max_items = 3;
+}
+
+message ListAccountStatusesResponse {
+  repeated AccountStatus account_statuses = 1;
+  // True if more matching statuses exist beyond max_items.
+  bool truncated = 2;
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.contract.v1;
+
+// Filters organizations down to those with an invoice awaiting payment: unpaid
+// and still needs_charged, so neither closed nor out of retries. Invoices with
+// FAILURE_POLICY_RETRY_ONLY are ignored because they can't make the account
+// past due, matching CloseInvoiceResponse.has_other_invoices_awaiting_payment.
+message GetOrganizationsAwaitingPaymentRequest {
+  repeated uint64 organization_ids = 1;
+}
+
+message GetOrganizationsAwaitingPaymentResponse {
+  // The subset of the requested organization_ids with an invoice awaiting
+  // payment, in no particular order.
+  repeated uint64 organization_ids = 1;
+}
