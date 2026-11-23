@@ -1,3 +1,9 @@
+## 0.129.0
+
+### New Features ✨
+
+- (billing) Add endpoints to monitor past-due accounts by @noahsmartin with @getsantry in [#551](https://github.com/getsentry/sentry-protos/pull/551)
+
 ## 0.128.0
 
 ### New Features ✨
