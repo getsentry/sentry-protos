@@ -1,3 +1,9 @@
+## 0.128.0
+
+### New Features ✨
+
+- (billing) Accept a usage snapshot in GetSpendAllocationState by @hybrendan and @claude with @getsantry in [#549](https://github.com/getsentry/sentry-protos/pull/549)
+
 ## 0.127.0
 
 ### New Features ✨
