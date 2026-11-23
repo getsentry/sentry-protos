@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.spend_allocation_budget_enforcer.v1;
+
+// Invalidates the contract-scoped cache entries CalculateSpendAllocationBudgetQuotas
+// reads: the contract's spend allocation state and its priced usage.
+message BustSpendAllocationBudgetCacheRequest {
+  uint64 contract_id = 1;
+}
+
+message BustSpendAllocationBudgetCacheResponse {}
