@@ -1,3 +1,9 @@
+## 0.126.0
+
+### New Features ✨
+
+- (billing) Add today's usage to the Seer wallet by @billyvg and @claude in [#548](https://github.com/getsentry/sentry-protos/pull/548)
+
 ## 0.125.0
 
 ### New Features ✨
