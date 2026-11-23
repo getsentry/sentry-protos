@@ -1,3 +1,9 @@
+## 0.127.0
+
+### New Features ✨
+
+- (billing-platform) Add spend allocation quota services by @hybrendan and @claude in [#425](https://github.com/getsentry/sentry-protos/pull/425)
+
 ## 0.126.0
 
 ### New Features ✨
