@@ -1211,6 +1211,11 @@ pub struct TimeSeriesRequest {
     /// ex: Find the number of spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
     #[prost(message, repeated, tag = "7")]
     pub trace_filters: ::prost::alloc::vec::Vec<TraceItemFilterWithType>,
+    /// optional, the routing_hint from an earlier TimeSeriesResponse. When set,
+    /// this request reads the same data that response read. Clients should not
+    /// inspect, construct, or modify it.
+    #[prost(string, tag = "8")]
+    pub routing_hint: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Expression {
@@ -1364,6 +1369,11 @@ pub struct TimeSeriesResponse {
     pub result_timeseries: ::prost::alloc::vec::Vec<TimeSeries>,
     #[prost(message, optional, tag = "5")]
     pub meta: ::core::option::Option<ResponseMeta>,
+    /// opaque value identifying how this response was routed. Pass it as
+    /// TimeSeriesRequest.routing_hint to make a related query read the same
+    /// data. Clients should not inspect, construct, or modify it.
+    #[prost(string, tag = "6")]
+    pub routing_hint: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CreateSubscriptionRequest {
