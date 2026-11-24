@@ -457,3 +457,12 @@ pub struct UsageData {
     #[prost(uint64, tag = "7")]
     pub dynamic_sampling: u64,
 }
+/// A tag key and value on usage, e.g. key "feature", value "code_review".
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UsageTag {
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    /// Empty when usage has no value for the key.
+    #[prost(string, tag = "2")]
+    pub value: ::prost::alloc::string::String,
+}
