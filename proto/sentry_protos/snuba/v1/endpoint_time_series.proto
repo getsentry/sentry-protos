@@ -49,6 +49,11 @@ message TimeSeriesRequest {
   // If specified, the endpoint will only consider traces that match all the filters.
   // ex: Find the number of spans in traces containing a span with op = 'db' that also contain errors with message = 'timeout'
   repeated TraceItemFilterWithType trace_filters = 7;
+
+  // optional, the routing_hint from an earlier TimeSeriesResponse. When set,
+  // this request reads the same data that response read. Clients should not
+  // inspect, construct, or modify it.
+  string routing_hint = 8;
 }
 
 message Expression {
@@ -129,4 +134,9 @@ message TimeSeries {
 message TimeSeriesResponse {
   repeated TimeSeries result_timeseries = 1;
   ResponseMeta meta = 5;
+
+  // opaque value identifying how this response was routed. Pass it as
+  // TimeSeriesRequest.routing_hint to make a related query read the same
+  // data. Clients should not inspect, construct, or modify it.
+  string routing_hint = 6;
 }
