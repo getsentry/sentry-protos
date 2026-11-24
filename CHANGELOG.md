@@ -1,3 +1,9 @@
+## 0.130.0
+
+### New Features ✨
+
+- (snuba) Add routing_hint to TimeSeries request and response by @pbhandari in [#553](https://github.com/getsentry/sentry-protos/pull/553)
+
 ## 0.129.0
 
 ### New Features ✨
