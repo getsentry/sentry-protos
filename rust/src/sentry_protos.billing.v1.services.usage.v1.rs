@@ -59,6 +59,11 @@ pub struct GetUsageRequest {
     /// When empty, usage for all categories is returned.
     #[prost(enumeration = "super::super::super::DataCategory", repeated, tag = "4")]
     pub categories: ::prost::alloc::vec::Vec<i32>,
+    /// Optional. The contract that this usage is priced for. When set, seat days come
+    /// only from the contracts on that contract's on-demand period, from the period
+    /// start on. Event usage does not change.
+    #[prost(uint64, optional, tag = "5")]
+    pub contract_id: ::core::option::Option<u64>,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct GetUsageByProjectRequest {
