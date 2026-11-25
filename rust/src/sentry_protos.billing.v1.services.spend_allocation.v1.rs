@@ -40,3 +40,26 @@ pub struct GetSpendAllocationStateResponse {
         super::super::usage::v1::GetUsageResponse,
     >,
 }
+/// Gets the spend allocations on an organization's current contract, with how
+/// much each project used this period.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSpendAllocationsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSpendAllocationsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub allocations: ::prost::alloc::vec::Vec<SpendAllocationUsage>,
+    #[prost(message, repeated, tag = "2")]
+    pub unallocated_reservations: ::prost::alloc::vec::Vec<UnallocatedReservation>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UnallocatedReservation {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    pub quantity: u64,
+    #[prost(uint64, tag = "3")]
+    pub used: u64,
+}

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.spend_allocation.v1;
+
+import "sentry_protos/billing/v1/services/spend_allocation/v1/spend_allocation_usage.proto";
+
+// Gets the spend allocations on an organization's current contract, with how
+// much each project used this period.
+message GetSpendAllocationsRequest {
+  uint64 organization_id = 1;
+}
+
+message GetSpendAllocationsResponse {
+  repeated SpendAllocationUsage allocations = 1;
+  repeated UnallocatedReservation unallocated_reservations = 2;
+}
+
+message UnallocatedReservation {
+  string line_item_uid = 1;
+  uint64 quantity = 2;
+  uint64 used = 3;
+}
