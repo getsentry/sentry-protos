@@ -40,3 +40,45 @@ pub struct GetSpendAllocationStateResponse {
         super::super::usage::v1::GetUsageResponse,
     >,
 }
+/// Gets the spend allocations on an organization's current contract, with how
+/// much each project used this period.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetSpendAllocationsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSpendAllocationsResponse {
+    /// The on-demand period the allocations cover. Unset when the organization has
+    /// no current contract.
+    #[prost(message, optional, tag = "1")]
+    pub period_start: ::core::option::Option<super::super::super::Date>,
+    /// Exclusive.
+    #[prost(message, optional, tag = "2")]
+    pub period_end: ::core::option::Option<super::super::super::Date>,
+    #[prost(message, repeated, tag = "3")]
+    pub allocations: ::prost::alloc::vec::Vec<SpendAllocationUsage>,
+    #[prost(message, repeated, tag = "4")]
+    pub pools: ::prost::alloc::vec::Vec<LineItemPool>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct LineItemPool {
+    #[prost(string, tag = "1")]
+    pub line_item_uid: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "4")]
+    pub unallocated: u64,
+    #[prost(uint64, tag = "5")]
+    pub used: u64,
+    #[prost(oneof = "line_item_pool::ReservedUnits", tags = "2, 3")]
+    pub reserved_units: ::core::option::Option<line_item_pool::ReservedUnits>,
+}
+/// Nested message and enum types in `LineItemPool`.
+pub mod line_item_pool {
+    #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Oneof)]
+    pub enum ReservedUnits {
+        #[prost(bool, tag = "2")]
+        IsUnlimited(bool),
+        #[prost(uint64, tag = "3")]
+        NumReservedUnits(u64),
+    }
+}
