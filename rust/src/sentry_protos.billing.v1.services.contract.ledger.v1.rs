@@ -140,6 +140,12 @@ pub struct ListLedgerEntriesRequest {
     /// Defaults to 100 when zero; capped at 1000.
     #[prost(uint32, tag = "4")]
     pub limit: u32,
+    /// When set together, include entries in \[start, end). Omit both to list
+    /// the full history.
+    #[prost(message, optional, tag = "5")]
+    pub start: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "6")]
+    pub end: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListLedgerEntriesResponse {

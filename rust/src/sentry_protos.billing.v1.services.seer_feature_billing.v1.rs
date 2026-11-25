@@ -259,3 +259,90 @@ pub struct GetSeerWalletBalanceResponse {
     #[prost(message, optional, tag = "1")]
     pub wallet: ::core::option::Option<SeerWallet>,
 }
+/// A customer-readable change to the Seer wallet. credits_micro is signed and
+/// measured in 10^-6 credits to preserve operation costs exactly.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SeerWalletLedgerEntry {
+    #[prost(enumeration = "SeerWalletLedgerEntryType", tag = "1")]
+    pub r#type: i32,
+    #[prost(message, optional, tag = "2")]
+    pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(sint64, tag = "3")]
+    pub credits_micro: i64,
+    /// Deposits only. True while the source invoice remains unpaid.
+    #[prost(bool, tag = "4")]
+    pub pending: bool,
+    #[prost(string, optional, tag = "5")]
+    pub description: ::core::option::Option<::prost::alloc::string::String>,
+    /// Usage only.
+    #[prost(string, optional, tag = "6")]
+    pub feature: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "7")]
+    pub call_id: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct SeerWalletLedgerCursor {
+    /// Contract ledger rows are newest-first by ID.
+    #[prost(uint64, optional, tag = "1")]
+    pub before_ledger_entry_id: ::core::option::Option<u64>,
+    #[prost(message, optional, tag = "2")]
+    pub operation_cursor: ::core::option::Option<
+        super::super::usage::v1::BilledLlmOperationCursor,
+    >,
+    #[prost(bool, tag = "3")]
+    pub ledger_exhausted: bool,
+    #[prost(bool, tag = "4")]
+    pub operations_exhausted: bool,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListSeerWalletLedgerRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Required bounds of the half-open interval \[start, end).
+    #[prost(message, optional, tag = "2")]
+    pub start: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "3")]
+    pub end: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "4")]
+    pub cursor: ::core::option::Option<SeerWalletLedgerCursor>,
+    /// Defaults to 100 when zero; capped at 1000.
+    #[prost(uint32, tag = "5")]
+    pub limit: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListSeerWalletLedgerResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub entries: ::prost::alloc::vec::Vec<SeerWalletLedgerEntry>,
+    /// Unset on the last page.
+    #[prost(message, optional, tag = "2")]
+    pub next_cursor: ::core::option::Option<SeerWalletLedgerCursor>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SeerWalletLedgerEntryType {
+    Unspecified = 0,
+    Deposit = 1,
+    Usage = 2,
+}
+impl SeerWalletLedgerEntryType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SEER_WALLET_LEDGER_ENTRY_TYPE_UNSPECIFIED",
+            Self::Deposit => "SEER_WALLET_LEDGER_ENTRY_TYPE_DEPOSIT",
+            Self::Usage => "SEER_WALLET_LEDGER_ENTRY_TYPE_USAGE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SEER_WALLET_LEDGER_ENTRY_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "SEER_WALLET_LEDGER_ENTRY_TYPE_DEPOSIT" => Some(Self::Deposit),
+            "SEER_WALLET_LEDGER_ENTRY_TYPE_USAGE" => Some(Self::Usage),
+            _ => None,
+        }
+    }
+}

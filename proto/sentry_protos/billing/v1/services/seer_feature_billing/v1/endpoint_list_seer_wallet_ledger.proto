@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.seer_feature_billing.v1;
+
+import "google/protobuf/timestamp.proto";
+import "sentry_protos/billing/v1/services/usage/v1/endpoint_list_billed_llm_operations.proto";
+
+enum SeerWalletLedgerEntryType {
+  SEER_WALLET_LEDGER_ENTRY_TYPE_UNSPECIFIED = 0;
+  SEER_WALLET_LEDGER_ENTRY_TYPE_DEPOSIT = 1;
+  SEER_WALLET_LEDGER_ENTRY_TYPE_USAGE = 2;
+}
+
+// A customer-readable change to the Seer wallet. credits_micro is signed and
+// measured in 10^-6 credits to preserve operation costs exactly.
+message SeerWalletLedgerEntry {
+  SeerWalletLedgerEntryType type = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  sint64 credits_micro = 3;
+  // Deposits only. True while the source invoice remains unpaid.
+  bool pending = 4;
+  optional string description = 5;
+  // Usage only.
+  optional string feature = 6;
+  optional string call_id = 7;
+}
+
+message SeerWalletLedgerCursor {
+  // Contract ledger rows are newest-first by ID.
+  optional uint64 before_ledger_entry_id = 1;
+  optional sentry_protos.billing.v1.services.usage.v1.BilledLlmOperationCursor operation_cursor = 2;
+  bool ledger_exhausted = 3;
+  bool operations_exhausted = 4;
+}
+
+message ListSeerWalletLedgerRequest {
+  uint64 organization_id = 1;
+  // Required bounds of the half-open interval [start, end).
+  google.protobuf.Timestamp start = 2;
+  google.protobuf.Timestamp end = 3;
+  optional SeerWalletLedgerCursor cursor = 4;
+  // Defaults to 100 when zero; capped at 1000.
+  uint32 limit = 5;
+}
+
+message ListSeerWalletLedgerResponse {
+  repeated SeerWalletLedgerEntry entries = 1;
+  // Unset on the last page.
+  optional SeerWalletLedgerCursor next_cursor = 2;
+}

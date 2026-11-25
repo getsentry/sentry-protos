@@ -94,6 +94,52 @@ pub struct GetUsageByProjectResponse {
     #[prost(message, optional, tag = "2")]
     pub last_usage_ts: ::core::option::Option<::prost_types::Timestamp>,
 }
+/// One operation recorded by the LLM proxy that billing charges as Seer usage.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct BilledLlmOperation {
+    #[prost(message, optional, tag = "1")]
+    pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(string, tag = "2")]
+    pub feature: ::prost::alloc::string::String,
+    /// The LLM proxy's stable identifier for this operation.
+    #[prost(string, tag = "3")]
+    pub call_id: ::prost::alloc::string::String,
+    /// Cost in 10^-6 cents, rounded as billing records LLM cost.
+    #[prost(uint64, tag = "4")]
+    pub cost_micro_cents: u64,
+}
+/// Resumes a newest-first list strictly after one operation.
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct BilledLlmOperationCursor {
+    #[prost(message, optional, tag = "1")]
+    pub timestamp: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(string, tag = "2")]
+    pub call_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListBilledLlmOperationsRequest {
+    #[prost(uint64, tag = "1")]
+    pub organization_id: u64,
+    /// Required bounds of the half-open interval \[start, end).
+    #[prost(message, optional, tag = "2")]
+    pub start: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "3")]
+    pub end: ::core::option::Option<::prost_types::Timestamp>,
+    /// Resume after this operation. Omit for the first page.
+    #[prost(message, optional, tag = "4")]
+    pub cursor: ::core::option::Option<BilledLlmOperationCursor>,
+    /// Defaults to 100 when zero; capped at 1000.
+    #[prost(uint32, tag = "5")]
+    pub limit: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListBilledLlmOperationsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub operations: ::prost::alloc::vec::Vec<BilledLlmOperation>,
+    /// Unset on the last page.
+    #[prost(message, optional, tag = "2")]
+    pub next_cursor: ::core::option::Option<BilledLlmOperationCursor>,
+}
 #[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct PageToken {
     #[prost(oneof = "page_token::Value", tags = "1")]
