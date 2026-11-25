@@ -14,6 +14,10 @@ message GetUsageByProjectRequest {
   // Optional filter for specific data categories.
   // When empty, usage for all categories is returned.
   repeated DataCategory categories = 4;
+
+  // Optional tag keys to split each category's usage by, e.g. ["feature"].
+  // When empty, usage is returned per category only.
+  repeated string group_by = 5;
 }
 
 // Usage for a single project, broken down by day and category.

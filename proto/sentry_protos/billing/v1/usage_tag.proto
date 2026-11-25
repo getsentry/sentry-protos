@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1;
+
+// A tag key and value on usage, e.g. key "feature", value "code_review".
+message UsageTag {
+  string key = 1;
+  // Empty when usage has no value for the key.
+  string value = 2;
+}

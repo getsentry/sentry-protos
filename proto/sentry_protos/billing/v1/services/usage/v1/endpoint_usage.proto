@@ -7,9 +7,21 @@ import "sentry_protos/billing/v1/data_category.proto";
 import "sentry_protos/billing/v1/date.proto";
 import "sentry_protos/billing/v1/seat_category.proto";
 import "sentry_protos/billing/v1/usage_data.proto";
+import "sentry_protos/billing/v1/usage_tag.proto";
 
 message CategoryUsage {
   DataCategory category = 1;
+  // Usage of the category over all tag values.
+  UsageData data = 2;
+  // Usage split by the tag keys in the request's group_by, one entry per
+  // distinct combination of values. Empty when the request has no group_by.
+  repeated TaggedUsage tagged_usage = 3;
+}
+
+// Usage of a category for one combination of tag values.
+message TaggedUsage {
+  // One tag per key in the request's group_by, in the same order.
+  repeated UsageTag tags = 1;
   UsageData data = 2;
 }
 
@@ -52,4 +64,8 @@ message GetUsageRequest {
   // Optional filter for specific data categories.
   // When empty, usage for all categories is returned.
   repeated DataCategory categories = 4;
+
+  // Optional tag keys to split each category's usage by, e.g. ["feature"].
+  // When empty, usage is returned per category only.
+  repeated string group_by = 5;
 }
