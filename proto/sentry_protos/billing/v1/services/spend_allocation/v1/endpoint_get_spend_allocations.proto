@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.spend_allocation.v1;
 
-import "sentry_protos/billing/v1/date.proto";
 import "sentry_protos/billing/v1/services/spend_allocation/v1/spend_allocation_usage.proto";
 
 // Gets the spend allocations on an organization's current contract, with how
@@ -12,22 +11,12 @@ message GetSpendAllocationsRequest {
 }
 
 message GetSpendAllocationsResponse {
-  // The on-demand period the allocations cover. Unset when the organization has
-  // no current contract.
-  sentry_protos.billing.v1.Date period_start = 1;
-  // Exclusive.
-  sentry_protos.billing.v1.Date period_end = 2;
-
-  repeated SpendAllocationUsage allocations = 3;
-  repeated LineItemPool pools = 4;
+  repeated SpendAllocationUsage allocations = 1;
+  repeated UnallocatedReservation unallocated_reservations = 2;
 }
 
-message LineItemPool {
+message UnallocatedReservation {
   string line_item_uid = 1;
-  oneof reserved_units {
-    bool is_unlimited = 2;
-    uint64 num_reserved_units = 3;
-  }
-  uint64 unallocated = 4;
-  uint64 used = 5;
+  uint64 quantity = 2;
+  uint64 used = 3;
 }
