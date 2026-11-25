@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.ledger.v1;
 
+import "google/protobuf/timestamp.proto";
 import "sentry_protos/billing/v1/services/contract/ledger/v1/ledger_entry.proto";
 
 // Lists an account's entries, newest first.
@@ -13,6 +14,10 @@ message ListLedgerEntriesRequest {
   optional uint64 before_entry_id = 3;
   // Defaults to 100 when zero; capped at 1000.
   uint32 limit = 4;
+  // When set together, include entries in [start, end). Omit both to list
+  // the full history.
+  optional google.protobuf.Timestamp start = 5;
+  optional google.protobuf.Timestamp end = 6;
 }
 
 message ListLedgerEntriesResponse {
