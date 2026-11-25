@@ -1,3 +1,45 @@
+## 0.130.0
+
+### New Features ✨
+
+- (snuba) Add routing_hint to TimeSeries request and response by @pbhandari in [#553](https://github.com/getsentry/sentry-protos/pull/553)
+
+## 0.129.0
+
+### New Features ✨
+
+- (billing) Add endpoints to monitor past-due accounts by @noahsmartin with @getsantry in [#551](https://github.com/getsentry/sentry-protos/pull/551)
+
+## 0.128.0
+
+### New Features ✨
+
+- (billing) Accept a usage snapshot in GetSpendAllocationState by @hybrendan and @claude with @getsantry in [#549](https://github.com/getsentry/sentry-protos/pull/549)
+
+## 0.127.0
+
+### New Features ✨
+
+- (billing-platform) Add spend allocation quota services by @hybrendan and @claude in [#425](https://github.com/getsentry/sentry-protos/pull/425)
+
+## 0.126.0
+
+### New Features ✨
+
+- (billing) Add today's usage to the Seer wallet by @billyvg and @claude in [#548](https://github.com/getsentry/sentry-protos/pull/548)
+
+## 0.125.0
+
+### New Features ✨
+
+- (billing) Add Seer wallet expiry by @volokluev with @getsantry and @sentry-junior in [#527](https://github.com/getsentry/sentry-protos/pull/527)
+
+## 0.124.1
+
+### Internal Changes 🔧
+
+- (billing) Add GetSpendAllocationState to the spend allocation service by @hybrendan and @claude with @getsantry in [#544](https://github.com/getsentry/sentry-protos/pull/544)
+
 ## 0.124.0
 
 ### New Features ✨

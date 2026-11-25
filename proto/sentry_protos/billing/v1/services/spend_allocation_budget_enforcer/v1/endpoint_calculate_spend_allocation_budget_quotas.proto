@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package sentry_protos.billing.v1.services.spend_allocation_budget_enforcer.v1;
+
+import "sentry_protos/billing/v1/quota_config.proto";
+
+message CalculateSpendAllocationBudgetQuotasRequest {
+  uint64 contract_id = 1;
+  uint64 project_id = 2;
+}
+
+message CalculateSpendAllocationBudgetQuotasResponse {
+  repeated sentry_protos.billing.v1.QuotaConfig quotas = 1;
+}

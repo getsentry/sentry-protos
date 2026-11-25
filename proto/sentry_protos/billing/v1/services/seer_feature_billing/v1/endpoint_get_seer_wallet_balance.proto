@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.seer_feature_billing.v1;
 
+import "sentry_protos/billing/v1/date.proto";
+
 // Reads the organization's prepaid Seer credit from its current contract.
 message GetSeerWalletBalanceRequest {
   uint64 organization_id = 1;
@@ -23,6 +25,15 @@ message SeerWallet {
   uint64 included_credits = 4;
   // Included credits used this billing period. At most included_credits.
   uint64 included_credits_used = 5;
+  // Purchased credits expire twelve months after the latest ledger deposit.
+  // Unset when the wallet has never received a deposit.
+  optional sentry_protos.billing.v1.Date expires_at = 6;
+  // Credits used today, the UTC day the daily usage limit counts. Included and
+  // purchased credits both count. Can exceed the daily usage limit
+  // (SpendConfig.daily_cap_cents in the Seer wallet config): the credit check
+  // admits usage on its prediction, and the limit can be lowered after
+  // today's usage.
+  uint64 credits_used_today = 7;
 }
 
 message GetSeerWalletBalanceResponse {

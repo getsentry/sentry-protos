@@ -88,6 +88,26 @@ pub struct GetAccountStatusResponse {
     #[prost(message, optional, tag = "1")]
     pub account_status: ::core::option::Option<AccountStatus>,
 }
+/// Lists account statuses with a given status, ordered by organization_id.
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListAccountStatusesRequest {
+    #[prost(enumeration = "Status", tag = "1")]
+    pub status: i32,
+    /// Keyset cursor: only returns organizations with a greater id. Pass the
+    /// last organization_id of the previous page.
+    #[prost(uint64, optional, tag = "2")]
+    pub after_organization_id: ::core::option::Option<u64>,
+    #[prost(uint32, tag = "3")]
+    pub max_items: u32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListAccountStatusesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub account_statuses: ::prost::alloc::vec::Vec<AccountStatus>,
+    /// True if more matching statuses exist beyond max_items.
+    #[prost(bool, tag = "2")]
+    pub truncated: bool,
+}
 /// Creates or updates the account status for an organization. If no record
 /// exists for the given organization_id, one is created. If a record already
 /// exists, it is updated with the provided fields.

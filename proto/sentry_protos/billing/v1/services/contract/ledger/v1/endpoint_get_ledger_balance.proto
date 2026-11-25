@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package sentry_protos.billing.v1.services.contract.ledger.v1;
 
+import "google/protobuf/timestamp.proto";
+
 message GetLedgerBalanceRequest {
   uint64 organization_id = 1;
   string account_id = 2;
@@ -12,4 +14,7 @@ message GetLedgerBalanceResponse {
   int64 balance_cents = 1;
   // Deposits whose invoices are not paid yet. Not part of balance_cents.
   int64 pending_deposit_cents = 2;
+  // Creation time of the most recent deposit, whether or not its invoice has
+  // been paid. Unset when the account has no deposits.
+  optional google.protobuf.Timestamp latest_deposit_at = 3;
 }
